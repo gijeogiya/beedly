@@ -25,6 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
+    // 로그인 필요 없는 페이지
     private static final String[] PERMIT_URL_ARRAY = {
             /* swagger v2 */
             "/v2/api-docs",
@@ -36,7 +37,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             /* swagger v3 */
             "/v3/api-docs/**",
-            "/swagger-ui/**"
+            "/swagger-ui/**",
+            /* 카카오 로그인 */
+            "/user/kakao/callback",
+            "/user/login",
+            // 연습
+            "/user/users",
+            "/user/users/login"
     };
 
 //    @Override

@@ -1,5 +1,6 @@
 package com.ssafy.beedly.config.web;
 
+import com.ssafy.beedly.common.exception.NotMatchException;
 import com.ssafy.beedly.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -27,7 +28,12 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
                                   ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest,
                                   WebDataBinderFactory binderFactory) throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (User) authentication.getPrincipal();
+
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            return (User) authentication.getPrincipal();
+        } catch (ClassCastException e) {
+            throw new NotMatchException("토큰 정보가 잘못되었습니다.");
+        }
     }
 }

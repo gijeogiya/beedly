@@ -13,12 +13,12 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/testest?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=Asia/Seoul
     username: root
-    password: ssafy
+    password: 1234
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         default_batch_fetch_size: 500
@@ -45,4 +45,11 @@ cloud:
 
 logging:
   level:
+<<<<<<< Updated upstream
     org.hibernate.SQL: debug
+=======
+    org.hibernate.SQL: debug
+
+kakao:
+  restapikey: 3862f54bf3ad04ea7d23f310de16a274
+>>>>>>> Stashed changes
