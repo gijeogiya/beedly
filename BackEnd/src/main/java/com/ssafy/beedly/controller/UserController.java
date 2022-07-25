@@ -6,7 +6,6 @@ import com.ssafy.beedly.dto.user.request.UserCreateRequest;
 import com.ssafy.beedly.dto.user.request.UserLoginRequest;
 import com.ssafy.beedly.dto.user.request.UserUpdateRequest;
 import com.ssafy.beedly.service.UserService;
-import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
