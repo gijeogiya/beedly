@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,7 +30,7 @@ public class PersonalProduct extends BaseEntity {
     @Column(name = "p_product_desc")
     private String productDesc;
 
-    @Column(name = "p_start_time")
+    @Column(name = "p_start_price")
     private int startPrice;
 
     @Column(name = "p_product_h")
@@ -43,6 +46,9 @@ public class PersonalProduct extends BaseEntity {
     @Column(name = "p_sold_status")
     private SoldStatus soldStatus;
 
+    @Column(name = "p_start_time")
+    private LocalDateTime startTime;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
@@ -50,4 +56,7 @@ public class PersonalProduct extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "personalProduct")
+    private List<PersonalProductImg> productImgs = new ArrayList<>();
 }
