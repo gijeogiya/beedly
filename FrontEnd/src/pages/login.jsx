@@ -36,9 +36,7 @@ const flexbox = {
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center",
-    height : "11vh",
-
-    
+    height : "11vh",   
 }
 const smallButton={
     width: "30vw",
