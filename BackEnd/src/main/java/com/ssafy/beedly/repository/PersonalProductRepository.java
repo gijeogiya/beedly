@@ -8,11 +8,8 @@ import java.util.List;
 
 public interface PersonalProductRepository extends JpaRepository<PersonalProduct, Long> {
 
-    // 1. 프로덕트이름으로 상품 찾기 - 리스트
-    @Query("select p from PersonalProduct p where p.productName = :productName")
-    List<PersonalProduct> findPersonalProductByProductName(String productName);
-
-    // 2.
-
+    // 1. 특정 단어가 들어가는 상품 찾기 - 리스트
+    @Query("select p from PersonalProduct p where p.productName like :productName")
+    List<PersonalProduct> findPersonalProductByProductNameLike(String productName);
 
 }
