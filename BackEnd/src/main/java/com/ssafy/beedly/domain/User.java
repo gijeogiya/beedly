@@ -26,7 +26,7 @@ public class User extends BaseEntity {
     @Column(name = "user_id")
     private Long id;
 
-    private String userPw;
+//    private String userPw;
 
     @Column(name = "kakao_id")
     private Long kakaoId;
@@ -59,31 +59,34 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    public static User createUser_temp(String email, String pw, String name){
-        User user = new User();
-        user.userEmail = email;
-        user.userPw = pw;
-        user.userName = name;
-        user.userRole = UserRole.ROLE_USER;
-        return user;
-    }
+//    public static User createUser_temp(String email, String pw, String name){
+//        User user = new User();
+//        user.userEmail = email;
+//        user.userPw = pw;
+//        user.userName = name;
+//        user.userRole = UserRole.ROLE_USER;
+//        return user;
+//    }
 
     public static User createUser(Long kakaoId){
         User user = new User();
         user.kakaoId = kakaoId;
+        user.userName = "구매자";
         user.userRole = UserRole.ROLE_USER;
         return user;
     }
 
     public void updateUser(UserUpdateRequest request) {
+        this.userEmail = request.getEmail();
         this.userName = request.getName();
         this.userNickname = request.getNickname();
-        this.userAddr = request.getAddr();
         if (request.getGender().equals("M")) {
             this.userGender = Gender.M;
         } else {
             this.userGender = Gender.F;
         }
         this.userTel = request.getTel();
+        this.userAddr = request.getAddr();
+
     }
 }

@@ -21,7 +21,7 @@ public class AbsenteeBid extends BaseEntity {
     private Long id;
 
     @Column(name = "absentee_bid_price")
-    private int absenteeBidPrice;
+    private Integer absenteeBidPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_product_id")

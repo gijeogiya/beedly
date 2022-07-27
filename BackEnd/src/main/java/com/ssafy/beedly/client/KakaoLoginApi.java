@@ -110,9 +110,10 @@ public class KakaoLoginApi {
         KakaoUserResponse kaKaoUserResponse = null;
 
         try {
+            System.out.println(response.getBody());
             kaKaoUserResponse = objectMapper2.readValue(response.getBody(), KakaoUserResponse.class);
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             throw new NotFoundException("kakao 사용자 정보를 불러오지 못했습니다.");
         }
 

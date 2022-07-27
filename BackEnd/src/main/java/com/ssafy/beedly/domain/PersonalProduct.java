@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,21 +30,24 @@ public class PersonalProduct extends BaseEntity {
     @Column(name = "p_product_desc")
     private String productDesc;
 
-    @Column(name = "p_start_time")
-    private int startPrice;
+    @Column(name = "p_start_price")
+    private Integer startPrice;
 
     @Column(name = "p_product_h")
-    private int height;
+    private Integer height;
 
     @Column(name = "p_product_w")
-    private int weight;
+    private Integer weight;
 
     @Column(name = "p_product_d")
-    private int depth;
+    private Integer depth;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "p_sold_status")
     private SoldStatus soldStatus;
+
+    @Column(name = "p_start_time")
+    private LocalDateTime startTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
@@ -50,4 +56,29 @@ public class PersonalProduct extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "personalProduct")
+    private List<PersonalProductImg> productImgs = new ArrayList<>();
+
+    @OneToOne(mappedBy = "personalProduct")
+    private PersonalSold personalSold;
+
+    @Override
+    public String toString() {
+        return "PersonalProduct{" +
+                "id=" + id +
+                ", productName='" + productName + '\'' +
+                ", productDesc='" + productDesc + '\'' +
+                ", startPrice=" + startPrice +
+                ", height=" + height +
+                ", weight=" + weight +
+                ", depth=" + depth +
+                ", soldStatus=" + soldStatus +
+                ", startTime=" + startTime +
+                ", category=" + category +
+                ", user=" + user +
+                ", productImgs=" + productImgs +
+                ", personalSold=" + personalSold +
+                '}';
+    }
 }

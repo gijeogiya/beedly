@@ -25,10 +25,10 @@ public class SpecialSold extends BaseEntity {
     private LocalDateTime endTime;
 
     @Column(name = "s_final_price")
-    private int finalPrice;
+    private Integer finalPrice;
 
     @Column(name = "s_paid_flag")
-    private boolean paidFlag;
+    private Boolean paidFlag;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "s_product_id")
