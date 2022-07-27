@@ -20,7 +20,7 @@ public class SpecialAuction extends BaseEntity {
     private Long id;
 
     @Column(name = "s_active_flag")
-    private boolean activeFlag;
+    private Boolean activeFlag;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "s_product_id")

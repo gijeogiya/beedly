@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.ssafy.beedly.domain.QPersonalProduct.personalProduct;
+import static com.ssafy.beedly.domain.QPersonalProductImg.*;
 import static com.ssafy.beedly.domain.QPersonalSold.*;
 import static com.ssafy.beedly.domain.QSpecialProduct.*;
 import static com.ssafy.beedly.domain.QSpecialSold.*;
@@ -52,5 +53,41 @@ public class UserQueryRepository {
                 .join(specialSold.specialProduct, specialProduct).fetchJoin()
                 .orderBy(specialSold.createdDate.desc())
                 .fetch();
+    }
+
+    // 판매내역 리스트 조회
+//    public List<UserSalesResponse> searchUserSales(Long userId) {
+        public List<PersonalProduct> searchUserSales(Long userId) {
+
+            return queryFactory
+//                .select(Projections.constructor(UserSalesResponse.class, personalProduct))
+                .select(personalProduct)
+                .from(personalProduct)
+                .where(personalProduct.user.id.eq(userId))
+                .leftJoin(personalProduct.personalSold, personalSold).fetchJoin()
+                .leftJoin(personalProduct.productImgs, personalProductImg).fetchJoin()
+                .orderBy(personalProduct.createdDate.desc())
+                .fetch();
+    }
+
+    // 상시구매내역 결제정보 조회
+    public PersonalSold searchPersonalPurchasePaidInfo(Long productSoldId) {
+        return queryFactory
+                .selectFrom(personalSold)
+                .where(personalSold.id.eq(productSoldId))
+                .leftJoin(personalSold.user, user).fetchJoin()
+                .leftJoin(personalSold.personalProduct, personalProduct).fetchJoin()
+//                .join(personalSold.personalProduct.productImgs, personalProductImg).fetchJoin()
+                .fetchOne();
+    }
+
+    // 기획전구매내역 결제정보 조회
+    public SpecialSold searchSpecialPurchasePaidInfo(Long productSoldId) {
+        return queryFactory
+                .selectFrom(specialSold)
+                .where(specialSold.id.eq(productSoldId))
+                .leftJoin(specialSold.user, user).fetchJoin()
+                .leftJoin(specialSold.specialProduct, specialProduct).fetchJoin()
+                .fetchOne();
     }
 }

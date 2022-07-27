@@ -30,16 +30,16 @@ public class SpecialProduct extends BaseEntity {
     private String productDesc;
 
     @Column(name = "s_start_price")
-    private int startPrice;
+    private Integer startPrice;
 
     @Column(name = "s_product_h")
-    private int height;
+    private Integer height;
 
     @Column(name = "s_product_w")
-    private int weight;
+    private Integer weight;
 
     @Column(name = "s_product_d")
-    private int depth;
+    private Integer depth;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "s_sold_status")

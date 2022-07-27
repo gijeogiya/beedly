@@ -1,19 +1,15 @@
 package com.ssafy.beedly.service;
 
 import com.ssafy.beedly.client.KakaoLoginApi;
-import com.ssafy.beedly.common.exception.DuplicateException;
 import com.ssafy.beedly.common.exception.NotFoundException;
-import com.ssafy.beedly.common.exception.NotMatchException;
 import com.ssafy.beedly.config.security.util.JwtUtil;
+import com.ssafy.beedly.domain.PersonalProduct;
+import com.ssafy.beedly.domain.PersonalSold;
 import com.ssafy.beedly.domain.User;
 import com.ssafy.beedly.dto.tag.common.TagDto;
 import com.ssafy.beedly.dto.user.kakao.KakaoUserResponse;
-import com.ssafy.beedly.dto.user.request.UserCreateRequest;
-import com.ssafy.beedly.dto.user.request.UserLoginRequest;
 import com.ssafy.beedly.dto.user.request.UserUpdateRequest;
-import com.ssafy.beedly.dto.user.response.DuplicatedNicknameResponse;
-import com.ssafy.beedly.dto.user.response.UserPurchaseResponse;
-import com.ssafy.beedly.dto.user.response.UserWithTagResponse;
+import com.ssafy.beedly.dto.user.response.*;
 import com.ssafy.beedly.repository.UserRepository;
 import com.ssafy.beedly.repository.UserTagRepository;
 import com.ssafy.beedly.repository.query.UserQueryRepository;
@@ -98,12 +94,36 @@ public class UserService {
         }
     }
 
+    // 내 구매내역 리스트
     public List<UserPurchaseResponse> searchMyPurchases(User user) {
         User findUser = validateUser(user);
         List<UserPurchaseResponse> userPersonalPurchaseResponses = userQueryRepository.searchUserPersonalPurchaces(findUser.getId());
         List<UserPurchaseResponse> userSpecialPurchaseResponses = userQueryRepository.searchUserSpecialPurchaces(findUser.getId());
 
         return Stream.concat(userPersonalPurchaseResponses.stream(), userSpecialPurchaseResponses.stream()).collect(Collectors.toList());
+    }
+
+    // 내 판매내역 리스트
+//    public List<UserSalesResponse> searchMySales(User user) {
+        public List<UserSalesResponse> searchMySales(Long userId) {
+//        User findUser = validateUser(user);
+        List<PersonalProduct> personalProducts = userQueryRepository.searchUserSales(userId);
+
+        return personalProducts.stream()
+                .map(personalProduct -> new UserSalesResponse(personalProduct))
+                .collect(Collectors.toList());
+    }
+
+    // 상시 구매내역 결제정보 조회
+    public UserPurchasePaidResponse searchPersonalPurchasePaidInfo(Long productSoldId, Long userId) {
+        // 본인 구매내역 맞는지 방어로직 추가하기
+        return new UserPurchasePaidResponse(userQueryRepository.searchPersonalPurchasePaidInfo(productSoldId));
+    }
+
+    // 기획전 구매내역 결제정보 조회
+    public UserPurchasePaidResponse searchSpecialPurchasePaidInfo(Long productSoldId, Long userId) {
+        // 본인 구매내역 맞는지 방어로직 추가하기
+        return new UserPurchasePaidResponse(userQueryRepository.searchSpecialPurchasePaidInfo(productSoldId));
     }
 
     /* ******************************* 연습코드 ********************************* */
@@ -134,8 +154,6 @@ public class UserService {
         User findUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
 
-
         return findUser;
     }
-
 }

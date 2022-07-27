@@ -31,16 +31,16 @@ public class PersonalProduct extends BaseEntity {
     private String productDesc;
 
     @Column(name = "p_start_price")
-    private int startPrice;
+    private Integer startPrice;
 
     @Column(name = "p_product_h")
-    private int height;
+    private Integer height;
 
     @Column(name = "p_product_w")
-    private int weight;
+    private Integer weight;
 
     @Column(name = "p_product_d")
-    private int depth;
+    private Integer depth;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "p_sold_status")
@@ -59,4 +59,26 @@ public class PersonalProduct extends BaseEntity {
 
     @OneToMany(mappedBy = "personalProduct")
     private List<PersonalProductImg> productImgs = new ArrayList<>();
+
+    @OneToOne(mappedBy = "personalProduct")
+    private PersonalSold personalSold;
+
+    @Override
+    public String toString() {
+        return "PersonalProduct{" +
+                "id=" + id +
+                ", productName='" + productName + '\'' +
+                ", productDesc='" + productDesc + '\'' +
+                ", startPrice=" + startPrice +
+                ", height=" + height +
+                ", weight=" + weight +
+                ", depth=" + depth +
+                ", soldStatus=" + soldStatus +
+                ", startTime=" + startTime +
+                ", category=" + category +
+                ", user=" + user +
+                ", productImgs=" + productImgs +
+                ", personalSold=" + personalSold +
+                '}';
+    }
 }
