@@ -12,7 +12,7 @@ public interface PersonalProductRepository extends JpaRepository<PersonalProduct
     @Query("select p from PersonalProduct p where p.productName = :productName")
     List<PersonalProduct> findPersonalProductByProductName(String productName);
 
-    // 2. 
+    // 2.
 
 
 }
