@@ -122,7 +122,6 @@ export function NavBar() {
             
                 <div style={IconButtonStyle} >
                     <img alt="홈" src="/img/HomeIcon.svg"/>
-
                 </div>
                 <div style={IconButtonStyle} >
                     <img alt="검색" src="/img/SearchIcon.svg"/>
