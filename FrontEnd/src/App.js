@@ -11,6 +11,7 @@ import SearchPage from "./pages/SearchPage";
 import ProductListPage from "./pages/ProductListPage";
 import OnairPage from "./pages/OnairPage";
 import MyPage from "./pages/MyPage";
+import { Auction } from "./pages/Auction";
 
 const Layout = () => {
   return (
@@ -28,7 +29,8 @@ const Layout = () => {
 function App() {
   return (
     <div className="App">
-      <Router>
+      <Auction />
+      {/* <Router>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<MainPage />} />
@@ -38,7 +40,7 @@ function App() {
             <Route path="/mypage" element={<MyPage />} />
           </Route>
         </Routes>
-      </Router>
+      </Router> */}
     </div>
   );
 }
