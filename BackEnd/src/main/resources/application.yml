@@ -13,7 +13,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/testest?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=Asia/Seoul
     username: root
-    password: 1234
+    password: dldkgus11!
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -45,11 +45,10 @@ cloud:
 
 logging:
   level:
-<<<<<<< Updated upstream
+
     org.hibernate.SQL: debug
-=======
-    org.hibernate.SQL: debug
+
 
 kakao:
   restapikey: 3862f54bf3ad04ea7d23f310de16a274
->>>>>>> Stashed changes
+

@@ -1,25 +1,16 @@
 import React from 'react'
-import Logo from "../components/logo.jsx";
-
+import Button from "../components/Button"
+import { Input, Hr } from "../components/User"
 
 const loginInput = {
     display: "flex",
-    margin: "10vw 3vw",
+    margin: "2vw 3vw",
     flexDirection: "column",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     alignItems: "center",
-    height : "35vh",
+    minHeight: "45vh",
 }
 
-const inputStyle = {
-    minWidth : "80vw",
-    minHeight : "40px",
-    boxShadow:"0px 4px 3px 0px rgba(0,0,0,0.6)",
-    borderRadius: "5px",
-    border:"1px rgb(255,255,255)",
-    padding : "5px",
-    margin : "5px 0px"
-}
 
 const heading = {
     fontWeight: "bold",
@@ -27,7 +18,7 @@ const heading = {
 }
 
 const heading2 = {
-    fontWeight: "600",
+    fontWeight: "500",
     fontSize: "16px",
 }
 const flexbox = {
@@ -36,56 +27,35 @@ const flexbox = {
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center",
-    height : "11vh",
-
-    
+    height: "auto",
 }
-const smallButton={
-    width: "30vw",
-    height: "42px",
-    borderRadius: "5px",
-    backgroundColor: "#1F1D1D",
-    color: "white",
-    border:"0px",
+const MainContent = {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: "90vh",
 }
 
-const largeButton={
-    width: "70vw",
-    height: "42px",
-    borderRadius: "5px",
-    backgroundColor: "#1F1D1D",
-    color: "white",
-    border:"0px",
-}
-
-const largeButtonYellow={
-    width: "70vw",
-    height: "42px",
-    borderRadius: "5px",
-    backgroundColor: "#FFD100",
-    color: "#1F1D1D",
-    border:"0px",
-}
 export default function login() {
     return (
-        <div>
-            <Logo />
+        <div style={MainContent}>
             <div style={loginInput}>
                 <div style={heading}>로그인</div>
                 <div>
                     <div style={heading2}>Email</div>
-                    <input type="text" style = {inputStyle}/>
+                    <Input></Input>
                 </div>
                 <div>
                     <div style={heading2}>Password</div>
-                    <input type="text" style = {inputStyle}/>
+                    <Input></Input>
                 </div>
-                <button style={smallButton}>로그인</button>
+                <Button MediumBlack>로그인</Button>
             </div>
-            <hr/>
+            <Hr Thin />
             <div style={flexbox}>
-            <button style={largeButtonYellow}>카카오로 로그인</button>
-            <button style={largeButton}>회원가입</button>
+                <Button BigYellow>카카오로 로그인</Button>
+                <Button BigBlack>회원가입</Button>
             </div>
         </div>
     )
