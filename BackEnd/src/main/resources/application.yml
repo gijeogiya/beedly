@@ -11,9 +11,18 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/testest?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=Asia/Seoul
-    username: root
-    password: ssafy
+    # 로컬 환경
+#    url: jdbc:mysql://localhost:3306/testest?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=Asia/Seoul
+#    username: root
+#    password: ssafy
+    # 배포 도커 환경
+#    url: jdbc:mysql://ubuntu_db-mysql_1/beedly?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=Asia/Seoul
+#    username: ssafy
+#    password: yfass1234
+    # 로컬에서 ec2 DB로 연결
+    url: jdbc:mysql://i7a601.p.ssafy.io:3306/beedly?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=Asia/Seoul
+    username: ssafy
+    password: yfass1234
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
