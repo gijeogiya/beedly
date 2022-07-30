@@ -12,7 +12,8 @@ import ProductListPage from "./pages/ProductListPage";
 import OnairPage from "./pages/OnairPage";
 import MyPage from "./pages/MyPage";
 import { Auction } from "./pages/Auction";
-
+import { SpecialAuction } from "./pages/SpecialAuction";
+import { SpecialProduct } from "./pages/SpecialProduct";
 const Layout = () => {
   return (
     <div>
@@ -29,18 +30,19 @@ const Layout = () => {
 function App() {
   return (
     <div className="App">
-      <Auction />
-      {/* <Router>
+      {/* <Auction /> */}
+      <Router>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<MainPage />} />
+            <Route index element={<SpecialAuction />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/productlist" element={<ProductListPage />} />
             <Route path="/onair" element={<OnairPage />} />
             <Route path="/mypage" element={<MyPage />} />
+            <Route path="/specialProduct" element={<SpecialProduct />} />
           </Route>
         </Routes>
-      </Router> */}
+      </Router>
     </div>
   );
 }
