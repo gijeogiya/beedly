@@ -1,6 +1,6 @@
 import React from 'react'
 import Button from "../components/Button"
-import { Input, Hr } from "../components/User"
+import { Input, Hr } from "../components/UserStyled"
 
 const loginInput = {
     display: "flex",
@@ -10,7 +10,6 @@ const loginInput = {
     alignItems: "center",
     minHeight: "45vh",
 }
-
 
 const heading = {
     fontWeight: "bold",
@@ -37,6 +36,15 @@ const MainContent = {
     minHeight: "90vh",
 }
 
+
+const CLIENT_ID = process.env.REACT_APP_KAKAO_API_KEY;
+const REDIRECT_URI = "http://localhost:3000/user/kakao/callback";
+const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+const test = () => {
+    console.log(KAKAO_AUTH_URL)
+    window.location.href = KAKAO_AUTH_URL;
+}
 export default function login() {
     return (
         <div style={MainContent}>
@@ -54,7 +62,7 @@ export default function login() {
             </div>
             <Hr Thin />
             <div style={flexbox}>
-                <Button BigYellow>카카오로 로그인</Button>
+                <Button BigYellow onClick={test}>카카오 로그인</Button>
                 <Button BigBlack>회원가입</Button>
             </div>
         </div>

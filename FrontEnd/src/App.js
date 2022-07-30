@@ -13,6 +13,7 @@ import Onair from "./pages/Onair";
 import Login from "./pages/Login";
 import SignupChoice from "./pages/SignupChoice";
 import Signup from "./pages/Signup";
+import Kakao from "./pages/Kakao";
 const Layout = () => {
   return (
     <div>
@@ -37,6 +38,7 @@ function App() {
             <Route path="/mypage" element={<Login />} />
             <Route path="/signup1" element={<SignupChoice />} />
             <Route path="/signup2" element={<Signup />} />
+            <Route path="/user/callback/kakao" element={Kakao}></Route>
           </Route>
         </Routes>
       </Router>
