@@ -1,5 +1,4 @@
 import { Box, DateInput, FileInput, FormField, Grid, TextInput } from "grommet";
-
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import DatePicker from "react-datepicker";
@@ -31,7 +30,7 @@ const MainDiv = styled.div`
   padding: 20px;
 `;
 
-const MainContent = ({ startDate, f, locale }) => {
+const MainContent = ({ startDate, f, locale, textValue, handleValue }) => {
   return (
     <MainDiv>
       <div>
@@ -48,7 +47,11 @@ const MainContent = ({ startDate, f, locale }) => {
       <TextField id="filled-basic" label="부제" variant="standard" />
 
       <div>
-        <textarea placeholder="기획전에 대한 설명을 적어주세요"></textarea>
+        <textarea
+          placeholder="기획전에 대한 설명을 적어주세요"
+          value={textValue}
+          onChange={(e) => handleValue(e)}
+        ></textarea>
       </div>
       <div>배경사진 등록</div>
     </MainDiv>
@@ -56,7 +59,7 @@ const MainContent = ({ startDate, f, locale }) => {
 };
 
 const ProductImg = styled.img`
-  border-radius: 50%;
+  border-radius: 10px;
   width: 100px;
   height: 40px;
   src: ${(props) => props.src || ""};
@@ -64,18 +67,17 @@ const ProductImg = styled.img`
 
 const ProductGrid = ({ products }) => {
   console.log(products);
+
   return (
-    <Grid
-      rows={["auto", "flex"]}
-      columns={["auto", "flex"]}
-      gap="small"
-      areas={products}
-    >
+    <Grid columns={{ count: 3, size: "auto" }} gap="small">
       {products.map((product) => (
-        <Box gridArea={product.name} key={product.name}>
+        <Box key={product.name}>
           <ProductImg src={product.src} />
         </Box>
       ))}
+      <Link to="/specialProduct">
+        <Button SmallGray>+</Button>
+      </Link>
     </Grid>
   );
 };
@@ -85,13 +87,14 @@ const ProductDiv = styled.div``;
 export const SpecialAuction = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [products, setProducts] = useState([]);
+  const [textValue, setTextValue] = useState("");
   let pr = [];
   useEffect(() => {
     for (let i = 0; i < 3; i++) {
       let product = {
         name: "product" + i + "",
-        start: [0, i],
-        end: [0, i],
+        start: [i, 1],
+        end: [i, 1],
         src: product1,
       };
       pr.push(product);
@@ -102,15 +105,21 @@ export const SpecialAuction = () => {
     setStartDate(date);
     console.log(startDate);
   };
+
+  const handleValue = (text) => {};
   return (
     <div>
       <HeaderBox></HeaderBox>
-      <MainContent startDate={startDate} f={handleDate} locale={ko} />
+      <MainContent
+        startDate={startDate}
+        f={handleDate}
+        locale={ko}
+        textValue={textValue}
+      />
       <StyledText weight="bold" size="18px" text="작품 목록"></StyledText>
       {products.length > 1 && <ProductGrid products={products}></ProductGrid>}
-      <Link to="/specialProduct">
-        <Button BigBlack>기획전 등록</Button>
-      </Link>
+
+      <Button BigBlack>기획전 등록</Button>
     </div>
   );
 };
