@@ -7,12 +7,9 @@ import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-<<<<<<< HEAD
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-=======
->>>>>>> d1ebe1a (personalProductDto추가)
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -22,10 +19,6 @@ import com.ssafy.beedly.domain.SpecialProductImg;
 import com.ssafy.beedly.domain.type.SoldStatus;
 
 public class SpecialProductDto {
-<<<<<<< HEAD
-
-=======
->>>>>>> d1ebe1a (personalProductDto추가)
 	private Long id;
 	private String productName;
 	private String productDesc;
