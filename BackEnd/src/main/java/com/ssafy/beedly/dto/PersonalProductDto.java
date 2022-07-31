@@ -1,5 +1,6 @@
 package com.ssafy.beedly.dto;
 
+<<<<<<< HEAD
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,4 +34,7 @@ public class PersonalProductDto {
 	private User user;
 	private List<PersonalProductImg> productImgs;
 	private PersonalSold personalSold;
+=======
+public class PersonalProductDto {
+>>>>>>> d1ebe1a (personalProductDto추가)
 }
