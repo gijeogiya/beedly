@@ -29,4 +29,12 @@ public class PersonalAuction extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public static PersonalAuction createPersonalAuction(PersonalProduct p, User u) {
+        PersonalAuction personalAuction = new PersonalAuction();
+        personalAuction.activeFlag = true;
+        personalAuction.personalProduct = p;
+        personalAuction.user = u;
+        return personalAuction;
+    }
 }
