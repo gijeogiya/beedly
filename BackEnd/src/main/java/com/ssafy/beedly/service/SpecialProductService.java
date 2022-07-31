@@ -1,5 +1,7 @@
 package com.ssafy.beedly.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,12 +29,16 @@ public class SpecialProductService {
 
 	@Transactional
 	public void update(SpecialProduct specialProduct){
+		Optional<SpecialProduct> product = specialProductRepository.findById(specialProduct.getId());
 
+		product.ifPresent(selectProduct ->{
+			specialProductRepository.save(selectProduct);
+		});
 	}
 
 	@Transactional
 	public void delete(SpecialProduct specialProduct){
-
+		specialProductRepository.deleteById(specialProduct.getId());
 	}
 
 }
