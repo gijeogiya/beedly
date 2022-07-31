@@ -1,14 +1,17 @@
 package com.ssafy.beedly;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.beedly.domain.PersonalProduct;
 import com.ssafy.beedly.repository.PersonalProductRepository;
+import com.ssafy.beedly.repository.query.PersonalProductQueryRepository;
 import com.ssafy.beedly.service.PersonalProductService;
 
 @SpringBootTest
@@ -18,6 +21,7 @@ public class ServiceTest {
 	PersonalProductService personalProductService;
 	@Autowired
 	PersonalProductRepository personalProductRepository;
+	private Object Collections;
 
 	@Test
 	public void CRUD(){
@@ -36,6 +40,12 @@ public class ServiceTest {
 			"안녕");
 
 		System.out.println(product2);
+	}
+
+	@Test
+	public void Category(){
+		List<PersonalProduct> products = personalProductRepository.findPersonalProductByOrderByStartTimeAsc("회화");
+		System.out.println(products);
 	}
 
 }

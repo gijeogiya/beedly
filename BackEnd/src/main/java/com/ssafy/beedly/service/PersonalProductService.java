@@ -23,11 +23,13 @@ public class PersonalProductService {
 	private final PersonalProductRepository personalProductRepository;
 	private final PersonalProductQueryRepository personalProductQueryRepository;
 
+	// 상품 등록
 	@Transactional
 	public void save(PersonalProduct personalProduct){
 		personalProductRepository.save(personalProduct);
 	}
 
+	// 상품 수정
 	@Transactional
 	public void update(PersonalProduct personalProduct){
 		Optional<PersonalProduct> product = personalProductRepository.findById(personalProduct.getId());
@@ -37,6 +39,7 @@ public class PersonalProductService {
 		});
 	}
 
+	/// 상품 삭제
 	@Transactional
 	public void delete(SpecialProduct specialProduct){
 		personalProductRepository.deleteById(specialProduct.getId());

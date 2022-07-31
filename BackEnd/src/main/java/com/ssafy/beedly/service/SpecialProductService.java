@@ -22,11 +22,13 @@ public class SpecialProductService {
 	private final SpecialProductRepository specialProductRepository;
 	private final SpecialProductQueryRepository specialProductQueryRepository;
 
+	// 상품 등록
 	@Transactional
 	public void save(SpecialProduct specialProduct){
 		specialProductRepository.save(specialProduct);
 	}
 
+	// 상품 수정
 	@Transactional
 	public void update(SpecialProduct specialProduct){
 		Optional<SpecialProduct> product = specialProductRepository.findById(specialProduct.getId());
@@ -36,6 +38,7 @@ public class SpecialProductService {
 		});
 	}
 
+	// 상품 삭제
 	@Transactional
 	public void delete(SpecialProduct specialProduct){
 		specialProductRepository.deleteById(specialProduct.getId());

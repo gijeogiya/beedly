@@ -10,6 +10,6 @@ import com.ssafy.beedly.domain.PersonalProduct;
 
 public interface PersonalFavoriteRepository  extends JpaRepository<PersonalFavorite, Long> {
 
-	@Query("select p from ")
-	List<PersonalProduct> findPersonalFavoriteByUser();
+	// @Query("select p from ")
+	// List<PersonalProduct> findPersonalFavoriteByUser();
 }
