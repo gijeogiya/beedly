@@ -49,6 +49,10 @@ public class SpecialProduct extends BaseEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "s_board_id")
+    private SpecialBoard specialBoard;
+
     @OneToMany(mappedBy = "specialProduct")
     private List<SpecialProductImg> specialProductImgs = new ArrayList<>();
 }
