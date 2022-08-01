@@ -3,9 +3,7 @@ package com.ssafy.beedly.service;
 import com.ssafy.beedly.common.exception.NotFoundException;
 import com.ssafy.beedly.common.exception.NotMatchException;
 import com.ssafy.beedly.domain.*;
-import com.ssafy.beedly.dto.auction.EnterAuctionResponse;
-import com.ssafy.beedly.dto.bid.request.BidMessageRequest;
-import com.ssafy.beedly.dto.bid.response.BidMessageResponse;
+import com.ssafy.beedly.dto.auction.EnterPersonalAuctionResponse;
 import com.ssafy.beedly.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,7 +37,7 @@ public class PersonalAuctionService {
     }
 
     // 상시 경매방 입장(상품 정보 + 작가정보도 같이 리턴)
-    public EnterAuctionResponse enterPersonalAuction(User user, Long auctionId) {
+    public EnterPersonalAuctionResponse enterPersonalAuction(Long auctionId) {
         PersonalAuction findPersonalAuction = personalAuctionRepository.findByIdWithProductAndUser(auctionId)
                 .orElseThrow(() -> new NotFoundException(AUCTION_NOT_FOUND));
 
@@ -47,6 +45,6 @@ public class PersonalAuctionService {
         Artist findArtist = artistRepository.findByUserId(host.getId())
                 .orElseThrow(() -> new NotFoundException(ARTIST_NOT_FOUND));
 
-        return new EnterAuctionResponse(findPersonalAuction, findArtist, host);
+        return new EnterPersonalAuctionResponse(findPersonalAuction, findArtist, host);
     }
 }

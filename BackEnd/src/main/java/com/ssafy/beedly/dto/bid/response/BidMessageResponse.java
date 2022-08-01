@@ -1,6 +1,7 @@
 package com.ssafy.beedly.dto.bid.response;
 
 import com.ssafy.beedly.domain.PersonalBid;
+import com.ssafy.beedly.domain.SpecialBid;
 import com.ssafy.beedly.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,5 +21,12 @@ public class BidMessageResponse {
         this.userName = bidder.getUserName();
         this.userNickname = bidder.getUserNickname();
         this.bidPrice = pb.getBidPrice();
+    }
+
+    public BidMessageResponse(SpecialBid sb) {
+        User bidder = sb.getUser();
+        this.userName = bidder.getUserName();
+        this.userNickname = bidder.getUserNickname();
+        this.bidPrice = sb.getBidPrice();
     }
 }

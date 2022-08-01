@@ -8,12 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EnterAuctionResponse {
+public class EnterPersonalAuctionResponse {
 
     private Long auctionId;
 
@@ -29,7 +27,7 @@ public class EnterAuctionResponse {
     private String userNickname;
 
 
-    public EnterAuctionResponse(PersonalAuction pa, Artist a, User u) {
+    public EnterPersonalAuctionResponse(PersonalAuction pa, Artist a, User u) {
         this.auctionId = pa.getId();
 
         PersonalProduct p = pa.getPersonalProduct();
