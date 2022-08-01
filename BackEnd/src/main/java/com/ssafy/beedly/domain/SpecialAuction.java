@@ -23,8 +23,8 @@ public class SpecialAuction extends BaseEntity {
     private Boolean activeFlag;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "s_product_id")
-    private SpecialProduct specialProduct;
+    @JoinColumn(name = "s_board_id")
+    private SpecialBoard specialBoard;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

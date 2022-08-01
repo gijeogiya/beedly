@@ -12,7 +12,4 @@ public interface SpecialProductRepository extends JpaRepository<SpecialProduct, 
 	// 1. 프로덕트이름으로 상품 찾기 - 리스트
 	@Query(value="select c from SpecialProduct c where c.productName like %:productName%")
 	List<SpecialProduct> findSpecialProductByProductNameLike(@Param("productName") String productName);
-
-
-
 }

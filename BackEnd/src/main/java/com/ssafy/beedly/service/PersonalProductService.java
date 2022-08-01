@@ -1,8 +1,11 @@
 package com.ssafy.beedly.service;
 
 
+import java.util.List;
 import java.util.Optional;
 
+import com.ssafy.beedly.domain.Artist;
+import com.ssafy.beedly.dto.ProductAndArtistDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,5 +48,11 @@ public class PersonalProductService {
 		personalProductRepository.deleteById(specialProduct.getId());
 	}
 
+	@Transactional
+	public List<ProductAndArtistDto> find(String categoryName, String orderBy, String sort){
+//
+//		List<PersonalProduct> =
+//		List<Artist> =
+	}
 	
 }

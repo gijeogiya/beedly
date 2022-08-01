@@ -43,4 +43,6 @@ public class  SpecialBoard extends BaseEntity {
 
     @OneToMany(mappedBy = "specialBoard")
     List<SpecialProduct> specialProduct = new ArrayList<>();
+
+
 }
