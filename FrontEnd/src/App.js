@@ -30,8 +30,8 @@ const Layout = () => {
 function App() {
   return (
     <div className="App">
-      {/* <Auction /> */}
-      <Router>
+      <Auction />
+      {/* <Router>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<SpecialAuction />} />
@@ -42,7 +42,7 @@ function App() {
             <Route path="/specialProduct" element={<SpecialProduct />} />
           </Route>
         </Routes>
-      </Router>
+      </Router> */}
     </div>
   );
 }

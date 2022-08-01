@@ -7,6 +7,8 @@ import artist from "../assets/images/artist.png";
 import product1 from "../assets/images/product1.png";
 import { ReactComponent as Success } from "../assets/icons/success.svg";
 import { ReactComponent as Fail } from "../assets/icons/fail.svg";
+import App2 from "./App2";
+import ErrorBoundary from "./ErrorBoundary";
 const MainContent = styled.img`
   src: ${(props) => props.src || ""};
   width: 100%;
@@ -333,7 +335,11 @@ export const Auction = () => {
   }
   return (
     <div>
-      <MainContent src={image} />
+      {/* <MainContent src={image} /> */}
+      <ErrorBoundary>
+        <App2 />
+      </ErrorBoundary>
+
       <AuctionArtist
         title={bidInfo.title}
         artist={bidInfo.artist}
