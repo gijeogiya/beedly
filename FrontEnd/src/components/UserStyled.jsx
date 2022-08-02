@@ -60,7 +60,6 @@ export function Hr({ ...props }) {
 
 const StyledDiv = styled.div`
     display: flex;
-    
     ${(props) =>
         props.Column_SB &&
         css`
@@ -103,6 +102,6 @@ const StyledDiv = styled.div`
     `}
         `;
 
-export function FlexBox({ children }, { ...props }) {
+export function FlexBox({ children , ...props }) {
     return <StyledDiv {...props}> {children} </StyledDiv>;
 }

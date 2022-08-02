@@ -38,8 +38,8 @@ function App() {
             <Route path="/mypage" element={<Login />} />
             <Route path="/signup1" element={<SignupChoice />} />
             <Route path="/signup2" element={<Signup />} />
-            <Route path="/user/callback/kakao" element={Kakao}></Route>
           </Route>
+            <Route path="/user/kakao/callback" element={<Kakao/>}></Route>
         </Routes>
       </Router>
     </div>
