@@ -14,15 +14,18 @@ public interface PersonalProductRepository extends JpaRepository<PersonalProduct
 
     // 2. 카테고리 별 조회 시작시간 순으로 정렬
     @Query(value="select p from PersonalProduct p join fetch p.category c where c.categoryName = :categoryName order by p.startTime")
-    List<PersonalProduct> findPersonalProductByOrderByStartTimeAsc(String categoryName);
+    List<PersonalProduct> findPersonalProductByOrderByStartTimeAsc(@Param("categoryName")String categoryName);
 
     @Query(value="select p from PersonalProduct p join fetch p.category c where c.categoryName = :categoryName order by p.startTime desc ")
-    List<PersonalProduct> findPersonalProductByOrderByStartTimeDesc(String categoryName);
+    List<PersonalProduct> findPersonalProductByOrderByStartTimeDesc(@Param("categoryName")String categoryName);
 
-    // 현재 시작 중인 경매 가져오기
-    @Query(value="select p from PersonalProduct p left join fetch p.personalSold s where p.startTime <= current_timestamp and s.endTime is null order by p.startTime")
-    List<PersonalProduct> findPersonalProductByStartTimeOderByStartTimeAsc();
+    // 3. 현재 시작 중인 경매 카테고리 별로 가져오기(오름차순)
+    @Query( value="select pa from PersonalAuction pa join fetch pa.personalProduct p"
+            +" join fetch p.category c"+" where c.categoryName = : categoryName and  pa.activeFlag = true order by p.startTime")
+    List<PersonalProduct> findPersonalProductByOnAirOderByStartTimeAsc(@Param("categoryName")String categoryName);
 
-    @Query(value="select p from PersonalProduct p left join fetch p.personalSold s where p.startTime <= current_timestamp and  s.endTime is null order by p.startTime desc ")
-    List<PersonalProduct> findPersonalProductByStartTimeOderByStartTimeDesc();
+    // 4. 현재 시작 중인 경매 카테고리 별로 가져오기(내림차순)
+    @Query( value="select pa from PersonalAuction pa join fetch pa.personalProduct p"
+            +" join fetch p.category c"+" where c.categoryName = : categoryName and  pa.activeFlag = true order by p.startTime Desc")
+    List<PersonalProduct> findPersonalProductByOnAirOderByStartTimeDesc(@Param("categoryName")String categoryName);
 }

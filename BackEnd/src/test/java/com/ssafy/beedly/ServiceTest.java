@@ -3,6 +3,9 @@ package com.ssafy.beedly;
 import java.util.Collections;
 import java.util.List;
 
+import com.ssafy.beedly.domain.SpecialAuction;
+import com.ssafy.beedly.domain.SpecialBoard;
+import com.ssafy.beedly.repository.SpecialBoardRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,9 +22,15 @@ import com.ssafy.beedly.service.PersonalProductService;
 public class ServiceTest {
 	@Autowired
 	PersonalProductService personalProductService;
+
+	@Autowired
+	SpecialBoardRepository specialBoardRepository;
+
 	@Autowired
 	PersonalProductRepository personalProductRepository;
 	private Object Collections;
+
+
 
 	@Test
 	public void CRUD(){
@@ -46,6 +55,15 @@ public class ServiceTest {
 	public void Category(){
 		List<PersonalProduct> products = personalProductRepository.findPersonalProductByOrderByStartTimeAsc("회화");
 		System.out.println(products);
+	}
+
+	@Test
+	public void SpecialBoardRepository(){
+		List<SpecialAuction> boards = specialBoardRepository.findSpecialBoardByOnAirOrderByStartTimeDesc();
+		for (SpecialAuction board : boards) {
+
+			System.out.println(board.getId());
+		}
 	}
 
 }

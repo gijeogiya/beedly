@@ -35,6 +35,7 @@ public class UserQueryRepository {
 
     // 상시 경매 구매내역 리스트 조회
     public List<UserPurchaseResponse> searchUserPersonalPurchaces(Long userId) {
+
         return queryFactory
                 .select(Projections.constructor(UserPurchaseResponse.class, personalSold))
                 .from(personalSold)
