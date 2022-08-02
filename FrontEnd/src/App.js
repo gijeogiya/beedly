@@ -1,11 +1,6 @@
 import "./App.css";
 import { LogoHeader, Footer, NavBar } from "./components/Common";
-import {
-  BrowserRouter as Router,
-  Outlet,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
 import Main from "./pages/Main";
 import Search from "./pages/Search";
 import ProductList from "./pages/ProductList";
@@ -28,24 +23,18 @@ const Layout = () => {
 function App() {
   return (
     <div className="App">
-      <Router>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Main />} />
-            <Route path="/search" element={<Search />} />
-            <Route path="/productlist" element={<ProductList />} />
-            <Route path="/onair" element={<Onair />} />
-            <Route path="/mypage" element={<Login />} />
-            <Route path="/signup1" element={<SignupChoice />} />
-            <Route path="/signup2" element={<Signup />} />
-          </Route>
-<<<<<<< HEAD
-          <Route path="/user/kakao/callback" element={<Kakao />}></Route>
-=======
-            <Route path="/user/kakao/callback" element={<Kakao/>}></Route>
->>>>>>> efe1ffe1cf04e2ac28f4ee4bfa8ff92590ff5e35
-        </Routes>
-      </Router>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Main />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/productlist" element={<ProductList />} />
+          <Route path="/onair" element={<Onair />} />
+          <Route path="/mypage" element={<Login />} />
+          <Route path="/signup1" element={<SignupChoice />} />
+          <Route path="/signup2" element={<Signup />} />
+        </Route>
+        <Route path="/user/kakao/callback" element={<Kakao />}></Route>
+      </Routes>
     </div>
   );
 }

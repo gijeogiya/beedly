@@ -1,4 +1,16 @@
 spring:
+  # 채팅 테스트용
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+  freemarker:
+    cache: false
+    template-loader-path: classpath:/templates
+    prefix: /chat/
+    suffix: .ftl
+
   servlet:
     multipart:
       enabled: true
@@ -11,6 +23,15 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
+    # 로컬 환경
+#    url: jdbc:mysql://localhost:3306/testest?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=Asia/Seoul
+#    username: root
+#    password: ssafy
+    # 배포 도커 환경
+#    url: jdbc:mysql://ubuntu_db-mysql_1/beedly?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=Asia/Seoul
+#    username: ssafy
+#    password: yfass1234
+    # 로컬에서 ec2 DB로 연결
     url: jdbc:mysql://i7a601.p.ssafy.io:3306/beedly?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=Asia/Seoul
     username: ssafy
     password: yfass1234
@@ -45,10 +66,7 @@ cloud:
 
 logging:
   level:
-
     org.hibernate.SQL: debug
-
 
 kakao:
   restapikey: 3862f54bf3ad04ea7d23f310de16a274
-
