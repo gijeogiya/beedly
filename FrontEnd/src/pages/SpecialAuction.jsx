@@ -4,7 +4,7 @@ import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/esm/locale";
-import TextField from "@mui/material/TextField";
+// import TextField from "@mui/material/TextField";
 import Button from "../components/Button";
 import {} from "grommet-icons";
 import { StyledText } from "../components/Common";
@@ -43,8 +43,8 @@ const MainContent = ({ startDate, f, locale, textValue, handleValue }) => {
           locale={locale}
         />
       </div>
-      <TextField id="filled-basic" label="제목" variant="standard" />
-      <TextField id="filled-basic" label="부제" variant="standard" />
+      {/* <TextField id="filled-basic" label="제목" variant="standard" />
+      <TextField id="filled-basic" label="부제" variant="standard" /> */}
 
       <div>
         <textarea

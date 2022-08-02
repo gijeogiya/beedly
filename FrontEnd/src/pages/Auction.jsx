@@ -7,8 +7,10 @@ import artist from "../assets/images/artist.png";
 import product1 from "../assets/images/product1.png";
 import { ReactComponent as Success } from "../assets/icons/success.svg";
 import { ReactComponent as Fail } from "../assets/icons/fail.svg";
-import App2 from "./App2";
 import ErrorBoundary from "./ErrorBoundary";
+import VideoRoomComponent from "../components/openvidu/components/VideoRoomComponent";
+import UserModel from "../components/openvidu/models/user-model";
+import ChatComponent from "../components/openvidu/components/chat/ChatComponent";
 const MainContent = styled.img`
   src: ${(props) => props.src || ""};
   width: 100%;
@@ -246,8 +248,16 @@ const ChatFrame = styled.div`
 
 const ChattingDiv = styled.div``;
 
-const ChatBox = () => {
-  return <ChatFrame></ChatFrame>;
+const ChatBox = ({ localUser }) => {
+  return (
+    <ChatFrame>
+      {localUser !== undefined
+        ? localUser.getStreamManager() !== undefined && (
+            <ChatComponent user={localUser} />
+          )
+        : null}
+    </ChatFrame>
+  );
 };
 
 const Conatainer = styled(Carousel)`
@@ -259,10 +269,10 @@ const Conatainer = styled(Carousel)`
   justify-content: center;
 `;
 
-function BottomUi({ bidInfo, visible, f }) {
+function BottomUi({ bidInfo, visible, f, localUser }) {
   return (
     <Conatainer controls="arrows">
-      <ChatBox />
+      {localUser !== undefined && <ChatBox localUser={localUser} />}
       <ProductFrame
         title={bidInfo.title}
         category={bidInfo.category}
@@ -292,6 +302,8 @@ export const Auction = () => {
     currentPrice: 0,
     callPrice: 0,
   });
+  const [localUser, setLocalUser] = useState(undefined);
+
   useEffect(() => {
     setBidInfo({
       title: "Ice Age",
@@ -337,9 +349,9 @@ export const Auction = () => {
     <div>
       {/* <MainContent src={image} /> */}
       <ErrorBoundary>
-        <App2 />
+        {" "}
+        <VideoRoomComponent setLocalUser={setLocalUser} />{" "}
       </ErrorBoundary>
-
       <AuctionArtist
         title={bidInfo.title}
         artist={bidInfo.artist}
@@ -355,7 +367,12 @@ export const Auction = () => {
             onClose={() => setVisible(false)}
           />
         )}
-        <BottomUi bidInfo={bidInfo} visible={visible} f={handleVisible} />
+        <BottomUi
+          bidInfo={bidInfo}
+          visible={visible}
+          f={handleVisible}
+          localUser={localUser}
+        />
       </Grommet>
     </div>
   );
