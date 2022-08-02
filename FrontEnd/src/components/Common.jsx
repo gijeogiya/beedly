@@ -41,27 +41,27 @@ const FooterContainer = styled.div`
 `;
 
 
-const FooterContent = ({title, desc}) => {
-    return <div style={{padding:"10px", fontSize:"10px"}}>
+const FooterContent = ({ title, desc }) => {
+    return <div style={{ padding: "10px", fontSize: "10px" }}>
         <h3>{title || ""}</h3>
-        {desc.map((d) =>(<p>{d}</p>)
-            
+        {desc.map((d) => (<p>{d}</p>)
+
         )}
     </div>
 }
 
 export function Footer() {
-    return (<Box background="light-3" margin={{bottom: "0"}} align="center" padding="25px" >
+    return (<Box background="light-3" margin={{ bottom: "0" }} align="center" padding="25px" >
         <FooterContainer>
-        <Box><FooterContent title="고객센터 1500-1111" desc={["운영시간 평일 11:00 - 18:00 (토, 일, 공휴일 휴무)","점심시간 평일 13:00 - 14:00"]} /></Box>
-        <Box direction="row" align="center">
-        <FooterContent title="이용안내" desc={["이용 정책","페널티 정책", "커뮤니티 가이드라인"]} />
-        <FooterContent title="고객지원" desc={["공지사항","서비스 소개", "소장품 정기경매 접수"]} />
-        </Box>
-        <Box><FooterContent desc={["이용약관","개인정보처리방침", "SSAFY A601", "이아현 권기정 문석희 박재권 이수연 차유진", `Notion https://www.notion.so/chayoo/
+            <Box><FooterContent title="고객센터 1500-1111" desc={["운영시간 평일 11:00 - 18:00 (토, 일, 공휴일 휴무)", "점심시간 평일 13:00 - 14:00"]} /></Box>
+            <Box direction="row" align="center">
+                <FooterContent title="이용안내" desc={["이용 정책", "페널티 정책", "커뮤니티 가이드라인"]} />
+                <FooterContent title="고객지원" desc={["공지사항", "서비스 소개", "소장품 정기경매 접수"]} />
+            </Box>
+            <Box><FooterContent desc={["이용약관", "개인정보처리방침", "SSAFY A601", "이아현 권기정 문석희 박재권 이수연 차유진", `Notion https://www.notion.so/chayoo/
 2-PJT1-7f40831c919d4846a6214c2d30d7c8f2`]} /></Box>
-</FooterContainer>
-        
+        </FooterContainer>
+
     </Box>);
 }
 
@@ -81,15 +81,10 @@ const NavBarDiv = styled.div`
 `;
 const IconButtonStyle = {
     display: "flex",
-    flexDirection : "column",
-    justifyContent:"center",
-    alignItems:"center",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
 };
-const NavFont = {
-    fontSize: "10px",
-    fontWeight: "Bold",
-    color: "#5f5f5f"
-}
 let lastScrollTop = 0;
 let nowScrollTop = 0;
 export function NavBar() {
@@ -118,24 +113,24 @@ export function NavBar() {
         };
     }, []);
     return (
-        <NavBarDiv isShow={show} opacity = {opacity}>
-            
-                <div style={IconButtonStyle} >
-                    <img alt="홈" src="/img/HomeIcon.svg"/>
-                </div>
-                <div style={IconButtonStyle} >
-                    <img alt="검색" src="/img/SearchIcon.svg"/>
-                </div>
-                <div style={IconButtonStyle} >
-                    <img alt="리스트" src="/img/ListIcon.svg"/>
-                </div>
-                <div style={IconButtonStyle} >
-                    <img alt="Onair" src="/img/OnairIcon.svg"/>
-                </div>
-                <div style={IconButtonStyle} >
-                    <img alt="Mypage" src="/img/MypageIcon.svg"/>
-                </div>
-                
+        <NavBarDiv isShow={show} opacity={opacity}>
+
+            <div style={IconButtonStyle} >
+                <img alt="홈" src="/img/HomeIcon.svg" />
+            </div>
+            <div style={IconButtonStyle} >
+                <img alt="검색" src="/img/SearchIcon.svg" />
+            </div>
+            <div style={IconButtonStyle} >
+                <img alt="리스트" src="/img/ListIcon.svg" />
+            </div>
+            <div style={IconButtonStyle} >
+                <img alt="Onair" src="/img/OnairIcon.svg" />
+            </div>
+            <div style={IconButtonStyle} >
+                <img alt="Mypage" src="/img/MypageIcon.svg" />
+            </div>
+
         </NavBarDiv>
     )
 }
@@ -151,7 +146,7 @@ const ProductFrame = styled.div`
 
 const TimeTable = styled.div`
     color: white;
-    background-color: ${(props) => props.isStart? "red": "gray" || "gray"};
+    background-color: ${(props) => props.isStart ? "red" : "gray" || "gray"};
     font-size: 10px;
     text-align: center;
     border-radius: 5px;
@@ -166,11 +161,11 @@ const ArtistImg = styled.img`
 `;
 
 //상품 프레임
-export function Product({title, productSrc, artistSrc, artist, dueDate, dueTime, isStart, people}) {
+export function Product({ title, productSrc, artistSrc, artist, dueDate, dueTime, isStart, people }) {
     return <Box>
         <ProductFrame>
             <ProductImg productSrc={productSrc}></ProductImg>
-            <TimeTable>{isStart ? {dueTime} : "실시간"}</TimeTable>
+            <TimeTable>{isStart ? { dueTime } : "실시간"}</TimeTable>
         </ProductFrame>
         <Box direction="row">
             <ArtistImg artistSrc={artistSrc}></ArtistImg>
@@ -186,8 +181,8 @@ export function Product({title, productSrc, artistSrc, artist, dueDate, dueTime,
 
 
 //작가 프레임
-export function Artist({artist, artistSrc}) {
-    
+export function Artist({ artist, artistSrc }) {
+
 }
 // const ArtistImg = styled.
 
