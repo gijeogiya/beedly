@@ -37,7 +37,7 @@ public class UserService {
     private String restApiKey;
 
     private final UserRepository userRepository;
-    private final UserQueryRepository userQueryRetrsfpository;
+    private final UserQueryRepository userQueryRepository;
     private final UserTagRepository userTagRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
