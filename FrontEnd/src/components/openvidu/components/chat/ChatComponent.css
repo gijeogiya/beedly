@@ -74,7 +74,7 @@
   border-radius: 5px;
   color: #000000;
   width: auto;
-  max-width: 80%;
+  max-width: 95%;
 }
 
 .text {
@@ -88,6 +88,12 @@
 .message.left.my > .msg-content > .text {
   word-break: break-all;
   color: #d1cb1b;
+  text-shadow: -1px 0px rgb(0, 0, 0), 0px 1px rgb(0, 0, 0), 1px 0px rgb(0, 0, 0),
+    0px -1px rgb(0, 0, 0);
+}
+
+.seller {
+  color: #1bd158;
   text-shadow: -1px 0px rgb(0, 0, 0), 0px 1px rgb(0, 0, 0), 1px 0px rgb(0, 0, 0),
     0px -1px rgb(0, 0, 0);
 }

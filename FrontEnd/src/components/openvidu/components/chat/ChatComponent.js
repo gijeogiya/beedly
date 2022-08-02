@@ -15,7 +15,6 @@ export default class ChatComponent extends Component {
       message: "",
     };
     this.chatScroll = React.createRef();
-
     this.handleChange = this.handleChange.bind(this);
     this.handlePressKey = this.handlePressKey.bind(this);
     this.close = this.close.bind(this);
@@ -60,6 +59,10 @@ export default class ChatComponent extends Component {
     console.log(this.state.message);
     if (this.props.user && this.state.message) {
       let message = this.state.message.replace(/ +(?= )/g, "");
+      console.log("grade : " + this.props.grade);
+      if (this.props.grade !== undefined) {
+        if (this.props.grade === "seller") message = "[작가님] " + message;
+      }
       if (message !== "" && message !== " ") {
         const data = {
           message: message,
@@ -107,8 +110,9 @@ export default class ChatComponent extends Component {
                 className={
                   "message left" +
                   (data.connectionId !== this.props.user.getConnectionId()
-                    ? " "
-                    : " my")
+                    ? ""
+                    : " my") +
+                  (this.props.grade === " seller" ? "" : "")
                   //     ? " left"
                   //     : " right")
                   //   "message" +

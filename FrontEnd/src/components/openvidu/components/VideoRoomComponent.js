@@ -28,6 +28,10 @@ class VideoRoomComponent extends Component {
       : "SessionA";
     let userName = this.props.user
       ? this.props.user
+      : this.props.grade
+      ? this.props.grade == "seller"
+        ? "[작가님" + Math.floor(Math.random() * 100) + "]"
+        : "[구매자" + Math.floor(Math.random() * 100) + "]"
       : "OpenVidu_User" + Math.floor(Math.random() * 100);
     this.remotes = [];
     this.localUserAccessAllowed = false;

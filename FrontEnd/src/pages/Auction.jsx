@@ -1,6 +1,11 @@
 import { Notification, Grommet, Box, Carousel } from "grommet";
 import React, { useState, useEffect } from "react";
-import { AuctionArtist, StyledText, StyledHr } from "../components/Common";
+import {
+  AuctionArtist,
+  StyledText,
+  StyledHr,
+  Button,
+} from "../components/Common";
 import styled from "styled-components";
 import image from "../assets/images/openvidu.png";
 import artist from "../assets/images/artist.png";
@@ -142,6 +147,7 @@ function ProductFrame({
   currentPrice,
   callPrice,
   visible,
+  grade,
   f,
 }) {
   return (
@@ -195,9 +201,13 @@ function ProductFrame({
         </Box>
       </ProductBox>
       <ButtonContainer>
-        <BidButton disabled={visible} visible={visible} onClick={f}>
-          {visible ? "입찰완료" : "입찰하기"}
-        </BidButton>
+        {grade !== undefined && grade === "buyer" ? (
+          <BidButton disabled={visible} visible={visible} onClick={f}>
+            {visible ? "입찰완료" : "입찰하기"}
+          </BidButton>
+        ) : (
+          <Button MediumGray>종료하기</Button>
+        )}
       </ButtonContainer>
     </ProductContainer>
   );
@@ -248,12 +258,12 @@ const ChatFrame = styled.div`
 
 const ChattingDiv = styled.div``;
 
-const ChatBox = ({ localUser }) => {
+const ChatBox = ({ localUser, grade }) => {
   return (
     <ChatFrame>
       {localUser !== undefined
         ? localUser.getStreamManager() !== undefined && (
-            <ChatComponent user={localUser} />
+            <ChatComponent user={localUser} grade={grade} />
           )
         : null}
     </ChatFrame>
@@ -269,10 +279,12 @@ const Conatainer = styled(Carousel)`
   justify-content: center;
 `;
 
-function BottomUi({ bidInfo, visible, f, localUser }) {
+function BottomUi({ bidInfo, visible, f, localUser, grade }) {
   return (
     <Conatainer controls="arrows">
-      {localUser !== undefined && <ChatBox localUser={localUser} />}
+      {localUser !== undefined && (
+        <ChatBox localUser={localUser} grade={grade} />
+      )}
       <ProductFrame
         title={bidInfo.title}
         category={bidInfo.category}
@@ -282,6 +294,7 @@ function BottomUi({ bidInfo, visible, f, localUser }) {
         currentPrice={bidInfo.currentPrice}
         callPrice={bidInfo.callPrice}
         visible={visible}
+        grade={grade}
         f={f}
       ></ProductFrame>
     </Conatainer>
@@ -372,6 +385,7 @@ export const Auction = ({ grade }) => {
           visible={visible}
           f={handleVisible}
           localUser={localUser}
+          grade={grade}
         />
       </Grommet>
     </div>
