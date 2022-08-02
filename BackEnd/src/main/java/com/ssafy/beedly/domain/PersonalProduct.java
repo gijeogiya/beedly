@@ -43,6 +43,9 @@ public class PersonalProduct extends BaseEntity {
     @Column(name = "p_product_d")
     private Integer depth;
 
+    @Column(name = "p_favorite_count")
+    private Integer favoriteCount;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "p_sold_status")
     private SoldStatus soldStatus;

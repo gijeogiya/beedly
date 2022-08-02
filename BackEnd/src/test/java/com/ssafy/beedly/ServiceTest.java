@@ -56,7 +56,7 @@ public class ServiceTest {
 
 	@Test
 	public void Category(){
-		List<PersonalProduct> products = personalProductRepository.findPersonalProductByOrderByStartTimeAsc("회화");
+		List<PersonalProduct> products = personalProductRepository.findPersonalProductByOrderByStartTime("회화");
 		System.out.println(products);
 	}
 

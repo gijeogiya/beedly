@@ -13,3 +13,4 @@ public interface PersonalFavoriteRepository  extends JpaRepository<PersonalFavor
 	// @Query("select p from ")
 	// List<PersonalProduct> findPersonalFavoriteByUser();
 }
+ 
