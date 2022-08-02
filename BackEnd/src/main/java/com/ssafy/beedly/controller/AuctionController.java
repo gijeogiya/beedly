@@ -96,7 +96,7 @@ public class AuctionController {
     // redis cache 적용해야함.
     @ApiOperation(value = "기획전 경매방 입장", notes = "기획전 경매방 입장(방 정보 + 상품 정보 리스트 같이 리턴)")
     @ApiImplicitParam(name = "auctionId", value = "기획전 경매방 식별자")
-    @PostMapping("/auction/{auctionId}/special")
+    @GetMapping("/auction/{auctionId}/special")
     public ResponseEntity<List<EnterSpecialAuctionResponse>> enterSpecialAuction(@PathVariable Long auctionId) {
         return ResponseEntity.ok(specialAuctionService.enterSpecialAuction(auctionId));
     }
