@@ -1,6 +1,8 @@
 package com.ssafy.beedly.dto;
 
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -32,5 +34,4 @@ public class PersonalProductDto {
 	private User user;
 	private List<PersonalProductImg> productImgs;
 	private PersonalSold personalSold;
-
 }
