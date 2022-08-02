@@ -29,4 +29,16 @@ public class SpecialAuction extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public static SpecialAuction createSpecialAuction(SpecialBoard sb, User u) {
+        SpecialAuction specialAuction = new SpecialAuction();
+        specialAuction.activeFlag = true;
+        specialAuction.specialBoard = sb;
+        specialAuction.user = u;
+        return specialAuction;
+    }
+
+    public void closeAuction() {
+        this.activeFlag = false;
+    }
 }

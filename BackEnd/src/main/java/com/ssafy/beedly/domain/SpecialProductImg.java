@@ -24,6 +24,6 @@ public class SpecialProductImg extends BaseEntity {
     private String imgUri;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "p_product_id")
+    @JoinColumn(name = "s_product_id")
     private SpecialProduct specialProduct;
 }

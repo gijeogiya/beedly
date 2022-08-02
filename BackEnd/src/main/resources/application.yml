@@ -1,4 +1,16 @@
 spring:
+  # 채팅 테스트용
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+  freemarker:
+    cache: false
+    template-loader-path: classpath:/templates
+    prefix: /chat/
+    suffix: .ftl
+
   servlet:
     multipart:
       enabled: true

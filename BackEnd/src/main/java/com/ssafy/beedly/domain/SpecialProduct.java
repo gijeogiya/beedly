@@ -41,6 +41,9 @@ public class SpecialProduct extends BaseEntity {
     @Column(name = "s_product_d")
     private Integer depth;
 
+    @Column(name = "s_artist_name")
+    private String artistName;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "s_sold_status")
     private SoldStatus soldStatus;

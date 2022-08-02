@@ -42,7 +42,6 @@ public class  SpecialBoard extends BaseEntity {
     private User user;
 
     @OneToMany(mappedBy = "specialBoard")
-    List<SpecialProduct> specialProduct = new ArrayList<>();
-
+    private List<SpecialProduct> specialProducts = new ArrayList<>();
 
 }
