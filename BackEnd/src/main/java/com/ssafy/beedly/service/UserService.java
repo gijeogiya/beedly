@@ -109,10 +109,9 @@ public class UserService {
     }
 
     // 내 판매내역 리스트
-//    public List<UserSalesResponse> searchMySales(User user) {
-        public List<UserSalesResponse> searchMySales(Long userId) {
-//        User findUser = validateUser(user);
-        List<PersonalProduct> personalProducts = userQueryRepository.searchUserSales(userId);
+    public List<UserSalesResponse> searchMySales(User user) {
+        User findUser = validateUser(user);
+        List<PersonalProduct> personalProducts = userQueryRepository.searchUserSales(user.getId());
 
         return personalProducts.stream()
                 .map(personalProduct -> new UserSalesResponse(personalProduct))
@@ -120,13 +119,13 @@ public class UserService {
     }
 
     // 상시 구매내역 결제정보 조회
-    public UserPurchasePaidResponse searchPersonalPurchasePaidInfo(Long productSoldId, Long userId) {
+    public UserPurchasePaidResponse searchPersonalPurchasePaidInfo(Long productSoldId, User user) {
         // 본인 구매내역 맞는지 방어로직 추가하기
         return new UserPurchasePaidResponse(userQueryRepository.searchPersonalPurchasePaidInfo(productSoldId));
     }
 
     // 기획전 구매내역 결제정보 조회
-    public UserPurchasePaidResponse searchSpecialPurchasePaidInfo(Long productSoldId, Long userId) {
+    public UserPurchasePaidResponse searchSpecialPurchasePaidInfo(Long productSoldId, User user) {
         // 본인 구매내역 맞는지 방어로직 추가하기
         return new UserPurchasePaidResponse(userQueryRepository.searchSpecialPurchasePaidInfo(productSoldId));
     }
