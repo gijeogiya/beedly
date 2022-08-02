@@ -37,4 +37,8 @@ public class PersonalAuction extends BaseEntity {
         personalAuction.user = u;
         return personalAuction;
     }
+
+    public void closeAuction() {
+        this.activeFlag = false;
+    }
 }

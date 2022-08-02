@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.ssafy.beedly.common.exception.NotFoundException.*;
+import static com.ssafy.beedly.common.exception.NotMatchException.AUCTION_NOT_MATCH;
 import static com.ssafy.beedly.common.exception.NotMatchException.PRODUCT_OWNER_NOT_MATCH;
 
 @Service
@@ -46,5 +47,17 @@ public class PersonalAuctionService {
                 .orElseThrow(() -> new NotFoundException(ARTIST_NOT_FOUND));
 
         return new EnterPersonalAuctionResponse(findPersonalAuction, findArtist, host);
+    }
+
+    // 상시 경매방 종료
+    @Transactional
+    public void closePersonalAuction(User user, Long auctionId) {
+        PersonalAuction findPersonalAuction = personalAuctionRepository.findByIdWithProductAndUser(auctionId)
+                .orElseThrow(() -> new NotFoundException(AUCTION_NOT_FOUND));
+        if (findPersonalAuction.getUser().getId() != user.getId()) {
+            throw new NotMatchException(AUCTION_NOT_MATCH);
+        }
+
+        findPersonalAuction.closeAuction();
     }
 }

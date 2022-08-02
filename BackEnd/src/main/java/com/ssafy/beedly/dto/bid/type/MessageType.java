@@ -1,5 +1,5 @@
 package com.ssafy.beedly.dto.bid.type;
 
 public enum MessageType {
-    ENTER, TALK, BIDDING
+    ENTER, BIDDING
 }

@@ -9,13 +9,11 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.*;
 
 @Configuration
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 @EnableWebSocketMessageBroker
-//@EnableWebSocket
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-//public class WebSocketConfig implements WebSocketConfigurer {
 
-//    private final StompHandler stompHandler;
+    private final StompHandler stompHandler;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -30,8 +28,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/pub");
     }
 //
-//    @Override
-//    public void configureClientInboundChannel(ChannelRegistration registration) {
-//        registration.interceptors(stompHandler);
-//    }
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(stompHandler);
+    }
 }

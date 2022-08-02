@@ -13,6 +13,9 @@ import com.ssafy.beedly.service.PersonalAuctionService;
 import com.ssafy.beedly.service.PersonalBidService;
 import com.ssafy.beedly.service.SpecialAuctionService;
 import com.ssafy.beedly.service.SpecialBidService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,6 +28,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
+@Api(value = "경매 컨트롤러")
 @RestController
 @RequiredArgsConstructor
 public class AuctionController {
@@ -37,6 +41,8 @@ public class AuctionController {
     private final JwtUtil jwtUtil;
 
     // 상시 경매방 생성
+    @ApiOperation(value = "상시 경매방 생성", notes = "상품 식별자로 상시 경매방 생성")
+    @ApiImplicitParam(name = "productId", value = "상품 식별자")
     @PostMapping("/auction/personal/product/{productId}")
     public ResponseEntity<CreateAuctionResponse> createPersonalAuction(@ApiIgnore @LoginUser User user, @PathVariable Long productId) {
         return ResponseEntity.status(HttpStatus.CREATED).body(new CreateAuctionResponse(personalAuctionService.createPersonalAuction(user, productId)));
@@ -44,6 +50,8 @@ public class AuctionController {
 
     // 상시 경매방 입장(방 정보 + 상품 정보 + 작가정보도 같이 리턴)
     // redis cache 적용해야함.
+    @ApiOperation(value = "상시 경매방 입장", notes = "상시 경매방 입장(방 정보 + 상품 정보 + 작가정보도 같이 리턴)")
+    @ApiImplicitParam(name = "auctionId", value = "상시 경매방 식별자")
     @GetMapping("/auction/{auctionId}/personal")
     public ResponseEntity<EnterPersonalAuctionResponse> enterPersonalAuction(@PathVariable Long auctionId) {
         return ResponseEntity.ok(personalAuctionService.enterPersonalAuction(auctionId));
@@ -66,7 +74,19 @@ public class AuctionController {
         messagingTemplate.convertAndSend("/sub/auction/personal/" + request.getAuctionId(), bidMessageResponse);
     }
 
+    // 상시 경매방 종료
+    @ApiOperation(value = "상시 경매방 종료", notes = "상시 경매방 종료하기")
+    @ApiImplicitParam(name = "auctionId", value = "상시 경매방 식별자")
+    @PatchMapping("/auction/{auctionId}/personal")
+    public ResponseEntity closePersonalAuction(@ApiIgnore @LoginUser User user, @PathVariable Long auctionId) {
+        personalAuctionService.closePersonalAuction(user, auctionId);
+
+        return ResponseEntity.ok().build();
+    }
+
     // 기획전 경매방 생성
+    @ApiOperation(value = "기획전 경매방 생성", notes = "기획전 게시글 식별자로 기획전 경매방 생성")
+    @ApiImplicitParam(name = "boardId", value = "기획전 게시글 식별자")
     @PostMapping("/auction/special/board/{boardId}")
     public ResponseEntity<CreateAuctionResponse> createSpecialAuction(@ApiIgnore @LoginUser User user, @PathVariable Long boardId) {
         return ResponseEntity.status(HttpStatus.CREATED).body(new CreateAuctionResponse(specialAuctionService.createSpecialAuction(user, boardId)));
@@ -74,6 +94,8 @@ public class AuctionController {
 
     // 기획전 경매방 입장
     // redis cache 적용해야함.
+    @ApiOperation(value = "기획전 경매방 입장", notes = "기획전 경매방 입장(방 정보 + 상품 정보 리스트 같이 리턴)")
+    @ApiImplicitParam(name = "auctionId", value = "기획전 경매방 식별자")
     @PostMapping("/auction/{auctionId}/special")
     public ResponseEntity<List<EnterSpecialAuctionResponse>> enterSpecialAuction(@PathVariable Long auctionId) {
         return ResponseEntity.ok(specialAuctionService.enterSpecialAuction(auctionId));
@@ -93,5 +115,15 @@ public class AuctionController {
 
         // 입찰정보 뿌리기
         messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), bidMessageResponse);
+    }
+
+    // 기획전 경매방 종료
+    @ApiOperation(value = "기획전 경매방 종료", notes = "기획전 경매방 종료하기")
+    @ApiImplicitParam(name = "auctionId", value = "기획전 경매방 식별자")
+    @PatchMapping("/auction/{auctionId}/special")
+    public ResponseEntity closeSpecialAuction(@PathVariable Long auctionId) {
+        specialAuctionService.closeSpecialAuction(auctionId);
+
+        return ResponseEntity.ok().build();
     }
 }

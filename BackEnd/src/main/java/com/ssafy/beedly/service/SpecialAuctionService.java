@@ -48,4 +48,13 @@ public class SpecialAuctionService {
 
         return specialProducts.stream().map(specialProduct -> new EnterSpecialAuctionResponse(auctionId, specialProduct)).collect(Collectors.toList());
     }
+
+    // 기획전 경매방 종료
+    @Transactional
+    public void closeSpecialAuction(Long auctionId) {
+        SpecialAuction specialAuction = specialAuctionRepository.findById(auctionId)
+                .orElseThrow(() -> new NotFoundException(SPECIAL_BOARD_NOT_FOUND));
+
+        specialAuction.closeAuction();
+    }
 }
