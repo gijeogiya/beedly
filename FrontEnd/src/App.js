@@ -39,7 +39,11 @@ function App() {
             <Route path="/signup1" element={<SignupChoice />} />
             <Route path="/signup2" element={<Signup />} />
           </Route>
+<<<<<<< HEAD
           <Route path="/user/kakao/callback" element={<Kakao />}></Route>
+=======
+            <Route path="/user/kakao/callback" element={<Kakao/>}></Route>
+>>>>>>> efe1ffe1cf04e2ac28f4ee4bfa8ff92590ff5e35
         </Routes>
       </Router>
     </div>
