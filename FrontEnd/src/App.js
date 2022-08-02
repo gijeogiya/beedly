@@ -1,5 +1,6 @@
-import './App.css';
+import './App.css'
 import {LogoHeader, NavBar, Footer} from "./components/Common"
+import { CategoryBar } from './pages/Main';
 import { BrowserRouter,Route, Link} from "react-router-dom";
 function App() {
   
@@ -7,7 +8,9 @@ function App() {
     <div className="App">
       
       <LogoHeader/>
-      <div className="main-content"></div>
+      <div className="main-content">
+        <CategoryBar/>
+      </div>
       <Footer />
       
       <NavBar />
