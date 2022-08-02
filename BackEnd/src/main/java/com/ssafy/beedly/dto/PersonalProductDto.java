@@ -1,6 +1,9 @@
 package com.ssafy.beedly.dto;
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> f01397821cdb18ea9f04c6aa30826c37f12e7c21
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
