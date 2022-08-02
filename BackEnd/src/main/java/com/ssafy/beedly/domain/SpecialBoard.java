@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-public class SpecialBoard extends BaseEntity {
+public class  SpecialBoard extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,4 +43,5 @@ public class SpecialBoard extends BaseEntity {
 
     @OneToMany(mappedBy = "specialBoard")
     private List<SpecialProduct> specialProducts = new ArrayList<>();
+
 }
