@@ -7,6 +7,6 @@ import com.ssafy.beedly.domain.User;
 public class AbsenteeBidDto {
     private long id;
     private Integer absenteeBidPrice;
-    private PersonalProduct personalProduct;
-    private User user;
+    private long personalProductId;
+    private long userId;
 }

@@ -1,5 +1,6 @@
 package com.ssafy.beedly.service;
 
+import com.ssafy.beedly.dto.AbsenteeBidDto;
 import com.ssafy.beedly.repository.AbsenteeBidRepository;
 import com.ssafy.beedly.repository.query.AbsenteeBidQueryRepository;
 import com.ssafy.beedly.domain.AbsenteeBid;
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -41,4 +43,7 @@ public class AbsenteeBidService {
     }
 
     // 서면응찰 목록
+    public List<AbsenteeBid> list() {
+        return absenteeBidRepository.findAll();
+    }
 }
