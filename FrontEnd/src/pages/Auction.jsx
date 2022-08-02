@@ -288,7 +288,7 @@ function BottomUi({ bidInfo, visible, f, localUser }) {
   );
 }
 
-export const Auction = () => {
+export const Auction = ({ grade }) => {
   const [visible, setVisible] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
   const [isCalled, setIsCalled] = useState(false);
@@ -350,7 +350,7 @@ export const Auction = () => {
       {/* <MainContent src={image} /> */}
       <ErrorBoundary>
         {" "}
-        <VideoRoomComponent setLocalUser={setLocalUser} />{" "}
+        <VideoRoomComponent setLocalUser={setLocalUser} grade={grade} />{" "}
       </ErrorBoundary>
       <AuctionArtist
         title={bidInfo.title}
