@@ -1,4 +1,5 @@
 import "./App.css";
+<<<<<<< HEAD
 import { LogoHeader, Footer, NavBar } from "./components/Common";
 import { Outlet, Route, Routes } from "react-router-dom";
 import Main from "./pages/Main";
@@ -9,6 +10,22 @@ import Login from "./pages/Login";
 import SignupChoice from "./pages/SignupChoice";
 import Signup from "./pages/Signup";
 import Kakao from "./pages/Kakao";
+=======
+import { LogoHeader, NavBar, Footer } from "./components/Common";
+import {
+  BrowserRouter as Router,
+  Outlet,
+  Route,
+  Routes,
+} from "react-router-dom";
+import MainPage from "./pages/MainPage";
+import SearchPage from "./pages/SearchPage";
+import ProductListPage from "./pages/ProductListPage";
+import OnairPage from "./pages/OnairPage";
+import MyPage from "./pages/MyPage";
+import { Auction } from "./pages/Auction";
+
+>>>>>>> 4e2ee8a569ff63c74111edc7186ff6eac6e85ab4
 const Layout = () => {
   return (
     <div>
@@ -23,6 +40,7 @@ const Layout = () => {
 function App() {
   return (
     <div className="App">
+<<<<<<< HEAD
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Main />} />
@@ -35,6 +53,20 @@ function App() {
         </Route>
         <Route path="/user/kakao/callback" element={<Kakao />}></Route>
       </Routes>
+=======
+      <Auction />
+      {/* <Router>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<MainPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/productlist" element={<ProductListPage />} />
+            <Route path="/onair" element={<OnairPage />} />
+            <Route path="/mypage" element={<MyPage />} />
+          </Route>
+        </Routes>
+      </Router> */}
+>>>>>>> 4e2ee8a569ff63c74111edc7186ff6eac6e85ab4
     </div>
   );
 }
