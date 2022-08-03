@@ -20,7 +20,7 @@ public class PersonalAuction extends BaseEntity {
     private Long id;
 
     @Column(name = "p_active_flag")
-    private boolean activeFlag;
+    private Boolean activeFlag;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_product_id")
@@ -29,4 +29,16 @@ public class PersonalAuction extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public static PersonalAuction createPersonalAuction(PersonalProduct p, User u) {
+        PersonalAuction personalAuction = new PersonalAuction();
+        personalAuction.activeFlag = true;
+        personalAuction.personalProduct = p;
+        personalAuction.user = u;
+        return personalAuction;
+    }
+
+    public void closeAuction() {
+        this.activeFlag = false;
+    }
 }

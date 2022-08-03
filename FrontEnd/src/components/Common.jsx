@@ -10,38 +10,19 @@ const Header = styled.img`
     max-width: 32vw;
     min-width: 32vw;
     padding: 0vw 34vw;
+    max-height: 10vh;
 `;
 export function LogoHeader() {
     return <Header alt="logo" src="img/logo.png"></Header>;
 }
 
-// 가변스타일링(변수 한개)
-const StyledButton = styled.button`
-  padding: 0.375rem 0.75rem;
-  border-radius: 0.25rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  border: 1px solid lightgray;
-
-  color: ${(props) => props.color || "gray"};
-  background: ${(props) => props.background || "white"};
-`;
-
-export function Button({ children, color, background }) {
-    return (
-        <StyledButton color={color} background={background} Î>
-            {children}
-        </StyledButton>
-    );
-}
-
+//Footer
 const FooterContainer = styled.div`
     padding: 15px;
     max-width: 300px;
     align-items: center;
     
 `;
-
 
 const FooterContent = ({ title, desc }) => {
     return <div style={{ padding: "10px", fontSize: "10px" }}>
@@ -67,6 +48,7 @@ export function Footer() {
     </Box>);
 }
 
+//NavBar
 const NavBarDiv = styled.div`
     position: fixed;
     bottom: 0;
@@ -147,9 +129,15 @@ export function NavBar() {
     )
 }
 
+
+
+
+
+
 const ProductImg = styled.img`
     src: ${(props) => props.productSrc || ""};
 `;
+
 const ProductFrame = styled.div`
     border-radius: 14px;
     width: 175px;

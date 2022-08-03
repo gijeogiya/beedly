@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ProductController {
 
-    private final PersonalProductService personalProductService;
-    private final SpecialProductService specialProductService;
+//    private final PersonalProductService personalProductService;
+//    private final SpecialProductService specialProductService;
 
 }
