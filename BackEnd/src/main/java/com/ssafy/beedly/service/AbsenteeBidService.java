@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.ssafy.beedly.common.exception.NotFoundException.ABSENTEE_BID_NOT_FOUND;
+import static com.ssafy.beedly.common.exception.NotFoundException.PRODUCT_NOT_FOUND;
 
 @Slf4j
 @Service
@@ -36,34 +37,25 @@ public class AbsenteeBidService {
 //                return; // 이미 해당 유저가 해당 상품에 대한 서면응찰을 한 기록이 있음
 //            }
 //        }
-        PersonalProduct p = null;
-        for (PersonalProduct pp: personalProductRepository.findAll()
-             ) {
-            if(pp.getId().equals(productId)) {
-                p = pp;
-                break;
-            }
-        }
-        AbsenteeBid bid = AbsenteeBid.createAbsenteeBid(price, p, user);
+        PersonalProduct personalProduct = personalProductRepository.findById(productId)
+                .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
+        AbsenteeBid bid = AbsenteeBid.createAbsenteeBid(price, personalProduct, user);
         absenteeBidRepository.save(bid);
     }
 
     // 서면응찰 수정
     @Transactional
-    public void update(AbsenteeBid absenteeBid, Integer newPrice) {
-        AbsenteeBid findAbsenteeBid = absenteeBidRepository.findById(absenteeBid.getId())
+    public void update(Long absenteeBidId, Integer newPrice) {
+        AbsenteeBid findAbsenteeBid = absenteeBidRepository.findById(absenteeBidId)
                 .orElseThrow(() -> new NotFoundException(ABSENTEE_BID_NOT_FOUND));
         findAbsenteeBid.updateBidPrice(newPrice);
     }
 
     @Transactional
     // 서면응찰 삭제
-    public void delete(AbsenteeBid absenteeBid) {
-        absenteeBidRepository.deleteById(absenteeBid.getId());
-    }
-
-    // 서면응찰 목록
-    public List<AbsenteeBid> getlist() {
-        return absenteeBidRepository.findAll();
+    public void delete(Long absenteeBidId) {
+        AbsenteeBid absenteeBid = absenteeBidRepository.findById(absenteeBidId)
+                .orElseThrow(() -> new NotFoundException(ABSENTEE_BID_NOT_FOUND));
+        absenteeBidRepository.delete(absenteeBid);
     }
 }

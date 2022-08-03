@@ -22,8 +22,15 @@ public class AbsenteeBidController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    public ResponseEntity<?> updateAbsenteeBidInfo(@PathVariable AbsenteeBid absenteeBid, @RequestBody Integer newPrice) {
-        absenteeBidService.update(absenteeBid, newPrice);
+    @PatchMapping("/{absenteeBidId}")
+    public ResponseEntity<?> updateAbsenteeBidInfo(@PathVariable Long absenteeBidId, @RequestBody Integer newPrice) {
+        absenteeBidService.update(absenteeBidId, newPrice);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping("/{absenteeBidId}")
+    public ResponseEntity<?> deleteAbsenteeBidInfo(@PathVariable Long absenteeBidId) {
+        absenteeBidService.delete(absenteeBidId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
