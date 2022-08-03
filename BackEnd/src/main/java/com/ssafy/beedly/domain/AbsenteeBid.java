@@ -30,4 +30,16 @@ public class AbsenteeBid extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public static AbsenteeBid createAbsenteeBid(Integer price, PersonalProduct p, User user) {
+        AbsenteeBid absenteeBid = new AbsenteeBid();
+        absenteeBid.absenteeBidPrice = price;
+        absenteeBid.personalProduct = p;
+        absenteeBid.user = user;
+        return absenteeBid;
+    }
+
+    public void updateBidPrice(Integer newPrice) {
+        this.absenteeBidPrice = newPrice;
+    }
 }

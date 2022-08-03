@@ -1,12 +1,23 @@
 package com.ssafy.beedly.dto;
 
 import com.ssafy.beedly.domain.AbsenteeBid;
-import com.ssafy.beedly.domain.PersonalProduct;
-import com.ssafy.beedly.domain.User;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AbsenteeBidDto {
-    private long id;
+    private Long id;
     private Integer absenteeBidPrice;
-    private long personalProductId;
-    private long userId;
+    private Long personalProductId;
+    private Long userId;
+
+    public AbsenteeBidDto(AbsenteeBid absenteeBid) {
+        this.id = absenteeBid.getId();
+        this.absenteeBidPrice = absenteeBid.getAbsenteeBidPrice();
+        this.personalProductId = absenteeBid.getPersonalProduct().getId();
+        this.userId = absenteeBid.getUser().getId();
+    }
 }
