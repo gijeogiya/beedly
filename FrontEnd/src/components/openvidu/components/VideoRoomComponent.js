@@ -213,6 +213,17 @@ class VideoRoomComponent extends Component {
       }
     );
     this.props.setLocalUser(localUser);
+
+    const data = {
+      message: "님이 입장했습니다.",
+      nickname: localUser.getNickname(),
+      streamId: localUser.getStreamManager().stream.streamId,
+    };
+    localUser.getStreamManager().stream.session.signal({
+      data: JSON.stringify(data),
+      type: "chat",
+    });
+
   }
 
   updateSubscribers() {
