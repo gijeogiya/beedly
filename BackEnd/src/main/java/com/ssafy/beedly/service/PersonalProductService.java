@@ -4,6 +4,7 @@ package com.ssafy.beedly.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.ssafy.beedly.dto.PersonalProductCloseDto;
 import com.ssafy.beedly.dto.PersonalProductDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -55,16 +56,36 @@ public class PersonalProductService {
 		return dto;
 
 	}
+
 	@Transactional
-	Slice<PersonalProductDto> getProductByCategry(Pageable pageable, Long id){
-		Slice<PersonalProductDto> products = personalProductRepository.findAll(pageable)
+	public PersonalProductCloseDto getProductByIdClose(Long id){
+
+	}
+
+	@Transactional
+	public Slice<PersonalProductDto> getProductByCategory(String categoryName, Pageable pageable){
+		Slice<PersonalProductDto> products = personalProductRepository.findProductByCategory(categoryName, pageable)
+				.map(PersonalProductDto::new);
+		return products;
+	}
+
+//	@Transactional
+	public Slice<PersonalProductDto> getProductOnAirByCategory(String categoryName, Pageable pageable){
+		Slice<PersonalProductDto> products = personalProductRepository.findProductOnAirByCategory(categoryName, pageable)
 				.map(PersonalProductDto::new);
 		return products;
 	}
 
 	@Transactional
-	List<PersonalProduct> getProductByName(String name){
+	public List<PersonalProduct> getProductByName(String name){
 		return personalProductRepository.findPersonalProductByProductNameLike(name);
+	}
+
+	@Transactional
+	public Slice<PersonalProductDto> getProductBySize(Integer width, Integer height, Pageable pageable){
+		Slice<PersonalProductDto> products = personalProductRepository.findProductBySize(width, height, pageable)
+				.map(PersonalProductDto::new);
+		return products;
 	}
 
 

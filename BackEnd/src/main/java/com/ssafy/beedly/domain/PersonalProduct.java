@@ -38,7 +38,7 @@ public class PersonalProduct extends BaseEntity {
     private Integer height;
 
     @Column(name = "p_product_w")
-    private Integer weight;
+    private Integer width;
 
     @Column(name = "p_product_d")
     private Integer depth;
@@ -67,6 +67,10 @@ public class PersonalProduct extends BaseEntity {
     @OneToOne(mappedBy = "personalProduct")
     private PersonalSold personalSold;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "artist_id")
+    private Artist artist;
+
     public PersonalProduct(String productName) {
         this.productName = productName;
     }
@@ -79,7 +83,7 @@ public class PersonalProduct extends BaseEntity {
                 ", productDesc='" + productDesc + '\'' +
                 ", startPrice=" + startPrice +
                 ", height=" + height +
-                ", weight=" + weight +
+                ", width=" + width +
                 ", depth=" + depth +
                 ", soldStatus=" + soldStatus +
                 ", startTime=" + startTime +
