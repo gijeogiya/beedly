@@ -3,9 +3,7 @@ package com.ssafy.beedly;
 import java.util.Collections;
 import java.util.List;
 
-import com.ssafy.beedly.domain.AbsenteeBid;
-import com.ssafy.beedly.domain.SpecialAuction;
-import com.ssafy.beedly.domain.SpecialBoard;
+import com.ssafy.beedly.domain.*;
 import com.ssafy.beedly.repository.AbsenteeBidRepository;
 import com.ssafy.beedly.repository.SpecialBoardRepository;
 import com.ssafy.beedly.repository.query.AbsenteeBidQueryRepository;
@@ -16,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ssafy.beedly.domain.PersonalProduct;
 import com.ssafy.beedly.repository.PersonalProductRepository;
 import com.ssafy.beedly.repository.query.PersonalProductQueryRepository;
 import com.ssafy.beedly.service.PersonalProductService;
@@ -24,7 +21,7 @@ import com.ssafy.beedly.service.PersonalProductService;
 import javax.persistence.EntityExistsException;
 
 @SpringBootTest
-@Transactional
+//@Transactional
 public class ServiceTest {
 
 	/*
@@ -73,7 +70,6 @@ public class ServiceTest {
 	}
 	 */
 
-
 	@Autowired
 	AbsenteeBidRepository absenteeBidRepository;
 
@@ -85,9 +81,10 @@ public class ServiceTest {
 
 	@Test
 	public void setAbsenteeBidQueryRepository() {
-		AbsenteeBid absenteeBid = new AbsenteeBid(1L, 30000,1L, 1L);
-		absenteeBidQueryRepository.addAbsenteeBid(absenteeBid);
-
+		AbsenteeBid absenteeBid = new AbsenteeBid(null, 500000, new PersonalProduct(4L, null,null,null,null,null,null,null,null,null,null,null,null), new User(1L, null, null, null, null, null, null, null, null, null));
+//		absenteeBidRepository.save(absenteeBid);
+		absenteeBidService.save(absenteeBid);
+//		absenteeBidService.update(absenteeBid);
 	}
 
 }
