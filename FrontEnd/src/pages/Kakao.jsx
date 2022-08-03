@@ -1,8 +1,9 @@
 import React from 'react'
 import { useDispatch } from "react-redux";
+import { LogoHeader } from '../components/Common';
 import { actionCreators as userActions } from "../stores/modules/user";
 // import { login } from '../utils/api';
-import Login from "./Login";
+import Loading from "./Loading";
 
 export default function Kakao() {
     const dispatch = useDispatch();
@@ -19,7 +20,10 @@ export default function Kakao() {
     }, []);
 
     return (
-        <Login />
+        <div>
+            <LogoHeader />
+            <Loading />
+        </div>
     )
 }
 

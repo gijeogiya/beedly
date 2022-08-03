@@ -63,7 +63,6 @@ export default function login() {
             <Hr Thin /> */}
             <div style={flexbox}>
                 <Button BigYellow onClick={test}>카카오 로그인</Button>
-                <Button BigBlack>회원가입</Button>
             </div>
         </div>
     )

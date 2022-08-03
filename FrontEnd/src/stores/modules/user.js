@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createAction, handleActions } from "redux-actions";
+import "react-router-dom";
 import produce from "immer";
 const LOGIN = "user/LOGIN";
 const SET_USER = "SET_USER";
@@ -13,13 +14,15 @@ export const login = (code) => {
     axios
       .post(`http://localhost:8080/user/login?code=${code}`)
       .then((res) => {
-        console.log("로그인 성공");
-        let token = res.headers["authorization"];
-        localStorage.setItem("token", res.data.token);
         if (res.status === 200) {
+          console.log("로그인 성공");
+          let token = res.headers["authorization"];
+          localStorage.setItem("token", res.data.token);
+          window.location.replace("/");
         } else if (res.status === 201) {
+          //사용자 정보가 없을 때(회원가입 안함)
+          window.location.replace("/signup1");
         }
-        console.log(token);
         dispatch(
           setUser({
             username: res.data.username,

@@ -13,7 +13,7 @@ const Header = styled.img`
     max-height: 10vh;
 `;
 export function LogoHeader() {
-  return <Header alt="logo" src="img/logo.png"></Header>;
+  return <Header alt="logo" src="/img/logo.png"></Header>;
 }
 
 //Footer
