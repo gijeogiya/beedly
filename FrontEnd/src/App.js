@@ -1,7 +1,7 @@
 import './App.css'
 import {LogoHeader, NavBar, Footer} from "./components/Common"
-import { CategoryBar } from './pages/Main';
-import { BrowserRouter,Route, Link} from "react-router-dom";
+import { CategoryBar, BannerTable } from './pages/Main';
+import { BrowserRouter, Route, Link} from "react-router-dom";
 function App() {
   
   return (
@@ -10,6 +10,7 @@ function App() {
       <LogoHeader/>
       <div className="main-content">
         <CategoryBar/>
+        <BannerTable/>
       </div>
       <Footer />
       
