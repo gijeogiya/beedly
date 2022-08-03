@@ -1,12 +1,21 @@
 import { Notification, Grommet, Box, Carousel } from "grommet";
 import React, { useState, useEffect } from "react";
-import { AuctionArtist, StyledText, StyledHr } from "../components/Common";
+import {
+  AuctionArtist,
+  StyledText,
+  StyledHr,
+} from "../components/Common";
 import styled from "styled-components";
 import image from "../assets/images/openvidu.png";
 import artist from "../assets/images/artist.png";
 import product1 from "../assets/images/product1.png";
 import { ReactComponent as Success } from "../assets/icons/success.svg";
 import { ReactComponent as Fail } from "../assets/icons/fail.svg";
+import ErrorBoundary from "./ErrorBoundary";
+import VideoRoomComponent from "../components/openvidu/components/VideoRoomComponent";
+import UserModel from "../components/openvidu/models/user-model";
+import ChatComponent from "../components/openvidu/components/chat/ChatComponent";
+import Button from "../components/Button";
 const MainContent = styled.img`
   src: ${(props) => props.src || ""};
   width: 100%;
@@ -138,6 +147,7 @@ function ProductFrame({
   currentPrice,
   callPrice,
   visible,
+  grade,
   f,
 }) {
   return (
@@ -191,9 +201,13 @@ function ProductFrame({
         </Box>
       </ProductBox>
       <ButtonContainer>
-        <BidButton disabled={visible} visible={visible} onClick={f}>
-          {visible ? "입찰완료" : "입찰하기"}
-        </BidButton>
+        {grade !== undefined && grade === "buyer" ? (
+          <BidButton disabled={visible} visible={visible} onClick={f}>
+            {visible ? "입찰완료" : "입찰하기"}
+          </BidButton>
+        ) : (
+          <Button MediumGray>종료하기</Button>
+        )}
       </ButtonContainer>
     </ProductContainer>
   );
@@ -244,8 +258,16 @@ const ChatFrame = styled.div`
 
 const ChattingDiv = styled.div``;
 
-const ChatBox = () => {
-  return <ChatFrame></ChatFrame>;
+const ChatBox = ({ localUser, grade }) => {
+  return (
+    <ChatFrame>
+      {localUser !== undefined
+        ? localUser.getStreamManager() !== undefined && (
+          <ChatComponent user={localUser} grade={grade} />
+        )
+        : null}
+    </ChatFrame>
+  );
 };
 
 const Conatainer = styled(Carousel)`
@@ -257,10 +279,12 @@ const Conatainer = styled(Carousel)`
   justify-content: center;
 `;
 
-function BottomUi({ bidInfo, visible, f }) {
+function BottomUi({ bidInfo, visible, f, localUser, grade }) {
   return (
     <Conatainer controls="arrows">
-      <ChatBox />
+      {localUser !== undefined && (
+        <ChatBox localUser={localUser} grade={grade} />
+      )}
       <ProductFrame
         title={bidInfo.title}
         category={bidInfo.category}
@@ -270,13 +294,14 @@ function BottomUi({ bidInfo, visible, f }) {
         currentPrice={bidInfo.currentPrice}
         callPrice={bidInfo.callPrice}
         visible={visible}
+        grade={grade}
         f={f}
       ></ProductFrame>
     </Conatainer>
   );
 }
 
-export const Auction = () => {
+export const Auction = ({ grade }) => {
   const [visible, setVisible] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
   const [isCalled, setIsCalled] = useState(false);
@@ -290,6 +315,8 @@ export const Auction = () => {
     currentPrice: 0,
     callPrice: 0,
   });
+  const [localUser, setLocalUser] = useState(undefined);
+
   useEffect(() => {
     setBidInfo({
       title: "Ice Age",
@@ -333,7 +360,11 @@ export const Auction = () => {
   }
   return (
     <div>
-      <MainContent src={image} />
+      {/* <MainContent src={image} /> */}
+      <ErrorBoundary>
+        {" "}
+        <VideoRoomComponent setLocalUser={setLocalUser} grade={grade} />{" "}
+      </ErrorBoundary>
       <AuctionArtist
         title={bidInfo.title}
         artist={bidInfo.artist}
@@ -349,7 +380,13 @@ export const Auction = () => {
             onClose={() => setVisible(false)}
           />
         )}
-        <BottomUi bidInfo={bidInfo} visible={visible} f={handleVisible} />
+        <BottomUi
+          bidInfo={bidInfo}
+          visible={visible}
+          f={handleVisible}
+          localUser={localUser}
+          grade={grade}
+        />
       </Grommet>
     </div>
   );

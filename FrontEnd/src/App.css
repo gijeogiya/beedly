@@ -48,3 +48,13 @@
     transform: rotate(360deg);
   }
 }
+
+#join {
+  text-align: center;
+}
+
+#join,
+#session {
+  width: 100%;
+  height: 100%;
+}
