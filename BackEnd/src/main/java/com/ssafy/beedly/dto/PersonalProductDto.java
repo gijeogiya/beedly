@@ -1,13 +1,11 @@
 package com.ssafy.beedly.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.ssafy.beedly.domain.Category;
-import com.ssafy.beedly.domain.PersonalProduct;
-import com.ssafy.beedly.domain.PersonalProductImg;
-import com.ssafy.beedly.domain.PersonalSold;
+import com.ssafy.beedly.domain.*;
 import com.ssafy.beedly.domain.type.SoldStatus;
 
 import lombok.AllArgsConstructor;
@@ -27,11 +25,13 @@ public class PersonalProductDto {
 	private Integer depth;
 	private SoldStatus soldStatus;
 	private LocalDateTime startTime;
-	private Category category;
+	private Long categoryId;
 	private Long userId;
 	private Integer favoriteCount;
-	private List<PersonalProductImg> productImgs;
-	private PersonalSold personalSold;
+	private List<String> productImgs = new ArrayList<>();
+	//private Long personalSoldId;
+
+	private String artistImg;
 
 
 	public PersonalProductDto(PersonalProduct personalProduct){
@@ -40,15 +40,40 @@ public class PersonalProductDto {
 		this.productDesc = personalProduct.getProductDesc();
 		this.startPrice = personalProduct.getStartPrice();
 		this.height = personalProduct.getHeight();
-		this.weight = personalProduct.getWeight();
+		this.weight = personalProduct.getWidth();
 		this.depth = personalProduct.getDepth();
 		this.soldStatus = personalProduct.getSoldStatus();
 		this.startTime = personalProduct.getStartTime();
-		this.category = personalProduct.getCategory();
+		this.categoryId = personalProduct.getCategory().getId();
 		this.userId = personalProduct.getUser().getId();
 		this.favoriteCount = personalProduct.getFavoriteCount();
-		this.productImgs = personalProduct.getProductImgs();
-		this.personalSold = personalProduct.getPersonalSold();
+		List<PersonalProductImg> productImgs = personalProduct.getProductImgs();
+		for (PersonalProductImg productImg : productImgs) {
+			this.productImgs.add(productImg.getImgUri());
+		}
+		this.artistImg = personalProduct.getArtist().getArtistBgImg();
+		//this.personalSoldId = personalProduct.getPersonalSold().getId();
 	}
 
+	public PersonalProductDto(PersonalAuction personalAuction){
+		PersonalProduct personalProduct = personalAuction.getPersonalProduct();
+		this.id = personalProduct.getId();
+		this.productName = personalProduct.getProductName();
+		this.productDesc = personalProduct.getProductDesc();
+		this.startPrice = personalProduct.getStartPrice();
+		this.height = personalProduct.getHeight();
+		this.weight = personalProduct.getWidth();
+		this.depth = personalProduct.getDepth();
+		this.soldStatus = personalProduct.getSoldStatus();
+		this.startTime = personalProduct.getStartTime();
+		this.categoryId = personalProduct.getCategory().getId();
+		this.userId = personalProduct.getUser().getId();
+		this.favoriteCount = personalProduct.getFavoriteCount();
+		List<PersonalProductImg> productImgs = personalProduct.getProductImgs();
+		for (PersonalProductImg productImg : productImgs) {
+			this.productImgs.add(productImg.getImgUri());
+		}
+		this.artistImg = personalProduct.getArtist().getArtistBgImg();
+		//this.personalSoldId = personalProduct.getPersonalSold().getId();
+	}
 }
