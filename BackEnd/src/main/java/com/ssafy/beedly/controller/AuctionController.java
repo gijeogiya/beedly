@@ -1,5 +1,6 @@
 package com.ssafy.beedly.controller;
 
+import com.ssafy.beedly.config.data.CacheKey;
 import com.ssafy.beedly.config.security.util.JwtUtil;
 import com.ssafy.beedly.config.web.LoginUser;
 import com.ssafy.beedly.domain.User;
@@ -17,6 +18,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,12 +51,12 @@ public class AuctionController {
     }
 
     // 상시 경매방 입장(방 정보 + 상품 정보 + 작가정보도 같이 리턴)
-    // redis cache 적용해야함.
     @ApiOperation(value = "상시 경매방 입장", notes = "상시 경매방 입장(방 정보 + 상품 정보 + 작가정보도 같이 리턴)")
     @ApiImplicitParam(name = "auctionId", value = "상시 경매방 식별자")
+    @Cacheable(value = CacheKey.PERSONAL_AUCTION_BOARD, key = "#auctionId", unless = "#result == null", cacheManager = "cacheManager")
     @GetMapping("/auction/{auctionId}/personal")
-    public ResponseEntity<EnterPersonalAuctionResponse> enterPersonalAuction(@PathVariable Long auctionId) {
-        return ResponseEntity.ok(personalAuctionService.enterPersonalAuction(auctionId));
+    public EnterPersonalAuctionResponse enterPersonalAuction(@PathVariable Long auctionId) {
+        return personalAuctionService.enterPersonalAuction(auctionId);
     }
 
     // 상시 경매 입찰하기
@@ -93,12 +95,12 @@ public class AuctionController {
     }
 
     // 기획전 경매방 입장
-    // redis cache 적용해야함.
     @ApiOperation(value = "기획전 경매방 입장", notes = "기획전 경매방 입장(방 정보 + 상품 정보 리스트 같이 리턴)")
     @ApiImplicitParam(name = "auctionId", value = "기획전 경매방 식별자")
+    @Cacheable(value = CacheKey.SPECIAL_AUCTION_BOARD, key = "#auctionId", unless = "#result == null", cacheManager = "cacheManager")
     @GetMapping("/auction/{auctionId}/special")
-    public ResponseEntity<List<EnterSpecialAuctionResponse>> enterSpecialAuction(@PathVariable Long auctionId) {
-        return ResponseEntity.ok(specialAuctionService.enterSpecialAuction(auctionId));
+    public List<EnterSpecialAuctionResponse> enterSpecialAuction(@PathVariable Long auctionId) {
+        return specialAuctionService.enterSpecialAuction(auctionId);
     }
 
     // 기획전 경매 입찰하기
