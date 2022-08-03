@@ -18,7 +18,10 @@ spring:
   cache:
     type: redis
   redis:
-    host: localhost
+    # 로컬 환경
+#    host: localhost
+    # 도커 배포 환경
+    host: myredis
     port: 6379
 
   servlet:
