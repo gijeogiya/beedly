@@ -1,16 +1,17 @@
 import './App.css'
 import {LogoHeader, NavBar, Footer} from "./components/Common"
-import { CategoryBar, BannerTable } from './pages/Main';
+import { CategoryBar, BannerTable, OnairHorizonTable } from './pages/Main';
 import { BrowserRouter, Route, Link} from "react-router-dom";
 function App() {
   
   return (
     <div className="App">
       
-      <LogoHeader/>
+      <LogoHeader />
       <div className="main-content">
-        <CategoryBar/>
-        <BannerTable/>
+        <CategoryBar />
+        <BannerTable />
+        <OnairHorizonTable />
       </div>
       <Footer />
       
