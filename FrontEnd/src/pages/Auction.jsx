@@ -1,10 +1,6 @@
 import { Notification, Grommet, Box, Carousel } from "grommet";
 import React, { useState, useEffect } from "react";
-import {
-  AuctionArtist,
-  StyledText,
-  StyledHr,
-} from "../components/Common";
+import { AuctionArtist, StyledText, StyledHr } from "../components/Common";
 import styled from "styled-components";
 import image from "../assets/images/openvidu.png";
 import artist from "../assets/images/artist.png";
@@ -16,6 +12,15 @@ import VideoRoomComponent from "../components/openvidu/components/VideoRoomCompo
 import UserModel from "../components/openvidu/models/user-model";
 import ChatComponent from "../components/openvidu/components/chat/ChatComponent";
 import Button from "../components/Button";
+import { useRef } from "react";
+import { createRef } from "react";
+import { useNavigate } from "react-router-dom";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
 const MainContent = styled.img`
   src: ${(props) => props.src || ""};
   width: 100%;
@@ -263,8 +268,8 @@ const ChatBox = ({ localUser, grade }) => {
     <ChatFrame>
       {localUser !== undefined
         ? localUser.getStreamManager() !== undefined && (
-          <ChatComponent user={localUser} grade={grade} />
-        )
+            <ChatComponent user={localUser} grade={grade} />
+          )
         : null}
     </ChatFrame>
   );
@@ -301,11 +306,51 @@ function BottomUi({ bidInfo, visible, f, localUser, grade }) {
   );
 }
 
+const ExitButtonDiv = styled.div`
+  z-index: 8;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  justify-content: center;
+`;
+
+function ExitButton({ handleClickOpen, handleClose, handleAuctionExit, open }) {
+  return (
+    <ExitButtonDiv>
+      <Button SmallRed onClick={handleClickOpen}>
+        나가기
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"나가기"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            정말 나가시겠습니까?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button SmallRed onClick={handleClose}>
+            취소
+          </Button>
+          <Button SmallBlack onClick={handleAuctionExit} autoFocus>
+            나가기
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </ExitButtonDiv>
+  );
+}
+
 export const Auction = ({ grade }) => {
   const [visible, setVisible] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
   const [isCalled, setIsCalled] = useState(false);
   const [initPrice, setInitPrice] = useState(0);
+  const [open, setOpen] = useState(false);
   const [bidInfo, setBidInfo] = useState({
     title: "",
     category: "",
@@ -358,18 +403,50 @@ export const Auction = ({ grade }) => {
     }
     setVisible(!visible);
   }
+
+  const ref = createRef();
+  const navigate = useNavigate();
+  function handleAuctionExit() {
+    ref.current.componentWillUnmount();
+  }
+
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <div>
       {/* <MainContent src={image} /> */}
       <ErrorBoundary>
         {" "}
-        <VideoRoomComponent setLocalUser={setLocalUser} grade={grade} />{" "}
+        <VideoRoomComponent
+          setLocalUser={setLocalUser}
+          handleGoBack={handleGoBack}
+          grade={grade}
+          ref={ref}
+          // openviduServerUrl="https://i7a601.p.ssafy.io:443"
+        />{" "}
       </ErrorBoundary>
+      {grade === "buyer" && (
+        <ExitButton
+          handleClickOpen={handleClickOpen}
+          handleClose={handleClose}
+          handleAuctionExit={handleAuctionExit}
+          open={open}
+        />
+      )}
+
       <AuctionArtist
         title={bidInfo.title}
         artist={bidInfo.artist}
         artistSrc={artist}
       />
+
       <PriceBox price={bidInfo.currentPrice} callPrice={bidInfo.callPrice} />
       <Grommet theme={GrommetTheme}>
         {visible && (

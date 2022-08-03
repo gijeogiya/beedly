@@ -10,8 +10,8 @@ import { BrowserRouter } from "react-router-dom";
 import { composeWithDevTools } from "redux-devtools-extension";
 import reportWebVitals from "./reportWebVitals";
 
-const composedEnhancer = compose(applyMiddleware(thunk), composeWithDevTools());
-const store = createStore(rootReducer, composedEnhancer);
+// const composedEnhancer = compose(applyMiddleware(thunk), composeWithDevTools());
+const store = createStore(rootReducer, applyMiddleware(thunk));
 ReactDOM.render(
   <BrowserRouter>
     <Provider store={store}>

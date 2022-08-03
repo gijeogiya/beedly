@@ -4,11 +4,8 @@ import "./VideoRoomComponent.css";
 import { OpenVidu } from "openvidu-browser";
 import StreamComponent from "./stream/StreamComponent";
 import DialogExtensionComponent from "./dialog-extension/DialogExtension";
-import ChatComponent from "./chat/ChatComponent";
-
 import OpenViduLayout from "../layout/openvidu-layout";
 import UserModel from "../models/user-model";
-import ToolbarComponent from "./toolbar/ToolbarComponent";
 
 var localUser = new UserModel();
 
@@ -29,7 +26,7 @@ class VideoRoomComponent extends Component {
     let userName = this.props.user
       ? this.props.user
       : this.props.grade
-      ? this.props.grade == "seller"
+      ? this.props.grade === "seller"
         ? "[작가님" + Math.floor(Math.random() * 100) + "]"
         : "[구매자" + Math.floor(Math.random() * 100) + "]"
       : "OpenVidu_User" + Math.floor(Math.random() * 100);
@@ -45,6 +42,7 @@ class VideoRoomComponent extends Component {
       subscribers: [],
       chatDisplay: "block",
       currentVideoDevice: undefined,
+      grade: this.props.grade,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -144,7 +142,10 @@ class VideoRoomComponent extends Component {
 
   connect(token) {
     this.state.session
-      .connect(token, { clientData: this.state.myUserName })
+      .connect(token, {
+        clientData: this.state.myUserName,
+        grade: this.state.grade,
+      })
       .then(() => {
         this.connectWebCam();
       })
@@ -193,6 +194,7 @@ class VideoRoomComponent extends Component {
     }
     localUser.setNickname(this.state.myUserName);
     localUser.setConnectionId(this.state.session.connection.connectionId);
+    localUser.setGrade(this.state.grade);
     localUser.setScreenShareActive(false);
     localUser.setStreamManager(publisher);
     this.subscribeToUserChanged();
@@ -223,7 +225,6 @@ class VideoRoomComponent extends Component {
       data: JSON.stringify(data),
       type: "chat",
     });
-
   }
 
   updateSubscribers() {
@@ -250,7 +251,18 @@ class VideoRoomComponent extends Component {
     const mySession = this.state.session;
 
     if (mySession) {
+      const data = {
+        message: "님이 퇴장했습니다.",
+        nickname: localUser.getNickname(),
+        streamId: localUser.getStreamManager().stream.streamId,
+      };
+      localUser.getStreamManager().stream.session.signal({
+        data: JSON.stringify(data),
+        type: "chat",
+      });
       mySession.disconnect();
+
+      this.props.handleGoBack();
     }
 
     // Empty all properties...
@@ -318,7 +330,10 @@ class VideoRoomComponent extends Component {
       newUser.setConnectionId(event.stream.connection.connectionId);
       newUser.setType("remote");
       const nickname = event.stream.connection.data.split("%")[0];
+      const grade = event.stream.connection.data.split("%")[0];
       newUser.setNickname(JSON.parse(nickname).clientData);
+      newUser.setGrade(JSON.parse(grade).grade);
+      console.log("new user : ", newUser.getGrade());
       this.remotes.push(newUser);
       if (this.localUserAccessAllowed) {
         this.updateSubscribers();
@@ -564,9 +579,9 @@ class VideoRoomComponent extends Component {
   }
 
   render() {
-    const mySessionId = this.state.mySessionId;
+    // const mySessionId = this.state.mySessionId;
     const localUser = this.state.localUser;
-    var chatDisplay = { display: this.state.chatDisplay };
+    // var chatDisplay = { display: this.state.chatDisplay };
 
     return (
       <div className="container" id="container">
@@ -603,18 +618,23 @@ class VideoRoomComponent extends Component {
                   />
                 </div>
               )
-            : this.state.subscribers.map((sub, i) => (
-                <div
-                  key={i}
-                  className="OT_root OT_publisher custom-class"
-                  id="remoteUsers"
-                >
-                  <StreamComponent
-                    user={sub}
-                    streamId={sub.streamManager.stream.streamId}
-                  />
-                </div>
-              ))}
+            : this.state.subscribers.map(
+                (sub, i) =>
+                  sub.getGrade() !== "" &&
+                  sub.getGrade() === "seller" && (
+                    <div
+                      key={i}
+                      className="OT_root OT_publisher custom-class"
+                      id="remoteUsers"
+                    >
+                      <div>{console.log(sub)}</div>
+                      <StreamComponent
+                        user={sub}
+                        streamId={sub.streamManager.stream.streamId}
+                      />
+                    </div>
+                  )
+              )}
 
           {/* {localUser !== undefined &&
             localUser.getStreamManager() !== undefined && (

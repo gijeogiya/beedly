@@ -5,6 +5,7 @@ class UserModel {
     screenShareActive;
     nickname;
     streamManager;
+    grade;
     type; // 'remote' | 'local'
 
     constructor() {
@@ -14,6 +15,7 @@ class UserModel {
         this.screenShareActive = false;
         this.nickname = '';
         this.streamManager = null;
+        this.grade = "";
         this.type = 'local';
     }
 
@@ -39,6 +41,9 @@ class UserModel {
 
     getStreamManager() {
         return this.streamManager;
+    }
+    getGrade() {
+        return this.grade;
     }
 
     isLocal() {
@@ -70,6 +75,9 @@ class UserModel {
         if (type === 'local' |  type === 'remote') {
             this.type = type;
         }
+    }
+    setGrade(grade) {
+        this.grade = grade;
     }
 }
 
