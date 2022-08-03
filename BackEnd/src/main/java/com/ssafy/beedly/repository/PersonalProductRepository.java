@@ -9,23 +9,46 @@ import java.util.List;
 
 public interface PersonalProductRepository extends JpaRepository<PersonalProduct, Long>{
 
+    //----------- 1. productName 검색하기
     @Query(value="select c from PersonalProduct c where c.productName like %:productName%")
     List<PersonalProduct> findPersonalProductByProductNameLike(@Param("productName") String productName);
 
-    // 2. 카테고리 별 조회 시작시간 순으로 정렬
+    //----------- 2. 카테고리 정렬
+    //----------- 2-1 시간 오름차순
     @Query(value="select p from PersonalProduct p join fetch p.category c where c.categoryName = :categoryName order by p.startTime")
-    List<PersonalProduct> findPersonalProductByOrderByStartTimeAsc(@Param("categoryName")String categoryName);
+    List<PersonalProduct> findPersonalProductByOrderByStartTime(@Param("categoryName")String categoryName);
 
+    //----------- 2-2 시간 내림차순 DEFALUT
     @Query(value="select p from PersonalProduct p join fetch p.category c where c.categoryName = :categoryName order by p.startTime desc ")
     List<PersonalProduct> findPersonalProductByOrderByStartTimeDesc(@Param("categoryName")String categoryName);
 
-    // 3. 현재 시작 중인 경매 카테고리 별로 가져오기(오름차순)
+    //---------- 2-3 찜하기 오름차순
+    @Query(value="select p from PersonalProduct p join fetch p.category c where c.categoryName = :categoryName order by p.favoriteCount")
+    List<PersonalProduct> findPersonalProductByOrderByFavoriteCount(@Param("categoryName")String categoryName);
+
+    //---------- 2-4 찜하기 내림차순
+    @Query(value="select p from PersonalProduct p join fetch p.category c where c.categoryName = :categoryName order by p.favoriteCount desc ")
+    List<PersonalProduct> findPersonalProductByOrderByFavoriteCountDesc(@Param("categoryName")String categoryName);
+
+    //---------- 3. 현재 시작 중인 경매 카테고리 정렬
+    //---------- 3-1 시간 오름차순
     @Query( value="select pa from PersonalAuction pa join fetch pa.personalProduct p"
             +" join fetch p.category c"+" where c.categoryName = : categoryName and  pa.activeFlag = true order by p.startTime")
-    List<PersonalProduct> findPersonalProductByOnAirOderByStartTimeAsc(@Param("categoryName")String categoryName);
+    List<PersonalProduct> findPersonalProductByOnAirOderByStartTime(@Param("categoryName")String categoryName);
 
-    // 4. 현재 시작 중인 경매 카테고리 별로 가져오기(내림차순)
+    //---------- 3-2 시간 내림차순
     @Query( value="select pa from PersonalAuction pa join fetch pa.personalProduct p"
             +" join fetch p.category c"+" where c.categoryName = : categoryName and  pa.activeFlag = true order by p.startTime Desc")
     List<PersonalProduct> findPersonalProductByOnAirOderByStartTimeDesc(@Param("categoryName")String categoryName);
+
+    //---------- 3-3 찜하기 오름차순
+    @Query( value="select pa from PersonalAuction pa join fetch pa.personalProduct p"
+        +" join fetch p.category c"+" where c.categoryName = : categoryName and  pa.activeFlag = true order by p.favoriteCount Desc")
+    List<PersonalProduct> findPersonalProductByOnAirOderByFavoriteCount(@Param("categoryName")String categoryName);
+
+    //---------- 3-4 찜하기 내림차순
+    @Query( value="select pa from PersonalAuction pa join fetch pa.personalProduct p"
+        +" join fetch p.category c"+" where c.categoryName = : categoryName and  pa.activeFlag = true order by p.favoriteCount Desc")
+    List<PersonalProduct> findPersonalProductByOnAirOderByFavoriteCountDesc(@Param("categoryName")String categoryName);
+
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.beedly.service.SpecialProductService;
 
 @RestController
-@RequestMapping("personalProduct")
+@RequestMapping("specialProduct")
 @RequiredArgsConstructor
 public class SpecialProductController {
    private final SpecialProductService specialProductService;
