@@ -16,8 +16,8 @@ export const login = (code) => {
         console.log("로그인 성공");
         let token = res.headers["authorization"];
         localStorage.setItem("token", res.data.token);
-        if (res.status == 200) {
-        } else if (res.status == 201) {
+        if (res.status === 200) {
+        } else if (res.status === 201) {
         }
         console.log(token);
         dispatch(
