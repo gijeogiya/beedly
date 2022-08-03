@@ -3,13 +3,8 @@
 
 .App {
   /* text-align: center; */
-<<<<<<< HEAD
   font-family: "Noto Sans KR", sans-serif;
   height: auto;
-=======
-  font-family: "Noto Sans KR";
-  /* height: 2000px; */
->>>>>>> 4e2ee8a569ff63c74111edc7186ff6eac6e85ab4
 }
 .main-content {
   height: 2000px;
