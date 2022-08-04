@@ -26,4 +26,7 @@ public class SearchTag extends BaseEntity {
     @Column(name = "search_tag_name")
     private String searchTagName;
 
+    @OneToMany(mappedBy = "searchTag")
+    private List<PersonalSearchTag> tags = new ArrayList<>();
+
 }
