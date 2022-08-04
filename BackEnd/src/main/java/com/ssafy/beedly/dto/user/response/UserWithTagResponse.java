@@ -1,9 +1,7 @@
 package com.ssafy.beedly.dto.user.response;
 
-import com.ssafy.beedly.domain.Tag;
 import com.ssafy.beedly.domain.User;
-import com.ssafy.beedly.domain.UserTag;
-import com.ssafy.beedly.dto.tag.common.TagDto;
+import com.ssafy.beedly.dto.tag.common.SearchTagDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,9 +23,9 @@ public class UserWithTagResponse {
     private String userAddr;
     private LocalDate userBirthday;
     private String userRole;
-    private List<TagDto> tagDtos;
+    private List<SearchTagDto> searchTagDtos;
 
-    public UserWithTagResponse(User u, List<TagDto> tagDtos) {
+    public UserWithTagResponse(User u, List<SearchTagDto> searchTagDtos) {
         this.userId = u.getId();
         this.userEmail = u.getUserEmail();
         this.userName = u.getUserName();
@@ -37,7 +35,7 @@ public class UserWithTagResponse {
         this.userAddr = u.getUserAddr();
         this.userBirthday = u.getUserBirthday();
         this.userRole = u.getUserRole().toString();
-        this.tagDtos = tagDtos;
+        this.searchTagDtos = searchTagDtos;
     }
 }
 
