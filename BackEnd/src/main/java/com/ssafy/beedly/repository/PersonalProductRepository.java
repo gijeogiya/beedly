@@ -3,6 +3,8 @@ package com.ssafy.beedly.repository;
 import com.ssafy.beedly.domain.PersonalAuction;
 import com.ssafy.beedly.domain.PersonalFavorite;
 import com.ssafy.beedly.domain.PersonalProduct;
+import com.ssafy.beedly.dto.PersonalProductCloseDto;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,19 +13,11 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
+
 public interface PersonalProductRepository extends JpaRepository<PersonalProduct, Long>{
 
-<<<<<<< HEAD
-    @Query(value="select c from PersonalProduct c where c.productName like %:productName%")
-    List<PersonalProduct> findPersonalProductByProductNameLike(@Param("productName") String productName);
 
-    // 2. 카테고리 별 조회 시작시간 순으로 정렬
-    @Query(value="select p from PersonalProduct p join fetch p.category c where c.categoryName = :categoryName order by p.startTime")
-    List<PersonalProduct> findPersonalProductByOrderByStartTimeAsc(@Param("categoryName")String categoryName);
-
-    @Query(value="select p from PersonalProduct p join fetch p.category c where c.categoryName = :categoryName order by p.startTime desc ")
-    List<PersonalProduct> findPersonalProductByOrderByStartTimeDesc(@Param("categoryName")String categoryName);
-=======
     //----------- 1. productName 검색하기
     @Query(value="select c from PersonalProduct c where c.productName like %:productName%")
     List<PersonalProduct> findPersonalProductByProductNameLike(@Param("productName") String productName);
@@ -43,15 +37,8 @@ public interface PersonalProductRepository extends JpaRepository<PersonalProduct
 
     //---------- 5. Product 상세 찾기
     //----------- 5-1. Product 찜하기
->>>>>>> 6526eaf36b75a27a7860070b6e4654d0bb158761
+    @Query(value="select new com.ssafy.beedly.dto.PersonalProductCloseDto(p.id, ) from product p")
+    PersonalProductCloseDto findPersonalProductCloseById(@Param("id") Long id);
 
-    // 3. 현재 시작 중인 경매 카테고리 별로 가져오기(오름차순)
-    @Query( value="select pa from PersonalAuction pa join fetch pa.personalProduct p"
-            +" join fetch p.category c"+" where c.categoryName = : categoryName and  pa.activeFlag = true order by p.startTime")
-    List<PersonalProduct> findPersonalProductByOnAirOderByStartTimeAsc(@Param("categoryName")String categoryName);
 
-    // 4. 현재 시작 중인 경매 카테고리 별로 가져오기(내림차순)
-    @Query( value="select pa from PersonalAuction pa join fetch pa.personalProduct p"
-            +" join fetch p.category c"+" where c.categoryName = : categoryName and  pa.activeFlag = true order by p.startTime Desc")
-    List<PersonalProduct> findPersonalProductByOnAirOderByStartTimeDesc(@Param("categoryName")String categoryName);
 }

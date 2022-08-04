@@ -4,15 +4,13 @@ package com.ssafy.beedly.service;
 import java.util.List;
 import java.util.Optional;
 
-<<<<<<< HEAD
+
 import com.ssafy.beedly.domain.Artist;
 import com.ssafy.beedly.dto.ProductAndArtistDto;
-=======
 import com.ssafy.beedly.dto.PersonalProductCloseDto;
 import com.ssafy.beedly.dto.PersonalProductDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
->>>>>>> 6526eaf36b75a27a7860070b6e4654d0bb158761
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,17 +36,13 @@ public class PersonalProductService {
 	public void save(PersonalProduct personalProduct){
 		personalProductRepository.save(personalProduct);
 	}
-<<<<<<< HEAD
 
-=======
->>>>>>> 6526eaf36b75a27a7860070b6e4654d0bb158761
 	// 상품 수정
 	@Transactional
 	public void update(PersonalProduct personalProduct){
 		Optional<PersonalProduct> product = personalProductRepository.findById(personalProduct.getId());
 
 		product.ifPresent(selectProduct ->{
-<<<<<<< HEAD
 			personalProductRepository.save(selectProduct);
 		});
 	}
@@ -59,20 +53,6 @@ public class PersonalProductService {
 		personalProductRepository.deleteById(specialProduct.getId());
 	}
 
-	@Transactional
-	public List<ProductAndArtistDto> find(String categoryName, String orderBy, String sort){
-//
-//		List<PersonalProduct> =
-//		List<Artist> =
-
-		return null;
-	}
-	
-=======
-			System.out.println(selectProduct);
-			personalProductRepository.save(personalProduct);
-		});
-	}
 	// 상품 삭제
 	@Transactional
 	public void delete(PersonalProduct personalProduct){
@@ -88,10 +68,11 @@ public class PersonalProductService {
 
 	}
 
-	@Transactional
-	public PersonalProductCloseDto getProductByIdClose(Long id){
-
-	}
+	// @Transactional
+	// public PersonalProductCloseDto getProductByIdClose(Long id){
+	// 	PersonalProductCloseDto dto = new PersonalProductCloseDto();
+	// 	return dto
+	// }
 
 	@Transactional
 	public Slice<PersonalProductDto> getProductByCategory(String categoryName, Pageable pageable){
@@ -119,7 +100,4 @@ public class PersonalProductService {
 		return products;
 	}
 
-
-
->>>>>>> 6526eaf36b75a27a7860070b6e4654d0bb158761
 }

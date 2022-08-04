@@ -67,13 +67,20 @@ public class PersonalProduct extends BaseEntity {
     @OneToOne(mappedBy = "personalProduct")
     private PersonalSold personalSold;
 
-<<<<<<< HEAD
-=======
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
->>>>>>> 6526eaf36b75a27a7860070b6e4654d0bb158761
+    @Column(name = "p_brightness")
+    private Integer brightness;
+
+    @Column(name = "p_saturation")
+    private Integer saturation;
+
+    @Column(name="p_temperature")
+    private Integer temperature;
+        
+
     public PersonalProduct(String productName) {
         this.productName = productName;
     }
@@ -94,6 +101,9 @@ public class PersonalProduct extends BaseEntity {
                 ", user=" + user +
                 ", productImgs=" + productImgs +
                 ", personalSold=" + personalSold +
+                ", temperature=" +temperature+
+                ", brightness=" + brightness+
+                ", saturation=" + saturation+
                 '}';
     }
 }
