@@ -44,7 +44,6 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok'
     testCompileOnly 'org.projectlombok:lombok'
-
     // 이거 키면 redis 에러남
 //    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 

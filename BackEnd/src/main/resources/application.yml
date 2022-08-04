@@ -4,6 +4,7 @@ server:
 
 spring:
   # 채팅 테스트용
+<<<<<<< HEAD
 #  devtools:
 #    livereload:
 #      enabled: true
@@ -24,6 +25,16 @@ spring:
 #    host: 172.17.0.3
 
     port: 6379
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+  freemarker:
+    cache: false
+    template-loader-path: classpath:/templates
+    prefix: /chat/
+    suffix: .ftl
 
   servlet:
     multipart:
@@ -60,6 +71,12 @@ spring:
         #        show_sql: false
         format_sql: true
     open-in-view: false
+
+  data:
+    web:
+      pageable:
+        default-per-size: 10
+        max-page-size: 2000 
 
 token:
   # 일단 하루

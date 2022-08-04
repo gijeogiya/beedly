@@ -38,10 +38,13 @@ public class PersonalProduct extends BaseEntity {
     private Integer height;
 
     @Column(name = "p_product_w")
-    private Integer weight;
+    private Integer width;
 
     @Column(name = "p_product_d")
     private Integer depth;
+
+    @Column(name = "p_favorite_count")
+    private Integer favoriteCount;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "p_sold_status")
@@ -64,6 +67,13 @@ public class PersonalProduct extends BaseEntity {
     @OneToOne(mappedBy = "personalProduct")
     private PersonalSold personalSold;
 
+<<<<<<< HEAD
+=======
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "artist_id")
+    private Artist artist;
+
+>>>>>>> 6526eaf36b75a27a7860070b6e4654d0bb158761
     public PersonalProduct(String productName) {
         this.productName = productName;
     }
@@ -76,7 +86,7 @@ public class PersonalProduct extends BaseEntity {
                 ", productDesc='" + productDesc + '\'' +
                 ", startPrice=" + startPrice +
                 ", height=" + height +
-                ", weight=" + weight +
+                ", width=" + width +
                 ", depth=" + depth +
                 ", soldStatus=" + soldStatus +
                 ", startTime=" + startTime +
