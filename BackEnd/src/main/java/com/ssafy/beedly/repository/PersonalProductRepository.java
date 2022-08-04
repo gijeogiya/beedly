@@ -37,8 +37,8 @@ public interface PersonalProductRepository extends JpaRepository<PersonalProduct
 
     //---------- 5. Product 상세 찾기
     //----------- 5-1. Product 찜하기
-    @Query(value="select new com.ssafy.beedly.dto.PersonalProductCloseDto(p.id, ) from product p")
-    PersonalProductCloseDto findPersonalProductCloseById(@Param("id") Long id);
-
+    // @Query(value="select new com.ssafy.beedly.dto.PersonalProductCloseDto(p.id, ) from product p")
+    // PersonalProductCloseDto findPersonalProductCloseById(@Param("id") Long id);
+    //
 
 }

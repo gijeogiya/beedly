@@ -4,7 +4,6 @@ server:
 
 spring:
   # 채팅 테스트용
-<<<<<<< HEAD
 #  devtools:
 #    livereload:
 #      enabled: true
@@ -70,6 +69,8 @@ spring:
         default_batch_fetch_size: 500
         #        show_sql: false
         format_sql: true
+        show_sql: true
+
     open-in-view: false
 
   data:

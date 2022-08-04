@@ -1,5 +1,8 @@
 package com.ssafy.beedly.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ssafy.beedly.domain.common.BaseEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,6 +15,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
+@Table(name = "SEARCH_TAG")
 public class SearchTag extends BaseEntity {
 
     @Id
@@ -21,4 +25,5 @@ public class SearchTag extends BaseEntity {
 
     @Column(name = "search_tag_name")
     private String searchTagName;
+
 }

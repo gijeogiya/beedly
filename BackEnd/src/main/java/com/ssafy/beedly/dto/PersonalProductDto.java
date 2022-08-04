@@ -81,4 +81,26 @@ public class PersonalProductDto {
 		this.artistImg = personalProduct.getArtist().getArtistBgImg();
 		//this.personalSoldId = personalProduct.getPersonalSold().getId();
 	}
+
+	public PersonalProductDto(PersonalSearchTag personalSearchTag){
+		PersonalProduct personalProduct = personalSearchTag.getPersonalProduct();
+		this.id = personalProduct.getId();
+		this.productName = personalProduct.getProductName();
+		this.productDesc = personalProduct.getProductDesc();
+		this.startPrice = personalProduct.getStartPrice();
+		this.height = personalProduct.getHeight();
+		this.weight = personalProduct.getWidth();
+		this.depth = personalProduct.getDepth();
+		this.soldStatus = personalProduct.getSoldStatus();
+		this.startTime = personalProduct.getStartTime();
+		this.categoryId = personalProduct.getCategory().getId();
+		this.userId = personalProduct.getUser().getId();
+		this.favoriteCount = personalProduct.getFavoriteCount();
+		List<PersonalProductImg> productImgs = personalProduct.getProductImgs();
+		for (PersonalProductImg productImg : productImgs) {
+			this.productImgs.add(productImg.getImgUri());
+		}
+		this.artistImg = personalProduct.getArtist().getArtistBgImg();
+		//this.personalSoldId = personalProduct.getPersonalSold().getId();
+	}
 }
