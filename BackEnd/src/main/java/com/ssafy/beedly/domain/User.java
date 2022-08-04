@@ -53,6 +53,9 @@ public class User extends BaseEntity {
     @Column(name = "user_bday")
     private LocalDate userBirthday;
 
+    @Column(name = "user_score")
+    private Integer userScore;
+
 //    private LocalDateTime userDeleteDate;
 //
 //    @Enumerated(EnumType.STRING)
