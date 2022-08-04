@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/absentee")
+@RequestMapping("/absenteeBid")
 @RequiredArgsConstructor
 public class AbsenteeBidController {
     private final AbsenteeBidService absenteeBidService;
