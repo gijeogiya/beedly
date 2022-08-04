@@ -136,7 +136,7 @@ export function NavBar() {
 }
 
 const ProductImg = styled.img`
-    src: ${(props) => props.productSrc || ""};
+    src: ${(props) => props.src || ""};
 `;
 const ProductFrame = styled.div`
     border-radius: 14px;
@@ -156,7 +156,7 @@ const TimeTable = styled.div`
 `;
 
 const ArtistImg = styled.img`
-    src: ${(props) => props.artistSrc || ""};
+    src: ${(props) => props.src || ""};
     border-radius: 50%;
 `;
 
@@ -164,11 +164,11 @@ const ArtistImg = styled.img`
 export function Product({ title, productSrc, artistSrc, artist, dueDate, dueTime, isStart, people }) {
     return <Box>
         <ProductFrame>
-            <ProductImg productSrc={productSrc}></ProductImg>
+            <ProductImg src={productSrc}></ProductImg>
             <TimeTable>{isStart ? { dueTime } : "실시간"}</TimeTable>
         </ProductFrame>
         <Box direction="row">
-            <ArtistImg artistSrc={artistSrc}></ArtistImg>
+            <ArtistImg src={artistSrc}></ArtistImg>
             <div>
                 <h2>{artist}</h2>
                 <p>{title}</p>

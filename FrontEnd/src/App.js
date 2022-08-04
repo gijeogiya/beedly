@@ -1,6 +1,6 @@
 import './App.css'
 import {LogoHeader, NavBar, Footer} from "./components/Common"
-import { CategoryBar, BannerTable, OnairHorizonTable } from './pages/Main';
+import { MainPage } from './pages/Main';
 import { BrowserRouter, Route, Link} from "react-router-dom";
 function App() {
   
@@ -9,9 +9,7 @@ function App() {
       
       <LogoHeader />
       <div className="main-content">
-        <CategoryBar />
-        <BannerTable />
-        <OnairHorizonTable />
+        <MainPage />
       </div>
       <Footer />
       
