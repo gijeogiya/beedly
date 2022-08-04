@@ -4,15 +4,12 @@ import com.ssafy.beedly.client.KakaoLoginApi;
 import com.ssafy.beedly.common.exception.NotFoundException;
 import com.ssafy.beedly.config.security.util.JwtUtil;
 import com.ssafy.beedly.domain.PersonalProduct;
-import com.ssafy.beedly.domain.PersonalSold;
 import com.ssafy.beedly.domain.User;
-import com.ssafy.beedly.dto.tag.common.TagDto;
 import com.ssafy.beedly.dto.user.common.UserCreateFlag;
 import com.ssafy.beedly.dto.user.kakao.KakaoUserResponse;
 import com.ssafy.beedly.dto.user.request.UserUpdateRequest;
 import com.ssafy.beedly.dto.user.response.*;
 import com.ssafy.beedly.repository.UserRepository;
-import com.ssafy.beedly.repository.UserTagRepository;
 import com.ssafy.beedly.repository.query.UserQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +36,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserQueryRepository userQueryRepository;
-    private final UserTagRepository userTagRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     private final JwtUtil jwtUtil;
@@ -84,9 +80,8 @@ public class UserService {
     // 내 정보 조회(유저 취향 같이)
     public UserWithTagResponse getUserInfo(User user) {
         User findUser = validateUser(user);
-        List<TagDto> userTags = userTagRepository.findUserTagWithTagByUserId(user.getId());
 
-        return new UserWithTagResponse(findUser, userTags);
+        return null;
     }
 
     // 닉네임 중복 체크

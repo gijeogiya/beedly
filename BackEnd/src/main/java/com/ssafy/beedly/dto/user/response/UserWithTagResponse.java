@@ -1,10 +1,7 @@
 package com.ssafy.beedly.dto.user.response;
 
-import com.ssafy.beedly.domain.Tag;
 import com.ssafy.beedly.domain.User;
-import com.ssafy.beedly.domain.UserTag;
 import com.ssafy.beedly.dto.tag.common.SearchTagDto;
-import com.ssafy.beedly.dto.tag.common.TagDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
