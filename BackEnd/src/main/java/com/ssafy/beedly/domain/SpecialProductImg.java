@@ -26,4 +26,12 @@ public class SpecialProductImg extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "s_product_id")
     private SpecialProduct specialProduct;
+
+    public static SpecialProductImg createSpecialProductImg(String imgUri, SpecialProduct specialProduct) {
+        SpecialProductImg specialProductImg = new SpecialProductImg();
+        specialProductImg.imgUri = imgUri;
+        specialProductImg.specialProduct = specialProduct;
+
+        return specialProductImg;
+    }
 }

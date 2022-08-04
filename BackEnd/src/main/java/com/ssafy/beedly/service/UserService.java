@@ -8,6 +8,7 @@ import com.ssafy.beedly.domain.PersonalSold;
 import com.ssafy.beedly.domain.User;
 import com.ssafy.beedly.dto.tag.common.TagDto;
 import com.ssafy.beedly.dto.user.common.UserCreateFlag;
+import com.ssafy.beedly.dto.user.common.UserDefaultDto;
 import com.ssafy.beedly.dto.user.kakao.KakaoUserResponse;
 import com.ssafy.beedly.dto.user.request.UserUpdateRequest;
 import com.ssafy.beedly.dto.user.response.*;
@@ -52,10 +53,15 @@ public class UserService {
         Long userId;
         UserCreateFlag userCreateFlag = new UserCreateFlag();
         if (!findUser.isPresent()) { // 유저정보 없으면 회원가입 후 토큰 발급
-            User saveUser = userRepository.save(User.createUser(kakaoId));
+            User saveUser = userRepository.save(User.createUser(kakaoUserInfo));
             userId = saveUser.getId();
             userCreateFlag.setCreateFlag(true);
 
+            UserDefaultDto defaultUserInfo = new UserDefaultDto();
+            defaultUserInfo.setUserEmail(saveUser.getUserEmail());
+            defaultUserInfo.setUserGender(saveUser.getUserGender());
+
+            userCreateFlag.setUserDefaultDto(defaultUserInfo);
             // 관리자 계정 가입시키는거 로직 추가해야댐.
 
         } else { // 유저정보 있으면 바로 토큰 발급

@@ -11,5 +11,6 @@ public class KakaoUserResponse {
 
     public Long id;
     public String connected_at;
+    public KakaoAuccount kakao_account;
 
 }
