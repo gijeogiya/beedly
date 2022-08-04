@@ -3,6 +3,8 @@ package com.ssafy.beedly.repository;
 import com.ssafy.beedly.domain.PersonalAuction;
 import com.ssafy.beedly.domain.PersonalFavorite;
 import com.ssafy.beedly.domain.PersonalProduct;
+import com.ssafy.beedly.dto.PersonalProductCloseDto;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +13,10 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
+
 public interface PersonalProductRepository extends JpaRepository<PersonalProduct, Long>{
+
 
     //----------- 1. productName 검색하기
     @Query(value="select c from PersonalProduct c where c.productName like %:productName%")
@@ -32,5 +37,8 @@ public interface PersonalProductRepository extends JpaRepository<PersonalProduct
 
     //---------- 5. Product 상세 찾기
     //----------- 5-1. Product 찜하기
+    @Query(value="select new com.ssafy.beedly.dto.PersonalProductCloseDto(p.id, ) from product p")
+    PersonalProductCloseDto findPersonalProductCloseById(@Param("id") Long id);
+
 
 }
