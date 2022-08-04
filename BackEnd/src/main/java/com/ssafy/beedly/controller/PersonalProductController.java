@@ -50,10 +50,10 @@ public class PersonalProductController {
 	}
 
 	// 1-4-1. 상품 상세 조회
-	@GetMapping("/close/{id}")
-	public ResponseEntity<?> getProductInfoClose(@PathVariable("id") Long id){
-		return ResponseEntity.ok(personalProductService.getProductByIdClose(id));
-	}
+	// @GetMapping("/close/{id}")
+	// public ResponseEntity<?> getProductInfoClose(@PathVariable("id") Long id){
+	// 	return ResponseEntity.ok(personalProductService.getProductByIdClose(id));
+	// }
 
 	// 2. 카테고리 별 SLICE로 product가져오기
 	//http://localhost:8080/personalProduct/list?categoryName=""&page=0&sort=startTime,DESC

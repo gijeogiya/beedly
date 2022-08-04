@@ -88,10 +88,6 @@ public class PersonalProductService {
 		return products;
 	}
 
-	@Transactional
-	public List<PersonalProduct> getProductByName(String name){
-		return personalProductRepository.findPersonalProductByProductNameLike(name);
-	}
 
 	@Transactional
 	public Slice<PersonalProductDto> getProductBySize(Integer width, Integer height, Pageable pageable){
