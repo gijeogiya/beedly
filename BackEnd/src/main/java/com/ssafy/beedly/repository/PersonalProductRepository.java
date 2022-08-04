@@ -13,10 +13,14 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
+
 public interface PersonalProductRepository extends JpaRepository<PersonalProduct, Long>{
 
 
-
+    //----------- 1. productName 검색하기
+    @Query(value="select c from PersonalProduct c where c.productName like %:productName%")
+    List<PersonalProduct> findPersonalProductByProductNameLike(@Param("productName") String productName);
 
     //------------ 2. 카테고리별로 정렬하기
     @Query(value="select p from PersonalProduct p join fetch p.category c where c.categoryName = :categoryName")

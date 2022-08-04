@@ -29,7 +29,7 @@ public class SpecialBoardDto {
 	private String boardSubtitle;
 	private String boardDesc;
 	private String mainImgUri;
-	List<SpecialProduct> specialProduct;
+	List<SpecialProduct> specialProducts;
 
 	public SpecialBoardDto(SpecialBoard specialBoard) {
 		this.id = specialBoard.getId();
@@ -39,6 +39,6 @@ public class SpecialBoardDto {
 		this.boardSubtitle = specialBoard.getBoardSubtitle();
 		this.boardDesc = specialBoard.getBoardDesc();
 		this.mainImgUri = specialBoard.getMainImgUri();
-		this.specialProduct = specialBoard.getSpecialProduct();
+		this.specialProducts = specialBoard.getSpecialProducts();
 	}
 }

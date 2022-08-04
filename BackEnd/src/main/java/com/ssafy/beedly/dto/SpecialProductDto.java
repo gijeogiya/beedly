@@ -14,10 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.ssafy.beedly.domain.Category;
-import com.ssafy.beedly.domain.PersonalProduct;
-import com.ssafy.beedly.domain.SpecialProduct;
-import com.ssafy.beedly.domain.SpecialProductImg;
+import com.ssafy.beedly.domain.*;
 import com.ssafy.beedly.domain.type.SoldStatus;
 
 import lombok.AllArgsConstructor;
@@ -36,8 +33,8 @@ public class SpecialProductDto {
 	private Integer weight;
 	private Integer depth;
 	private SoldStatus soldStatus;
-	private Category category;
-	private List<SpecialProductImg> specialProductImgs;
+	private Long categoryId;
+	private List<String> specialProductImgs;
 
 	public SpecialProductDto(SpecialProduct specialProduct){
 		this.id = specialProduct.getId();
@@ -48,6 +45,11 @@ public class SpecialProductDto {
 		this.weight = specialProduct.getWeight();
 		this.depth = specialProduct.getDepth();
 		this.soldStatus = specialProduct.getSoldStatus();
-		this.category = specialProduct.getCategory();
+		this.categoryId = specialProduct.getCategory().getId();
+		List<SpecialProductImg> productImgs = specialProduct.getSpecialProductImgs();
+		for (SpecialProductImg productImg : productImgs) {
+			this.specialProductImgs.add(productImg.getImgUri());
+		}
+
 	}
 }

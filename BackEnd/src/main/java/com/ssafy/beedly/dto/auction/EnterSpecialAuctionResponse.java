@@ -7,12 +7,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+<<<<<<< HEAD
 import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class EnterSpecialAuctionResponse implements Serializable {
+=======
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class EnterSpecialAuctionResponse {
+>>>>>>> 6526eaf36b75a27a7860070b6e4654d0bb158761
 
     @ApiModelProperty(example = "기획전 경매방 식별자(1)")
     private Long auctionId;

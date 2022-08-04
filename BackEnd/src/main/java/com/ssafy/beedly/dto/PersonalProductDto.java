@@ -1,6 +1,11 @@
 package com.ssafy.beedly.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import com.ssafy.beedly.domain.*;
+import com.ssafy.beedly.domain.type.SoldStatus;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

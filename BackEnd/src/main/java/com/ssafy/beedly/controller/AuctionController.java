@@ -51,12 +51,14 @@ public class AuctionController {
     }
 
     // 상시 경매방 입장(방 정보 + 상품 정보 + 작가정보도 같이 리턴)
+
     @ApiOperation(value = "상시 경매방 입장", notes = "상시 경매방 입장(방 정보 + 상품 정보 + 작가정보도 같이 리턴)")
     @ApiImplicitParam(name = "auctionId", value = "상시 경매방 식별자")
     @Cacheable(value = CacheKey.PERSONAL_AUCTION_BOARD, key = "#auctionId", unless = "#result == null", cacheManager = "cacheManager")
     @GetMapping("/auction/{auctionId}/personal")
     public EnterPersonalAuctionResponse enterPersonalAuction(@PathVariable Long auctionId) {
         return personalAuctionService.enterPersonalAuction(auctionId);
+
     }
 
     // 상시 경매 입찰하기
@@ -101,6 +103,7 @@ public class AuctionController {
     @GetMapping("/auction/{auctionId}/special")
     public List<EnterSpecialAuctionResponse> enterSpecialAuction(@PathVariable Long auctionId) {
         return specialAuctionService.enterSpecialAuction(auctionId);
+
     }
 
     // 기획전 경매 입찰하기

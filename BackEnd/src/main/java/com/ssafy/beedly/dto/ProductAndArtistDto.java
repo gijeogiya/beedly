@@ -1,7 +1,6 @@
 package com.ssafy.beedly.dto;
 
 import java.time.LocalDateTime;
-
 import com.ssafy.beedly.domain.Artist;
 import com.ssafy.beedly.domain.PersonalProduct;
 
@@ -25,6 +24,7 @@ public class ProductAndArtistDto {
 	private String artistProfileImg;
 	private String artistBgImg;
 
+
 	public ProductAndArtistDto(PersonalProduct personalProduct, Artist artist){
 		this.productId = personalProduct.getId();
 		this.productName = personalProduct.getProductName();
@@ -35,6 +35,5 @@ public class ProductAndArtistDto {
 		this.artistProfileImg = artist.getArtistProfileImg();
 		this.artistBgImg = artist.getArtistBgImg();
 	}
-
 
 }
