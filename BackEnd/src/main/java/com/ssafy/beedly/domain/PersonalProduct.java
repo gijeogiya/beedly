@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Getter
+@Getter @Setter
 @Table(name = "PERSONAL_PRODUCT")
 public class PersonalProduct extends BaseEntity {
 
@@ -62,6 +63,10 @@ public class PersonalProduct extends BaseEntity {
 
     @OneToOne(mappedBy = "personalProduct")
     private PersonalSold personalSold;
+
+    public PersonalProduct(String productName) {
+        this.productName = productName;
+    }
 
     @Override
     public String toString() {

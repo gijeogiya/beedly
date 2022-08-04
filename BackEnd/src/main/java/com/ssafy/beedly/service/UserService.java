@@ -7,6 +7,7 @@ import com.ssafy.beedly.domain.PersonalProduct;
 import com.ssafy.beedly.domain.PersonalSold;
 import com.ssafy.beedly.domain.User;
 import com.ssafy.beedly.dto.tag.common.TagDto;
+import com.ssafy.beedly.dto.user.common.UserCreateFlag;
 import com.ssafy.beedly.dto.user.kakao.KakaoUserResponse;
 import com.ssafy.beedly.dto.user.request.UserUpdateRequest;
 import com.ssafy.beedly.dto.user.response.*;
@@ -37,7 +38,7 @@ public class UserService {
     private String restApiKey;
 
     private final UserRepository userRepository;
-    private final UserQueryRepository userQueryRetrsfpository;
+    private final UserQueryRepository userQueryRepository;
     private final UserTagRepository userTagRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -45,20 +46,24 @@ public class UserService {
 
     // 카카오 로그인
     @Transactional
-    public String kakaoLogin(KakaoUserResponse kakaoUserInfo) {
+    public UserCreateFlag kakaoLogin(KakaoUserResponse kakaoUserInfo) {
         Long kakaoId = Long.valueOf(kakaoUserInfo.getId());
         Optional<User> findUser = userRepository.findByKakaoId(kakaoId);
         Long userId;
+        UserCreateFlag userCreateFlag = new UserCreateFlag();
         if (!findUser.isPresent()) { // 유저정보 없으면 회원가입 후 토큰 발급
             User saveUser = userRepository.save(User.createUser(kakaoId));
             userId = saveUser.getId();
+            userCreateFlag.setCreateFlag(true);
 
             // 관리자 계정 가입시키는거 로직 추가해야댐.
 
         } else { // 유저정보 있으면 바로 토큰 발급
             userId = findUser.get().getId();
+            userCreateFlag.setCreateFlag(false);
         }
-        return jwtUtil.createToken(userId);
+        userCreateFlag.setAccessToken(jwtUtil.createToken(userId));
+        return userCreateFlag;
     }
 
     public String getKakaoAccessToken(String code) {
@@ -104,10 +109,9 @@ public class UserService {
     }
 
     // 내 판매내역 리스트
-//    public List<UserSalesResponse> searchMySales(User user) {
-        public List<UserSalesResponse> searchMySales(Long userId) {
-//        User findUser = validateUser(user);
-        List<PersonalProduct> personalProducts = userQueryRepository.searchUserSales(userId);
+    public List<UserSalesResponse> searchMySales(User user) {
+        User findUser = validateUser(user);
+        List<PersonalProduct> personalProducts = userQueryRepository.searchUserSales(user.getId());
 
         return personalProducts.stream()
                 .map(personalProduct -> new UserSalesResponse(personalProduct))
@@ -115,13 +119,13 @@ public class UserService {
     }
 
     // 상시 구매내역 결제정보 조회
-    public UserPurchasePaidResponse searchPersonalPurchasePaidInfo(Long productSoldId, Long userId) {
+    public UserPurchasePaidResponse searchPersonalPurchasePaidInfo(Long productSoldId, User user) {
         // 본인 구매내역 맞는지 방어로직 추가하기
         return new UserPurchasePaidResponse(userQueryRepository.searchPersonalPurchasePaidInfo(productSoldId));
     }
 
     // 기획전 구매내역 결제정보 조회
-    public UserPurchasePaidResponse searchSpecialPurchasePaidInfo(Long productSoldId, Long userId) {
+    public UserPurchasePaidResponse searchSpecialPurchasePaidInfo(Long productSoldId, User user) {
         // 본인 구매내역 맞는지 방어로직 추가하기
         return new UserPurchasePaidResponse(userQueryRepository.searchSpecialPurchasePaidInfo(productSoldId));
     }

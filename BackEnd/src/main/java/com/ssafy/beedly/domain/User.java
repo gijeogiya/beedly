@@ -45,7 +45,7 @@ public class User extends BaseEntity {
     @Column(name = "user_tel")
     private String userTel;
 
-    @Column(name = "user_adddr")
+    @Column(name = "user_addr")
     private String userAddr;
 
     @Column(name = "user_bday")
