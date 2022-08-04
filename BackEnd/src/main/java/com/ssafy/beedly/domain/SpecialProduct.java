@@ -53,7 +53,7 @@ public class SpecialProduct extends BaseEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "s_board_id")
     private SpecialBoard specialBoard;
 

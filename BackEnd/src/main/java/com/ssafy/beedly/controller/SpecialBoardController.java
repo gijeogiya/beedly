@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.xml.ws.Response;
 import java.util.List;
 
 @RestController
@@ -52,6 +53,26 @@ public class SpecialBoardController {
     @GetMapping("/special/board")
     public ResponseEntity<List<SpecialBoardSimpleResponse>> searchWaitingSpecialBoards() {
         return ResponseEntity.ok(specialBoardService.searchWaitingSpecialBoards());
+    }
+
+    // 기획전 게시글 내용 수정
+    @ApiOperation(value = "기획전 게시글 내용만 수정", notes = "게시글 내용만 수정")
+    @ApiImplicitParam(name = "boardId", value = "기획전 게시글 식별자")
+    @PatchMapping("/admin/special/board/{boardId}")
+    public ResponseEntity updateSpecialBoard(@PathVariable Long boardId, @RequestBody CreateSpecialBoardRequest request) {
+        specialBoardService.updateSpecialBoard(boardId, request);
+
+        return ResponseEntity.ok().build();
+    }
+
+    // 기획전 게시글 삭제
+    @ApiOperation(value = "기획전 게시글 삭제", notes = "기획전 게시글 삭제")
+    @ApiImplicitParam(name = "boardId", value = "기획전 게시글 식별자")
+    @DeleteMapping("/admin/special/board/{boardId}")
+    public ResponseEntity deleteSpecialBoard(@PathVariable Long boardId) {
+        specialBoardService.deleteSpecialBoard(boardId);
+
+        return ResponseEntity.ok().build();
     }
 
 }
