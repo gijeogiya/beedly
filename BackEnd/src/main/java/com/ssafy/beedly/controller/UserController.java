@@ -47,7 +47,7 @@ public class UserController {
         if (userCreateFlag.isCreateFlag()) {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .header(HttpHeaders.AUTHORIZATION, userCreateFlag.getAccessToken())
-                    .build();
+                    .body(userCreateFlag.getUserDefaultDto());
         } else {
             return ResponseEntity.status(HttpStatus.OK)
                     .header(HttpHeaders.AUTHORIZATION, userCreateFlag.getAccessToken())

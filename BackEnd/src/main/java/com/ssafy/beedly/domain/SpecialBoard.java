@@ -1,6 +1,7 @@
 package com.ssafy.beedly.domain;
 
 import com.ssafy.beedly.domain.common.BaseEntity;
+import com.ssafy.beedly.dto.special.board.request.CreateSpecialBoardRequest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,4 +45,14 @@ public class  SpecialBoard extends BaseEntity {
     @OneToMany(mappedBy = "specialBoard")
     private List<SpecialProduct> specialProducts = new ArrayList<>();
 
+    public static SpecialBoard createSpecialBoard(User user, CreateSpecialBoardRequest request, String imageUri) {
+        SpecialBoard specialBoard = new SpecialBoard();
+        specialBoard.startTime = request.getStartTime();
+        specialBoard.boardTitle = request.getBoardTitle();
+        specialBoard.boardSubtitle = request.getBoardSubTitle();;
+        specialBoard.boardDesc = request.getBoardDesc();
+        specialBoard.mainImgUri = imageUri;
+        specialBoard.user = user;
+        return specialBoard;
+    }
 }
