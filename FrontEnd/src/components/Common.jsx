@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Box } from "grommet";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { Notice } from "./Notice";
 // 고정스타일링
 
 // Header
 const Header = styled.img`
-    background-color: #1F1D1D;
-    max-width: 32vw;
-    min-width: 32vw;
-    padding: 0vw 34vw;
-    max-height: 10vh;
+  background-color: #1f1d1d;
+  max-width: 32vw;
+  min-width: 32vw;
+  padding: 0vw 34vw;
+  max-height: 10vh;
 `;
 export function LogoHeader() {
   return <Header alt="logo" src="img/logo.png"></Header>;
@@ -23,18 +24,31 @@ const FooterContainer = styled.div`
   align-items: center;
 `;
 
-const FooterContent = ({ title, desc }) => {
+const FooterContent = ({ title, desc, setOpen }) => {
   return (
     <div style={{ padding: "10px", fontSize: "10px" }}>
       <h3>{title || ""}</h3>
       {desc.map((d) => (
-        <p key={d}>{d}</p>
+        <p
+          key={d}
+          onClick={
+            d === "공지사항" || d === "이용가이드"
+              ? () => setOpen(true)
+              : () => {}
+          }
+        >
+          {d}
+        </p>
       ))}
     </div>
   );
 };
 
 export function Footer() {
+  const [open, setOpen] = useState(false);
+  function onDismiss() {
+    setOpen(false);
+  }
   return (
     <Box
       background="light-3"
@@ -58,9 +72,11 @@ export function Footer() {
             desc={["이용 정책", "페널티 정책", "커뮤니티 가이드라인"]}
           />
           <FooterContent
+            setOpen={setOpen}
             title="고객지원"
             desc={["공지사항", "서비스 소개", "소장품 정기경매 접수"]}
           />
+          <Notice open={open} onDismiss={onDismiss} />
         </Box>
         <Box>
           <FooterContent
@@ -123,7 +139,7 @@ export function NavBar() {
       lastScrollTop = nowScrollTop;
     });
     return () => {
-      window.removeEventListener("scroll", () => { });
+      window.removeEventListener("scroll", () => {});
     };
   }, []);
   return (
@@ -156,11 +172,6 @@ export function NavBar() {
     </NavBarDiv>
   );
 }
-
-
-
-
-
 
 const ProductImg = styled.img`
   src: ${(props) => props.productSrc || ""};
@@ -248,7 +259,7 @@ export function AuctionArtist({ title, artist, artistSrc }) {
 }
 
 //작가 프레임
-export function Artist({ artist, artistSrc }) { }
+export function Artist({ artist, artistSrc }) {}
 // const ArtistImg = styled.
 
 //텍스트 폼

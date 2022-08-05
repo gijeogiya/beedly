@@ -11,7 +11,7 @@ const initialState = {
 export const login = (code) => {
   return function (dispatch, getState) {
     axios
-      .post(`http://localhost:8080/user/login?code=${code}`)
+      .post(`http://i7a601.p.ssafy.io:8080/api/user/login?code=${code}`)
       .then((res) => {
         console.log("로그인 성공");
         let token = res.headers["authorization"];
@@ -24,6 +24,7 @@ export const login = (code) => {
           setUser({
             username: res.data.username,
             nickname: res.data.nickname,
+            token: token,
           })
         );
       })

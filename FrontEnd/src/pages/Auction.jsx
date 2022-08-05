@@ -413,24 +413,27 @@ export const Auction = ({ grade }) => {
   const handleGoBack = () => {
     navigate(-1);
   };
+
   const handleClickOpen = () => {
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
   };
+
   return (
     <div>
       {/* <MainContent src={image} /> */}
       <ErrorBoundary>
-        {" "}
         <VideoRoomComponent
           setLocalUser={setLocalUser}
           handleGoBack={handleGoBack}
           grade={grade}
           ref={ref}
-          // openviduServerUrl="https://i7a601.p.ssafy.io:443"
-        />{" "}
+          openviduServerUrl="https://i7a601.p.ssafy.io:8443"
+          // openviduServerUrl="https://localhost:4443"
+        />
       </ErrorBoundary>
       {grade === "buyer" && (
         <ExitButton

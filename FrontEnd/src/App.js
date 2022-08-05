@@ -12,6 +12,7 @@ import Kakao from "./pages/Kakao";
 import { Auction } from "./pages/Auction";
 import { SpecialAuction } from "./pages/SpecialAuction";
 import { SpecialProduct } from "./pages/SpecialProduct";
+import MyPage from "./pages/MyPage";
 const Layout = () => {
   return (
     <div>
@@ -23,20 +24,33 @@ const Layout = () => {
   );
 };
 
+const Layout2 = () => {
+  return (
+    <div>
+      <LogoHeader />
+      <Outlet />
+      <NavBar />
+    </div>
+  );
+};
+
 function App() {
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Main />} />
-          <Route path="/specialAuction" element={<SpecialAuction />} />
+          <Route index element={<SpecialAuction />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/productlist" element={<ProductList />} />
+
           <Route path="/onair" element={<Onair />} />
-          <Route path="/mypage" element={<Login />} />
+          <Route path="/mypage" element={<MyPage />} />
           <Route path="/signup1" element={<SignupChoice />} />
           <Route path="/signup2" element={<Signup />} />
           <Route path="/specialProduct" element={<SpecialProduct />} />
+        </Route>
+        <Route path="/" element={<Layout2 />}>
+          <Route path="/specialAuction" element={<SpecialAuction />} />
+          <Route path="/productlist" element={<SpecialProduct />} />
         </Route>
         <Route path="/auctionSeller" element={<Auction grade="seller" />} />
         <Route path="/auctionBuyer" element={<Auction grade="buyer" />} />
