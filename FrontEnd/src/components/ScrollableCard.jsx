@@ -9,13 +9,14 @@ const StyledProductCard = styled.div`
     display:flex;
     flex-direction:column;
     justify-content:space-between;
-    width:240px;
-    padding-left:14px;
+    width:200px;
+    padding-right:14px;
     padding-top:14px;
 `;
 
 const StyledProductCardImgFrame = styled.div`
-    width:240px;
+    position:relative;
+    width:200px;
     display:flex;
     flex-direction:column;
     justify-content: flex-end;
@@ -24,8 +25,8 @@ const StyledProductCardImgFrame = styled.div`
 
 const StyledRectangleRowImg = styled.img`
     border-radius:8px;
-    width:240px;
-    height:180px;
+    width:200px;
+    height:200px;
     object-fit: cover;
 `;
 
@@ -34,7 +35,6 @@ const AuctionStateBox = styled.div`
     background-color: ${true ? "red" : "gray" || "gray"};
     display: inline-block;
     position: absolute;
-    z-index: 5;
     font-size: 12px;
     padding-left: 5px;
     padding-right: 5px;
@@ -54,8 +54,8 @@ const StyledCardInfBox = styled.div`
 
 const StyledCardArtistImgFrame = styled.div`
     display:flex;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     flex-direction:column;
     padding-left:3px;
     padding-top:5px;
@@ -90,7 +90,7 @@ export function ProductCard() {
                 <StyledCardInfTextFrame>
                     <div style={{"fontSize": "14px", "fontWeight": "700"}}>해리아현</div>
                     <div style={{"fontSize": "14px"}}>고양이와 함께 춤을</div>
-                    <div style={{"fontSize": "14px"}}>{true ? `24명 시청중` : `2022년 12월 22일 13시 예정`}</div>
+                    <div style={{"fontSize": "12px"}}>{false ? `24명 시청중` : `2022년 12월 22일 13시 예정`}</div>
                 </StyledCardInfTextFrame>
             </StyledCardInfBox>
         </StyledProductCard>
@@ -102,29 +102,29 @@ const StyledProfileCard = styled.div`
     display:flex;
     flex-direction:column;
     justify-content:space-between;
-    width:150px;
-    padding-left:10px;
+    width:144px;
+    padding-right:10px;
     padding-top:14px;
 `;
 
 const StyledProfileCardImgFrame = styled.div`
-    width:150px;
+    position: relative;
+    width:144px;
     display:flex;
     flex-direction:column;
 `;
 
 const StyledRectangleColImg = styled.img`
     border-radius:8px;
-    width:150px;
-    height:200px;
+    width:144px;
+    height:208px;
     object-fit: cover;
 `;
 
 const StyledProfileCardInfBox = styled.div`
     position: absolute;
-    z-index: 5;
-    height:200px;
-    width:150px;
+    height:208px;
+    width:144px;
     display:flex;
     flex-direction:column;
     justify-content: space-between;

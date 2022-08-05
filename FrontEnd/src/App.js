@@ -8,11 +8,8 @@ function App() {
     <div className="App">
       
       <LogoHeader />
-      <div className="main-content">
-        <MainPage />
-      </div>
+      <MainPage />
       <Footer />
-      
       <NavBar />
       
     </div>
