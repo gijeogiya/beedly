@@ -37,4 +37,15 @@ public class PersonalSold extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public static PersonalSold createPersonalSold(Integer finalPrice, PersonalProduct p, User u) {
+        PersonalSold personalSold = new PersonalSold();
+        personalSold.endTime = LocalDateTime.now();
+        personalSold.finalPrice = finalPrice;
+        personalSold.paidFlag = false;
+        personalSold.personalProduct = p;
+        personalSold.user = u;
+
+        return personalSold;
+    }
 }

@@ -75,4 +75,8 @@ public class SpecialProduct extends BaseEntity {
 
         return specialProduct;
     }
+
+    public void updateSoldStatus(SoldStatus s) {
+        this.soldStatus = s;
+    }
 }

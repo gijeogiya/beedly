@@ -103,4 +103,8 @@ public class PersonalProduct extends BaseEntity {
 
         return personalProduct;
     }
+
+    public void updateSoldStatus(SoldStatus s) {
+        this.soldStatus = s;
+    }
 }

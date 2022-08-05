@@ -25,8 +25,8 @@ import static com.ssafy.beedly.common.exception.NotFoundException.PRODUCT_NOT_FO
 @RequiredArgsConstructor
 public class AbsenteeBidService {
 
-    private AbsenteeBidRepository absenteeBidRepository;
-    private PersonalProductRepository personalProductRepository;
+    private final AbsenteeBidRepository absenteeBidRepository;
+    private final PersonalProductRepository personalProductRepository;
 
     // 서면응찰 등록
     @Transactional
@@ -37,8 +37,10 @@ public class AbsenteeBidService {
 //                return; // 이미 해당 유저가 해당 상품에 대한 서면응찰을 한 기록이 있음
 //            }
 //        }
+
         PersonalProduct personalProduct = personalProductRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
+
         AbsenteeBid bid = AbsenteeBid.createAbsenteeBid(price, personalProduct, user);
         absenteeBidRepository.save(bid);
     }
