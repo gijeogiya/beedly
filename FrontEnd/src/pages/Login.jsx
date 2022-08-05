@@ -44,7 +44,7 @@ const test = () => {
   console.log(KAKAO_AUTH_URL);
   window.location.href = KAKAO_AUTH_URL;
 };
-export function Login() {
+export default function Login() {
   return (
     <div style={MainContent}>
       {/* <div style={loginInput}>
