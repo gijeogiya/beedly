@@ -13,6 +13,7 @@ import { Auction } from "./pages/Auction";
 import { SpecialAuction } from "./pages/SpecialAuction";
 import { SpecialProduct } from "./pages/SpecialProduct";
 import MyPage from "./pages/MyPage";
+import { ProductRegister } from "./pages/ProductRegister";
 const Layout = () => {
   return (
     <div>
@@ -39,8 +40,9 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<SpecialAuction />} />
+          <Route index element={<ProductRegister />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/productRegister" element={<ProductRegister />} />
 
           <Route path="/onair" element={<Onair />} />
           <Route path="/mypage" element={<MyPage />} />

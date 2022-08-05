@@ -23,8 +23,6 @@ import BackButtonImage from "../assets/images/backButton.png";
 
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import { Calendar } from "react-date-range";
-import * as locales from "react-date-range/dist/locale";
 import { registerSpecialBoard } from "../utils/api";
 const HeaderDiv = styled.div`
   margin: 5px;

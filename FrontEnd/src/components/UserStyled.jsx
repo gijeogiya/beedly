@@ -26,6 +26,7 @@ const InputStyle2 = styled.input`
   padding: 5px 15px;
   margin: 5px 0px;
   color: black;
+  text-align: right;
 `;
 
 const TextAreaStyle = styled.textarea`
