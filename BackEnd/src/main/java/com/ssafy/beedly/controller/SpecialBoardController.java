@@ -41,7 +41,7 @@ public class SpecialBoardController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    // 기획전 게시글 상세 조회( + 상품정보)
+    // 기획전 게시글 상세 조회( + 상품정보 + 경매 진행중이면 경매방 정보)
     @ApiOperation(value = "기획전 게시글 상세 조회", notes = "상품 정보도 함께 리턴")
     @ApiImplicitParam(name = "boardId", value = "기획전 게시글 식별자")
     @GetMapping("/special/board/{boardId}")

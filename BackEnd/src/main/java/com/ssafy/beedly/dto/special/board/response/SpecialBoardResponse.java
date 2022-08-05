@@ -42,6 +42,9 @@ public class SpecialBoardResponse {
     @ApiModelProperty(notes = "기획전에 등록된 상품들")
     private List<SpecialProductResponse> specialProducts = new ArrayList<>();
 
+    @ApiModelProperty(notes = "현재 진행중인 기획전 경매방 식별자(현재 진행중이 아니면 null)")
+    private Long specialAuctionId;
+
     public SpecialBoardResponse(SpecialBoard sb) {
         this.boardId = sb.getId();
         this.startTime = sb.getStartTime();
@@ -51,5 +54,8 @@ public class SpecialBoardResponse {
         this.mainImgUri = sb.getMainImgUri();
         this.userId = sb.getUser().getId();
         this.specialProducts = sb.getSpecialProducts().stream().map(specialProduct -> new SpecialProductResponse(specialProduct)).collect(Collectors.toList());
+        if (sb.getSpecialAuction() != null) {
+            this.specialAuctionId = sb.getSpecialAuction().getId();
+        }
     }
 }

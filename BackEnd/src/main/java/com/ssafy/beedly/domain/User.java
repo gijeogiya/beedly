@@ -80,7 +80,7 @@ public class User extends BaseEntity {
         user.kakaoId = kakao.getId();
         user.userName = "구매자";
         user.userEmail = kakaoAuccount.getEmail();
-        user.userGender = kakaoAuccount.getGender().equals("femail") ? Gender.F : Gender.M;
+        user.userGender = kakaoAuccount.getGender().equals("male") ? Gender.M : Gender.F;
         user.userRole = UserRole.ROLE_USER;
         return user;
     }
