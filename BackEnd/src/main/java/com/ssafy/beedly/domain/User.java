@@ -7,10 +7,7 @@ import com.ssafy.beedly.domain.type.YN;
 import com.ssafy.beedly.dto.user.kakao.KakaoAuccount;
 import com.ssafy.beedly.dto.user.kakao.KakaoUserResponse;
 import com.ssafy.beedly.dto.user.request.UserUpdateRequest;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -19,7 +16,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Getter
+@Getter @Setter
 @Table(name = "USER")
 public class User extends BaseEntity {
 
@@ -56,6 +53,7 @@ public class User extends BaseEntity {
     @Column(name = "user_score")
     private Integer userScore;
 
+
 //    private LocalDateTime userDeleteDate;
 //
 //    @Enumerated(EnumType.STRING)
@@ -91,5 +89,10 @@ public class User extends BaseEntity {
         this.userTel = request.getTel();
         this.userAddr = request.getAddr();
         this.userBirthday = request.getBirthday();
+    }
+
+    // 테스트용 생성자
+    public User(Long id) {
+        this.id = id;
     }
 }

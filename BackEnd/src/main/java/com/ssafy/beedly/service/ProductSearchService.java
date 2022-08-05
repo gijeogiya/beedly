@@ -38,7 +38,7 @@ public class ProductSearchService {
 
 	@Transactional
 	public Slice<PersonalProductDto> getProductByTerminated(Long id){
-		Slice<PersonalProductDto> dto = productSearchRepository.findPersonalProductByTerminated(id).map(PersonalProduct::new);
+		Slice<PersonalProductDto> dto = productSearchRepository.findPersonalProductByTerminated(id).map(PersonalProductDto::new);
 		return dto;
 	}
 
