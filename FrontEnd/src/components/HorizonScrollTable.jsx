@@ -1,35 +1,74 @@
-export function HorizonScrollTable(Table) {
-    return (
-      <div>
-        <StyledHorizonTable>
-          <Product title="Sample Title" productSrc={SampleProduct} artistSrc={SampleProfile} artist="Artist Name" dueDate={SampleDueDate} dueTime="10" isStart={false} people="0"/>
-          <div className="card"><h2>Card</h2></div>
-          <div className="card"><h2>Card</h2></div>
-          <div className="card"><h2>Card</h2></div>
-          <div className="card"><h2>Card</h2></div>
-          <div className="card"><h2>Card</h2></div>
-          <div className="card"><h2>Card</h2></div>
-          <div className="card"><h2>Card</h2></div>
-          <div className="card"><h2>Card</h2></div>
-          <div className="card"><h2>Card</h2></div>
-        </StyledHorizonTable>
-      </div>
-    )
+import styled from 'styled-components';
+import { ProductCard, ArtistCard } from '../components/ScrollableCard'
+
+const StyledHorizonTable = styled.div`
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding-left: 20px;
+  padding-right: 120px;
+  &::-webkit-scrollbar {
+    display: none;
   }
 
-  export function Product({ title, productSrc, artistSrc, artist, dueDate, dueTime, isStart, people }) {
-    return <Box>
-        <ProductFrame>
-            <ProductImg src={productSrc}></ProductImg>
-            <TimeTable>{isStart ? { dueTime } : "실시간"}</TimeTable>
-        </ProductFrame>
-        <Box direction="row">
-            <ArtistImg src={artistSrc}></ArtistImg>
-            <div>
-                <h2>{artist}</h2>
-                <p>{title}</p>
-                <p>{isStart ? `${people}명 시청중` : `${dueDate.year}년 ${dueDate.month}월 ${dueDate.day}일 ${dueDate.hour}시 예정`}</p>
-            </div>
-        </Box>
-    </Box>
+  .card {
+    display: inline-block;
+  }
+`;
+
+export function HorizonScrollRowTable() {
+  return (
+    <StyledHorizonTable>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+      <div className='card'><ProductCard/></div>
+    </StyledHorizonTable>
+  )
 }
+
+export function HorizonScrollColTable() {
+  return (
+    <StyledHorizonTable>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+      <div className='card'><ArtistCard/></div>
+    </StyledHorizonTable>
+  )
+}
+
