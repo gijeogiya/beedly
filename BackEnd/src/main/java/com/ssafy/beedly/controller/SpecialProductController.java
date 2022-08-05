@@ -66,6 +66,8 @@ public class SpecialProductController {
    @DeleteMapping("/admin/special/product/{productId}")
    public ResponseEntity deleteSpecialProduct(@PathVariable Long productId) {
       specialProductService.delete(productId);
+
+      return ResponseEntity.ok().build();
    }
 
 }
