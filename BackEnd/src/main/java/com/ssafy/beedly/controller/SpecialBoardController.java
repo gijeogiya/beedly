@@ -2,6 +2,7 @@ package com.ssafy.beedly.controller;
 
 import com.ssafy.beedly.config.web.LoginUser;
 import com.ssafy.beedly.domain.User;
+import com.ssafy.beedly.dto.ListRequest;
 import com.ssafy.beedly.dto.special.board.request.CreateSpecialBoardRequest;
 import com.ssafy.beedly.dto.special.board.response.SpecialBoardResponse;
 import com.ssafy.beedly.dto.special.board.response.SpecialBoardSimpleResponse;
@@ -73,6 +74,12 @@ public class SpecialBoardController {
         specialBoardService.deleteSpecialBoard(boardId);
 
         return ResponseEntity.ok().build();
+    }
+
+    // 유진누나 연습 코드
+    @GetMapping
+    public void dfdfd(@RequestBody ListRequest dddd) {
+
     }
 
 }

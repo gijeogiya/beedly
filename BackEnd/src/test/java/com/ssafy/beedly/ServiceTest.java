@@ -3,32 +3,28 @@ package com.ssafy.beedly;
 import java.util.Collections;
 import java.util.List;
 
-<<<<<<< HEAD
+
 import com.ssafy.beedly.domain.*;
 import com.ssafy.beedly.repository.AbsenteeBidRepository;
 import com.ssafy.beedly.repository.SpecialBoardRepository;
 import com.ssafy.beedly.repository.query.AbsenteeBidQueryRepository;
 import com.ssafy.beedly.service.AbsenteeBidService;
-=======
+
 import com.ssafy.beedly.domain.SpecialAuction;
 import com.ssafy.beedly.domain.SpecialBoard;
 import com.ssafy.beedly.repository.SpecialBoardRepository;
->>>>>>> 6526eaf36b75a27a7860070b6e4654d0bb158761
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-<<<<<<< HEAD
-=======
 import com.ssafy.beedly.domain.PersonalProduct;
->>>>>>> 6526eaf36b75a27a7860070b6e4654d0bb158761
 import com.ssafy.beedly.repository.PersonalProductRepository;
 import com.ssafy.beedly.repository.query.PersonalProductQueryRepository;
 import com.ssafy.beedly.service.PersonalProductService;
 
-<<<<<<< HEAD
 import javax.persistence.EntityExistsException;
 
 @SpringBootTest
@@ -112,7 +108,4 @@ public class ServiceTest {
 //		absenteeBidService.save(absenteeBid);
 //		absenteeBidService.update(absenteeBid);
 	}
-=======
->>>>>>> 6526eaf36b75a27a7860070b6e4654d0bb158761
-
 }
