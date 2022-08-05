@@ -57,11 +57,17 @@ public class SpecialBoardController {
     }
 
     // 기획전 게시글 내용 수정
-    @ApiOperation(value = "기획전 게시글 내용만 수정", notes = "게시글 내용만 수정")
+    @ApiOperation(value = "기획전 게시글 수정 + 이미지도", notes = "게시글 내용 수정 + 이미지도 \n 이미지 안넣으면 내용만 수정" +
+            "게시글 수정 데이터 request:\n {\n" +
+            "  \"boardTitle\": \"기획전 제목\",\n" +
+            "  \"boardSubTitle\": \"기획전 부제목\",\n" +
+            "  \"boardDesc\": \"기획전 설명입니다.\",\n" +
+            "  \"startTime\": \"2013-09-29T18:46:19Z\"\n" +
+            "}\n")
     @ApiImplicitParam(name = "boardId", value = "기획전 게시글 식별자")
     @PatchMapping("/admin/special/board/{boardId}")
-    public ResponseEntity updateSpecialBoard(@PathVariable Long boardId, @RequestBody CreateSpecialBoardRequest request) {
-        specialBoardService.updateSpecialBoard(boardId, request);
+    public ResponseEntity updateSpecialBoard(@PathVariable Long boardId, @RequestPart CreateSpecialBoardRequest request, @RequestPart(required = false)MultipartFile image) {
+        specialBoardService.updateSpecialBoard(boardId, request, image);
 
         return ResponseEntity.ok().build();
     }

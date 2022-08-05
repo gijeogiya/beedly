@@ -21,7 +21,7 @@ public class SpecialProductController {
    private final SpecialProductService specialProductService;
 
    // 기획전 게시글에 상품 등록 + 이미지
-   @ApiOperation(value = "기획전 게시글에 상품 등록", notes = "이미지도 여러개 가능 \n" +
+   @ApiOperation(value = "기획전 게시글에 상품 등록", notes = "이미지도 여러개 가능(최대 5개) \n" +
            "상품 등록 데이터 request:\n {\n" +
            "  \"productName\": \"기획전 상품\",\n" +
            "  \"productDesc\": \"기획전 상품이에요오오오\",\n" +
@@ -39,6 +39,33 @@ public class SpecialProductController {
       specialProductService.save(request, images, boardId);
 
       return ResponseEntity.status(HttpStatus.CREATED).build();
+   }
+
+   // 기획전 상품 수정
+   @ApiOperation(value = "기획전 상품 수정", notes = "이미지도 여러개 가능(최대 5개) \n" +
+           "상품 등록 데이터 request:\n {\n" +
+           "  \"productName\": \"기획전 상품\",\n" +
+           "  \"productDesc\": \"기획전 상품이에요오오오\",\n" +
+           "  \"startPrice\": 50000,\n" +
+           "  \"height\": 5,\n" +
+           "  \"weight\": 5,\n" +
+           "  \"depth\": 5,\n" +
+           "  \"artistName\": \"moonsk\",\n" +
+           "  \"categoryId\": 1\n" +
+           "}", produces = "multipart/form-data")
+   @ApiImplicitParam(name = "productId", value = "기획전 상품 식별자")
+   @PatchMapping("/admin/special/product/{productId}")
+   public ResponseEntity updateSpecialProduct(@RequestPart CreateSpecialProductRequest request, @RequestPart(required = false) List<MultipartFile> images,
+                                              @PathVariable Long productId) {
+      specialProductService.update(request, images, productId);
+
+      return ResponseEntity.status(HttpStatus.OK).build();
+   }
+
+   // 기획전 상품 삭제
+   @DeleteMapping("/admin/special/product/{productId}")
+   public ResponseEntity deleteSpecialProduct(@PathVariable Long productId) {
+      specialProductService.delete(productId);
    }
 
 }

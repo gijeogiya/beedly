@@ -9,6 +9,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.ssafy.beedly.common.ConstantClass;
 import com.ssafy.beedly.common.exception.NotFoundException;
 import com.ssafy.beedly.common.exception.NotMatchException;
 import com.ssafy.beedly.domain.*;
@@ -35,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
+import static com.ssafy.beedly.common.ConstantClass.MAX_IMAGE_COUNT;
 import static com.ssafy.beedly.common.exception.NotFoundException.ARTIST_NOT_FOUND;
 import static com.ssafy.beedly.common.exception.NotFoundException.CATEGORY_NOT_FOUND;
 import static com.ssafy.beedly.common.exception.NotMatchException.CONTENT_TYPE_NOT_MATCH;
@@ -59,7 +61,7 @@ public class PersonalProductService {
 	// 상품 등록 + 이미지
 	@Transactional
 	public void save(User user, CreatePersonalProductRequest request, List<MultipartFile> images){
-		if ((images != null) && images.size() > 5) {
+		if ((images != null) && images.size() > MAX_IMAGE_COUNT) {
 			throw new NotMatchException(IMG_COUNT_NOT_MATCH);
 		}
 

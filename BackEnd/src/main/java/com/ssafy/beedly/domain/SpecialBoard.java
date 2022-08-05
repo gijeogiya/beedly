@@ -65,4 +65,8 @@ public class  SpecialBoard extends BaseEntity {
         this.boardSubtitle = request.getBoardSubTitle();
         this.boardDesc = request.getBoardDesc();
     }
+
+    public void updateImage(String imageUrl) {
+        this.mainImgUri = imageUrl;
+    }
 }

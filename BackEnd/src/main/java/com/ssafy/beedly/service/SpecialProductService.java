@@ -26,8 +26,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
-import static com.ssafy.beedly.common.exception.NotFoundException.CATEGORY_NOT_FOUND;
-import static com.ssafy.beedly.common.exception.NotFoundException.SPECIAL_BOARD_NOT_FOUND;
+import static com.ssafy.beedly.common.ConstantClass.MAX_IMAGE_COUNT;
+import static com.ssafy.beedly.common.exception.NotFoundException.*;
 import static com.ssafy.beedly.common.exception.NotMatchException.CONTENT_TYPE_NOT_MATCH;
 import static com.ssafy.beedly.common.exception.NotMatchException.IMG_COUNT_NOT_MATCH;
 
@@ -50,7 +50,7 @@ public class SpecialProductService {
 	// 상품 등록 + 이미지
 	@Transactional
 	public void save(CreateSpecialProductRequest request, List<MultipartFile> images, Long boardId){
-		if ((images != null) && images.size() > 5) {
+		if ((images != null) && images.size() > MAX_IMAGE_COUNT) {
 			throw new NotMatchException(IMG_COUNT_NOT_MATCH);
 		}
 
@@ -67,18 +67,33 @@ public class SpecialProductService {
 
 	// 상품 수정
 	@Transactional
-	public void update(SpecialProduct specialProduct){
-		Optional<SpecialProduct> product = specialProductRepository.findById(specialProduct.getId());
+	public void update(CreateSpecialProductRequest request, List<MultipartFile> images, Long productId){
+		if ((images != null) && images.size() > MAX_IMAGE_COUNT) {
+			throw new NotMatchException(IMG_COUNT_NOT_MATCH);
+		}
 
-		product.ifPresent(selectProduct ->{
-			specialProductRepository.save(selectProduct);
-		});
+		Category findCategory = categoryRepository.findById(request.getCategoryId())
+				.orElseThrow(() -> new NotFoundException(CATEGORY_NOT_FOUND));
+		SpecialProduct specialProduct = specialProductRepository.findById(productId)
+				.orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
+
+		specialProduct.updateSpecialProduct(request, findCategory);
+
+		if (images != null) {
+			List<SpecialProductImg> findImages = specialProductImgRepository.findAllBySpecialProductId(productId);
+			if (findImages.size() > 0) {
+				specialProductImgRepository.deleteAllInBatch(findImages);
+			}
+
+			// 이미지 s3에 업로드
+			uploadImageS3(images, specialProduct);
+		}
 	}
 
 	// 상품 삭제
 	@Transactional
-	public void delete(SpecialProduct specialProduct){
-		specialProductRepository.deleteById(specialProduct.getId());
+	public void delete(Long productId){
+		specialProductRepository.deleteById(productId);
 	}
 
 	// 이미지 s3에 업로드
