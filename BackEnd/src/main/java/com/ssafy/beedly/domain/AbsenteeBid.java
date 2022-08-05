@@ -27,7 +27,7 @@ public class AbsenteeBid extends BaseEntity {
     @JoinColumn(name = "p_product_id")
     private PersonalProduct personalProduct;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

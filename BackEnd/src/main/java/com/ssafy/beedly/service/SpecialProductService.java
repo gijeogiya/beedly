@@ -50,7 +50,7 @@ public class SpecialProductService {
 	// 상품 등록 + 이미지
 	@Transactional
 	public void save(CreateSpecialProductRequest request, List<MultipartFile> images, Long boardId){
-		if (images.size() > 5) {
+		if ((!images.isEmpty()) && images.size() > 5) {
 			throw new NotMatchException(IMG_COUNT_NOT_MATCH);
 		}
 

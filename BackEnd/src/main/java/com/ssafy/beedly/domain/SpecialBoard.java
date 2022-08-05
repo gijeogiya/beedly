@@ -55,4 +55,11 @@ public class  SpecialBoard extends BaseEntity {
         specialBoard.user = user;
         return specialBoard;
     }
+
+    public void updateSpecialBoard(CreateSpecialBoardRequest request) {
+        this.startTime = request.getStartTime();
+        this.boardTitle = request.getBoardTitle();
+        this.boardSubtitle = request.getBoardSubTitle();
+        this.boardDesc = request.getBoardDesc();
+    }
 }

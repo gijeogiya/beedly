@@ -37,4 +37,15 @@ public class SpecialSold extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public static SpecialSold createSpecialSold(SpecialBid bidInfo) {
+        SpecialSold specialSold = new SpecialSold();
+        specialSold.endTime = LocalDateTime.now();
+        specialSold.finalPrice = bidInfo.getBidPrice();
+        specialSold.paidFlag = false;
+        specialSold.specialProduct = bidInfo.getSpecialProduct();
+        specialSold.user = bidInfo.getUser();
+
+        return specialSold;
+    }
 }
