@@ -1,11 +1,11 @@
 import "./App.css";
 import { LogoHeader, Footer, NavBar } from "./components/Common";
 import { Outlet, Route, Routes } from "react-router-dom";
-import Main from "./pages/Main";
+// import Main from "./pages/Main";
 import Search from "./pages/Search";
-import ProductList from "./pages/ProductList";
+// import ProductList from "./pages/ProductList";
 import Onair from "./pages/Onair";
-import Login from "./pages/Login";
+// import Login from "./pages/Login";
 import SignupChoice from "./pages/SignupChoice";
 import Signup from "./pages/Signup";
 import Kakao from "./pages/Kakao";
