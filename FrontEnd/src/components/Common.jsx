@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Box } from "grommet";
 import styled from "styled-components";
+import HomeIcon  from '../assets/img/HomeIcon.svg';
+import SearchIcon from '../assets/img/SearchIcon.svg';
+import ListIcon from '../assets/img/ListIcon.svg';
+import OnairIcon from '../assets/img/OnairIcon.svg';
+import MypageIcon from '../assets/img/MypageIcon.svg';
 // 고정스타일링
 
 // Header
@@ -116,19 +121,19 @@ export function NavBar() {
         <NavBarDiv isShow={show} opacity={opacity}>
 
             <div style={IconButtonStyle} >
-                <img alt="홈" src="/img/HomeIcon.svg" />
+                <img alt="홈" src={HomeIcon} />
             </div>
             <div style={IconButtonStyle} >
-                <img alt="검색" src="/img/SearchIcon.svg" />
+                <img alt="검색" src={SearchIcon} />
             </div>
             <div style={IconButtonStyle} >
-                <img alt="리스트" src="/img/ListIcon.svg" />
+                <img alt="리스트" src={ListIcon} />
             </div>
             <div style={IconButtonStyle} >
-                <img alt="Onair" src="/img/OnairIcon.svg" />
+                <img alt="Onair" src={OnairIcon} />
             </div>
             <div style={IconButtonStyle} >
-                <img alt="Mypage" src="/img/MypageIcon.svg" />
+                <img alt="Mypage" src={MypageIcon} />
             </div>
 
         </NavBarDiv>
