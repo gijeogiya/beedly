@@ -15,7 +15,7 @@ public class CreatePersonalProductRequest {
     private String productDesc;
     private Integer startPrice;
     private Integer height;
-    private Integer weight;
+    private Integer width;
     private Integer depth;
     // YYYY-MM-DDTHH:mm:sszz
     private LocalDateTime startTime;

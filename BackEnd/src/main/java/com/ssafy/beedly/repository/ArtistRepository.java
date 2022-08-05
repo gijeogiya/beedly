@@ -10,4 +10,7 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
 
     @Query("select a from Artist a where a.user.userNickname like %:id%")
     Optional<Artist> findByUserId(Long id);
+
+    // userId로 작가 조회
+    Optional<Artist> findArtistByUserId(Long userId);
 }

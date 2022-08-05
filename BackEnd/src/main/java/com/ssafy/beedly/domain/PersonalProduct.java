@@ -114,7 +114,7 @@ public class PersonalProduct extends BaseEntity {
         personalProduct.productDesc = request.getProductDesc();
         personalProduct.startPrice = request.getStartPrice();
         personalProduct.height = request.getHeight();
-        personalProduct.weight = request.getWeight();
+        personalProduct.width = request.getWidth();
         personalProduct.depth = request.getDepth();
         personalProduct.soldStatus = SoldStatus.STANDBY;
         personalProduct.startTime = request.getStartTime();

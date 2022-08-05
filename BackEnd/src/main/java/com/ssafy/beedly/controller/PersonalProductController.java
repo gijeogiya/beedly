@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.beedly.domain.PersonalProduct;
 import com.ssafy.beedly.dto.PersonalProductDto;
->>>>>>> BackEnd/src/main/java/com/ssafy/beedly/controller/PersonalProductController.java
 import com.ssafy.beedly.service.PersonalProductService;
 
 import lombok.RequiredArgsConstructor;
