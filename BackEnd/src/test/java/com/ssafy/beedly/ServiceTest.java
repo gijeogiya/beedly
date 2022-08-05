@@ -109,7 +109,7 @@ public class ServiceTest {
 	public void setAbsenteeBidQueryRepository() {
 		AbsenteeBid absenteeBid = new AbsenteeBid(null, 500000, new PersonalProduct(4L, null,null,null,null,null,null,null,null,null,null,null,null), new User(1L, null, null, null, null, null, null, null, null, null));
 //		absenteeBidRepository.save(absenteeBid);
-		absenteeBidService.save(absenteeBid);
+//		absenteeBidService.save(absenteeBid);
 //		absenteeBidService.update(absenteeBid);
 	}
 =======

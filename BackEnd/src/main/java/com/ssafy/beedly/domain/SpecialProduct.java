@@ -2,6 +2,7 @@ package com.ssafy.beedly.domain;
 
 import com.ssafy.beedly.domain.common.BaseEntity;
 import com.ssafy.beedly.domain.type.SoldStatus;
+import com.ssafy.beedly.dto.special.product.request.CreateSpecialProductRequest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -58,4 +59,20 @@ public class SpecialProduct extends BaseEntity {
 
     @OneToMany(mappedBy = "specialProduct")
     private List<SpecialProductImg> specialProductImgs = new ArrayList<>();
+
+    public static SpecialProduct createSpecialProduct(CreateSpecialProductRequest request, Category findCategory, SpecialBoard findBoard) {
+        SpecialProduct specialProduct = new SpecialProduct();
+        specialProduct.productName = request.getProductName();
+        specialProduct.productDesc = request.getProductDesc();
+        specialProduct.startPrice = request.getStartPrice();
+        specialProduct.height = request.getHeight();
+        specialProduct.weight = request.getWeight();
+        specialProduct.depth = request.getDepth();
+        specialProduct.artistName = request.getArtistName();
+        specialProduct.soldStatus = SoldStatus.STANDBY;
+        specialProduct.category = findCategory;
+        specialProduct.specialBoard = findBoard;
+
+        return specialProduct;
+    }
 }

@@ -1,17 +1,16 @@
 package com.ssafy.beedly.dto.user.common;
 
+import com.ssafy.beedly.domain.type.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class UserCreateFlag {
+@AllArgsConstructor
+public class UserDefaultDto {
 
-    private boolean createFlag;
-    private String accessToken;
-
-    private UserDefaultDto userDefaultDto;
+    private String userEmail;
+    private Gender userGender;
 
 }
