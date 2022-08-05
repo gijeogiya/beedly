@@ -35,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
+import static com.ssafy.beedly.common.exception.NotFoundException.ARTIST_NOT_FOUND;
 import static com.ssafy.beedly.common.exception.NotFoundException.CATEGORY_NOT_FOUND;
 import static com.ssafy.beedly.common.exception.NotMatchException.CONTENT_TYPE_NOT_MATCH;
 import static com.ssafy.beedly.common.exception.NotMatchException.IMG_COUNT_NOT_MATCH;
@@ -64,10 +65,10 @@ public class PersonalProductService {
 
 		Category findCategory = categoryRepository.findById(request.getCategoryId())
 				.orElseThrow(() -> new NotFoundException(CATEGORY_NOT_FOUND));
-//		artistRepository.findArtistByUserId(user.getId())
-//				.orElseThrow(() -> new )
+		Artist artist = artistRepository.findArtistByUserId(user.getId())
+				.orElseThrow(() -> new NotFoundException(ARTIST_NOT_FOUND));
 
-		PersonalProduct save = PersonalProduct.createPersonalProduct(request, findCategory, user);
+		PersonalProduct save = PersonalProduct.createPersonalProduct(request, findCategory, user, artist);
 
 		// 이미지 s3에 업로드
 		uploadImageS3(images, save);

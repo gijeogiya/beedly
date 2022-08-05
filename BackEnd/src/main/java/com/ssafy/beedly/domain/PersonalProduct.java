@@ -108,7 +108,7 @@ public class PersonalProduct extends BaseEntity {
                 '}';
     }
 
-    public static PersonalProduct createPersonalProduct(CreatePersonalProductRequest request, Category category, User user) {
+    public static PersonalProduct createPersonalProduct(CreatePersonalProductRequest request, Category category, User user, Artist artist) {
         PersonalProduct personalProduct = new PersonalProduct();
         personalProduct.productName = request.getProductName();
         personalProduct.productDesc = request.getProductDesc();
@@ -120,6 +120,10 @@ public class PersonalProduct extends BaseEntity {
         personalProduct.startTime = request.getStartTime();
         personalProduct.category = category;
         personalProduct.user = user;
+        personalProduct.artist = artist;
+        personalProduct.brightness = request.getBrightness();
+        personalProduct.saturation = request.getSaturation();
+        personalProduct.temperature = request.getTemperature();
 
         return personalProduct;
     }
