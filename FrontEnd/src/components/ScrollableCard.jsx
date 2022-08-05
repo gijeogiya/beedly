@@ -88,14 +88,15 @@ export function ProductCard() {
                     <StyledCardArtistImg src={SampleProfile} />
                 </StyledCardArtistImgFrame>
                 <StyledCardInfTextFrame>
-                    <div style={{"font-size": "14px", "font-weight": "700"}}>해리아현</div>
-                    <div style={{"font-size": "14px"}}>고양이와 함께 춤을</div>
-                    <div style={{"font-size": "14px"}}>{true ? `24명 시청중` : `2022년 12월 22일 13시 예정`}</div>
+                    <div style={{"fontSize": "14px", "fontWeight": "700"}}>해리아현</div>
+                    <div style={{"fontSize": "14px"}}>고양이와 함께 춤을</div>
+                    <div style={{"fontSize": "14px"}}>{true ? `24명 시청중` : `2022년 12월 22일 13시 예정`}</div>
                 </StyledCardInfTextFrame>
             </StyledCardInfBox>
         </StyledProductCard>
     )
 }
+
 
 const StyledProfileCard = styled.div`
     display:flex;
@@ -123,9 +124,12 @@ const StyledProfileCardInfBox = styled.div`
     position: absolute;
     z-index: 5;
     height:200px;
+    width:150px;
     display:flex;
     flex-direction:column;
     justify-content: space-between;
+    border-radius:8px;
+    background-image:linear-gradient(0deg,rgba(0,0,0,.5),rgba(0,0,0,0) 30%);
 `;
 
 export function ArtistCard() {
@@ -137,7 +141,7 @@ export function ArtistCard() {
                     <StyledCardArtistImgFrame style={{"padding": "12px"}}>
                         <StyledCardArtistImg style={{"border": "2px solid white"}} src={SampleProfile} />
                     </StyledCardArtistImgFrame>
-                    <div style={{"padding":"12px", "color":"white", "font-size":"14px"}}>
+                    <div style={{"padding":"12px", "color":"white", "fontSize":"14px"}}>
                         해리아현
                     </div>
                 </StyledProfileCardInfBox>
