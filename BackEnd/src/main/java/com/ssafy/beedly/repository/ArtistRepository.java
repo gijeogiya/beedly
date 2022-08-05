@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface ArtistRepository extends JpaRepository<Artist, Long> {
 
-    @Query("select a from Artist a where a.user.id = :userId")
-    Optional<Artist> findByUserId(Long userId);
+    @Query("select a from Artist a where a.user.userNickname like %:id%")
+    Optional<Artist> findByUserId(Long id);
 }

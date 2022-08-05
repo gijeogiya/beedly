@@ -17,6 +17,13 @@ import com.ssafy.beedly.dto.personal.product.request.CreatePersonalProductReques
 import com.ssafy.beedly.repository.CategoryRepository;
 import com.ssafy.beedly.repository.PersonalProductImgRepository;
 import org.springframework.beans.factory.annotation.Value;
+
+import com.ssafy.beedly.domain.Artist;
+import com.ssafy.beedly.dto.ProductAndArtistDto;
+import com.ssafy.beedly.dto.PersonalProductCloseDto;
+import com.ssafy.beedly.dto.PersonalProductDto;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,13 +85,51 @@ public class PersonalProductService {
 		personalProductRepository.deleteById(specialProduct.getId());
 	}
 
+	// 상품 삭제
 	@Transactional
-	public List<ProductAndArtistDto> find(String categoryName, String orderBy, String sort){
-//
-//		List<PersonalProduct> =
-//		List<Artist> =
+	public void delete(PersonalProduct personalProduct){
+		personalProductRepository.deleteById(personalProduct.getId());
+	}
+	// 상품 정보가져오기
+	@Transactional
+	public PersonalProductDto getProductById(Long id){
+		PersonalProduct product = personalProductRepository.findById(id).get();
+		PersonalProductDto dto = new PersonalProductDto(product);
+		System.out.println("여기까지못옴");
+		return dto;
 
-		return null;
+	}
+
+	// @Transactional
+	// public PersonalProductCloseDto getProductByIdClose(Long id){
+	// 	PersonalProductCloseDto dto = new PersonalProductCloseDto();
+	// 	return dto
+	// }
+
+	@Transactional
+	public Slice<PersonalProductDto> getProductByCategory(String categoryName, Pageable pageable){
+		Slice<PersonalProductDto> products = personalProductRepository.findProductByCategory(categoryName, pageable)
+				.map(PersonalProductDto::new);
+		return products;
+	}
+
+//	@Transactional
+	public Slice<PersonalProductDto> getProductOnAirByCategory(String categoryName, Pageable pageable){
+		Slice<PersonalProductDto> products = personalProductRepository.findProductOnAirByCategory(categoryName, pageable)
+				.map(PersonalProductDto::new);
+		return products;
+	}
+
+	@Transactional
+	public List<PersonalProduct> getProductByName(String name){
+		return personalProductRepository.findPersonalProductByProductNameLike(name);
+	}
+
+	@Transactional
+	public Slice<PersonalProductDto> getProductBySize(Integer width, Integer height, Pageable pageable){
+		Slice<PersonalProductDto> products = personalProductRepository.findProductBySize(width, height, pageable)
+				.map(PersonalProductDto::new);
+		return products;
 	}
 
 	private void uploadImageS3(List<MultipartFile> images, PersonalProduct savePersonalProduct) {
@@ -117,5 +162,4 @@ public class PersonalProductService {
 			}
 		}
 	}
-	
 }

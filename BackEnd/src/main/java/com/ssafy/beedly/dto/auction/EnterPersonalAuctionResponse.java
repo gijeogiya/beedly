@@ -9,12 +9,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EnterPersonalAuctionResponse implements Serializable {
+public class EnterPersonalAuctionResponse {
 
     @ApiModelProperty(example = "상시 경매방 식별자(1)")
     private Long auctionId;

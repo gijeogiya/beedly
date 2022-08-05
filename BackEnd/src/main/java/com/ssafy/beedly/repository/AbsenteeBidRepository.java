@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface AbsenteeBidRepository extends JpaRepository<AbsenteeBid, Long> {
-
     // 서면응찰 등록
 //    @Query(value="insert into ABSENTEE_BID (absentee_bid_id, absentee_bid_price, p_product_id, user_id) values (absentee_bid_id, absentee_bid_price, p_product_id, user_id)")
 
