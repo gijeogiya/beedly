@@ -37,10 +37,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.ssafy.beedly.common.ConstantClass.MAX_IMAGE_COUNT;
-import static com.ssafy.beedly.common.exception.NotFoundException.ARTIST_NOT_FOUND;
-import static com.ssafy.beedly.common.exception.NotFoundException.CATEGORY_NOT_FOUND;
-import static com.ssafy.beedly.common.exception.NotMatchException.CONTENT_TYPE_NOT_MATCH;
-import static com.ssafy.beedly.common.exception.NotMatchException.IMG_COUNT_NOT_MATCH;
+import static com.ssafy.beedly.common.exception.NotFoundException.*;
+import static com.ssafy.beedly.common.exception.NotMatchException.*;
 
 @Slf4j
 @Service
@@ -78,24 +76,42 @@ public class PersonalProductService {
 
 	// 상품 수정
 	@Transactional
-	public void update(PersonalProduct personalProduct){
-		Optional<PersonalProduct> product = personalProductRepository.findById(personalProduct.getId());
+	public void update(User user, CreatePersonalProductRequest request, List<MultipartFile> images, Long productId
+	){
+		Category findCategory = categoryRepository.findById(request.getCategoryId())
+				.orElseThrow(() -> new NotFoundException(CATEGORY_NOT_FOUND));
+		PersonalProduct findProduct = personalProductRepository.findById(productId)
+				.orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
 
-		product.ifPresent(selectProduct ->{
-			personalProductRepository.save(selectProduct);
-		});
-	}
+		if (user.getId() != findProduct.getUser().getId()) {
+			throw new NotMatchException(PRODUCT_OWNER_NOT_MATCH);
+		}
 
-	/// 상품 삭제
-	@Transactional
-	public void delete(SpecialProduct specialProduct){
-		personalProductRepository.deleteById(specialProduct.getId());
+		if ((images != null) && images.size() > MAX_IMAGE_COUNT) {
+			throw new NotMatchException(IMG_COUNT_NOT_MATCH);
+		}
+
+		findProduct.updatePersonalProduct(request, findCategory);
+
+		if (images != null) {
+			List<PersonalProductImg> findImages = personalProductImgRepository.findAllByPersonalProductId(findProduct.getId());
+			if (findImages.size() > 0) {
+				personalProductImgRepository.deleteAllInBatch(findImages);
+			}
+
+			uploadImageS3(images, findProduct);
+		}
+
+
 	}
 
 	// 상품 삭제
 	@Transactional
-	public void delete(PersonalProduct personalProduct){
-		personalProductRepository.deleteById(personalProduct.getId());
+	public void delete(Long productId){
+		PersonalProduct findProduct = personalProductRepository.findById(productId)
+				.orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
+
+		personalProductRepository.delete(findProduct);
 	}
 	// 상품 정보가져오기
 	@Transactional

@@ -93,7 +93,10 @@ public class SpecialProductService {
 	// 상품 삭제
 	@Transactional
 	public void delete(Long productId){
-		specialProductRepository.deleteById(productId);
+		SpecialProduct specialProduct = specialProductRepository.findById(productId)
+				.orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
+
+		specialProductRepository.delete(specialProduct);
 	}
 
 	// 이미지 s3에 업로드

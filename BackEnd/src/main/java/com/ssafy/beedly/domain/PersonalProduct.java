@@ -131,4 +131,19 @@ public class PersonalProduct extends BaseEntity {
     public void updateSoldStatus(SoldStatus s) {
         this.soldStatus = s;
     }
+
+
+    public void updatePersonalProduct(CreatePersonalProductRequest request, Category findCategory) {
+        this.productName = request.getProductName();
+        this.productDesc = request.getProductDesc();
+        this.startPrice = request.getStartPrice();
+        this.height = request.getHeight();
+        this.width = request.getWidth();
+        this.depth = request.getDepth();
+        this.startTime = request.getStartTime();
+        this.category = findCategory;
+        this.brightness = request.getBrightness();
+        this.saturation = request.getSaturation();
+        this.temperature = request.getTemperature();
+    }
 }
