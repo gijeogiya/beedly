@@ -133,7 +133,7 @@ const Preview = ({ src }) => {
   );
 };
 
-export const ProductRegister = () => {
+export const SpecialProductRegister = () => {
   const [productName, setProductName] = useState("");
   const [productArtist, setProductArtist] = useState("");
   const [category, setCategory] = useState("카테고리");
@@ -312,6 +312,21 @@ export const ProductRegister = () => {
           </Box>
           <Box margin="small" direction="row">
             <Box width="small" justify="center">
+              <StyledText size={titleSize} weight="bold" text="작가명" />
+            </Box>
+            <Box width="medium" direction="row" justify="end">
+              <Input2
+                Thin
+                placeholder="작가명을 입력하세요."
+                value={productArtist}
+                onChange={(e) => {
+                  setProductArtist(e.target.value);
+                }}
+              />
+            </Box>
+          </Box>
+          <Box margin="small" direction="row">
+            <Box width="small" justify="center">
               <StyledText size={titleSize} weight="bold" text="카테고리" />
             </Box>
             <Box width="medium" direction="row" justify="end">
@@ -465,7 +480,7 @@ export const ProductRegister = () => {
             })}
           </Box>
 
-          <Box margin={{ top: "20px" }}>
+          {/* <Box margin={{ top: "20px" }}>
             <StyledText text="Tag" size={titleSize} weight="bold" />
             <Grid columns={{ count: 4, size: "auto" }} gap="xsmall">
               {tags.map((tag, idx) => {
@@ -485,7 +500,7 @@ export const ProductRegister = () => {
                 );
               })}
             </Grid>
-          </Box>
+          </Box> */}
           <Box alignSelf="center">
             <Button
               BigBlack

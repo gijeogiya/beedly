@@ -33,7 +33,9 @@ const FooterContent = ({ title, desc, setOpen }) => {
           key={d}
           onClick={
             d === "공지사항" || d === "이용가이드"
-              ? () => setOpen(true)
+              ? () => {
+                  setOpen(true);
+                }
               : () => {}
           }
         >
@@ -268,6 +270,8 @@ const TextForm = styled.div`
   font-size: ${(props) => props.size || "14px"};
   font-weight: ${(props) => props.weight || "normal"};
   font-family: "Noto Sans KR", sans-serif;
+  align-items: center;
+  display: flex;
 `;
 
 //텍스트 사이즈, 컬러, 웨이트, 글자를 설정할 수 있는 컴포넌트

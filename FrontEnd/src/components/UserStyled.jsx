@@ -29,6 +29,18 @@ const InputStyle2 = styled.input`
   text-align: right;
 `;
 
+export const SizeInput = styled.input`
+  font-weight: bold;
+  font-family: "Noto Sans KR", sans-serif;
+  width: 20vw;
+  height: 30px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 5px 15px;
+  color: black;
+  text-align: right;
+`;
+
 const TextAreaStyle = styled.textarea`
   font-weight: bold;
   font-family: "Noto Sans KR", sans-serif;
