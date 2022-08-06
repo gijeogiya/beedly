@@ -121,6 +121,23 @@ const StyledButton = styled.button`
       background: #ffd100;
       width: 20vw;
     `}
+    ${(props) =>
+    props.SmallThinYellow &&
+    css`
+      color: #1f1d1d;
+      background: #ffd100;
+      height: 30px;
+      width: 15vw;
+    `}
+
+    ${(props) =>
+    props.SmallThinWhite &&
+    css`
+      color: black;
+      background: #e0e0e0;
+      height: 30px;
+      width: 15vw;
+    `}
 
     ${(props) =>
     props.XsmallBlack &&

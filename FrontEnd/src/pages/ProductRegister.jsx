@@ -1,4 +1,4 @@
-import { Box, FileInput, Grommet, Select } from "grommet";
+import { Box, FileInput, Grid, Grommet, Select } from "grommet";
 import React, { forwardRef, useState } from "react";
 import { useEffect } from "react";
 import { StyledText } from "../components/Common";
@@ -6,6 +6,18 @@ import { Input2, STextArea } from "../components/UserStyled";
 import { HeaderBox } from "./SpecialProduct";
 import DatePicker from "react-datepicker";
 import { ko } from "date-fns/esm/locale";
+import styled from "styled-components";
+import ImageInputPic from "../assets/images/imageInput.png";
+import Button from "../components/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
+import CloseButton from "../assets/images/close.png";
+
+const titleSize = "16px";
 
 const GrTheme = {
   global: {
@@ -73,6 +85,39 @@ const style3 = {
   background: "#1F1D1D",
   width: "100%",
 };
+
+const PreviewImg = styled.img`
+  width: 25vw;
+  height: 10vh;
+  object-fit: cover;
+  border-radius: 10px;
+  src: ${(props) => props.src || ""};
+`;
+
+const PreviewDiv = styled.div`
+  width: 25vw;
+  height: 10vh;
+  border-radius: 10px;
+  margin: 3px;
+`;
+
+const BackButton = styled.button`
+  background: none;
+  font-size: 12px;
+  font-family: Noto Sans KR, sans-serif;
+  border: 0px;
+  width: 10vw;
+  margin-top: 15px;
+`;
+
+const Preview = ({ src }) => {
+  return (
+    <PreviewDiv>
+      <PreviewImg src={src} />
+    </PreviewDiv>
+  );
+};
+
 export const ProductRegister = () => {
   const [productName, setProductName] = useState("");
   const [productArtist, setProductArtist] = useState("");
@@ -82,10 +127,20 @@ export const ProductRegister = () => {
   const [productDesc, setProductDesc] = useState("");
   const [productImages, setProductImages] = useState([]);
   const [prevs, setPrevs] = useState([]);
-  useEffect(() => {
-    setProductImages([]);
-    setPrevs([]);
-  }, []);
+  const [tags, setTags] = useState([
+    "수채화",
+    "유화",
+    "정물화",
+    "인물화",
+    "팝아트",
+    "풍경화",
+  ]);
+  const [select, setSelect] = useState([]);
+  const [open, setOpen] = useState(false);
+  // useEffect(() => {
+  //   const t = ["수채화", "유화", "정물화", "인물화", "팝아트", "풍경화"];
+  //   setTags(t);
+  // }, []);
   const DateInputButton = forwardRef(({ value, onClick }, ref) => (
     <button onClick={onClick} ref={ref} style={style3}>
       {value === "" ? "날짜를 선택하세요" : value}
@@ -138,6 +193,85 @@ export const ProductRegister = () => {
     }
   };
 
+  const ImageBtn = styled.img`
+    background: #fff;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    &:hover {
+      background: rgb(77, 77, 77);
+      color: #fff;
+    }
+  `;
+
+  const ImageInput = ({ handleImageUpload }) => {
+    return (
+      <Box width="100%">
+        <label
+          htmlFor="image"
+          style={{
+            display: "flex",
+            alignContent: "space-between",
+          }}
+        >
+          <ImageBtn src={ImageInputPic} />
+          <Box direction="row" justify="between" width="90%">
+            <StyledText size={titleSize} weight="bold" text="사진 등록" />
+            <StyledText
+              size="10px"
+              color="lightgray"
+              text="최대 3장"
+              alignSelf="end"
+            />
+          </Box>
+        </label>
+        <input
+          id="image"
+          type="file"
+          multiple
+          accept="image/jpg,image/png,image/jpeg,image/gif"
+          onChange={handleImageUpload}
+          style={{
+            display: "none",
+          }}
+        />
+      </Box>
+    );
+  };
+
+  const handleImageUpload = (e) => {
+    const fileArr = e.target.files;
+
+    let fileURLs = [];
+    let files = [];
+    let file;
+    let filesLength = fileArr.length > 3 ? 3 : fileArr.length;
+
+    for (let i = 0; i < filesLength; i++) {
+      file = fileArr[i];
+      files[i] = file;
+      setProductImages([...files]);
+      let reader = new FileReader();
+      reader.onload = () => {
+        // console.log(reader.result);
+        fileURLs[i] = reader.result;
+        setPrevs([...fileURLs]);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleClickRegister = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Grommet theme={GrTheme}>
       <Box>
@@ -145,7 +279,7 @@ export const ProductRegister = () => {
         <Box width="90vw" alignSelf="center">
           <Box margin="small" direction="row">
             <Box width="small" justify="center">
-              <StyledText weight="bold" text="작품명" />
+              <StyledText size={titleSize} weight="bold" text="작품명" />
             </Box>
 
             <Box width="medium" direction="row" justify="end">
@@ -161,7 +295,7 @@ export const ProductRegister = () => {
           </Box>
           <Box margin="small" direction="row">
             <Box width="small" justify="center">
-              <StyledText weight="bold" text="카테고리" />
+              <StyledText size={titleSize} weight="bold" text="카테고리" />
             </Box>
             <Box width="medium" direction="row" justify="end">
               <Select
@@ -177,7 +311,7 @@ export const ProductRegister = () => {
           </Box>
           <Box margin="small" direction="row">
             <Box width="small" justify="center">
-              <StyledText weight="bold" text="경매 시작가" />
+              <StyledText size={titleSize} weight="bold" text="경매 시작가" />
             </Box>
             <Box width="medium" direction="row" justify="center">
               <Input2
@@ -202,7 +336,11 @@ export const ProductRegister = () => {
           </Box>
           <Box margin="small" justify="end" direction="row">
             <Box width="small" justify="center">
-              <StyledText weight="bold" text="경매 시작 일시" />
+              <StyledText
+                size={titleSize}
+                weight="bold"
+                text="경매 시작 일시"
+              />
             </Box>
             <Box width="medium" direction="row" justify="end">
               <DatePicker
@@ -226,13 +364,14 @@ export const ProductRegister = () => {
               <div>{productDesc.length} / 300</div>
             </Box>
           </Box>
-          <Box width="60vw">
-            {/* <input
+          <ImageInput handleImageUpload={handleImageUpload} />
+          {/* <input
               type="file"
-              multiple="multiple"
-              onChange={handleChangeFile}
+              multiple
+              accept="image/jpg,image/png,image/jpeg,image/gif"
+              onChange={handleImageUpload}
             /> */}
-            <FileInput
+          {/* <FileInput
               multiple={{
                 aggregateThreshold: 3,
                 max: 3,
@@ -245,16 +384,73 @@ export const ProductRegister = () => {
                 remove: "삭제",
                 maxFile: "제한 : 3장",
               }}
-            />
+            /> */}
+          <Box direction="row" justify="around">
+            {prevs.map((image, idx) => {
+              return <Preview src={image} key={idx} />;
+            })}
+          </Box>
+
+          <Box margin={{ top: "20px" }}>
+            <StyledText text="Tag" size={titleSize} weight="bold" />
+            <Grid columns={{ count: 4, size: "auto" }} gap="xsmall">
+              {tags.map((tag, idx) => {
+                return (
+                  <Button
+                    key={idx}
+                    onClick={() => {
+                      !select.includes(idx)
+                        ? setSelect((select) => [...select, idx])
+                        : setSelect(select.filter((Button) => Button !== idx));
+                    }}
+                    SmallThinWhite={!select.includes(idx) ? true : false}
+                    SmallThinYellow={select.includes(idx) ? true : false}
+                  >
+                    #{tag}
+                  </Button>
+                );
+              })}
+            </Grid>
+          </Box>
+          <Box alignSelf="center">
+            <Button
+              BigBlack
+              children="작품 등록"
+              onClick={handleClickRegister}
+            ></Button>
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <Box direction="row" width="100%" justify="end">
+                <BackButton onClick={handleClose}>
+                  <img src={CloseButton} />
+                </BackButton>
+              </Box>
+
+              <DialogContent>
+                <Box align="center">
+                  <StyledText text="작품을 등록하시겠습니까?" weight="bold" />
+                  <p />
+                  <StyledText
+                    text="경매 시작가는 수정이 불가능합니다."
+                    color="red"
+                    size="10px"
+                  />
+                </Box>
+              </DialogContent>
+              <DialogActions>
+                <Box direction="row" width="100%" justify="center">
+                  <Button MediumBlack onClick={() => {}} autoFocus>
+                    작품 등록
+                  </Button>
+                </Box>
+              </DialogActions>
+            </Dialog>
           </Box>
         </Box>
-        <Box>
-          {prevs.map((image) => {
-            return <img src={image} />;
-          })}
-        </Box>
-        <div>태그</div>
-        <div>버튼</div>
       </Box>
     </Grommet>
   );

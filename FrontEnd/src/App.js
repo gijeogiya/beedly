@@ -42,8 +42,6 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<ProductRegister />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/productRegister" element={<ProductRegister />} />
-
           <Route path="/onair" element={<Onair />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/signup1" element={<SignupChoice />} />
@@ -51,6 +49,7 @@ function App() {
           <Route path="/specialProduct" element={<SpecialProduct />} />
         </Route>
         <Route path="/" element={<Layout2 />}>
+          <Route path="/productRegister" element={<ProductRegister />} />
           <Route path="/specialAuction" element={<SpecialAuction />} />
           <Route path="/productlist" element={<SpecialProduct />} />
         </Route>
