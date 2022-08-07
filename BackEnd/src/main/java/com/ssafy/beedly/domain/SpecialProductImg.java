@@ -23,7 +23,15 @@ public class SpecialProductImg extends BaseEntity {
     @Column(name = "s_img_uri")
     private String imgUri;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "s_product_id")
     private SpecialProduct specialProduct;
+
+    public static SpecialProductImg createSpecialProductImg(String imgUri, SpecialProduct specialProduct) {
+        SpecialProductImg specialProductImg = new SpecialProductImg();
+        specialProductImg.imgUri = imgUri;
+        specialProductImg.specialProduct = specialProduct;
+
+        return specialProductImg;
+    }
 }

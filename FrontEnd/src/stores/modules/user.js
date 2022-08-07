@@ -1,47 +1,95 @@
 import axios from "axios";
 import { createAction, handleActions } from "redux-actions";
-import "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import produce from "immer";
-const LOGIN = "user/LOGIN";
+import { loginApi, updateUserInfoApi } from "../../utils/api";
+
 const SET_USER = "SET_USER";
+
 const setUser = createAction(SET_USER, (user) => ({ user }));
+
 const initialState = {
-  user: null,
+  user: {
+    userEmail: "hi",
+  },
 };
 
+// 카카오 로그인
 export const login = (code) => {
   return function (dispatch, getState) {
-    axios
-      .post(`http://i7a601.p.ssafy.io:8080/api/user/login?code=${code}`)
-      .then((res) => {
+    loginApi(
+      code,
+      (res) => {
+        let token = res.headers["authorization"];
+
+        dispatch(
+          setUser({
+            userEmail: res.data.userEmail,
+            userEender: res.data.userGender,
+            userId: token,
+          })
+        );
+
         if (res.status === 200) {
           console.log("로그인 성공");
           let token = res.headers["authorization"];
-          localStorage.setItem("token", res.data.token);
-          window.location.replace("/");
+          // localStorage.setItem("token", token);
+          // sessionStorage("token", token);
+          dispatch(setUser);
+          // window.location.href = "/";
         } else if (res.status === 201) {
-          //사용자 정보가 없을 때(회원가입 안함)
-          window.location.replace("/signup1");
+          //사용자 정보가 없을 때(회원가입 안함) -> 회원가입 페이지로 이동
+          // localStorage.setItem("token", token);
+          // window.location.href = "/signup1";
         }
-        dispatch(
-          setUser({
-            username: res.data.username,
-            nickname: res.data.nickname,
-            token: token,
-          })
-        );
-      })
-      .catch((err) => {
+      },
+      (err) => {
         console.log(err);
-      });
+      }
+    );
   };
 };
+
+export const join = (user) => {
+  return function (dispatch, getState) {
+    updateUserInfoApi(
+      user,
+      (res) => {
+        let token = res.headers["authorization"];
+        console.log(res);
+        dispatch(
+          setUser({
+            userEmail: res.data.userEmail,
+            userGender: res.data.userGender,
+            userId: token,
+          })
+        );
+        console.log(res.data.userEmail);
+        console.log(res.data.userGender);
+        if (res.status === 200) {
+          console.log("로그인 성공");
+          let token = res.headers["authorization"];
+          localStorage.setItem("token", token);
+          // window.location.href = "/";
+        } else if (res.status === 201) {
+          //사용자 정보가 없을 때(회원가입 안함) -> 회원가입 페이지로 이동
+          // window.location.href = "/signup1";
+        }
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  };
+};
+
 export default handleActions(
   {
-    [SET_USER]: (state, action) =>
+    //사용자 정보 설정
+    [SET_USER]: (state, { payload: user }) =>
       produce(state, (draft) => {
-        console.log(2);
-        draft.user = action.payload.user;
+        draft.user = user;
+        console.log(draft.user);
       }),
   },
   initialState
@@ -50,5 +98,7 @@ export default handleActions(
 const actionCreators = {
   setUser,
   login,
+  join,
 };
+
 export { actionCreators };
