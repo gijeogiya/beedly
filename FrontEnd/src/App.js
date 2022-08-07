@@ -13,6 +13,7 @@ import Login from "./pages/Login";
 import { Auction } from "./pages/Auction";
 import { SpecialAuction } from "./pages/SpecialAuction";
 import MyPage from "./pages/MyPage";
+import MainPage from "./pages/Main";
 import { ProductRegister } from "./pages/ProductRegister";
 import { SpecialProductRegister } from "./pages/SpecialProductRegister";
 const Layout = () => {
@@ -41,7 +42,7 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Main />} />
+          <Route index element={<MainPage />} />
           <Route path="/search" element={<Search />} />
           <Route path="/productRegister" element={<ProductRegister />} />
           <Route path="/onair" element={<Onair />} />
