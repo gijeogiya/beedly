@@ -15,7 +15,6 @@ import { SpecialAuction } from "./pages/SpecialAuction";
 import MyPage from "./pages/MyPage";
 import { ProductRegister } from "./pages/ProductRegister";
 import { SpecialProductRegister } from "./pages/SpecialProductRegister";
-import Main from "./pages/Main";
 const Layout = () => {
   return (
     <div>
