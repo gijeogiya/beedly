@@ -9,6 +9,7 @@ public class NotFoundException extends RuntimeException {
     public static final String SPECIAL_BOARD_NOT_FOUND = "존재하지 않는 게시글입니다.";
     public static final String ABSENTEE_BID_NOT_FOUND = "존재하지 않는 정보입니다.";
     public static final String CATEGORY_NOT_FOUND = "존재하지 않는 카테고리입니다.";
+    public static final String TAG_NOT_FOUND = "존재하지 않는 태그입니다.";
 
 
     public NotFoundException(String message) {
