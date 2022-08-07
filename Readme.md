@@ -1,5 +1,3 @@
-# 8.8 평가 준비
-
 # ****🖥️ 개발 환경****
 
 ---
@@ -106,31 +104,19 @@ OpenVidu 2.22.0
 
 ### 개발 진행 중
 
-- 사용자 취향 태그 관련 기능
-- 취향 태그 기반 추천 알고리즘 기능
-- 작가 권한 승인 기능
-- 메인페이지 - Main
 - 검색 페이지 - Search
 - 검색 결과 페이지 - SearchResult
 - 카테고리 조회 페이지 - ProductList
 - 작품 상세 페이지 - ProductDetail
 - 작가 상세 페이지 - ArtistDetail
-- 작품 등록 페이지 - ProductRegister
 - 작품 수정 페이지 - ProductModify
-- 로그인 페이지 - Login
-- 회원가입 - 등급 선택 페이지 - SignupChoice
-- 회원가입 - 정보 입력 페이지 - Signup
 - 회원가입 - 판매자 메일 보내라 페이지 - SignupResult
 - 회원가입 - 태그 선택 페이지 - SignupTag
-- 마이페이지 - 전체 페이지 - Mypage
 - 마이페이지 - 상세 유저 정보 페이지 - MypageDetail
 - 판매내역 페이지 - MypageSell
 - 구매내역 페이지 - MypageBuy
 - 관심 작품 목록 페이지 - LikeProduct
 - 관심 작가 목록 페이지 - LikeArtist
-- 공지사항, FAQ 페이지 - Board
-- 이용가이드 페이지 - UserGuide
-- 이용약관 페이지 - UserRule
 - 결제 페이지 - Payment
 - 결제 완료 페이지 - PaymentResult
 - 낙찰 정보 페이지 - BidResult
@@ -141,9 +127,23 @@ OpenVidu 2.22.0
 - 작품 조회 페이지 - AdminProductManage
 - 공지사항 조회 페이지 - AdminBoard
 - 공지사항 등록 페이지 - AdminBoardRegister
+
+### 디자인 완료
+
+- 메인페이지 - Main
+- 작품 등록 페이지 - ProductRegister
+- 마이페이지 - 전체 페이지 - Mypage
+- 공지사항, FAQ 페이지 - Board
+- 이용가이드 페이지 - UserGuide
+- 이용약관 페이지 - UserRule
 - 기획전 - 등록 페이지 - AdminSpecialBoardRegister
 - 기획전 - 작품 등록 페이지 - AdminSpecialProductRegister
 
 ### 개발 완료
 
--
+- 로그인 페이지 - Login
+- 회원가입 - 등급 선택 페이지 - SignupChoice
+- 회원가입 - 정보 입력 페이지 - Signup
+
+# 참고 사이트
+[Notion](https://www.notion.so/chayoo/2-PJT1-90b015294bdb4944ab19aa2c63c3075d)
