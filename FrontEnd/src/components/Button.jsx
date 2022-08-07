@@ -1,132 +1,149 @@
-import React from 'react'
-import styled, { css } from 'styled-components';
+import React from "react";
+import styled, { css } from "styled-components";
 import "../App.css";
 const StyledButton = styled.button`
-    height: 42px;
-    border-radius: 5px;
-    border: 0px;
-    font-size: 12px;
-    font-family: "Noto Sans KR", sans-serif;
-    font-weight: 500;
-    margin: 10px 5px;
+  height: 42px;
+  border-radius: 5px;
+  border: 0px;
+  font-size: 12px;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 500;
+  margin: 10px 5px;
   ${(props) =>
-            props.BigBlack &&
-            css`
+    props.BigBlack &&
+    css`
       color: white;
-      background: #1F1D1D;
+      background: #1f1d1d;
+      width: 70vw;
+    `}
+  ${(props) =>
+    props.BigYellow &&
+    css`
+      color: #1f1d1d;
+      background: #ffd100;
       width: 70vw;
     `}
     ${(props) =>
-            props.BigYellow &&
-            css`
-      color: #1F1D1D;
-      background: #FFD100;
-      width: 70vw;
-    `}
-    ${(props) =>
-            props.BigPink &&
-            css`
+    props.BigPink &&
+    css`
       color: white;
-      background: #D00000;
+      background: #d00000;
       opacity: 0.4;
       width: 70vw;
     `}
     ${(props) =>
-            props.BigGray &&
-            css`
+    props.BigGray &&
+    css`
       color: white;
-      background: #1F1D1D;
+      background: #1f1d1d;
       opacity: 0.4;
       width: 70vw;
     `}
     ${(props) =>
-            props.BigRed &&
-            css`
+    props.BigRed &&
+    css`
       color: white;
-      background: #D00000;
+      background: #d00000;
       width: 70vw;
     `}
 
     ${(props) =>
-            props.MediumBlack &&
-            css`
+    props.MediumBlack &&
+    css`
       color: white;
-      background: #1F1D1D;
+      background: #1f1d1d;
       width: 40vw;
     `}
     ${(props) =>
-            props.MediumGreen &&
-            css`
+    props.MediumGreen &&
+    css`
       color: white;
-      background: #2C9722;
+      background: #2c9722;
       width: 40vw;
     `}
     ${(props) =>
-            props.MideumRed &&
-            css`
+    props.MideumRed &&
+    css`
       color: white;
-      background: #D00000;
+      background: #d00000;
       width: 40vw;
     `}
     ${(props) =>
-            props.MediumYellow &&
-            css`
-      color: #1F1D1D;
-      background: #FFD100;
+    props.MediumYellow &&
+    css`
+      color: #1f1d1d;
+      background: #ffd100;
       width: 40vw;
     `}
     ${(props) =>
-            props.MediumPink &&
-            css`
+    props.MediumPink &&
+    css`
       color: white;
-      background: #D00000;
+      background: #d00000;
       opacity: 0.4;
       width: 40vw;
     `}
     ${(props) =>
-            props.MediumGray &&
-            css`
+    props.MediumGray &&
+    css`
       color: white;
-      background: #1F1D1D;
+      background: #1f1d1d;
       opacity: 0.4;
       width: 40vw;
     `}
 
     ${(props) =>
-            props.SmallBlack &&
-            css`
+    props.SmallBlack &&
+    css`
       color: white;
-      background: #1F1D1D;
+      background: #1f1d1d;
       width: 20vw;
     `}
     ${(props) =>
-            props.SmallRed &&
-            css`
+    props.SmallRed &&
+    css`
       color: white;
-      background: #D00000;
+      background: #d00000;
       width: 20vw;
     `}
     ${(props) =>
-            props.SmallGray &&
-            css`
+    props.SmallGray &&
+    css`
       color: white;
-      background: #1F1D1D;
+      background: #1f1d1d;
       opacity: 0.4;
       width: 20vw;
     `}
     ${(props) =>
-            props.SmallYellow &&
-            css`
-      color: #1F1D1D;
-      background: #FFD100;
+    props.SmallYellow &&
+    css`
+      color: #1f1d1d;
+      background: #ffd100;
       width: 20vw;
+    `}
+    ${(props) =>
+    props.SmallThinYellow &&
+    css`
+      color: #1f1d1d;
+      background: #ffd100;
+      height: 30px;
+      width: 15vw;
     `}
 
     ${(props) =>
-            props.XsmallBlack &&
-            css`
+    props.SmallThinWhite &&
+    css`
+      color: black;
+      background: #e0e0e0;
+      height: 30px;
+      width: 15vw;
+    `}
+
+    ${(props) =>
+    props.XsmallBlack &&
+    css`
       color: white;
-      background: #1F1D1D;
+      background: #1f1d1d;
       width: 15vw;
       height: 30px;
       font-size: 8px;
@@ -134,7 +151,5 @@ const StyledButton = styled.button`
 `;
 
 export default function Button({ children, ...props }) {
-      return <StyledButton {...props}>{children}</StyledButton>;
+  return <StyledButton {...props}>{children}</StyledButton>;
 }
-
-

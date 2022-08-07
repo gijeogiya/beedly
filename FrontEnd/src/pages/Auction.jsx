@@ -1,10 +1,6 @@
 import { Notification, Grommet, Box, Carousel } from "grommet";
 import React, { useState, useEffect } from "react";
-import {
-  AuctionArtist,
-  StyledText,
-  StyledHr,
-} from "../components/Common";
+import { AuctionArtist, StyledText, StyledHr } from "../components/Common";
 import styled from "styled-components";
 import image from "../assets/images/openvidu.png";
 import artist from "../assets/images/artist.png";
@@ -16,6 +12,15 @@ import VideoRoomComponent from "../components/openvidu/components/VideoRoomCompo
 import UserModel from "../components/openvidu/models/user-model";
 import ChatComponent from "../components/openvidu/components/chat/ChatComponent";
 import Button from "../components/Button";
+import { useRef } from "react";
+import { createRef } from "react";
+import { useNavigate } from "react-router-dom";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
 const MainContent = styled.img`
   src: ${(props) => props.src || ""};
   width: 100%;
@@ -26,7 +31,6 @@ const PriceContent = styled.div`
   background-color: lightgray;
   background: rgba(220, 220, 220, 0.6);
   width: 40%;
-  height: 6%;
   color: white;
   z-index: 5;
   position: absolute;
@@ -36,6 +40,7 @@ const PriceContent = styled.div`
   align-content: center;
   text-align: center;
   border-radius: 10px;
+  align-items: center;
   padding: 5px;
 `;
 
@@ -55,18 +60,25 @@ const BidButton = styled.button`
 function PriceBox({ price, callPrice }) {
   return (
     <PriceContent>
-      <StyledText
-        size="20px"
-        color="white"
-        weight="bold"
-        text={`₩ ${moneyFormat(price)}`}
-      />
-      <StyledHr />
-      <StyledText
-        size="14px"
-        color="white"
-        text={`호가 ₩ ${moneyFormat(callPrice)}`}
-      />
+      <Box
+        align="center"
+        justify="center"
+        alignContent="center"
+        alignSelf="center"
+      >
+        <StyledText
+          size="20px"
+          color="white"
+          weight="bold"
+          text={`₩ ${moneyFormat(price)}`}
+        />
+        <StyledHr />
+        <StyledText
+          size="14px"
+          color="white"
+          text={`호가 ₩ ${moneyFormat(callPrice)}`}
+        />
+      </Box>
     </PriceContent>
   );
 }
@@ -149,6 +161,10 @@ function ProductFrame({
   visible,
   grade,
   f,
+  open,
+  handleClose,
+  handleAuctionExit,
+  handleClickOpen,
 }) {
   return (
     <ProductContainer>
@@ -178,26 +194,30 @@ function ProductFrame({
             titleSize="10px"
             infoSize="10px"
           />
-          <StyledHr color="white" />
-          <AuctionInfoText
-            title="입찰가"
-            info={`${moneyFormat(callPrice + currentPrice)} 원`}
-            titleWeight="bold"
-            infoWeight="bold"
-            titleSize="10px"
-            infoSize="14px"
-            infoColor="#D00000"
-          />
-          <AuctionInfoText
-            title="예상결제금액"
-            info={`${moneyFormat(
-              Math.floor((0 + callPrice + currentPrice) * 1.1)
-            )} 원`}
-            titleWeight="bold"
-            infoWeight="bold"
-            titleSize="10px"
-            infoSize="10px"
-          />
+          {grade === "buyer" && <StyledHr color="white" />}
+          {grade === "buyer" && (
+            <AuctionInfoText
+              title="입찰가"
+              info={`${moneyFormat(callPrice + currentPrice)} 원`}
+              titleWeight="bold"
+              infoWeight="bold"
+              titleSize="10px"
+              infoSize="14px"
+              infoColor="#D00000"
+            />
+          )}
+          {grade === "buyer" && (
+            <AuctionInfoText
+              title="예상결제금액"
+              info={`${moneyFormat(
+                Math.floor((0 + callPrice + currentPrice) * 1.1)
+              )} 원`}
+              titleWeight="bold"
+              infoWeight="bold"
+              titleSize="10px"
+              infoSize="10px"
+            />
+          )}
         </Box>
       </ProductBox>
       <ButtonContainer>
@@ -206,7 +226,34 @@ function ProductFrame({
             {visible ? "입찰완료" : "입찰하기"}
           </BidButton>
         ) : (
-          <Button MediumGray>종료하기</Button>
+          <Box justify="center" alignContent="center" align="center">
+            <Button MideumRed onClick={handleClickOpen}>
+              종료하기
+            </Button>
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"경매 종료하기"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  정말 경매를 종료하시겠습니까?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button SmallRed onClick={handleClose}>
+                  취소
+                </Button>
+                <Button SmallBlack onClick={handleAuctionExit} autoFocus>
+                  경매 종료
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </Box>
         )}
       </ButtonContainer>
     </ProductContainer>
@@ -263,8 +310,8 @@ const ChatBox = ({ localUser, grade }) => {
     <ChatFrame>
       {localUser !== undefined
         ? localUser.getStreamManager() !== undefined && (
-          <ChatComponent user={localUser} grade={grade} />
-        )
+            <ChatComponent user={localUser} grade={grade} />
+          )
         : null}
     </ChatFrame>
   );
@@ -279,7 +326,17 @@ const Conatainer = styled(Carousel)`
   justify-content: center;
 `;
 
-function BottomUi({ bidInfo, visible, f, localUser, grade }) {
+function BottomUi({
+  bidInfo,
+  visible,
+  f,
+  localUser,
+  grade,
+  handleClose,
+  handleAuctionExit,
+  open,
+  handleClickOpen,
+}) {
   return (
     <Conatainer controls="arrows">
       {localUser !== undefined && (
@@ -296,8 +353,51 @@ function BottomUi({ bidInfo, visible, f, localUser, grade }) {
         visible={visible}
         grade={grade}
         f={f}
+        open={open}
+        handleClose={handleClose}
+        handleAuctionExit={handleAuctionExit}
+        handleClickOpen={handleClickOpen}
       ></ProductFrame>
     </Conatainer>
+  );
+}
+
+const ExitButtonDiv = styled.div`
+  z-index: 8;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  justify-content: center;
+`;
+
+function ExitButton({ handleClickOpen, handleClose, handleAuctionExit, open }) {
+  return (
+    <ExitButtonDiv>
+      <Button SmallRed onClick={handleClickOpen}>
+        나가기
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"나가기"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            정말 나가시겠습니까?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button SmallRed onClick={handleClose}>
+            취소
+          </Button>
+          <Button SmallBlack onClick={handleAuctionExit} autoFocus>
+            나가기
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </ExitButtonDiv>
   );
 }
 
@@ -306,6 +406,7 @@ export const Auction = ({ grade }) => {
   const [isSuccess, setIsSuccess] = useState(true);
   const [isCalled, setIsCalled] = useState(false);
   const [initPrice, setInitPrice] = useState(0);
+  const [open, setOpen] = useState(false);
   const [bidInfo, setBidInfo] = useState({
     title: "",
     category: "",
@@ -358,18 +459,53 @@ export const Auction = ({ grade }) => {
     }
     setVisible(!visible);
   }
+
+  const ref = createRef();
+  const navigate = useNavigate();
+  function handleAuctionExit() {
+    ref.current.componentWillUnmount();
+  }
+
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
       {/* <MainContent src={image} /> */}
       <ErrorBoundary>
-        {" "}
-        <VideoRoomComponent setLocalUser={setLocalUser} grade={grade} />{" "}
+        <VideoRoomComponent
+          setLocalUser={setLocalUser}
+          handleGoBack={handleGoBack}
+          grade={grade}
+          ref={ref}
+          openviduServerUrl="https://i7a601.p.ssafy.io:8443"
+          // openviduServerUrl="https://localhost:4443"
+        />
       </ErrorBoundary>
+      {grade === "buyer" && (
+        <ExitButton
+          handleClickOpen={handleClickOpen}
+          handleClose={handleClose}
+          handleAuctionExit={handleAuctionExit}
+          open={open}
+        />
+      )}
+
       <AuctionArtist
         title={bidInfo.title}
         artist={bidInfo.artist}
         artistSrc={artist}
       />
+
       <PriceBox price={bidInfo.currentPrice} callPrice={bidInfo.callPrice} />
       <Grommet theme={GrommetTheme}>
         {visible && (
@@ -386,6 +522,10 @@ export const Auction = ({ grade }) => {
           f={handleVisible}
           localUser={localUser}
           grade={grade}
+          handleClickOpen={handleClickOpen}
+          handleClose={handleClose}
+          handleAuctionExit={handleAuctionExit}
+          open={open}
         />
       </Grommet>
     </div>

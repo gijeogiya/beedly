@@ -422,14 +422,14 @@ class OpenViduLayout {
   initLayoutContainer(container, opts) {
     this.opts = {
       maxRatio: opts.maxRatio != null ? opts.maxRatio : 21 / 9,
-      minRatio: opts.minRatio != null ? opts.minRatio : 21 / 9,
+      minRatio: opts.minRatio != null ? opts.minRatio : 9 / 21,
       fixedRatio: opts.fixedRatio != null ? opts.fixedRatio : false,
       animate: opts.animate != null ? opts.animate : false,
       bigClass: opts.bigClass != null ? opts.bigClass : "OT_big",
       bigPercentage: opts.bigPercentage != null ? opts.bigPercentage : 0.8,
       bigFixedRatio: opts.bigFixedRatio != null ? opts.bigFixedRatio : false,
       bigMaxRatio: opts.bigMaxRatio != null ? opts.bigMaxRatio : 21 / 9,
-      bigMinRatio: opts.bigMinRatio != null ? opts.bigMinRatio : 21 / 9,
+      bigMinRatio: opts.bigMinRatio != null ? opts.bigMinRatio : 9 / 21,
       bigFirst: opts.bigFirst != null ? opts.bigFirst : true,
     };
     this.layoutContainer =

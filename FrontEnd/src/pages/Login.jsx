@@ -1,7 +1,7 @@
-import React from 'react'
-import Button from "../components/Button"
-import { Input, Hr } from "../components/UserStyled"
-import Loading from "../components/Loading"
+import React from "react";
+import Button from "../components/Button";
+import { Input, Hr } from "../components/UserStyled";
+import Loading from "../components/Loading";
 
 // const loginInput = {
 //     display: "flex",
@@ -22,33 +22,32 @@ import Loading from "../components/Loading"
 //     fontSize: "16px",
 // }
 const flexbox = {
-    display: "flex",
-    margin: "10vw 3vw",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "center",
-    height: "auto",
-}
+  display: "flex",
+  margin: "10vw 3vw",
+  flexDirection: "column",
+  justifyContent: "space-between",
+  alignItems: "center",
+  height: "auto",
+};
 const MainContent = {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    minHeight: "90vh",
-}
-
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  minHeight: "90vh",
+};
 
 const CLIENT_ID = process.env.REACT_APP_KAKAO_API_KEY;
 const REDIRECT_URI = "http://localhost:3000/user/kakao/callback";
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 const test = () => {
-    console.log(KAKAO_AUTH_URL)
-    window.location.href = KAKAO_AUTH_URL;
-}
-export default function login() {
-    return (
-        <div style={MainContent}>
-            {/* <div style={loginInput}>
+  console.log(KAKAO_AUTH_URL);
+  window.location.href = KAKAO_AUTH_URL;
+};
+export default function Login() {
+  return (
+    <div style={MainContent}>
+      {/* <div style={loginInput}>
                 <div style={heading}>로그인</div>
                 <div>
                     <div style={heading2}>Email</div>
@@ -61,9 +60,20 @@ export default function login() {
                 <Button MediumBlack>로그인</Button>
             </div>
             <Hr Thin /> */}
+<<<<<<< HEAD:FrontEnd/src/pages/login.jsx
             <div style={flexbox}>
                 <Button BigYellow onClick={test}>카카오 로그인</Button>
             </div>
         </div>
     )
+=======
+      <div style={flexbox}>
+        <Button BigYellow onClick={test}>
+          카카오 로그인
+        </Button>
+        <Button BigBlack>회원가입</Button>
+      </div>
+    </div>
+  );
+>>>>>>> origin/feature/f_auctionDetail:FrontEnd/src/pages/Login.jsx
 }

@@ -1,17 +1,19 @@
 import "./App.css";
 import { LogoHeader, Footer, NavBar } from "./components/Common";
 import { Outlet, Route, Routes } from "react-router-dom";
-import Main from "./pages/Main";
+// import Main from "./pages/Main";
 import Search from "./pages/Search";
-import ProductList from "./pages/ProductList";
+// import ProductList from "./pages/ProductList";
 import Onair from "./pages/Onair";
-import Login from "./pages/Login";
+// import Login from "./pages/Login";
 import SignupChoice from "./pages/SignupChoice";
 import Signup from "./pages/Signup";
 import Kakao from "./pages/Kakao";
 import { Auction } from "./pages/Auction";
 import { SpecialAuction } from "./pages/SpecialAuction";
-import { SpecialProduct } from "./pages/SpecialProduct";
+import MyPage from "./pages/MyPage";
+import { ProductRegister } from "./pages/ProductRegister";
+import { SpecialProductRegister } from "./pages/SpecialProductRegister";
 const Layout = () => {
   return (
     <div>
@@ -23,20 +25,34 @@ const Layout = () => {
   );
 };
 
+const Layout2 = () => {
+  return (
+    <div>
+      <LogoHeader />
+      <Outlet />
+      <NavBar />
+    </div>
+  );
+};
+
 function App() {
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Main />} />
-          <Route path="/specialAuction" element={<SpecialAuction />} />
+          <Route index element={<ProductRegister />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/productlist" element={<ProductList />} />
+          <Route path="/productRegister" element={<ProductRegister />} />
+
           <Route path="/onair" element={<Onair />} />
-          <Route path="/mypage" element={<Login />} />
+          <Route path="/mypage" element={<MyPage />} />
           <Route path="/signup1" element={<SignupChoice />} />
           <Route path="/signup2" element={<Signup />} />
-          <Route path="/specialProduct" element={<SpecialProduct />} />
+          <Route path="/specialProduct" element={<SpecialProductRegister />} />
+        </Route>
+        <Route path="/" element={<Layout2 />}>
+          <Route path="/specialAuction" element={<SpecialAuction />} />
+          <Route path="/productlist" element={<SpecialProductRegister />} />
         </Route>
         <Route path="/auctionSeller" element={<Auction grade="seller" />} />
         <Route path="/auctionBuyer" element={<Auction grade="buyer" />} />
