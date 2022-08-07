@@ -12,22 +12,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EnterSpecialAuctionResponse {
 
-    @ApiModelProperty(example = "기획전 경매방 식별자(1)")
+    @ApiModelProperty(notes = "기획전 경매방 식별자")
     private Long auctionId;
 
-    @ApiModelProperty(example = "상품 식별자(1)")
+    @ApiModelProperty(notes = "상품 식별자")
     private Long productId;
 
-    @ApiModelProperty(example = "상품 이름(폭풍의 눈물)")
+    @ApiModelProperty(notes = "상품 이름")
     private String productName;
 
-    @ApiModelProperty(example = "상품 설명(이 그림은 폭풍의 눈물입니다.)")
+    @ApiModelProperty(notes = "상품 설명")
     private String productDesc;
 
-    @ApiModelProperty(example = "시작 가격(500000)")
+    @ApiModelProperty(notes = "시작 가격")
     private Integer startPrice;
 
-    @ApiModelProperty(example = "작가 이름(무느스크)")
+    @ApiModelProperty(notes = "작가 이름")
     private String artistName;
 
     public EnterSpecialAuctionResponse(Long auctionId, SpecialProduct sp) {

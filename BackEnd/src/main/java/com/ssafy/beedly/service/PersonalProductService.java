@@ -9,6 +9,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.ssafy.beedly.common.ConstantClass;
 import com.ssafy.beedly.common.exception.NotFoundException;
 import com.ssafy.beedly.common.exception.NotMatchException;
 import com.ssafy.beedly.domain.*;
@@ -35,9 +36,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
-import static com.ssafy.beedly.common.exception.NotFoundException.CATEGORY_NOT_FOUND;
-import static com.ssafy.beedly.common.exception.NotMatchException.CONTENT_TYPE_NOT_MATCH;
-import static com.ssafy.beedly.common.exception.NotMatchException.IMG_COUNT_NOT_MATCH;
+import static com.ssafy.beedly.common.ConstantClass.MAX_IMAGE_COUNT;
+import static com.ssafy.beedly.common.exception.NotFoundException.*;
+import static com.ssafy.beedly.common.exception.NotMatchException.*;
 
 @Slf4j
 @Service
@@ -58,16 +59,16 @@ public class PersonalProductService {
 	// 상품 등록 + 이미지
 	@Transactional
 	public void save(User user, CreatePersonalProductRequest request, List<MultipartFile> images){
-		if ((images != null) && images.size() > 5) {
+		if ((images != null) && images.size() > MAX_IMAGE_COUNT) {
 			throw new NotMatchException(IMG_COUNT_NOT_MATCH);
 		}
 
 		Category findCategory = categoryRepository.findById(request.getCategoryId())
 				.orElseThrow(() -> new NotFoundException(CATEGORY_NOT_FOUND));
-//		artistRepository.findArtistByUserId(user.getId())
-//				.orElseThrow(() -> new )
+		Artist artist = artistRepository.findArtistByUserId(user.getId())
+				.orElseThrow(() -> new NotFoundException(ARTIST_NOT_FOUND));
 
-		PersonalProduct save = PersonalProduct.createPersonalProduct(request, findCategory, user);
+		PersonalProduct save = PersonalProduct.createPersonalProduct(request, findCategory, user, artist);
 
 		// 이미지 s3에 업로드
 		uploadImageS3(images, save);
@@ -75,24 +76,42 @@ public class PersonalProductService {
 
 	// 상품 수정
 	@Transactional
-	public void update(PersonalProduct personalProduct){
-		Optional<PersonalProduct> product = personalProductRepository.findById(personalProduct.getId());
+	public void update(User user, CreatePersonalProductRequest request, List<MultipartFile> images, Long productId
+	){
+		Category findCategory = categoryRepository.findById(request.getCategoryId())
+				.orElseThrow(() -> new NotFoundException(CATEGORY_NOT_FOUND));
+		PersonalProduct findProduct = personalProductRepository.findById(productId)
+				.orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
 
-		product.ifPresent(selectProduct ->{
-			personalProductRepository.save(selectProduct);
-		});
-	}
+		if (user.getId() != findProduct.getUser().getId()) {
+			throw new NotMatchException(PRODUCT_OWNER_NOT_MATCH);
+		}
 
-	/// 상품 삭제
-	@Transactional
-	public void delete(SpecialProduct specialProduct){
-		personalProductRepository.deleteById(specialProduct.getId());
+		if ((images != null) && images.size() > MAX_IMAGE_COUNT) {
+			throw new NotMatchException(IMG_COUNT_NOT_MATCH);
+		}
+
+		findProduct.updatePersonalProduct(request, findCategory);
+
+		if (images != null) {
+			List<PersonalProductImg> findImages = personalProductImgRepository.findAllByPersonalProductId(findProduct.getId());
+			if (findImages.size() > 0) {
+				personalProductImgRepository.deleteAllInBatch(findImages);
+			}
+
+			uploadImageS3(images, findProduct);
+		}
+
+
 	}
 
 	// 상품 삭제
 	@Transactional
-	public void delete(PersonalProduct personalProduct){
-		personalProductRepository.deleteById(personalProduct.getId());
+	public void delete(Long productId){
+		PersonalProduct findProduct = personalProductRepository.findById(productId)
+				.orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
+
+		personalProductRepository.delete(findProduct);
 	}
 	// 상품 정보가져오기
 	@Transactional

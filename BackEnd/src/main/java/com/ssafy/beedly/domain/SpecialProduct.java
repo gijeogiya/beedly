@@ -79,4 +79,15 @@ public class SpecialProduct extends BaseEntity {
     public void updateSoldStatus(SoldStatus s) {
         this.soldStatus = s;
     }
+
+    public void updateSpecialProduct(CreateSpecialProductRequest request, Category category) {
+        this.productName = request.getProductName();
+        this.productDesc = request.getProductDesc();
+        this.startPrice = request.getStartPrice();
+        this.height = request.getHeight();
+        this.weight = request.getWeight();
+        this.depth = request.getDepth();
+        this.artistName = request.getArtistName();
+        this.category = category;
+    }
 }
