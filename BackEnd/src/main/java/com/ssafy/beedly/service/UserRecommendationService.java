@@ -25,20 +25,22 @@ public class UserRecommendationService {
     private final UserRecommendationRepository userRecommendationRepository;
     private final RecommendationTagRepository recommendationTagRepository;
 
+    @Transactional
     public void add(User user, List<Long> tags) {
         delete(user);
         for (Long tag: tags) {
             RecommendationTag recommendationTag = recommendationTagRepository.findById(tag)
                     .orElseThrow(() -> new NotFoundException(TAG_NOT_FOUND));
             UserRecommendation userRecommendation = UserRecommendation.createUserRecommendation(user, recommendationTag);
+            userRecommendationRepository.save(userRecommendation);
         }
 
     }
 
+    @Transactional
     public void delete(User user) {
-        UserRecommendation userRecommendation = userRecommendationRepository.findById(user.getId())
-                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
-        userRecommendationRepository.delete(userRecommendation);
+        List<UserRecommendation> result = userRecommendationRepository.findByUserId(user.getId());
+        if(!result.isEmpty()) userRecommendationRepository.deleteAllInBatch(result);
     }
 
 
