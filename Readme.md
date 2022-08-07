@@ -49,7 +49,7 @@ OpenVidu 2.22.0
 
 ### 서비스 아키텍쳐
 
-![Untitled](8%208%20%E1%84%91%E1%85%A7%E1%86%BC%E1%84%80%E1%85%A1%20%E1%84%8C%E1%85%AE%E1%86%AB%E1%84%87%E1%85%B5%2098faf445161d45dd84026c466f284548/Untitled.png)
+![Untitled](ReadmeImage/architecture.png)
 
 # 🏄‍♂️진행 상황
 
