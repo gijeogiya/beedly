@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.ssafy.beedly.domain.QCategory.category;
+import static com.ssafy.beedly.domain.QSpecialAuction.specialAuction;
 import static com.ssafy.beedly.domain.QSpecialBoard.specialBoard;
 import static com.ssafy.beedly.domain.QSpecialProduct.*;
 import static com.ssafy.beedly.domain.QSpecialProductImg.specialProductImg;
@@ -24,6 +25,7 @@ public class SpecialBoardQueryRepository {
                 .where(specialBoard.id.eq(boardId))
                 .leftJoin(specialBoard.specialProducts, specialProduct).fetchJoin()
                 .leftJoin(specialProduct.category, category).fetchJoin()
+                .leftJoin(specialBoard.specialAuction, specialAuction).fetchJoin()
                 .leftJoin(specialProduct.specialProductImgs, specialProductImg)
                 .fetchOne();
     }

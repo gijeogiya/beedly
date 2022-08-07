@@ -13,19 +13,19 @@ import java.time.LocalDate;
 public class UserUpdateRequest {
 
 
-    @ApiModelProperty(example = "이름(실명)")
+    @ApiModelProperty(notes = "이름(실명)")
     private String name;
 
-    @ApiModelProperty(example = "닉네임")
+    @ApiModelProperty(notes = "닉네임")
     private String nickname;
 
-    @ApiModelProperty(example = "전화번호")
+    @ApiModelProperty(notes = "전화번호")
     private String tel;
 
-    @ApiModelProperty(example = "풀주소")
+    @ApiModelProperty(notes = "풀주소")
     private String addr;
 
-    @ApiModelProperty(example = "생년월일(YYYY-MM-DD)")
+    @ApiModelProperty(example = "1998-02-07", notes = "생년월일(YYYY-MM-DD)")
     private LocalDate birthday;
 
 }

@@ -2,6 +2,7 @@ package com.ssafy.beedly.dto.special.board.response;
 
 import com.ssafy.beedly.domain.SpecialBoard;
 import com.ssafy.beedly.dto.special.product.response.SpecialProductResponse;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,16 +18,32 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class SpecialBoardResponse {
 
+    @ApiModelProperty(notes = "기획전 게시글 식별자")
     private Long boardId;
+
+    @ApiModelProperty(notes = "기획전 경매 시작 시간")
     private LocalDateTime startTime;
+
+    @ApiModelProperty(notes = "기획전 게시글 제목")
     private String boardTitle;
+
+    @ApiModelProperty(notes = "기획전 게시글 부제목")
     private String boardSubtitle;
+
+    @ApiModelProperty(notes = "기획전 게시글 설명")
     private String boardDesc;
+
+    @ApiModelProperty(notes = "기획전 게시글 대표 이미지")
     private String mainImgUri;
 
+    @ApiModelProperty(notes = "기획전 등록자")
     private Long userId;
 
+    @ApiModelProperty(notes = "기획전에 등록된 상품들")
     private List<SpecialProductResponse> specialProducts = new ArrayList<>();
+
+    @ApiModelProperty(notes = "현재 진행중인 기획전 경매방 식별자(현재 진행중이 아니면 null)")
+    private Long specialAuctionId;
 
     public SpecialBoardResponse(SpecialBoard sb) {
         this.boardId = sb.getId();
@@ -37,5 +54,8 @@ public class SpecialBoardResponse {
         this.mainImgUri = sb.getMainImgUri();
         this.userId = sb.getUser().getId();
         this.specialProducts = sb.getSpecialProducts().stream().map(specialProduct -> new SpecialProductResponse(specialProduct)).collect(Collectors.toList());
+        if (sb.getSpecialAuction() != null) {
+            this.specialAuctionId = sb.getSpecialAuction().getId();
+        }
     }
 }

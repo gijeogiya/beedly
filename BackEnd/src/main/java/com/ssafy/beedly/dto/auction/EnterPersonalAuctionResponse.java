@@ -15,31 +15,31 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EnterPersonalAuctionResponse {
 
-    @ApiModelProperty(example = "상시 경매방 식별자(1)")
+    @ApiModelProperty(notes = "상시 경매방 식별자", example = "1")
     private Long auctionId;
 
-    @ApiModelProperty(example = "상품 식별자(1)")
+    @ApiModelProperty(notes = "상품 식별자", example = "1")
     private Long productId;
 
-    @ApiModelProperty(example = "상품 이름(폭풍의 눈물)")
+    @ApiModelProperty(notes = "상품 이름", example = "폭풍의 눈물")
     private String productName;
 
-    @ApiModelProperty(example = "상품 설명(이 그림은 폭풍의 눈물입니다.)")
+    @ApiModelProperty(notes = "상품 설명", example = "폭풍처럼 휘몰아치는 눈물을 그렸습니다.")
     private String productDesc;
 
-    @ApiModelProperty(example = "시작 가격(500000)")
+    @ApiModelProperty(notes = "시작 가격", example = "500000")
     private Integer startPrice;
 
-    @ApiModelProperty(example = "작가 식별자(1)")
+    @ApiModelProperty(notes = "작가 식별자", example = "1")
     private Long artistId;
 
-    @ApiModelProperty(example = "작가 프로필 이미지 url")
+    @ApiModelProperty(notes = "작가 프로필 이미지 url")
     private String artistProfileImg;
 
-    @ApiModelProperty(example = "회원 실명(박재권)")
+    @ApiModelProperty(notes = "회원 실명")
     private String userName;
 
-    @ApiModelProperty(example = "회원 닉네임(무느스크)")
+    @ApiModelProperty(notes = "회원 닉네임")
     private String userNickname;
 
 

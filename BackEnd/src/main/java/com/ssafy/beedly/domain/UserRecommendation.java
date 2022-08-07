@@ -1,17 +1,14 @@
 package com.ssafy.beedly.domain;
 
 import com.ssafy.beedly.domain.common.BaseEntity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Getter
+@Getter @Setter
 @Table(name = "USER_RECOMMENDATION")
 public class UserRecommendation extends BaseEntity {
 
@@ -27,4 +24,17 @@ public class UserRecommendation extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public UserRecommendation(Long id, User user) {
+        this.id = id;
+        this.user = user;
+    }
+
+
+    public static UserRecommendation createUserRecommendation(User user, RecommendationTag tag) {
+        UserRecommendation userRecommendation = new UserRecommendation();
+        userRecommendation.user = user;
+        userRecommendation.recTag = tag;
+        return userRecommendation;
+    }
 }

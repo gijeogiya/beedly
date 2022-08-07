@@ -1,17 +1,17 @@
 package com.ssafy.beedly.domain;
 
 import com.ssafy.beedly.domain.common.BaseEntity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Getter
+@Getter @Setter
+@Table(name = "RECOMMENDATION_TAG")
 public class RecommendationTag extends BaseEntity {
 
     @Id
@@ -30,4 +30,14 @@ public class RecommendationTag extends BaseEntity {
 
     @Column(name = "rec_tag_temperature")
     private Integer recTagTemperature;
+
+//    @OneToMany(mappedBy = "recommendationTag")
+//    private List<UserRecommendation> tags = new ArrayList<>();
+
+
+    public RecommendationTag(Long id) {
+        this.id = id;
+    }
+
+
 }

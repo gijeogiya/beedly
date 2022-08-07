@@ -24,7 +24,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.util.List;
 
 @RestController
-@RequestMapping("personalProduct")
+@RequestMapping("/personalProduct")
 @RequiredArgsConstructor
 @Api(value = "상시 상품 컨트롤러")
 public class PersonalProductController {
@@ -37,15 +37,16 @@ public class PersonalProductController {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	// 1-2. 상품 업데이트
-	@PatchMapping
-	public ResponseEntity<?> updateProductInfo(@RequestBody PersonalProduct personalProduct){
-		personalProductService.update(personalProduct);
+	@PatchMapping("/{productId}")
+	public ResponseEntity<?> updateProductInfo(@ApiIgnore User user, @RequestPart CreatePersonalProductRequest request
+			, @RequestPart(required = false) List<MultipartFile> images,  @PathVariable Long productId){
+		personalProductService.update(user, request, images, productId);
 		return  ResponseEntity.status(HttpStatus.OK).build();
 	}
 	// 1-3. 상픔 삭제
-	@DeleteMapping
-	public ResponseEntity<?> deleteProductInfo(@RequestBody PersonalProduct personalProduct){
-		personalProductService.delete(personalProduct);
+	@DeleteMapping("/{productId}")
+	public ResponseEntity<?> deleteProductInfo(@PathVariable Long productId){
+		personalProductService.delete(productId);
 		return  ResponseEntity.status(HttpStatus.OK).build();
 	}
 	// 1-4. 상품 조회

@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateAuctionResponse {
 
-    @ApiModelProperty(value = "상시 경매 식별자", example = "상시 경매 식별자(1)")
+    @ApiModelProperty(notes = "상시 경매 식별자")
     private Long auctionId;
 }

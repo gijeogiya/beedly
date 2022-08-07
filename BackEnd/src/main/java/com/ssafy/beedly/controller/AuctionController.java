@@ -135,14 +135,18 @@ public class AuctionController {
     }
 
     // 상시 경매 상품 낙찰 확정
+    @ApiOperation("상시 경매 상품 낙찰 확정")
+    @ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
     @PostMapping("/personal/successful/bid/product/{productId}")
     public ResponseEntity<SuccessfulBidResponse> successfulBidPersonalAuction(@PathVariable Long productId) {
         return ResponseEntity.ok(personalAuctionService.successfulBid(productId));
     }
 
     // 기획전 경매 상품 낙찰 확정
+    @ApiOperation("기획전 경매 상품 낙찰 확정")
+    @ApiImplicitParam(name = "productId", value = "기획전 상품 식별자")
     @PostMapping("/special/successful/bid/product/{productId}")
-    public ResponseEntity<?> successfulBidSpecialAuction(@PathVariable Long productId) {
+    public ResponseEntity<SuccessfulBidResponse> successfulBidSpecialAuction(@PathVariable Long productId) {
         return ResponseEntity.ok(specialAuctionService.successfulBid(productId));
     }
 
