@@ -3,7 +3,7 @@ import { LogoHeader, Footer, NavBar } from "./components/Common";
 import { Outlet, Route, Routes } from "react-router-dom";
 // import Main from "./pages/Main";
 import Search from "./pages/Search";
-// import ProductList from "./pages/ProductList";
+import ProductList from "./pages/ProductList";
 import Onair from "./pages/Onair";
 // import Login from "./pages/Login";
 import SignupChoice from "./pages/SignupChoice";
@@ -15,6 +15,7 @@ import { SpecialAuction } from "./pages/SpecialAuction";
 import MyPage from "./pages/MyPage";
 import { ProductRegister } from "./pages/ProductRegister";
 import { SpecialProductRegister } from "./pages/SpecialProductRegister";
+import Main from "./pages/Main";
 const Layout = () => {
   return (
     <div>
@@ -41,20 +42,17 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<ProductRegister />} />
+          <Route index element={<Main />} />
           <Route path="/search" element={<Search />} />
           <Route path="/productRegister" element={<ProductRegister />} />
-
           <Route path="/onair" element={<Onair />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup1" element={<SignupChoice />} />
           <Route path="/signup2" element={<Signup />} />
-          <Route path="/specialProduct" element={<SpecialProductRegister />} />
-        </Route>
-        <Route path="/" element={<Layout2 />}>
           <Route path="/specialAuction" element={<SpecialAuction />} />
-          <Route path="/productlist" element={<SpecialProductRegister />} />
+          <Route path="/specialProduct" element={<SpecialProductRegister />} />
+          <Route path="/productlist" element={<ProductList />} />
         </Route>
         <Route path="/auctionSeller" element={<Auction grade="seller" />} />
         <Route path="/auctionBuyer" element={<Auction grade="buyer" />} />

@@ -4,12 +4,12 @@ const API_SERVER = "http://i7a601.p.ssafy.io:8080/api/";
 
 const API_SERVER_SPECIAL = API_SERVER + "admin/special/";
 const API_SERVER_PERSONAL = API_SERVER + "personalProduct/";
+
 const specialPostApi = axios.create({
   baseURL: API_SERVER_SPECIAL,
   headers: {
     "Content-type": "multipart/form-data",
-    Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMCIsImlhdCI6MTY1OTY4NTE5MSwiZXhwIjoxNjU5NzcxNTkxfQ.9mIibcLf1pe4z_wBwOBzDzyX6tHZ6t6sTaeKCwZE9CY",
+    Authorization: `Bearer ` + localStorage.getItem("token"),
   },
 });
 
@@ -17,8 +17,7 @@ const specialGetApi = axios.create({
   baseURL: API_SERVER_SPECIAL,
   headers: {
     "Content-type": "application/json",
-    Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMCIsImlhdCI6MTY1OTY4NTE5MSwiZXhwIjoxNjU5NzcxNTkxfQ.9mIibcLf1pe4z_wBwOBzDzyX6tHZ6t6sTaeKCwZE9CY",
+    Authorization: `Bearer ` + localStorage.getItem("token"),
   },
 });
 
@@ -26,8 +25,7 @@ const personalPostApi = axios.create({
   baseURL: API_SERVER_PERSONAL,
   headers: {
     "Content-type": "multipart/form-data",
-    Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMCIsImlhdCI6MTY1OTY4NTE5MSwiZXhwIjoxNjU5NzcxNTkxfQ.9mIibcLf1pe4z_wBwOBzDzyX6tHZ6t6sTaeKCwZE9CY",
+    Authorization: `Bearer ` + localStorage.getItem("token"),
   },
 });
 
@@ -35,8 +33,7 @@ const personalGetApi = axios.create({
   baseURL: API_SERVER_PERSONAL,
   headers: {
     "Content-type": "application/json",
-    Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMCIsImlhdCI6MTY1OTY4NTE5MSwiZXhwIjoxNjU5NzcxNTkxfQ.9mIibcLf1pe4z_wBwOBzDzyX6tHZ6t6sTaeKCwZE9CY",
+    Authorization: `Bearer ` + localStorage.getItem("token"),
   },
 });
 

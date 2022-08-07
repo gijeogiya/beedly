@@ -24,6 +24,9 @@ import BackButtonImage from "../assets/images/backButton.png";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { registerSpecialBoard } from "../utils/api";
+import { ImageBtn, ImageInput, Preview } from "./SpecialProductRegister";
+import ImageInputPic from "../assets/images/imageInput.png";
+
 const HeaderDiv = styled.div`
   margin: 5px;
   display: flex;
@@ -127,6 +130,10 @@ const MainContent = ({
   handleTitle,
   handleSubTitle,
   setFile,
+  ImageInputPic,
+  titleSize,
+  handleImageUpload,
+  prevs,
 }) => {
   const DateInputButton = forwardRef(({ value, onClick }, ref) => (
     <button onClick={onClick} ref={ref} style={style3}>
@@ -134,7 +141,7 @@ const MainContent = ({
     </button>
   ));
   return (
-    <MainDiv>
+    <Box width="90vw" alignSelf="center">
       <Box margin="small" direction="row">
         <Box width="xsmall" justify="center" align="center">
           제목
@@ -205,8 +212,40 @@ const MainContent = ({
           </Box>
         </Box>
       </div>
-      <Box width="small">
-        <FileInput
+      <Box width="100%">
+        <label
+          htmlFor="image"
+          style={{
+            display: "flex",
+            alignContent: "space-between",
+          }}
+        >
+          <ImageBtn src={ImageInputPic} />
+          <Box direction="row" justify="between" width="90%">
+            <StyledText size={titleSize} weight="bold" text="배경 사진 등록" />
+            <StyledText
+              size="10px"
+              color="lightgray"
+              text="최대 1장"
+              alignSelf="end"
+            />
+          </Box>
+        </label>
+        <input
+          id="image"
+          type="file"
+          accept="image/jpg,image/png,image/jpeg,image/gif"
+          onChange={handleImageUpload}
+          style={{
+            display: "none",
+          }}
+        />
+      </Box>
+      <Box direction="row" justify="around">
+        {prevs.map((image, idx) => {
+          return <Preview src={image} key={idx} />;
+        })}
+        {/* <FileInput
           onChange={(event, { files }) => {
             const fileList = files;
             for (let i = 0; i < fileList.length; i += 1) {
@@ -223,9 +262,9 @@ const MainContent = ({
             remove: "삭제",
             maxFile: "사진 용량이 너무 큽니다.",
           }}
-        />
+        /> */}
       </Box>
-    </MainDiv>
+    </Box>
   );
 };
 
@@ -264,6 +303,8 @@ export const SpecialAuction = () => {
   const [file, setFile] = useState("");
   const [board, setBoard] = useState({});
   const [showDate, toggleShowDate] = useState(false);
+  const [productImages, setProductImages] = useState([]);
+  const [prevs, setPrevs] = useState([]);
   let pr = [];
   // useEffect(() => {
   //   for (let i = 0; i < 3; i++) {
@@ -356,9 +397,31 @@ export const SpecialAuction = () => {
     }
   }
 
+  const handleImageUpload = (e) => {
+    const fileArr = e.target.files;
+
+    let fileURLs = [];
+    let files = [];
+    let file;
+    let filesLength = fileArr.length > 3 ? 3 : fileArr.length;
+
+    for (let i = 0; i < filesLength; i++) {
+      file = fileArr[i];
+      files[i] = file;
+      setProductImages([...files]);
+      let reader = new FileReader();
+      reader.onload = () => {
+        // console.log(reader.result);
+        fileURLs[i] = reader.result;
+        setPrevs([...fileURLs]);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
-    <div>
-      <Grommet theme={GrTheme}>
+    <Grommet theme={GrTheme}>
+      <Box>
         <HeaderBox goBack={goBack}></HeaderBox>
         <MainContent
           startDate={startDate}
@@ -374,6 +437,10 @@ export const SpecialAuction = () => {
           handleDate2={handleDate2}
           showDate={showDate}
           toggleShow={toggleShowDate}
+          ImageInputPic={ImageInputPic}
+          titleSize="16px"
+          handleImageUpload={handleImageUpload}
+          prevs={prevs}
         />
         {/* <StyledText weight="bold" size="18px" text="작품 목록"></StyledText>
       {products.length > 1 && <ProductGrid products={products}></ProductGrid>} */}
@@ -382,7 +449,7 @@ export const SpecialAuction = () => {
             기획전 등록
           </Button>
         </Box>
-      </Grommet>
-    </div>
+      </Box>
+    </Grommet>
   );
 };
