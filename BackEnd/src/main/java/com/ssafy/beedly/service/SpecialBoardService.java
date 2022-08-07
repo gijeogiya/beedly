@@ -63,11 +63,16 @@ public class SpecialBoardService {
 
     // 게시글 내용 수정
     @Transactional
-    public void updateSpecialBoard(Long boardId, CreateSpecialBoardRequest request) {
+    public void updateSpecialBoard(Long boardId, CreateSpecialBoardRequest request, MultipartFile image) {
         SpecialBoard findSpecialBoard = specialBoardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundException(SPECIAL_BOARD_NOT_FOUND));
 
         findSpecialBoard.updateSpecialBoard(request);
+
+        if (image != null) {
+            String imageUrl = uploadImageS3(image);
+            findSpecialBoard.updateImage(imageUrl);
+        }
     }
 
     // 게시글 삭제

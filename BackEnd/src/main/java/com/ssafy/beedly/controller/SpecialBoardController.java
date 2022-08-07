@@ -2,6 +2,7 @@ package com.ssafy.beedly.controller;
 
 import com.ssafy.beedly.config.web.LoginUser;
 import com.ssafy.beedly.domain.User;
+import com.ssafy.beedly.dto.ListRequest;
 import com.ssafy.beedly.dto.special.board.request.CreateSpecialBoardRequest;
 import com.ssafy.beedly.dto.special.board.response.SpecialBoardResponse;
 import com.ssafy.beedly.dto.special.board.response.SpecialBoardSimpleResponse;
@@ -40,7 +41,7 @@ public class SpecialBoardController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    // 기획전 게시글 상세 조회( + 상품정보)
+    // 기획전 게시글 상세 조회( + 상품정보 + 경매 진행중이면 경매방 정보)
     @ApiOperation(value = "기획전 게시글 상세 조회", notes = "상품 정보도 함께 리턴")
     @ApiImplicitParam(name = "boardId", value = "기획전 게시글 식별자")
     @GetMapping("/special/board/{boardId}")
@@ -56,11 +57,17 @@ public class SpecialBoardController {
     }
 
     // 기획전 게시글 내용 수정
-    @ApiOperation(value = "기획전 게시글 내용만 수정", notes = "게시글 내용만 수정")
+    @ApiOperation(value = "기획전 게시글 수정 + 이미지도", notes = "게시글 내용 수정 + 이미지도 \n 이미지 안넣으면 내용만 수정" +
+            "게시글 수정 데이터 request:\n {\n" +
+            "  \"boardTitle\": \"기획전 제목\",\n" +
+            "  \"boardSubTitle\": \"기획전 부제목\",\n" +
+            "  \"boardDesc\": \"기획전 설명입니다.\",\n" +
+            "  \"startTime\": \"2013-09-29T18:46:19Z\"\n" +
+            "}\n")
     @ApiImplicitParam(name = "boardId", value = "기획전 게시글 식별자")
     @PatchMapping("/admin/special/board/{boardId}")
-    public ResponseEntity updateSpecialBoard(@PathVariable Long boardId, @RequestBody CreateSpecialBoardRequest request) {
-        specialBoardService.updateSpecialBoard(boardId, request);
+    public ResponseEntity updateSpecialBoard(@PathVariable Long boardId, @RequestPart CreateSpecialBoardRequest request, @RequestPart(required = false)MultipartFile image) {
+        specialBoardService.updateSpecialBoard(boardId, request, image);
 
         return ResponseEntity.ok().build();
     }
@@ -73,6 +80,12 @@ public class SpecialBoardController {
         specialBoardService.deleteSpecialBoard(boardId);
 
         return ResponseEntity.ok().build();
+    }
+
+    // 유진누나 연습 코드
+    @GetMapping
+    public void dfdfd(@RequestBody ListRequest dddd) {
+
     }
 
 }

@@ -108,7 +108,7 @@ public class PersonalProduct extends BaseEntity {
                 '}';
     }
 
-    public static PersonalProduct createPersonalProduct(CreatePersonalProductRequest request, Category category, User user) {
+    public static PersonalProduct createPersonalProduct(CreatePersonalProductRequest request, Category category, User user, Artist artist) {
         PersonalProduct personalProduct = new PersonalProduct();
         personalProduct.productName = request.getProductName();
         personalProduct.productDesc = request.getProductDesc();
@@ -120,11 +120,30 @@ public class PersonalProduct extends BaseEntity {
         personalProduct.startTime = request.getStartTime();
         personalProduct.category = category;
         personalProduct.user = user;
+        personalProduct.artist = artist;
+        personalProduct.brightness = request.getBrightness();
+        personalProduct.saturation = request.getSaturation();
+        personalProduct.temperature = request.getTemperature();
 
         return personalProduct;
     }
 
     public void updateSoldStatus(SoldStatus s) {
         this.soldStatus = s;
+    }
+
+
+    public void updatePersonalProduct(CreatePersonalProductRequest request, Category findCategory) {
+        this.productName = request.getProductName();
+        this.productDesc = request.getProductDesc();
+        this.startPrice = request.getStartPrice();
+        this.height = request.getHeight();
+        this.width = request.getWidth();
+        this.depth = request.getDepth();
+        this.startTime = request.getStartTime();
+        this.category = findCategory;
+        this.brightness = request.getBrightness();
+        this.saturation = request.getSaturation();
+        this.temperature = request.getTemperature();
     }
 }

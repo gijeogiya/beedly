@@ -3,44 +3,33 @@ package com.ssafy.beedly;
 import java.util.Collections;
 import java.util.List;
 
-<<<<<<< HEAD
+
 import com.ssafy.beedly.domain.*;
+import com.ssafy.beedly.domain.type.Gender;
 import com.ssafy.beedly.repository.AbsenteeBidRepository;
-import com.ssafy.beedly.repository.SpecialBoardRepository;
+import com.ssafy.beedly.repository.UserRecommendationRepository;
+import com.ssafy.beedly.repository.UserRepository;
 import com.ssafy.beedly.repository.query.AbsenteeBidQueryRepository;
 import com.ssafy.beedly.service.AbsenteeBidService;
-=======
-import com.ssafy.beedly.domain.SpecialAuction;
-import com.ssafy.beedly.domain.SpecialBoard;
-import com.ssafy.beedly.repository.SpecialBoardRepository;
->>>>>>> 6526eaf36b75a27a7860070b6e4654d0bb158761
+import com.ssafy.beedly.service.UserRecommendationService;
+import com.ssafy.beedly.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.repository.query.Param;
+import com.ssafy.beedly.domain.PersonalProduct;
 import org.springframework.transaction.annotation.Transactional;
 
-<<<<<<< HEAD
-=======
-import com.ssafy.beedly.domain.PersonalProduct;
->>>>>>> 6526eaf36b75a27a7860070b6e4654d0bb158761
-import com.ssafy.beedly.repository.PersonalProductRepository;
-import com.ssafy.beedly.repository.query.PersonalProductQueryRepository;
-import com.ssafy.beedly.service.PersonalProductService;
-
-<<<<<<< HEAD
-import javax.persistence.EntityExistsException;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest
 //@Transactional
 public class ServiceTest {
 
 	/*
-=======
 @SpringBootTest
 @Transactional
 public class ServiceTest {
->>>>>>> 6526eaf36b75a27a7860070b6e4654d0bb158761
 	@Autowired
 	PersonalProductService personalProductService;
 
@@ -51,11 +40,8 @@ public class ServiceTest {
 	PersonalProductRepository personalProductRepository;
 	private Object Collections;
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> 6526eaf36b75a27a7860070b6e4654d0bb158761
 	@Test
 	public void CRUD(){
 		PersonalProduct personalProduct = new PersonalProduct("안녕");
@@ -77,11 +63,8 @@ public class ServiceTest {
 
 	@Test
 	public void Category(){
-<<<<<<< HEAD
 		List<PersonalProduct> products = personalProductRepository.findPersonalProductByOrderByStartTimeAsc("회화");
-=======
 		List<PersonalProduct> products = personalProductRepository.findPersonalProductByOrderByStartTime("회화");
->>>>>>> 6526eaf36b75a27a7860070b6e4654d0bb158761
 		System.out.println(products);
 	}
 
@@ -93,9 +76,9 @@ public class ServiceTest {
 			System.out.println(board.getId());
 		}
 	}
-<<<<<<< HEAD
 	 */
 
+	/*
 	@Autowired
 	AbsenteeBidRepository absenteeBidRepository;
 
@@ -107,12 +90,33 @@ public class ServiceTest {
 
 	@Test
 	public void setAbsenteeBidQueryRepository() {
-//		AbsenteeBid absenteeBid = new AbsenteeBid(null, 500000, new PersonalProduct(4L, null,null,null,null,null,null,null,null,null,null,null,null), new User(1L, null, null, null, null, null, null, null, null, null));
-//		absenteeBidRepository.save(absenteeBid);
-//		absenteeBidService.save(absenteeBid);
-//		absenteeBidService.update(absenteeBid);
+		AbsenteeBid absenteeBid = new AbsenteeBid(null, 500000, new PersonalProduct(4L, null,null,null,null,null,null,null,null,null,null,null,null), new User(1L, null, null, null, null, null, null, null, null, null));
+		absenteeBidRepository.save(absenteeBid);
+		absenteeBidService.save(absenteeBid);
+		absenteeBidService.update(absenteeBid);
 	}
-=======
->>>>>>> 6526eaf36b75a27a7860070b6e4654d0bb158761
+	 */
+
+	@Autowired
+	UserRecommendationRepository userRecommendationRepository;
+	@Autowired
+	UserRecommendationService userRecommendationService;
+
+	@Test
+	public void addUserRecommendationTag() {
+		List<Long> selectedTags = new ArrayList<>();
+		Long l = 1L;
+		for (int i = 1; i <= 5; i++) {
+			selectedTags.add(l++);
+		}
+		User user = new User(1L);
+		UserRecommendation userRecommendation = new UserRecommendation(1L, user);
+		for (Long id: selectedTags
+			 ) {
+			RecommendationTag recommendationTag = new RecommendationTag(id);
+			userRecommendation.setRecTag(recommendationTag);
+			userRecommendationRepository.save(userRecommendation);
+		}
+	}
 
 }
