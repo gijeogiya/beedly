@@ -35,7 +35,7 @@ function App() {
           <Route path="/onair" element={<Onair />} />
           <Route path="/mypage" element={<Login />} />
           <Route path="/signup1" element={<SignupChoice />} />
-          <Route path="/signup2" element={<Signup />} />
+          <Route path="/signup2/*" element={<Signup />} />
           <Route path="/specialProduct" element={<SpecialProduct />} />
         </Route>
         <Route path="/auctionSeller" element={<Auction grade="seller" />} />

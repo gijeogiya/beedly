@@ -1,27 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from "react-redux";
 import { LogoHeader } from '../components/Common';
 import { actionCreators as userActions } from "../stores/modules/user";
 // import { login } from '../utils/api';
 import Loading from "./Loading";
-
+import { useSelector } from 'react-redux';
 export default function Kakao() {
     const dispatch = useDispatch();
-    let code = new URL(window.location.href).searchParams.get("code");
-    // React.useEffect(() => {
-    //     async function fetchdata() {
-    //         await dispatch(userActions.login(code));
+    const [userId, setuserId] = useState('');
+    const Selector = useSelector(state => state.user.user);
+    React.useEffect(() => {
+        let code = new URL(window.location.href).searchParams.get("code");
+        async function fetchData() {
+            await dispatch(userActions.login(code));
+        }
+        fetchData();
 
-    //     }
-    //     fetchdata();
-    // }, []);
-    React.useEffect(async () => {
-        await dispatch(userActions.login(code));
     }, []);
-
     return (
         <div>
             <LogoHeader />
+            <div>
+                {Selector.userId}
+
+            </div>
             <Loading />
         </div>
     )

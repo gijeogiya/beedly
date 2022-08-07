@@ -47,7 +47,7 @@ public class UserController {
         if (userCreateFlag.isCreateFlag()) {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .header(HttpHeaders.AUTHORIZATION, userCreateFlag.getAccessToken())
-                    .build();
+                    .body(userCreateFlag.getUserDefaultDto());
         } else {
             return ResponseEntity.status(HttpStatus.OK)
                     .header(HttpHeaders.AUTHORIZATION, userCreateFlag.getAccessToken())
@@ -88,11 +88,8 @@ public class UserController {
     // 판매내역 조회
     @ApiOperation(value = "내 판매내역 조회")
     @GetMapping("/sale")
-//    public ResponseEntity<?> searchMySales(@LoginUser User user) {
-    public ResponseEntity<List<UserSalesResponse>> searchMySales() {
-        Long userId = 1L;
-//        return ResponseEntity.ok(userService.searchMySales(user));
-        return ResponseEntity.ok(userService.searchMySales(userId));
+    public ResponseEntity<?> searchMySales(@LoginUser User user) {
+        return ResponseEntity.ok(userService.searchMySales(user));
     }
 
     // 구매내역 결제정보 조회
@@ -103,13 +100,11 @@ public class UserController {
     }
     )
     @GetMapping("/purchase/{productSoldId}")
-//    public ResponseEntity<?> searchPurchasePaidInfo(@ApiIgnore @LoginUser User user, @PathVariable Long productSoldId, @RequestParam String auctionType) {
-    public ResponseEntity<?> searchPurchasePaidInfo(@PathVariable Long productSoldId, @RequestParam String auctionType) {
-        Long userId = 1L;
+    public ResponseEntity<?> searchPurchasePaidInfo(@ApiIgnore @LoginUser User user, @PathVariable Long productSoldId, @RequestParam String auctionType) {
         if (auctionType.equals(AuctionType.P.toString())) {
-            return ResponseEntity.ok(userService.searchPersonalPurchasePaidInfo(productSoldId, userId));
+            return ResponseEntity.ok(userService.searchPersonalPurchasePaidInfo(productSoldId, user));
         } else if (auctionType.equals(AuctionType.S.toString())) {
-            return ResponseEntity.ok(userService.searchSpecialPurchasePaidInfo(productSoldId, userId));
+            return ResponseEntity.ok(userService.searchSpecialPurchasePaidInfo(productSoldId, user));
         }
         return null;
     }

@@ -6,18 +6,19 @@ import styled, { css } from 'styled-components';
 const InputStyle = styled.input`
     font-weight: bold;
     font-family: "Noto Sans KR", sans-serif;
-    width: 65vw;
-    height: 40px;
-    box-shadow: 0px 4px 3px 0px rgba(0,0,0,0.6);
-    border-radius: 5px;
-    border: 1px rgb(255,255,255);
+    /* box-shadow: 0px 4px 3px 0px rgba(0,0,0,0.6); */
+    /* border-radius: 5px; */
+    border:0px;
+    border-bottom: 1px solid #101010;
     padding: 5px 15px;
     margin: 5px 0px;
     color: black;
+    width: ${(props) => props.width || "65vw"};
+    height: ${(props) => props.height || "40px"};
 `;
 
-export function Input({ children }) {
-    return <InputStyle type="text" placeholder={children} />;
+export function Input({ placeholder, width, height, value, onChange, readOnly }) {
+    return <InputStyle width={width} height={height} type="text" placeholder={placeholder} value={value} onChange={onChange} readOnly={readOnly} />;
 }
 
 //hr 밑줄 Styled Component
@@ -100,8 +101,16 @@ const StyledDiv = styled.div`
         align-items: center;
         min-height: 90vh;
     `}
+
+    ${(props) =>
+        props.Content &&
+        css`
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    `}
         `;
 
-export function FlexBox({ children , ...props }) {
+export function FlexBox({ children, ...props }) {
     return <StyledDiv {...props}> {children} </StyledDiv>;
 }
