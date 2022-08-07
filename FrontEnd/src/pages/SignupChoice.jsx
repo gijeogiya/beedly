@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Button from "../components/Button"
-import { Hr } from "../components/UserStyled"
+import { FlexBox, Hr } from "../components/UserStyled"
+import { useNavigate } from 'react-router-dom'
+import { useSelector } from "react-redux";
 
 const SignupInput = {
   display: "flex",
@@ -21,22 +23,36 @@ const Choice = {
   display: "flex",
   justifyContent: "space-around",
 }
-export default function signup() {
-  return (
-    <div style={MainContent}>
 
+export default function Signup() {
+  const [role, setRole] = useState('');
+  const [borderstyle, setborderstyle] = useState('0px');
+  const Navigate = useNavigate();
+  const Signup2 = () => {
+    Navigate(`/signup2?role=${role}`)
+  }
+  const [state, setState] = useState([
+    {
+      startDate: new Date(),
+      endDate: null,
+      key: 'selection'
+    }
+  ]);
+  const userid = useSelector(state => state.user.user.userId);
+  return (
+    <FlexBox MainContent>
+      {userid}
       <h3>회원가입</h3>
       <div style={SignupInput}>
         <Hr Thin />
         <div style={Choice}>
-          <img style={{ maxWidth: "100%", height: "auto", margin: "0px 10px" }}
-            alt="판매자" src="/img/Choice1.svg" />
-          <img style={{ maxWidth: "100%", height: "auto", margin: "0px 10px" }} alt="구매자" src="/img/Choice2.svg" />
+          <img name="artist" style={{ maxWidth: "100%", height: "auto", margin: "0px 10px", borderRadius: "10px", border: `${role === 'ROLE_ARTIST' ? "3px solid black" : "3px"}` }} alt="판매자" src="/img/Choice1.svg" onClick={() => { setRole("ROLE_ARTIST"); }} />
+          <img name="user" style={{ maxWidth: "100%", height: "auto", margin: "0px 10px", borderRadius: "10px", border: `${role === 'ROLE_USER' ? "3px solid black" : "3px"}` }} alt="구매자" src="/img/Choice2.svg" onClick={() => setRole("ROLE_USER")} />
         </div>
-        <Button MediumBlack>본인인증</Button>
+        <Button MediumBlack onClick={Signup2}>다음으로 넘어가기</Button>
         <Hr Thin />
         <br />
       </div>
-    </div>
+    </FlexBox>
   )
 }

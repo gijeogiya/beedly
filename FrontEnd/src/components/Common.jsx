@@ -273,6 +273,17 @@ export function StyledText({ size, color, weight, text }) {
 
 //가운데 줄 긋기(hr)
 
+const StyledLink = styled(Link)`
+    text-decoration: none;
+    color: inherit;
+    &:focus, &:hover, &:visited, &:link, &:active {
+        text-decoration: none;
+    }
+
+`;
+
+export const LinkSt = (props) => <StyledLink {...props} />;
+
 const StyledHrInit = styled.hr`
   background: ${(props) => props.color || "white"};
   height: ${(props) => props.height || "0.0025rem"};

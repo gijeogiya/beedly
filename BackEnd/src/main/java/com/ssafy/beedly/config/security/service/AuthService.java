@@ -31,7 +31,7 @@ public class AuthService implements UserDetailsService {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(String.valueOf(findUser.getUserRole())));
 
-        LoginUserDetails loginUserDetails = new LoginUserDetails(findUser.getUserName(), "", authorities);
+        LoginUserDetails loginUserDetails = new LoginUserDetails(String.valueOf(findUser.getId()), "", authorities);
         loginUserDetails.setUser(findUser);
         return loginUserDetails;
     }

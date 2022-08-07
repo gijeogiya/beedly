@@ -4,6 +4,8 @@ import com.ssafy.beedly.domain.common.BaseEntity;
 import com.ssafy.beedly.domain.type.Gender;
 import com.ssafy.beedly.domain.type.UserRole;
 import com.ssafy.beedly.domain.type.YN;
+import com.ssafy.beedly.dto.user.kakao.KakaoAuccount;
+import com.ssafy.beedly.dto.user.kakao.KakaoUserResponse;
 import com.ssafy.beedly.dto.user.request.UserUpdateRequest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -51,6 +53,9 @@ public class User extends BaseEntity {
     @Column(name = "user_bday")
     private LocalDate userBirthday;
 
+    @Column(name = "user_score")
+    private Integer userScore;
+
 //    private LocalDateTime userDeleteDate;
 //
 //    @Enumerated(EnumType.STRING)
@@ -68,25 +73,23 @@ public class User extends BaseEntity {
 //        return user;
 //    }
 
-    public static User createUser(Long kakaoId){
+    public static User createUser(KakaoUserResponse kakao){
         User user = new User();
-        user.kakaoId = kakaoId;
+        KakaoAuccount kakaoAuccount = kakao.getKakao_account();
+
+        user.kakaoId = kakao.getId();
         user.userName = "구매자";
+        user.userEmail = kakaoAuccount.getEmail();
+        user.userGender = kakaoAuccount.getGender().equals("femail") ? Gender.F : Gender.M;
         user.userRole = UserRole.ROLE_USER;
         return user;
     }
 
     public void updateUser(UserUpdateRequest request) {
-        this.userEmail = request.getEmail();
         this.userName = request.getName();
         this.userNickname = request.getNickname();
-        if (request.getGender().equals("M")) {
-            this.userGender = Gender.M;
-        } else {
-            this.userGender = Gender.F;
-        }
         this.userTel = request.getTel();
         this.userAddr = request.getAddr();
-
+        this.userBirthday = request.getBirthday();
     }
 }

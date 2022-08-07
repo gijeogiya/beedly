@@ -12,4 +12,6 @@ public class UserCreateFlag {
     private boolean createFlag;
     private String accessToken;
 
+    private UserDefaultDto userDefaultDto;
+
 }

@@ -1,5 +1,29 @@
+server:
+  servlet:
+    context-path: /api
+
 spring:
   # 채팅 테스트용
+#  devtools:
+#    livereload:
+#      enabled: true
+#    restart:
+#      enabled: false
+#  freemarker:
+#    cache: false
+#    template-loader-path: classpath:/templates
+#    prefix: /chat/
+#    suffix: .ftl
+
+  cache:
+    type: redis
+  redis:
+    # 로컬 환경
+    host: localhost
+    # 도커 환경
+#    host: 172.17.0.3
+
+    port: 6379
   devtools:
     livereload:
       enabled: true
@@ -45,7 +69,15 @@ spring:
         default_batch_fetch_size: 500
         #        show_sql: false
         format_sql: true
+        show_sql: true
+
     open-in-view: false
+
+  data:
+    web:
+      pageable:
+        default-per-size: 10
+        max-page-size: 2000 
 
 token:
   # 일단 하루
@@ -55,10 +87,10 @@ token:
 cloud:
   aws:
     credentials:
-      accessKey:
-      secretKey:
+      accessKey: AKIASQN6UNY67SNTSHSU
+      secretKey: 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
     s3:
-      bucket:
+      bucket: beedly-img
     region:
       static: ap-northeast-2
     stack:
