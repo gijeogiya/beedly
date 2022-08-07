@@ -1,10 +1,12 @@
 import { Avatar, Box, Grid } from "grommet";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyledHr, StyledText } from "../components/Common";
 import ArtistPng from "../assets/images/artist.png";
 import MoreImage from "../assets/images/more.png";
 import Button from "../components/Button";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { getUserInfoApi } from "../utils/api";
 const ContainerBox = ({ title2 }) => {
   return (
     <Box
@@ -85,6 +87,24 @@ const BackButton = styled.button`
 `;
 
 export default function MyPage() {
+  const Selector = useSelector((state) => state.user.user);
+  const [token, setToken] = useState("");
+  useEffect(() => {
+    if (Selector === undefined) {
+      window.location.href = "/login";
+    } else {
+      console.log(Selector);
+      setToken(localStorage.getItem("token"));
+      // getUserInfoApi(
+      //   (response) => {
+      //     console.log(response);
+      //   },
+      //   (fail) => {
+      //     console.log(fail);
+      //   }
+      // );
+    }
+  }, []);
   return (
     <Grid
       width="100vw"

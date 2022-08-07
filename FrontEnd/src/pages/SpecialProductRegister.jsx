@@ -125,11 +125,60 @@ const BackButton = styled.button`
   margin-top: 15px;
 `;
 
-const Preview = ({ src }) => {
+export const Preview = ({ src }) => {
   return (
     <PreviewDiv>
       <PreviewImg src={src} />
     </PreviewDiv>
+  );
+};
+
+export const ImageBtn = styled.img`
+  background: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  &:hover {
+    background: rgb(77, 77, 77);
+    color: #fff;
+  }
+`;
+
+export const ImageInput = ({ ImageInputPic, titleSize, handleImageUpload }) => {
+  return (
+    <Box width="100%">
+      <label
+        htmlFor="image"
+        style={{
+          display: "flex",
+          alignContent: "space-between",
+        }}
+      >
+        <ImageBtn src={ImageInputPic} />
+        <Box direction="row" justify="between" width="90%">
+          <StyledText size={titleSize} weight="bold" text="사진 등록" />
+          <StyledText
+            size="10px"
+            color="lightgray"
+            text="최대 3장"
+            alignSelf="end"
+          />
+        </Box>
+      </label>
+      <input
+        id="image"
+        type="file"
+        multiple
+        accept="image/jpg,image/png,image/jpeg,image/gif"
+        onChange={handleImageUpload}
+        style={{
+          display: "none",
+        }}
+      />
+    </Box>
   );
 };
 
@@ -209,55 +258,6 @@ export const SpecialProductRegister = () => {
         };
       }
     }
-  };
-
-  const ImageBtn = styled.img`
-    background: #fff;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 10px;
-    &:hover {
-      background: rgb(77, 77, 77);
-      color: #fff;
-    }
-  `;
-
-  const ImageInput = ({ handleImageUpload }) => {
-    return (
-      <Box width="100%">
-        <label
-          htmlFor="image"
-          style={{
-            display: "flex",
-            alignContent: "space-between",
-          }}
-        >
-          <ImageBtn src={ImageInputPic} />
-          <Box direction="row" justify="between" width="90%">
-            <StyledText size={titleSize} weight="bold" text="사진 등록" />
-            <StyledText
-              size="10px"
-              color="lightgray"
-              text="최대 3장"
-              alignSelf="end"
-            />
-          </Box>
-        </label>
-        <input
-          id="image"
-          type="file"
-          multiple
-          accept="image/jpg,image/png,image/jpeg,image/gif"
-          onChange={handleImageUpload}
-          style={{
-            display: "none",
-          }}
-        />
-      </Box>
-    );
   };
 
   const handleImageUpload = (e) => {
@@ -453,7 +453,11 @@ export const SpecialProductRegister = () => {
               <div>{productDesc.length} / 300</div>
             </Box>
           </Box>
-          <ImageInput handleImageUpload={handleImageUpload} />
+          <ImageInput
+            ImageInputPic={ImageInputPic}
+            titleSize={titleSize}
+            handleImageUpload={handleImageUpload}
+          />
           {/* <input
               type="file"
               multiple

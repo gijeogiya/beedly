@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Box } from "grommet";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import HomeIcon from '../assets/img/HomeIcon.svg';
-import SearchIcon from '../assets/img/SearchIcon.svg';
-import ListIcon from '../assets/img/ListIcon.svg';
-import OnairIcon from '../assets/img/OnairIcon.svg';
-import MypageIcon from '../assets/img/MypageIcon.svg';
+import HomeIcon from "../assets/img/HomeIcon.svg";
+import SearchIcon from "../assets/img/SearchIcon.svg";
+import ListIcon from "../assets/img/ListIcon.svg";
+import OnairIcon from "../assets/img/OnairIcon.svg";
+import MypageIcon from "../assets/img/MypageIcon.svg";
 import { Notice } from "./Notice";
+import { UserGuide } from "./UserGuide";
 // 고정스타일링
 
 // Header
@@ -29,7 +30,7 @@ const FooterContainer = styled.div`
   align-items: center;
 `;
 
-const FooterContent = ({ title, desc, setOpen }) => {
+const FooterContent = ({ title, desc, setOpen, openGuid }) => {
   return (
     <div style={{ padding: "10px", fontSize: "10px" }}>
       <h3>{title || ""}</h3>
@@ -37,11 +38,15 @@ const FooterContent = ({ title, desc, setOpen }) => {
         <p
           key={d}
           onClick={
-            d === "공지사항" || d === "이용가이드"
+            d === "공지사항"
               ? () => {
-                setOpen(true);
-              }
-              : () => { }
+                  setOpen(true);
+                }
+              : d === "이용가이드"
+              ? () => {
+                  openGuid(true);
+                }
+              : () => {}
           }
         >
           {d}
@@ -53,8 +58,10 @@ const FooterContent = ({ title, desc, setOpen }) => {
 
 export function Footer() {
   const [open, setOpen] = useState(false);
+  const [guide, openGuid] = useState(false);
   function onDismiss() {
     setOpen(false);
+    openGuid(false);
   }
   return (
     <Box
@@ -75,8 +82,9 @@ export function Footer() {
         </Box>
         <Box direction="row" align="center">
           <FooterContent
+            openGuid={openGuid}
             title="이용안내"
-            desc={["이용 정책", "페널티 정책", "커뮤니티 가이드라인"]}
+            desc={["이용가이드", "페널티 정책", "커뮤니티 가이드라인"]}
           />
           <FooterContent
             setOpen={setOpen}
@@ -84,6 +92,7 @@ export function Footer() {
             desc={["공지사항", "서비스 소개", "소장품 정기경매 접수"]}
           />
           <Notice open={open} onDismiss={onDismiss} />
+          <UserGuide open={guide} onDismiss={onDismiss} />
         </Box>
         <Box>
           <FooterContent
@@ -142,11 +151,11 @@ export function NavBar() {
           setOpacity("1");
         }
       }
-
       lastScrollTop = nowScrollTop;
     });
+
     return () => {
-      window.removeEventListener("scroll", () => { });
+      window.removeEventListener("scroll", () => {});
     };
   }, []);
   return (
@@ -181,7 +190,7 @@ export function NavBar() {
 }
 
 const ProductImg = styled.img`
-    src: ${(props) => props.src || ""};
+  src: ${(props) => props.src || ""};
 `;
 
 const ProductFrame = styled.div`
@@ -191,38 +200,52 @@ const ProductFrame = styled.div`
 `;
 
 const TimeTable = styled.div`
-    color: white;
-    background-color: ${(props) => props.isStart ? "red" : "gray" || "gray"};
-    font-size: 10px;
-    text-align: center;
-    border-radius: 5px;
-    z-index: 5;
-    margin-bottom: 5px;
-    margin-right: 5px;
+  color: white;
+  background-color: ${(props) => (props.isStart ? "red" : "gray" || "gray")};
+  font-size: 10px;
+  text-align: center;
+  border-radius: 5px;
+  z-index: 5;
+  margin-bottom: 5px;
+  margin-right: 5px;
 `;
 
 const ArtistImg = styled.img`
-    src: ${(props) => props.src || ""};
-    border-radius: 50%;
+  src: ${(props) => props.src || ""};
+  border-radius: 50%;
 `;
 
 //상품 프레임
-export function Product({ title, productSrc, artistSrc, artist, dueDate, dueTime, isStart, people }) {
-  return <Box>
-    <ProductFrame>
-      <ProductImg src={productSrc}></ProductImg>
-      <TimeTable>{isStart ? { dueTime } : "실시간"}</TimeTable>
-    </ProductFrame>
-    <Box direction="row">
-      <ArtistImg src={artistSrc}></ArtistImg>
-      <div>
-        <h2>{artist}</h2>
-        <p>{title}</p>
-        <p>{isStart ? `${people}명 시청중` : `${dueDate.year}년 ${dueDate.month}월 ${dueDate.day}일 ${dueDate.hour}시 예정`}</p>
-      </div>
+export function Product({
+  title,
+  productSrc,
+  artistSrc,
+  artist,
+  dueDate,
+  dueTime,
+  isStart,
+  people,
+}) {
+  return (
+    <Box>
+      <ProductFrame>
+        <ProductImg src={productSrc}></ProductImg>
+        <TimeTable>{isStart ? { dueTime } : "실시간"}</TimeTable>
+      </ProductFrame>
+      <Box direction="row">
+        <ArtistImg src={artistSrc}></ArtistImg>
+        <div>
+          <h2>{artist}</h2>
+          <p>{title}</p>
+          <p>
+            {isStart
+              ? `${people}명 시청중`
+              : `${dueDate.year}년 ${dueDate.month}월 ${dueDate.day}일 ${dueDate.hour}시 예정`}
+          </p>
+        </div>
+      </Box>
     </Box>
-  </Box>
-
+  );
 }
 
 const AuctionArtistFrame = styled.div`
@@ -249,7 +272,7 @@ export function AuctionArtist({ title, artist, artistSrc }) {
 }
 
 //작가 프레임
-export function Artist({ artist, artistSrc }) { }
+export function Artist({ artist, artistSrc }) {}
 // const ArtistImg = styled.
 
 //텍스트 폼
@@ -274,12 +297,15 @@ export function StyledText({ size, color, weight, text }) {
 //가운데 줄 긋기(hr)
 
 const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  &:focus,
+  &:hover,
+  &:visited,
+  &:link,
+  &:active {
     text-decoration: none;
-    color: inherit;
-    &:focus, &:hover, &:visited, &:link, &:active {
-        text-decoration: none;
-    }
-
+  }
 `;
 
 export const LinkSt = (props) => <StyledLink {...props} />;
