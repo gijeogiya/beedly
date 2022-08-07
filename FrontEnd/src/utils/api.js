@@ -55,15 +55,15 @@ const getPersonalProduct = (id, success, fail) => {
 
 //토큰이 필요하지 않은 axios 처리
 const instance = axios.create({
-  baseURL: "https://i7a601.p.ssafy.io/api/",
+  baseURL: "http://i7a601.p.ssafy.io/api/",
   headers: {
     contentType: "application/json",
   },
 });
-const BASEURL = "https://i7a601.p.ssafy.io/api/";
+const BASEURL = "http://i7a601.p.ssafy.io/api/";
 // token이 필요한 axios 처리
 const authInstance = axios.create({
-  baseURL: "https://i7a601.p.ssafy.io/api/",
+  baseURL: "http://i7a601.p.ssafy.io/api/",
   headers: {
     Authorization: `Bearer ` + localStorage.getItem("token"),
     "Content-Type": "application/json",
