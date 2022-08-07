@@ -45,6 +45,9 @@ public class  SpecialBoard extends BaseEntity {
     @OneToMany(mappedBy = "specialBoard")
     private List<SpecialProduct> specialProducts = new ArrayList<>();
 
+    @OneToOne(mappedBy = "specialBoard")
+    private SpecialAuction specialAuction;
+
     public static SpecialBoard createSpecialBoard(User user, CreateSpecialBoardRequest request, String imageUri) {
         SpecialBoard specialBoard = new SpecialBoard();
         specialBoard.startTime = request.getStartTime();
@@ -54,5 +57,16 @@ public class  SpecialBoard extends BaseEntity {
         specialBoard.mainImgUri = imageUri;
         specialBoard.user = user;
         return specialBoard;
+    }
+
+    public void updateSpecialBoard(CreateSpecialBoardRequest request) {
+        this.startTime = request.getStartTime();
+        this.boardTitle = request.getBoardTitle();
+        this.boardSubtitle = request.getBoardSubTitle();
+        this.boardDesc = request.getBoardDesc();
+    }
+
+    public void updateImage(String imageUrl) {
+        this.mainImgUri = imageUrl;
     }
 }

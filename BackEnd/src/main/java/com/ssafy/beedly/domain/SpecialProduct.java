@@ -53,7 +53,7 @@ public class SpecialProduct extends BaseEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "s_board_id")
     private SpecialBoard specialBoard;
 
@@ -74,5 +74,20 @@ public class SpecialProduct extends BaseEntity {
         specialProduct.specialBoard = findBoard;
 
         return specialProduct;
+    }
+
+    public void updateSoldStatus(SoldStatus s) {
+        this.soldStatus = s;
+    }
+
+    public void updateSpecialProduct(CreateSpecialProductRequest request, Category category) {
+        this.productName = request.getProductName();
+        this.productDesc = request.getProductDesc();
+        this.startPrice = request.getStartPrice();
+        this.height = request.getHeight();
+        this.weight = request.getWeight();
+        this.depth = request.getDepth();
+        this.artistName = request.getArtistName();
+        this.category = category;
     }
 }

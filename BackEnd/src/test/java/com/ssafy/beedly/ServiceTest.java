@@ -1,5 +1,9 @@
 package com.ssafy.beedly;
 
+import java.util.Collections;
+import java.util.List;
+
+
 import com.ssafy.beedly.domain.*;
 import com.ssafy.beedly.domain.type.Gender;
 import com.ssafy.beedly.repository.AbsenteeBidRepository;

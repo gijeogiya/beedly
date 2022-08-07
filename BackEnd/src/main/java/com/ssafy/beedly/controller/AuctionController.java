@@ -7,6 +7,7 @@ import com.ssafy.beedly.domain.User;
 import com.ssafy.beedly.dto.auction.CreateAuctionResponse;
 import com.ssafy.beedly.dto.auction.EnterPersonalAuctionResponse;
 import com.ssafy.beedly.dto.auction.EnterSpecialAuctionResponse;
+import com.ssafy.beedly.dto.auction.SuccessfulBidResponse;
 import com.ssafy.beedly.dto.bid.request.BidMessageRequest;
 import com.ssafy.beedly.dto.bid.response.BidMessageResponse;
 import com.ssafy.beedly.dto.bid.type.MessageType;
@@ -32,6 +33,7 @@ import java.util.List;
 
 @Api(value = "경매 컨트롤러")
 @RestController
+@RequestMapping("/auction")
 @RequiredArgsConstructor
 public class AuctionController {
 
@@ -45,7 +47,7 @@ public class AuctionController {
     // 상시 경매방 생성
     @ApiOperation(value = "상시 경매방 생성", notes = "상품 식별자로 상시 경매방 생성")
     @ApiImplicitParam(name = "productId", value = "상품 식별자")
-    @PostMapping("/auction/personal/product/{productId}")
+    @PostMapping("/personal/product/{productId}")
     public ResponseEntity<CreateAuctionResponse> createPersonalAuction(@ApiIgnore @LoginUser User user, @PathVariable Long productId) {
         return ResponseEntity.status(HttpStatus.CREATED).body(new CreateAuctionResponse(personalAuctionService.createPersonalAuction(user, productId)));
     }
@@ -55,14 +57,14 @@ public class AuctionController {
     @ApiOperation(value = "상시 경매방 입장", notes = "상시 경매방 입장(방 정보 + 상품 정보 + 작가정보도 같이 리턴)")
     @ApiImplicitParam(name = "auctionId", value = "상시 경매방 식별자")
     @Cacheable(value = CacheKey.PERSONAL_AUCTION_BOARD, key = "#auctionId", unless = "#result == null", cacheManager = "cacheManager")
-    @GetMapping("/auction/{auctionId}/personal")
+    @GetMapping("/{auctionId}/personal")
     public EnterPersonalAuctionResponse enterPersonalAuction(@PathVariable Long auctionId) {
         return personalAuctionService.enterPersonalAuction(auctionId);
 
     }
 
     // 상시 경매 입찰하기
-    @MessageMapping("/auction/personal/bidding")
+    @MessageMapping("/personal/bidding")
     public void personalProductBidding(BidMessageRequest request, @Header(HttpHeaders.AUTHORIZATION) String bearerToken) {
         Long userId = Long.valueOf(jwtUtil.getSubject(bearerToken.substring(7)));
 
@@ -81,7 +83,7 @@ public class AuctionController {
     // 상시 경매방 종료
     @ApiOperation(value = "상시 경매방 종료", notes = "상시 경매방 종료하기")
     @ApiImplicitParam(name = "auctionId", value = "상시 경매방 식별자")
-    @PatchMapping("/auction/{auctionId}/personal")
+    @PatchMapping("/{auctionId}/personal")
     public ResponseEntity closePersonalAuction(@ApiIgnore @LoginUser User user, @PathVariable Long auctionId) {
         personalAuctionService.closePersonalAuction(user, auctionId);
 
@@ -91,7 +93,7 @@ public class AuctionController {
     // 기획전 경매방 생성
     @ApiOperation(value = "기획전 경매방 생성", notes = "기획전 게시글 식별자로 기획전 경매방 생성")
     @ApiImplicitParam(name = "boardId", value = "기획전 게시글 식별자")
-    @PostMapping("/auction/special/board/{boardId}")
+    @PostMapping("/special/board/{boardId}")
     public ResponseEntity<CreateAuctionResponse> createSpecialAuction(@ApiIgnore @LoginUser User user, @PathVariable Long boardId) {
         return ResponseEntity.status(HttpStatus.CREATED).body(new CreateAuctionResponse(specialAuctionService.createSpecialAuction(user, boardId)));
     }
@@ -100,14 +102,14 @@ public class AuctionController {
     @ApiOperation(value = "기획전 경매방 입장", notes = "기획전 경매방 입장(방 정보 + 상품 정보 리스트 같이 리턴)")
     @ApiImplicitParam(name = "auctionId", value = "기획전 경매방 식별자")
     @Cacheable(value = CacheKey.SPECIAL_AUCTION_BOARD, key = "#auctionId", unless = "#result == null", cacheManager = "cacheManager")
-    @GetMapping("/auction/{auctionId}/special")
+    @GetMapping("/{auctionId}/special")
     public List<EnterSpecialAuctionResponse> enterSpecialAuction(@PathVariable Long auctionId) {
         return specialAuctionService.enterSpecialAuction(auctionId);
 
     }
 
     // 기획전 경매 입찰하기
-    @MessageMapping("/auction/special/bidding")
+    @MessageMapping("/special/bidding")
     public void specialProductBidding(BidMessageRequest request, @Header(HttpHeaders.AUTHORIZATION) String bearerToken) {
         Long userId = Long.valueOf(jwtUtil.getSubject(bearerToken.substring(7)));
 
@@ -125,10 +127,27 @@ public class AuctionController {
     // 기획전 경매방 종료
     @ApiOperation(value = "기획전 경매방 종료", notes = "기획전 경매방 종료하기")
     @ApiImplicitParam(name = "auctionId", value = "기획전 경매방 식별자")
-    @PatchMapping("/auction/{auctionId}/special")
+    @PatchMapping("/{auctionId}/special")
     public ResponseEntity closeSpecialAuction(@PathVariable Long auctionId) {
         specialAuctionService.closeSpecialAuction(auctionId);
 
         return ResponseEntity.ok().build();
     }
+
+    // 상시 경매 상품 낙찰 확정
+    @ApiOperation("상시 경매 상품 낙찰 확정")
+    @ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
+    @PostMapping("/personal/successful/bid/product/{productId}")
+    public ResponseEntity<SuccessfulBidResponse> successfulBidPersonalAuction(@PathVariable Long productId) {
+        return ResponseEntity.ok(personalAuctionService.successfulBid(productId));
+    }
+
+    // 기획전 경매 상품 낙찰 확정
+    @ApiOperation("기획전 경매 상품 낙찰 확정")
+    @ApiImplicitParam(name = "productId", value = "기획전 상품 식별자")
+    @PostMapping("/special/successful/bid/product/{productId}")
+    public ResponseEntity<SuccessfulBidResponse> successfulBidSpecialAuction(@PathVariable Long productId) {
+        return ResponseEntity.ok(specialAuctionService.successfulBid(productId));
+    }
+
 }

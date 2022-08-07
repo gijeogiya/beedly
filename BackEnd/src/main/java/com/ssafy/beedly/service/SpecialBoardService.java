@@ -27,6 +27,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.ssafy.beedly.common.exception.NotFoundException.CATEGORY_NOT_FOUND;
+import static com.ssafy.beedly.common.exception.NotFoundException.SPECIAL_BOARD_NOT_FOUND;
 import static com.ssafy.beedly.common.exception.NotMatchException.CONTENT_TYPE_NOT_MATCH;
 
 @Service
@@ -60,6 +61,29 @@ public class SpecialBoardService {
                 .collect(Collectors.toList());
     }
 
+    // 게시글 내용 수정
+    @Transactional
+    public void updateSpecialBoard(Long boardId, CreateSpecialBoardRequest request, MultipartFile image) {
+        SpecialBoard findSpecialBoard = specialBoardRepository.findById(boardId)
+                .orElseThrow(() -> new NotFoundException(SPECIAL_BOARD_NOT_FOUND));
+
+        findSpecialBoard.updateSpecialBoard(request);
+
+        if (image != null) {
+            String imageUrl = uploadImageS3(image);
+            findSpecialBoard.updateImage(imageUrl);
+        }
+    }
+
+    // 게시글 삭제
+    @Transactional
+    public void deleteSpecialBoard(Long boardId) {
+        SpecialBoard findSpecialBoard = specialBoardRepository.findById(boardId)
+                .orElseThrow(() -> new NotFoundException(SPECIAL_BOARD_NOT_FOUND));
+
+        specialBoardRepository.delete(findSpecialBoard);
+    }
+
     public String uploadImageS3(MultipartFile image) {
         String imageUrl = null;
 
@@ -86,5 +110,4 @@ public class SpecialBoardService {
 
         return imageUrl;
     }
-
 }
