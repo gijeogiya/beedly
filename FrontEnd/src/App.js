@@ -9,6 +9,7 @@ import Onair from "./pages/Onair";
 import SignupChoice from "./pages/SignupChoice";
 import Signup from "./pages/Signup";
 import Kakao from "./pages/Kakao";
+import Login from "./pages/Login";
 import { Auction } from "./pages/Auction";
 import { SpecialAuction } from "./pages/SpecialAuction";
 import MyPage from "./pages/MyPage";
@@ -46,6 +47,7 @@ function App() {
 
           <Route path="/onair" element={<Onair />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/signup1" element={<SignupChoice />} />
           <Route path="/signup2" element={<Signup />} />
           <Route path="/specialProduct" element={<SpecialProductRegister />} />

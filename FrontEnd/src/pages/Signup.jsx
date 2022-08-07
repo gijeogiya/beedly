@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Button from "../components/Button"
 import { FlexBox, Input } from "../components/UserStyled"
 import qs from 'qs';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import DaumPostcode from 'react-daum-postcode';
 import { actionCreators as userActions } from "../stores/modules/user";
@@ -52,6 +52,7 @@ const postmodal = {
 }
 
 export default function Signup() {
+    const Navigate = useNavigate();
     //datepicker
     const [locale, setLocale] = React.useState('ko');
     const [date, setDate] = useState(new Date());
@@ -102,6 +103,7 @@ export default function Signup() {
             } else { // 구매자라면 회원가입 성공
                 //태그 선택 페이지로 이동
             }
+            Navigate("/");
 
         }
 

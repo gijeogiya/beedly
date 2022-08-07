@@ -30,17 +30,17 @@ export const login = (code) => {
           })
         );
 
+        localStorage.setItem("token", token);
         if (res.status === 200) {
           console.log("로그인 성공");
           let token = res.headers["authorization"];
-          // localStorage.setItem("token", token);
           // sessionStorage("token", token);
           dispatch(setUser);
-          // window.location.href = "/";
+          window.location.href = "/";
         } else if (res.status === 201) {
           //사용자 정보가 없을 때(회원가입 안함) -> 회원가입 페이지로 이동
           // localStorage.setItem("token", token);
-          // window.location.href = "/signup1";
+          window.location.href = "/signup1";
         }
       },
       (err) => {
@@ -50,38 +50,38 @@ export const login = (code) => {
   };
 };
 
-export const join = (user) => {
-  return function (dispatch, getState) {
-    updateUserInfoApi(
-      user,
-      (res) => {
-        let token = res.headers["authorization"];
-        console.log(res);
-        dispatch(
-          setUser({
-            userEmail: res.data.userEmail,
-            userGender: res.data.userGender,
-            userId: token,
-          })
-        );
-        console.log(res.data.userEmail);
-        console.log(res.data.userGender);
-        if (res.status === 200) {
-          console.log("로그인 성공");
-          let token = res.headers["authorization"];
-          localStorage.setItem("token", token);
-          // window.location.href = "/";
-        } else if (res.status === 201) {
-          //사용자 정보가 없을 때(회원가입 안함) -> 회원가입 페이지로 이동
-          // window.location.href = "/signup1";
-        }
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-  };
-};
+// export const join = (user) => {
+//   return function (dispatch, getState) {
+//     updateUserInfoApi(
+//       user,
+//       (res) => {
+//         let token = res.headers["authorization"];
+//         console.log(res);
+//         dispatch(
+//           setUser({
+//             userEmail: res.data.userEmail,
+//             userGender: res.data.userGender,
+//             userId: token,
+//           })
+//         );
+//         console.log(res.data.userEmail);
+//         console.log(res.data.userGender);
+//         if (res.status === 200) {
+//           console.log("로그인 성공");
+//           let token = res.headers["authorization"];
+//           localStorage.setItem("token", token);
+//           // window.location.href = "/";
+//         } else if (res.status === 201) {
+//           //사용자 정보가 없을 때(회원가입 안함) -> 회원가입 페이지로 이동
+//           // window.location.href = "/signup1";
+//         }
+//       },
+//       (err) => {
+//         console.log(err);
+//       }
+//     );
+//   };
+// };
 
 export default handleActions(
   {
@@ -98,7 +98,7 @@ export default handleActions(
 const actionCreators = {
   setUser,
   login,
-  join,
+  // join,
 };
 
 export { actionCreators };
