@@ -21,7 +21,7 @@ public class ArtistApproval extends BaseEntity {
     private Long id;
 
     @Column(name = "artist_approval_flag", columnDefinition = "TINYINT", length = 1)
-    private boolean approvalFlag;
+    private Boolean approvalFlag;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

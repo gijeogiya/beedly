@@ -1,6 +1,7 @@
 package com.ssafy.beedly.domain;
 
 import com.ssafy.beedly.domain.common.BaseEntity;
+import com.ssafy.beedly.dto.special.board.request.CreateSpecialBoardRequest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,12 +9,14 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-public class SpecialBoard extends BaseEntity {
+public class  SpecialBoard extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,4 +41,32 @@ public class SpecialBoard extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "specialBoard")
+    private List<SpecialProduct> specialProducts = new ArrayList<>();
+
+    @OneToOne(mappedBy = "specialBoard")
+    private SpecialAuction specialAuction;
+
+    public static SpecialBoard createSpecialBoard(User user, CreateSpecialBoardRequest request, String imageUri) {
+        SpecialBoard specialBoard = new SpecialBoard();
+        specialBoard.startTime = request.getStartTime();
+        specialBoard.boardTitle = request.getBoardTitle();
+        specialBoard.boardSubtitle = request.getBoardSubTitle();;
+        specialBoard.boardDesc = request.getBoardDesc();
+        specialBoard.mainImgUri = imageUri;
+        specialBoard.user = user;
+        return specialBoard;
+    }
+
+    public void updateSpecialBoard(CreateSpecialBoardRequest request) {
+        this.startTime = request.getStartTime();
+        this.boardTitle = request.getBoardTitle();
+        this.boardSubtitle = request.getBoardSubTitle();
+        this.boardDesc = request.getBoardDesc();
+    }
+
+    public void updateImage(String imageUrl) {
+        this.mainImgUri = imageUrl;
+    }
 }

@@ -64,7 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
                 .antMatchers("/ws-stomp/**", "/api/port","/actuator/health").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users", "/api/users/login").permitAll()
-                .anyRequest().hasAnyRole("USER", "ADMIN")
+                .anyRequest().permitAll()
+                //.anyRequest().hasAnyRole("USER", "ADMIN")
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint)
@@ -81,6 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
+        configuration.addExposedHeader("Authorization");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
