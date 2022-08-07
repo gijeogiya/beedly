@@ -90,7 +90,7 @@ export default function MyPage() {
   const Selector = useSelector((state) => state.user.user);
   const [token, setToken] = useState("");
   useEffect(() => {
-    if (Selector === undefined) {
+    if (Selector === null) {
       window.location.href = "/login";
     } else {
       console.log(Selector);
