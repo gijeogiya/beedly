@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_SERVER = "http://i7a601.p.ssafy.io:8080/api/";
+const API_SERVER = "https://i7a601.p.ssafy.io/api/";
 
 const API_SERVER_SPECIAL = API_SERVER + "admin/special/";
 const API_SERVER_PERSONAL = API_SERVER + "personalProduct/";
@@ -55,15 +55,15 @@ const getPersonalProduct = (id, success, fail) => {
 
 //토큰이 필요하지 않은 axios 처리
 const instance = axios.create({
-  baseURL: "http://i7a601.p.ssafy.io/api/",
+  baseURL: "https://i7a601.p.ssafy.io/api/",
   headers: {
     contentType: "application/json",
   },
 });
-const BASEURL = "http://i7a601.p.ssafy.io/api/";
+const BASEURL = "https://i7a601.p.ssafy.io/api/";
 // token이 필요한 axios 처리
 const authInstance = axios.create({
-  baseURL: "http://i7a601.p.ssafy.io/api/",
+  baseURL: "https://i7a601.p.ssafy.io/api/",
   headers: {
     Authorization: `Bearer ` + localStorage.getItem("token"),
     "Content-Type": "application/json",
@@ -72,7 +72,7 @@ const authInstance = axios.create({
 
 // login
 const loginApi = async (code, success, fail) => {
-  await instance.post(`/user/login?code=${code}`).then(success).catch(fail);
+  await instance.post(`user/login?code=${code}`).then(success).catch(fail);
 };
 
 // 닉네임 중복검사
