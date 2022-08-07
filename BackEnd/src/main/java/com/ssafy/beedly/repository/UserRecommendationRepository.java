@@ -5,6 +5,8 @@ import com.ssafy.beedly.domain.RecommendationTag;
 import com.ssafy.beedly.domain.UserRecommendation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRecommendationRepository extends JpaRepository<UserRecommendation, Long> {
+import java.util.List;
 
+public interface UserRecommendationRepository extends JpaRepository<UserRecommendation, Long> {
+    List<UserRecommendation> findByUserId(Long userId);
 }

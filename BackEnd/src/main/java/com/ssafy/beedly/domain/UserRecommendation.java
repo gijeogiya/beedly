@@ -33,7 +33,7 @@ public class UserRecommendation extends BaseEntity {
 
     public static UserRecommendation createUserRecommendation(User user, RecommendationTag tag) {
         UserRecommendation userRecommendation = new UserRecommendation();
-        userRecommendation.id = user.getId();
+        userRecommendation.user = user;
         userRecommendation.recTag = tag;
         return userRecommendation;
     }
