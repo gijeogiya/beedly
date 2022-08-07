@@ -153,27 +153,27 @@ export function NavBar() {
     <NavBarDiv isShow={show} opacity={opacity}>
       <div style={IconButtonStyle}>
         <Link to="/">
-          <img alt="홈" src="/img/HomeIcon.svg" />
+          <img alt="홈" src={HomeIcon} />
         </Link>
       </div>
       <div style={IconButtonStyle}>
         <Link to="/search">
-          <img alt="검색" src="/img/SearchIcon.svg" />
+          <img alt="검색" src={SearchIcon} />
         </Link>
       </div>
       <div style={IconButtonStyle}>
         <Link to="/productlist">
-          <img alt="리스트" src="/img/ListIcon.svg" />
+          <img alt="리스트" src={ListIcon} />
         </Link>
       </div>
       <div style={IconButtonStyle}>
         <Link to="/onair">
-          <img alt="Onair" src="/img/OnairIcon.svg" />
+          <img alt="Onair" src={OnairIcon} />
         </Link>
       </div>
       <div style={IconButtonStyle}>
         <Link to="/mypage">
-          <img alt="Mypage" src="/img/MypageIcon.svg" />
+          <img alt="Mypage" src={MypageIcon} />
         </Link>
       </div>
     </NavBarDiv>
