@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Box } from "grommet";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import HomeIcon from '../assets/img/HomeIcon.svg';
+import SearchIcon from '../assets/img/SearchIcon.svg';
+import ListIcon from '../assets/img/ListIcon.svg';
+import OnairIcon from '../assets/img/OnairIcon.svg';
+import MypageIcon from '../assets/img/MypageIcon.svg';
 // 고정스타일링
 
 // Header
@@ -163,7 +168,7 @@ export function NavBar() {
 
 
 const ProductImg = styled.img`
-  src: ${(props) => props.productSrc || ""};
+    src: ${(props) => props.src || ""};
 `;
 
 const ProductFrame = styled.div`
@@ -173,55 +178,38 @@ const ProductFrame = styled.div`
 `;
 
 const TimeTable = styled.div`
-  color: white;
-  background-color: ${(props) => (props.isStart ? "red" : "gray" || "gray")};
-  font-size: 10px;
-  text-align: center;
-  border-radius: 5px;
-  z-index: 5;
-  margin-bottom: 5px;
-  margin-right: 5px;
+    color: white;
+    background-color: ${(props) => props.isStart ? "red" : "gray" || "gray"};
+    font-size: 10px;
+    text-align: center;
+    border-radius: 5px;
+    z-index: 5;
+    margin-bottom: 5px;
+    margin-right: 5px;
 `;
 
 const ArtistImg = styled.img`
-  width: ${(props) => props.width || "37px"};
-  height: ${(props) => props.height || "37px"};
-  src: ${(props) => props.src || ""};
-  border-radius: 50%;
-  margin: 3px;
+    src: ${(props) => props.src || ""};
+    border-radius: 50%;
 `;
 
 //상품 프레임
-export function Product({
-  title,
-  productSrc,
-  artistSrc,
-  artist,
-  dueDate,
-  dueTime,
-  isStart,
-  people,
-}) {
-  return (
-    <Box>
-      <ProductFrame>
-        <ProductImg productSrc={productSrc}></ProductImg>
-        <TimeTable>{isStart ? { dueTime } : "실시간"}</TimeTable>
-      </ProductFrame>
-      <Box direction="row">
-        <ArtistImg artistSrc={artistSrc}></ArtistImg>
-        <div>
-          <h2>{artist}</h2>
-          <p>{title}</p>
-          <p>
-            {isStart
-              ? `${people}명 시청중`
-              : `${dueDate.year}년 ${dueDate.month}월 ${dueDate.day}일 ${dueDate.hour}시 예정`}
-          </p>
-        </div>
-      </Box>
+export function Product({ title, productSrc, artistSrc, artist, dueDate, dueTime, isStart, people }) {
+  return <Box>
+    <ProductFrame>
+      <ProductImg src={productSrc}></ProductImg>
+      <TimeTable>{isStart ? { dueTime } : "실시간"}</TimeTable>
+    </ProductFrame>
+    <Box direction="row">
+      <ArtistImg src={artistSrc}></ArtistImg>
+      <div>
+        <h2>{artist}</h2>
+        <p>{title}</p>
+        <p>{isStart ? `${people}명 시청중` : `${dueDate.year}년 ${dueDate.month}월 ${dueDate.day}일 ${dueDate.hour}시 예정`}</p>
+      </div>
     </Box>
-  );
+  </Box>
+
 }
 
 const AuctionArtistFrame = styled.div`

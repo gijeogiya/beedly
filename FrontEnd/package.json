@@ -12,7 +12,7 @@
     "@reduxjs/toolkit": "^1.8.3",
     "axios": "^0.27.2",
     "bootstrap": "^5.2.0",
-    "grommet": "^2.25.1",
+    "grommet": "^2.25.0",
     "grommet-icons": "^4.7.0",
     "immer": "^9.0.15",
     "jquery": "3.5.0",
