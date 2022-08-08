@@ -50,8 +50,8 @@ public class PersonalProductController {
 			"}", produces = "multipart/form-data")
 	@PostMapping
 	public ResponseEntity<?> saveProductInfo(@ApiIgnore @LoginUser User user, @RequestPart CreatePersonalProductRequest request, @RequestPart(required = false) List<MultipartFile> images){
-		personalProductService.save(user, request, images);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		Long id = personalProductService.save(user, request, images);
+		return ResponseEntity.ok(id);
 	}
 	// 1-2. 상품 업데이트
 	@ApiOperation(value = "상시 상품 수정", notes = "이미지도 여러개 가능(최대 5개) \n" +
