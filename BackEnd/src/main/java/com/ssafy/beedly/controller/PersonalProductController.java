@@ -93,7 +93,7 @@ public class PersonalProductController {
 	}
 
 	 // 1-4-1. 상품 상세 조회
-	 @GetMapping("/close/{id}/{productId}")
+	 @GetMapping("/close/{productId}")
 	 public ResponseEntity<?> getProductInfoClose(@LoginUser User user, @PathVariable("productId") Long productId){
 	 	return ResponseEntity.ok(personalProductService.getProductByIdClose(user.getId(), productId));
 	 }

@@ -126,18 +126,20 @@ public class PersonalProductService {
 		Boolean isAbsentee = false;
 		List<String> tagNames = new ArrayList<>();
 
-		List<SearchTag> searchTag = personalProductRepository.findSearchTagByProductId(id);
+		List<SearchTag> searchTag = personalProductRepository.findSearchTagByProductId(productId);
 		Optional<User> user = personalProductRepository.findUserIdByPersonalFavorite(productId, id);
 		Optional<AbsenteeBid> absenteeBid = personalProductRepository.findUserIdByAbsenteeBid(productId, id);
-
 		PersonalProductCloseDto personalProductCloseDto = new PersonalProductCloseDto();
 		personalProductCloseDto.setProductId(productId);
 
 		if(user.isPresent()) isFavorite = true;
 		personalProductCloseDto.setIsFavorite(isFavorite);
-		if(absenteeBid.isPresent()) isAbsentee = true;
+		if(absenteeBid.isPresent()){
+			isAbsentee = true;
+			personalProductCloseDto.setAbsenteeBidPrice(absenteeBid.get().getAbsenteeBidPrice());
+		}
 		personalProductCloseDto.setIsAbsenteeBid(isAbsentee);
-		personalProductCloseDto.setAbsenteeBidPrice(absenteeBid.get().getAbsenteeBidPrice());
+
 		 for (SearchTag tag : searchTag) {
 			 tagNames.add(tag.getSearchTagName());
 		 }
