@@ -124,6 +124,7 @@ public class PersonalProduct extends BaseEntity {
         personalProduct.brightness = request.getBrightness();
         personalProduct.saturation = request.getSaturation();
         personalProduct.temperature = request.getTemperature();
+        personalProduct.favoriteCount = 0;
 
         return personalProduct;
     }
