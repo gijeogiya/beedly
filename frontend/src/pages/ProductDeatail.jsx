@@ -1,4 +1,4 @@
-import { Box } from "grommet";
+import { Box, Carousel, Image } from "grommet";
 import React, { useState } from "react";
 import Button from "../components/Button";
 import BackBtn from "../assets/images/backButton.png";
@@ -14,6 +14,13 @@ import { HorizonScrollRowTable } from "../components/HorizonScrollTable";
 import { useEffect } from "react";
 import { getPersonalProduct } from "../utils/api";
 import { useParams } from "react-router-dom";
+import { Category } from "../stores/modules/basicInfo";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+
+import CloseButton from "../assets/images/close.png";
+import { AbsenteeBid } from "../components/AbsenteeBid";
 
 const HeaderBox = () => {
   return (
@@ -45,6 +52,7 @@ const MainImg = styled.img`
 
 export const ProductDeatail = () => {
   const { id } = useParams();
+  const [loading, setLoading] = useState(true);
   const [productName, setProductName] = useState("");
   const [productArtist, setProductArtist] = useState("");
   const [category, setCategory] = useState("카테고리");
@@ -53,42 +61,100 @@ export const ProductDeatail = () => {
   const [productDesc, setProductDesc] = useState("");
   const [productImages, setProductImages] = useState([]);
   const [productLike, setProductLike] = useState(0);
+  const [product, setProduct] = useState({});
+  const [open, setOpen] = useState(false);
   useEffect(() => {
-    getPersonalProduct(
-      id,
-      //   12,
-      (response) => {
-        console.log(response);
-        const product = response.data;
-        setProductName(product.productName);
-        setProductArtist(product.productArtist);
-        setCategory(product.category);
-        setStartTime(product.startTime);
-        setStartPrice(product.startPrice);
-        setProductDesc(productDesc);
-        setProductImages(product.productImages);
-        setProductLike(product.productLike);
-      },
-      (fail) => {
-        console.log(fail);
-      }
+    if (loading)
+      getPersonalProduct(
+        // id,
+        31,
+        (response) => {
+          // console.log(response.data);
+          // const product = response.data;
+          setProductName(response.data.productName);
+          setProductArtist(response.data.userName);
+          setCategory(response.data.categoryId);
+          setStartTime(response.data.startTime);
+          setStartPrice(response.data.startPrice);
+          setProductDesc(response.data.productDesc);
+          setProductImages([...response.data.productImgs]);
+          setProductLike(response.data.favoriteCount);
+          setProduct(response.data);
+          console.log(response);
+          setLoading(false);
+        },
+        (fail) => {
+          console.log(fail);
+        }
+      );
+  });
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const stringToDate = (string) => {
+    const date = string.split("T");
+    const yyyyMMdd = date[0].split("-");
+    const HHmm = date[1].split(":");
+    return (
+      `${yyyyMMdd[0]}년 ${parseInt(yyyyMMdd[1])}월 ${parseInt(
+        yyyyMMdd[2]
+      )}일  ${parseInt(HHmm[0])}시 ${
+        parseInt(HHmm[1]) != 0 ? `${parseInt(HHmm[1])}분` : ``
+      }` + ` 예정`
     );
-  }, []);
+    // return date.toString("yyyy년 MM월 dd일 HH시 mm분 예정");
+  };
+  // const getProductInfo = async () => {
+  //   await getPersonalProduct(
+  //     // id,
+  //     31,
+  //     (response) => {
+  //       console.log(response.data);
+  //       // const product = response.data;
+  //       setProductName(response.data.productName);
+  //       setProductArtist(response.data.productArtist);
+  //       setCategory(response.data.categoryId);
+  //       setStartTime(response.data.startTime);
+  //       setStartPrice(response.data.startPrice);
+  //       setProductDesc(response.data.productDesc);
+  //       setProductImages([...response.data.productImgs]);
+  //       setProductLike(response.data.favoriteCount);
+  //       setProduct(response.data);
+  //     },
+  //     (fail) => {
+  //       console.log(fail);
+  //     }
+  //   );
+  // };
+  if (loading) return <div>Loading...</div>;
   return (
     <Box>
       <HeaderBox />
       <Box>
-        <MainImg src={Product1} />
-        <Box margin="small">
-          <StyledText text={category} weight="bold" size="18px" />
+        {/* <MainImg src={Product1} /> */}
+        <Carousel fill wrap={true} play={3000} controls="arrows">
+          {productImages.map((image, idx) => {
+            return <Image src={image} fit="cover" key={idx} />;
+          })}
+        </Carousel>
+
+        <Box margin="medium">
+          <StyledText
+            text={Category[category].label}
+            weight="bold"
+            size="18px"
+            style={{ textDecoration: "underline" }}
+          />
           <StyledText text={productArtist} />
           <StyledText text={productName} />
-          <StyledText text={startPrice} />
-          <StyledText text={startTime} />
+          <StyledText text={`${startPrice}원 ~`} />
+          <StyledText text={stringToDate(startTime)} />
         </Box>
         <Box margin="small">
           <StyledText text="작품 설명" />
-          <StyledText text={productDesc} />
+          <StyledText text={productDesc} size="10px" color="#7B7B7B" />
         </Box>
         <Box margin="small">
           <StyledText text="작품 정보" />
@@ -106,9 +172,64 @@ export const ProductDeatail = () => {
           </BackButton>
           <StyledText text={productLike} />
         </Box>
-        <Box alignContent="center" justify="center">
+        <Box
+          alignContent="center"
+          align="center"
+          justify="center"
+          direction="row"
+        >
           <Button
-            BigBlack
+            MediumGreen
+            children="서면응찰"
+            onClick={() => setOpen(true)}
+          />
+          <AbsenteeBid
+            open={open}
+            onDismiss={handleClose}
+            product={{
+              image: productImages[0],
+              category: Category[category].label,
+              name: productName,
+              artist: productArtist,
+              price: startPrice,
+            }}
+          />
+          {/* <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <Box direction="row" width="100%" justify="end">
+              <BackButton onClick={handleClose}>
+                <img src={CloseButton} />
+              </BackButton>
+            </Box>
+
+            <DialogContent>
+              <Box align="center">
+                <StyledText text="작품을 등록하시겠습니까?" weight="bold" />
+                <p />
+                <StyledText
+                  text="경매 시작가는 수정이 불가능합니다."
+                  color="red"
+                  size="10px"
+                />
+              </Box>
+            </DialogContent>
+            <DialogActions>
+              <Box direction="row" width="100%" justify="center">
+                <Button
+                  MediumBlack
+                  onClick={() => {}}
+                  children="작품 등록"
+                  autoFocus
+                ></Button>
+              </Box>
+            </DialogActions>
+          </Dialog> */}
+          <Button
+            MediumBlack
             children={
               <Box direction="row" margin="xsmall">
                 <img src={Clock} />

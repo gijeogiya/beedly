@@ -46,11 +46,15 @@ const getData = (params, success, fail) => {
 };
 
 const registerPersonalProduct = (formData, success, fail) => {
-  personalPostApi.post(`/`, formData).then(success).then(fail);
+  personalPostApi.post(`/`, formData).then(success).catch(fail);
 };
 
-const getPersonalProduct = (id, success, fail) => {
-  personalGetApi.get(`/${id}`).then(success).then(fail);
+const getPersonalProduct = async (id, success, fail) => {
+  await personalGetApi.get(`/${id}`).then(success).catch(fail);
+};
+
+const getTempProductList = async (params, success, fail) => {
+  await personalGetApi(`/list`, { params }).then(success).catch(fail);
 };
 
 //토큰이 필요하지 않은 axios 처리
@@ -121,4 +125,5 @@ export {
   registerSpecialBoard,
   registerPersonalProduct,
   getPersonalProduct,
+  getTempProductList,
 };

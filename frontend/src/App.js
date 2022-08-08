@@ -17,6 +17,7 @@ import MainPage from "./pages/Main";
 import { ProductRegister } from "./pages/ProductRegister";
 import { SpecialProductRegister } from "./pages/SpecialProductRegister";
 import { ProductDeatail } from "./pages/ProductDeatail";
+import { Temp } from "./pages/Temp";
 const Layout = () => {
   return (
     <div>
