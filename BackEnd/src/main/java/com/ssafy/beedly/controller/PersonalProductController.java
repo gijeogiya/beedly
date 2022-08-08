@@ -75,6 +75,7 @@ public class PersonalProductController {
 		personalProductService.update(user, request, images, productId);
 		return  ResponseEntity.status(HttpStatus.OK).build();
 	}
+
 	// 1-3. 상픔 삭제
 	@ApiOperation(value = "상시 상품 삭제", notes = "상시 상품 삭제")
 	@ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
