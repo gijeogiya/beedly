@@ -23,7 +23,7 @@ public interface ProductSearchRepository extends JpaRepository<PersonalProduct, 
 	//----------- 3. Tag 검색하기
 	@Query(value="select s from SearchTag s where s.searchTagName = :tagName")
 	SearchTag findPersonalProductByTag(@Param("tagName") String tagName);
-	@Query(value="select s from PersonalSearchTag s join fetch s.personalProduct  where s.searchTag.id = :tagId")
+	@Query(value="select s from PersonalSearchTag s join fetch s.personalProduct p join fetch p.category where s.searchTag.id = :tagId")
 	Slice<PersonalSearchTag> findPersonalSearchTagByTagId(Long tagId);
 
 	//----------- 4. 종료된 작품 검색하기
