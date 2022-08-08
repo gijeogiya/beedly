@@ -51,6 +51,11 @@ OpenVidu 2.22.0
 
 # 🏄‍♂️진행 상황
 
+## 사용 branch
+- backend
+- frontend
+(develop에 아직 merge하지 않음)
+
 ---
 
 ## BackEnd
