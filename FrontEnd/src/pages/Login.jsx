@@ -14,12 +14,12 @@ const flexbox = {
 };
 
 const CLIENT_ID = process.env.REACT_APP_KAKAO_API_KEY;
-const REDIRECT_URI = "https://i7a601.p.ssafy.io/user/kakao/callback";
+const REDIRECT_URI = "http://loclhost:3000/user/kakao/callback";
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 const test = () => {
   console.log(KAKAO_AUTH_URL);
 
-  window.location.href = KAKAO_AUTH_URL;
+  // window.location.href = KAKAO_AUTH_URL;
 };
 export default function login() {
   return (
