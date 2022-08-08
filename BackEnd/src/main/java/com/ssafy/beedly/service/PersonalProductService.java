@@ -44,6 +44,7 @@ public class PersonalProductService {
 	private String bucket;
 
 	private final PersonalProductRepository personalProductRepository;
+	private final SearchTagRepository searchTagRepository;
 	private final PersonalProductQueryRepository personalProductQueryRepository;
 	private final CategoryRepository categoryRepository;
 	private final AmazonS3Client amazonS3Client;
@@ -204,5 +205,14 @@ public class PersonalProductService {
 				}
 			}
 		}
+	}
+
+	@Transactional
+	public List<SearchTagDto> getSearchTagsInfo() {
+		List<SearchTagDto> list = new ArrayList<>();
+		for (SearchTag searchTag : searchTagRepository.findAll()) {
+			list.add(new SearchTagDto(searchTag.getId(), searchTag.getSearchTagName()));
+		}
+		return list;
 	}
 }
