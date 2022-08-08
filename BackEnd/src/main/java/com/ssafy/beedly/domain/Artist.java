@@ -32,5 +32,9 @@ public class Artist extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-
+    public static Artist createArtist(User user){
+        Artist artist = new Artist();
+        artist.user = user;
+        return artist;
+    }
 }
