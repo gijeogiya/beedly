@@ -54,7 +54,7 @@ public class PersonalProductService {
 
 	// 상품 등록 + 이미지
 	@Transactional
-	public void save(User user, CreatePersonalProductRequest request, List<MultipartFile> images){
+	public Long save(User user, CreatePersonalProductRequest request, List<MultipartFile> images){
 		if ((images != null) && images.size() > MAX_IMAGE_COUNT) {
 			throw new NotMatchException(IMG_COUNT_NOT_MATCH);
 		}
@@ -70,6 +70,8 @@ public class PersonalProductService {
 
 		// 이미지 s3에 업로드
 		uploadImageS3(images, save);
+
+		return save.getId();
 	}
 
 	// 상품 수정
