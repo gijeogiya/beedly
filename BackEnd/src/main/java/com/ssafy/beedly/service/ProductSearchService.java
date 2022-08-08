@@ -3,6 +3,7 @@ package com.ssafy.beedly.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,27 +26,27 @@ public class ProductSearchService {
 	private final ProductSearchRepository productSearchRepository;
 
 	@Transactional
-	public Slice<PersonalProductDto> getProductByProductName(String productName){
-		Slice<PersonalProductDto> dto = productSearchRepository.findPersonalProductByProductNameLike(productName.trim()).map(PersonalProductDto::new);
+	public Slice<PersonalProductDto> getProductByProductName(String productName, Pageable pageable){
+		Slice<PersonalProductDto> dto = productSearchRepository.findPersonalProductByProductNameLike(productName.trim(), pageable).map(PersonalProductDto::new);
 		return dto;
 	}
 
 	@Transactional
-	public Slice<PersonalProductDto> getProductByNickname(String userNickName){
-		Slice<PersonalProductDto> dto = productSearchRepository.findPersonalProductByUserNickname(userNickName).map(PersonalProductDto::new);
+	public Slice<PersonalProductDto> getProductByNickname(String userNickName, Pageable pageable){
+		Slice<PersonalProductDto> dto = productSearchRepository.findPersonalProductByUserNickname(userNickName, pageable).map(PersonalProductDto::new);
 		return dto;
 	}
 
 	@Transactional
-	public Slice<PersonalProductDto> getProductByTerminated(Long id){
-		Slice<PersonalProductDto> dto = productSearchRepository.findPersonalProductByTerminated(id).map(PersonalProductDto::new);
+	public Slice<PersonalProductDto> getProductByTerminated(Long id, Pageable pageable){
+		Slice<PersonalProductDto> dto = productSearchRepository.findPersonalProductByTerminated(id, pageable).map(PersonalProductDto::new);
 		return dto;
 	}
 
 	@Transactional
-	public Slice<PersonalProductDto> getProductByTag(String tagName){
+	public Slice<PersonalProductDto> getProductByTag(String tagName, Pageable pageable){
 		SearchTag searchTag = productSearchRepository.findPersonalProductByTag(tagName.trim());
-		Slice<PersonalProductDto> tags =  productSearchRepository.findPersonalSearchTagByTagId(searchTag.getId()).map(PersonalProductDto::new);
+		Slice<PersonalProductDto> tags =  productSearchRepository.findPersonalSearchTagByTagId(searchTag.getId(), pageable).map(PersonalProductDto::new);
 		return tags;
 	}
 

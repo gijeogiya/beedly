@@ -1,5 +1,9 @@
 package com.ssafy.beedly.config.web;
 
+import com.fasterxml.classmate.TypeResolver;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.CorsEndpointProperties;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties;
 import org.springframework.boot.actuate.autoconfigure.web.server.ManagementPortType;
@@ -11,10 +15,12 @@ import org.springframework.boot.actuate.endpoint.web.servlet.WebMvcEndpointHandl
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
@@ -31,7 +37,10 @@ import java.util.List;
 
 @Configuration
 @EnableSwagger2
+@RequiredArgsConstructor
 public class SwaggerConfig {
+
+    private final TypeResolver typeResolver;
 
     // documentationpluginsbootstrapper 에러 설정
     @Bean
@@ -55,6 +64,7 @@ public class SwaggerConfig {
     @Bean
     public Docket restAPI() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(Pageable.class), typeResolver.resolve(Page.class)))
                 .useDefaultResponseMessages(true)
                 .apiInfo(apiInfo())
                 .select()
@@ -87,5 +97,17 @@ public class SwaggerConfig {
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
         return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
+    }
+
+    @Data
+    static class Page {
+        @ApiModelProperty(value = "페이지 번호(0~N)")
+        private Integer page;
+
+        @ApiModelProperty(value = "페이지 크기(기본 20개씩)")
+        private Integer size;
+
+        @ApiModelProperty(value = "정렬(사용법: 컬럼명,ASC|DESC)   최신순 = createdDate,DESC")
+        private List<String> sort;
     }
 }
