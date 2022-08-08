@@ -26,7 +26,7 @@ public class ProductSearchService {
 
 	@Transactional
 	public Slice<PersonalProductDto> getProductByProductName(String productName){
-		Slice<PersonalProductDto> dto = productSearchRepository.findPersonalProductByProductNameLike(productName).map(PersonalProductDto::new);
+		Slice<PersonalProductDto> dto = productSearchRepository.findPersonalProductByProductNameLike(productName.trim()).map(PersonalProductDto::new);
 		return dto;
 	}
 
@@ -44,8 +44,7 @@ public class ProductSearchService {
 
 	@Transactional
 	public Slice<PersonalProductDto> getProductByTag(String tagName){
-		System.out.println("도달");
-		SearchTag searchTag = productSearchRepository.findPersonalProductByTag(tagName);
+		SearchTag searchTag = productSearchRepository.findPersonalProductByTag(tagName.trim());
 		Slice<PersonalProductDto> tags =  productSearchRepository.findPersonalSearchTagByTagId(searchTag.getId()).map(PersonalProductDto::new);
 		return tags;
 	}

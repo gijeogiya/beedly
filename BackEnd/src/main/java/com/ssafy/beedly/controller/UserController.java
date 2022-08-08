@@ -65,7 +65,7 @@ public class UserController {
     }
 
     // 내 정보 + 취향 태그
-    @ApiOperation(value = "내 정보 조회", notes = "내 정보 + 취향태그도 같이 조회")
+    @ApiOperation(value = "내 정보 조회", notes = "내 정보")
     @GetMapping
     public ResponseEntity<UserWithTagResponse> getUserInfo(@ApiIgnore @LoginUser User user) {
         return ResponseEntity.ok(userService.getUserInfo(user));
@@ -88,7 +88,7 @@ public class UserController {
     // 판매내역 조회
     @ApiOperation(value = "내 판매내역 조회")
     @GetMapping("/sale")
-    public ResponseEntity<?> searchMySales(@LoginUser User user) {
+    public ResponseEntity<List<UserSalesResponse>> searchMySales(@ApiIgnore @LoginUser User user) {
         return ResponseEntity.ok(userService.searchMySales(user));
     }
 
