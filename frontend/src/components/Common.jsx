@@ -286,9 +286,9 @@ const TextForm = styled.div`
 `;
 
 //텍스트 사이즈, 컬러, 웨이트, 글자를 설정할 수 있는 컴포넌트
-export function StyledText({ size, color, weight, text }) {
+export function StyledText({ size, color, weight, text, style }) {
   return (
-    <TextForm size={size} color={color} weight={weight}>
+    <TextForm size={size} color={color} weight={weight} style={style}>
       {text}
     </TextForm>
   );

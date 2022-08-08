@@ -18,6 +18,7 @@ import "codemirror-colorpicker/dist/codemirror-colorpicker.css";
 import { Color, ColorPicker } from "codemirror-colorpicker";
 import { registerPersonalProduct } from "../utils/api";
 import { useNavigate } from "react-router-dom";
+import { Category } from "../stores/modules/basicInfo";
 
 const titleSize = "16px";
 
@@ -202,7 +203,7 @@ export const ProductRegister = () => {
       temperature: temperature,
     };
     setRequest(req);
-  }, [saturation, temperature, brightness]);
+  }, [saturation, temperature, brightness, productImages]);
   const DateInputButton = forwardRef(({ value, onClick }, ref) => (
     <button onClick={onClick} ref={ref} style={style3}>
       {value === "" ? "날짜를 선택하세요" : value}
@@ -440,7 +441,11 @@ export const ProductRegister = () => {
 
     // console.log(request);
     const formData = new FormData();
-    formData.append("images", productImages);
+    console.log(productImages);
+    for (let i = 0; i < productImages.length; i++) {
+      formData.append("images", productImages[i]);
+    }
+    // formData.append("images", productImages);
     // console.log(productImages);
     const blob = new Blob([JSON.stringify(request)], {
       type: "application/json",
@@ -493,13 +498,7 @@ export const ProductRegister = () => {
                 size="10px"
                 labelKey="label"
                 valueKey={{ key: "value", reduce: true }}
-                options={[
-                  { label: "회화", value: 1 },
-                  { label: "판화", value: 2 },
-                  { label: "에디션", value: 3 },
-                  { label: "사진", value: 4 },
-                  { label: "입체", value: 5 },
-                ]}
+                options={Category}
                 placeholder="선택하세요"
                 value={category}
                 onChange={({ value: nextValue }) => {
