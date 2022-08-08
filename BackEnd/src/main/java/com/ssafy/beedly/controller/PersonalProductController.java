@@ -3,6 +3,8 @@ package com.ssafy.beedly.controller;
 import com.ssafy.beedly.domain.User;
 import com.ssafy.beedly.dto.personal.product.request.CreatePersonalProductRequest;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -31,12 +33,41 @@ public class PersonalProductController {
 	private final PersonalProductService personalProductService;
 
 	// 상시 상품 등록 + 이미지
+	@ApiOperation(value = "상시 상품 등록", notes = "이미지도 여러개 가능(최대 5개) \n" +
+			"상품 등록 데이터 요청 데이터:\n request: {\n" +
+			"  \"productName\": \"기획전 상품\",\n" +
+			"  \"productDesc\": \"기획전 상품이에요오오오\",\n" +
+			"  \"startPrice\": 50000,\n" +
+			"  \"height\": 5,\n" +
+			"  \"weight\": 5,\n" +
+			"  \"depth\": 5,\n" +
+			" \"startTime\": \"2013-09-29T18:46:19Z,\"\n " +
+			"  \"categoryId\": 1,\n" +
+			" \" brightness : 3,\" " +
+			" \" saturation : 2,\" " +
+			" \" temperature : 0\" " +
+			"}", produces = "multipart/form-data")
 	@PostMapping
 	public ResponseEntity<?> saveProductInfo(@ApiIgnore User user, @RequestPart CreatePersonalProductRequest request, @RequestPart(required = false) List<MultipartFile> images){
 		personalProductService.save(user, request, images);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	// 1-2. 상품 업데이트
+	@ApiOperation(value = "상시 상품 수정", notes = "이미지도 여러개 가능(최대 5개) \n" +
+			"상품 등록 데이터 요청 데이터:\n request: {\n" +
+			"  \"productName\": \"기획전 상품\",\n" +
+			"  \"productDesc\": \"기획전 상품이에요오오오\",\n" +
+			"  \"startPrice\": 50000,\n" +
+			"  \"height\": 5,\n" +
+			"  \"weight\": 5,\n" +
+			"  \"depth\": 5,\n" +
+			" \"startTime\": \"2013-09-29T18:46:19Z,\"\n " +
+			"  \"categoryId\": 1,\n" +
+			" \" brightness : 3,\" " +
+			" \" saturation : 2,\" " +
+			" \" temperature : 0\" " +
+			"}", produces = "multipart/form-data")
+	@ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
 	@PatchMapping("/{productId}")
 	public ResponseEntity<?> updateProductInfo(@ApiIgnore User user, @RequestPart CreatePersonalProductRequest request
 			, @RequestPart(required = false) List<MultipartFile> images,  @PathVariable Long productId){
@@ -44,6 +75,8 @@ public class PersonalProductController {
 		return  ResponseEntity.status(HttpStatus.OK).build();
 	}
 	// 1-3. 상픔 삭제
+	@ApiOperation(value = "상시 상품 삭제", notes = "상시 상품 삭제")
+	@ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
 	@DeleteMapping("/{productId}")
 	public ResponseEntity<?> deleteProductInfo(@PathVariable Long productId){
 		personalProductService.delete(productId);

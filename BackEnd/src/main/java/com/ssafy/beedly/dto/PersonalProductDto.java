@@ -31,11 +31,15 @@ public class PersonalProductDto {
 	private SoldStatus soldStatus;
 	private LocalDateTime startTime;
 	private Long categoryId;
-	private Long userId;
+	private String categoryName;
 	private Integer favoriteCount;
 	private List<String> productImgs = new ArrayList<>();
-	//private Long personalSoldId;
 
+
+	private Long userId;
+	private String userName;
+	private String userNickname;
+	private Long artistId;
 	private String artistImg;
 
 
@@ -50,12 +54,17 @@ public class PersonalProductDto {
 		this.soldStatus = personalProduct.getSoldStatus();
 		this.startTime = personalProduct.getStartTime();
 		this.categoryId = personalProduct.getCategory().getId();
-		this.userId = personalProduct.getUser().getId();
+		this.categoryName = personalProduct.getCategory().getCategoryName();
 		this.favoriteCount = personalProduct.getFavoriteCount();
-		List<PersonalProductImg> productImgs = personalProduct.getProductImgs();
-		for (PersonalProductImg productImg : productImgs) {
-			this.productImgs.add(productImg.getImgUri());
-		}
+
+		this.userId = personalProduct.getUser().getId();
+		this.userName = personalProduct.getUser().getUserName();
+		this.userNickname = personalProduct.getUser().getUserNickname();
+		this.artistId = personalProduct.getArtist().getId();
+		this.artistImg = personalProduct.getArtist().getArtistProfileImg();
+
+
+
 		this.artistImg = personalProduct.getArtist().getArtistBgImg();
 		//this.personalSoldId = personalProduct.getPersonalSold().getId();
 	}
