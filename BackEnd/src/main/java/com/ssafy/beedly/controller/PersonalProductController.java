@@ -1,5 +1,6 @@
 package com.ssafy.beedly.controller;
 
+import com.ssafy.beedly.config.web.LoginUser;
 import com.ssafy.beedly.domain.User;
 import com.ssafy.beedly.dto.personal.product.request.CreatePersonalProductRequest;
 import io.swagger.annotations.Api;
@@ -48,7 +49,7 @@ public class PersonalProductController {
 			" \" temperature : 0\" " +
 			"}", produces = "multipart/form-data")
 	@PostMapping
-	public ResponseEntity<?> saveProductInfo(@ApiIgnore User user, @RequestPart CreatePersonalProductRequest request, @RequestPart(required = false) List<MultipartFile> images){
+	public ResponseEntity<?> saveProductInfo(@ApiIgnore @LoginUser User user, @RequestPart CreatePersonalProductRequest request, @RequestPart(required = false) List<MultipartFile> images){
 		personalProductService.save(user, request, images);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -69,7 +70,7 @@ public class PersonalProductController {
 			"}", produces = "multipart/form-data")
 	@ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
 	@PatchMapping("/{productId}")
-	public ResponseEntity<?> updateProductInfo(@ApiIgnore User user, @RequestPart CreatePersonalProductRequest request
+	public ResponseEntity<?> updateProductInfo(@ApiIgnore @LoginUser User user, @RequestPart CreatePersonalProductRequest request
 			, @RequestPart(required = false) List<MultipartFile> images,  @PathVariable Long productId){
 		personalProductService.update(user, request, images, productId);
 		return  ResponseEntity.status(HttpStatus.OK).build();
@@ -83,19 +84,19 @@ public class PersonalProductController {
 		return  ResponseEntity.status(HttpStatus.OK).build();
 	}
 	// 1-4. 상품 조회
-	@GetMapping("/{id}")
-	public ResponseEntity<?>getProductInfo(@PathVariable("id") Long id) throws Exception{
+	@GetMapping("/{productId}")
+	public ResponseEntity<?> getProductInfo(@PathVariable("productId") Long id) throws Exception{
 		System.out.println(id);
 		PersonalProductDto dto = personalProductService.getProductById(id);
 		System.out.println(dto);
 		return ResponseEntity.ok(dto);
 	}
 
-	// // 1-4-1. 상품 상세 조회
-	// @GetMapping("/close/{id}")
-	// public ResponseEntity<?> getProductInfoClose(@PathVariable("id") Long id){
-	// 	return ResponseEntity.ok(personalProductService.getProductByIdClose(id));
-	// }
+	 // 1-4-1. 상품 상세 조회
+	 @GetMapping("/close/{id}/{productId}")
+	 public ResponseEntity<?> getProductInfoClose(@LoginUser User user, @PathVariable("productId") Long productId){
+	 	return ResponseEntity.ok(personalProductService.getProductByIdClose(user.getId(), productId));
+	 }
 
 	// 2. 카테고리 별 SLICE로 product가져오기
 	//http://localhost:8080/personalProduct/list?categoryName=""&page=0&sort=startTime,DESC

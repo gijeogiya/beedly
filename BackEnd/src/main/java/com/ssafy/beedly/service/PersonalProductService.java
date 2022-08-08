@@ -1,6 +1,7 @@
 package com.ssafy.beedly.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -9,11 +10,10 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.ssafy.beedly.common.ConstantClass;
 import com.ssafy.beedly.common.exception.NotFoundException;
 import com.ssafy.beedly.common.exception.NotMatchException;
 import com.ssafy.beedly.domain.*;
-import com.ssafy.beedly.dto.ProductAndArtistDto;
+import com.ssafy.beedly.dto.*;
 import com.ssafy.beedly.dto.personal.product.request.CreatePersonalProductRequest;
 import com.ssafy.beedly.repository.ArtistRepository;
 import com.ssafy.beedly.repository.CategoryRepository;
@@ -21,9 +21,6 @@ import com.ssafy.beedly.repository.PersonalProductImgRepository;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.ssafy.beedly.domain.Artist;
-import com.ssafy.beedly.dto.ProductAndArtistDto;
-import com.ssafy.beedly.dto.PersonalProductCloseDto;
-import com.ssafy.beedly.dto.PersonalProductDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -123,11 +120,32 @@ public class PersonalProductService {
 
 	}
 
-	// @Transactional
-	// public PersonalProductCloseDto getProductByIdClose(Long id){
-	// 	PersonalProductCloseDto dto = new PersonalProductCloseDto();
-	// 	return dto
-	// }
+	 @Transactional
+	 public PersonalProductCloseDto getProductByIdClose(Long id, Long productId){
+		Boolean isFavorite = false;
+		Boolean isAbsentee = false;
+		List<String> tagNames = new ArrayList<>();
+
+		List<SearchTag> searchTag = personalProductRepository.findSearchTagByProductId(id);
+		Optional<User> user = personalProductRepository.findUserIdByPersonalFavorite(productId, id);
+		Optional<AbsenteeBid> absenteeBid = personalProductRepository.findUserIdByAbsenteeBid(productId, id);
+
+		PersonalProductCloseDto personalProductCloseDto = new PersonalProductCloseDto();
+		personalProductCloseDto.setProductId(productId);
+
+		if(user.isPresent()) isFavorite = true;
+		personalProductCloseDto.setIsFavorite(isFavorite);
+		if(absenteeBid.isPresent()) isAbsentee = true;
+		personalProductCloseDto.setIsAbsenteeBid(isAbsentee);
+		personalProductCloseDto.setAbsenteeBidPrice(absenteeBid.get().getAbsenteeBidPrice());
+		 for (SearchTag tag : searchTag) {
+			 tagNames.add(tag.getSearchTagName());
+		 }
+
+		personalProductCloseDto.setTagNames(tagNames);
+
+		return personalProductCloseDto;
+	 }
 
 	@Transactional
 	public Slice<PersonalProductDto> getProductByCategory(String categoryName, Pageable pageable){
