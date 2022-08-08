@@ -15,9 +15,7 @@ import com.ssafy.beedly.common.exception.NotMatchException;
 import com.ssafy.beedly.domain.*;
 import com.ssafy.beedly.dto.*;
 import com.ssafy.beedly.dto.personal.product.request.CreatePersonalProductRequest;
-import com.ssafy.beedly.repository.ArtistRepository;
-import com.ssafy.beedly.repository.CategoryRepository;
-import com.ssafy.beedly.repository.PersonalProductImgRepository;
+import com.ssafy.beedly.repository.*;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.ssafy.beedly.domain.Artist;
@@ -26,7 +24,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ssafy.beedly.repository.PersonalProductRepository;
 import com.ssafy.beedly.repository.query.PersonalProductQueryRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -52,6 +49,7 @@ public class PersonalProductService {
 	private final AmazonS3Client amazonS3Client;
 	private final PersonalProductImgRepository personalProductImgRepository;
 	private final ArtistRepository artistRepository;
+	private final UserRepository userRepository;
 
 	// 상품 등록 + 이미지
 	@Transactional
@@ -60,12 +58,14 @@ public class PersonalProductService {
 			throw new NotMatchException(IMG_COUNT_NOT_MATCH);
 		}
 
+		User findUser = userRepository.findById(user.getId())
+				.orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
 		Category findCategory = categoryRepository.findById(request.getCategoryId())
 				.orElseThrow(() -> new NotFoundException(CATEGORY_NOT_FOUND));
 		Artist artist = artistRepository.findArtistByUserId(user.getId())
 				.orElseThrow(() -> new NotFoundException(ARTIST_NOT_FOUND));
 
-		PersonalProduct save = PersonalProduct.createPersonalProduct(request, findCategory, user, artist);
+		PersonalProduct save = personalProductRepository.save(PersonalProduct.createPersonalProduct(request, findCategory, findUser, artist));
 
 		// 이미지 s3에 업로드
 		uploadImageS3(images, save);

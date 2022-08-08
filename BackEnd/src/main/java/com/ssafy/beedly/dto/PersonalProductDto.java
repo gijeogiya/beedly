@@ -56,16 +56,17 @@ public class PersonalProductDto {
 		this.categoryId = personalProduct.getCategory().getId();
 		this.categoryName = personalProduct.getCategory().getCategoryName();
 		this.favoriteCount = personalProduct.getFavoriteCount();
+		List<PersonalProductImg> productImgs = personalProduct.getProductImgs();
+		for (PersonalProductImg productImg : productImgs) {
+			this.productImgs.add(productImg.getImgUri());
+		}
 
 		this.userId = personalProduct.getUser().getId();
 		this.userName = personalProduct.getUser().getUserName();
 		this.userNickname = personalProduct.getUser().getUserNickname();
 		this.artistId = personalProduct.getArtist().getId();
 		this.artistImg = personalProduct.getArtist().getArtistProfileImg();
-
-
-
-		this.artistImg = personalProduct.getArtist().getArtistBgImg();
+//		this.artistImg = personalProduct.getArtist().getArtistBgImg();
 		//this.personalSoldId = personalProduct.getPersonalSold().getId();
 	}
 
@@ -103,7 +104,12 @@ public class PersonalProductDto {
 		this.soldStatus = personalProduct.getSoldStatus();
 		this.startTime = personalProduct.getStartTime();
 		this.categoryId = personalProduct.getCategory().getId();
+		this.categoryName = personalProduct.getCategory().getCategoryName();
 		this.userId = personalProduct.getUser().getId();
+		this.userName = personalProduct.getUser().getUserName();
+		this.userNickname = personalProduct.getUser().getUserNickname();
+		this.artistId = personalProduct.getArtist().getId();
+		this.artistImg = personalProduct.getArtist().getArtistProfileImg();
 		this.favoriteCount = personalProduct.getFavoriteCount();
 		List<PersonalProductImg> productImgs = personalProduct.getProductImgs();
 		for (PersonalProductImg productImg : productImgs) {
