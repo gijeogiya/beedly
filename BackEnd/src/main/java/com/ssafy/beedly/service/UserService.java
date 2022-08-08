@@ -12,6 +12,7 @@ import com.ssafy.beedly.dto.user.common.UserDefaultDto;
 import com.ssafy.beedly.dto.user.kakao.KakaoUserResponse;
 import com.ssafy.beedly.dto.user.request.UserUpdateRequest;
 import com.ssafy.beedly.dto.user.response.*;
+import com.ssafy.beedly.repository.UserRecommendationRepository;
 import com.ssafy.beedly.repository.UserRepository;
 import com.ssafy.beedly.repository.query.UserQueryRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserQueryRepository userQueryRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final UserRecommendationRepository userRecommendationRepository;
 
     private final JwtUtil jwtUtil;
 
@@ -89,7 +91,9 @@ public class UserService {
     public UserWithTagResponse getUserInfo(User user) {
         User findUser = validateUser(user);
 
-        return null;
+        List<UserRecommendation> userRecommendations = userRecommendationRepository.findByUserIdWithRecommendation(findUser.getId());
+
+        return new UserWithTagResponse(findUser, userRecommendations);
     }
 
     // 닉네임 중복 체크
