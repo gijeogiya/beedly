@@ -13,6 +13,7 @@ import java.util.Optional;
 import com.ssafy.beedly.domain.*;
 import com.ssafy.beedly.domain.type.SoldStatus;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,25 +22,60 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PersonalProductDto {
+
+	@ApiModelProperty(notes = "상시 상품 식별자")
 	private Long id;
+
+	@ApiModelProperty(notes = "상시 상품 이름")
 	private String productName;
+
+	@ApiModelProperty(notes = "상시 상품 설명")
 	private String productDesc;
+
+	@ApiModelProperty(notes = "상시 상품 가격")
 	private Integer startPrice;
+
+	@ApiModelProperty(notes = "상시 상품 세로")
 	private Integer height;
+
+	@ApiModelProperty(notes = "상시 상품 가로")
 	private Integer weight;
+
+	@ApiModelProperty(notes = "상시 상품 높이")
 	private Integer depth;
+
+	@ApiModelProperty(notes = "판매 상태: STANDBY, SUCCESS, FAIL")
 	private SoldStatus soldStatus;
+
+	@ApiModelProperty(notes = "경매 시작 시간")
 	private LocalDateTime startTime;
+
+	@ApiModelProperty(notes = "카테고리 식별자")
 	private Long categoryId;
+
+	@ApiModelProperty(notes = "카테고리 이름")
 	private String categoryName;
+
+	@ApiModelProperty(notes = "찜 개수")
 	private Integer favoriteCount;
+
+	@ApiModelProperty(notes = "상품 이미지들")
 	private List<String> productImgs = new ArrayList<>();
 
 
+	@ApiModelProperty(notes = "등록한 유저 식별자")
 	private Long userId;
+
+	@ApiModelProperty(notes = "등록한 유저 이름")
 	private String userName;
+
+	@ApiModelProperty(notes = "등록한 유저 닉네임")
 	private String userNickname;
+
+	@ApiModelProperty(notes = "등록한 작가 식별자")
 	private Long artistId;
+
+	@ApiModelProperty(notes = "등록한 작가 프로필 이미지")
 	private String artistImg;
 
 
