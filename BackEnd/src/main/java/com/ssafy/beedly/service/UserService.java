@@ -3,15 +3,14 @@ package com.ssafy.beedly.service;
 import com.ssafy.beedly.client.KakaoLoginApi;
 import com.ssafy.beedly.common.exception.NotFoundException;
 import com.ssafy.beedly.config.security.util.JwtUtil;
-import com.ssafy.beedly.domain.PersonalProduct;
-import com.ssafy.beedly.domain.RecommendationTag;
-import com.ssafy.beedly.domain.User;
-import com.ssafy.beedly.domain.UserRecommendation;
+import com.ssafy.beedly.domain.*;
+import com.ssafy.beedly.domain.type.UserRole;
 import com.ssafy.beedly.dto.user.common.UserCreateFlag;
 import com.ssafy.beedly.dto.user.common.UserDefaultDto;
 import com.ssafy.beedly.dto.user.kakao.KakaoUserResponse;
 import com.ssafy.beedly.dto.user.request.UserUpdateRequest;
 import com.ssafy.beedly.dto.user.response.*;
+import com.ssafy.beedly.repository.ArtistRepository;
 import com.ssafy.beedly.repository.UserRecommendationRepository;
 import com.ssafy.beedly.repository.UserRepository;
 import com.ssafy.beedly.repository.query.UserQueryRepository;
@@ -42,6 +41,7 @@ public class UserService {
     private final UserQueryRepository userQueryRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRecommendationRepository userRecommendationRepository;
+    private final ArtistRepository artistRepository;
 
     private final JwtUtil jwtUtil;
 
@@ -90,10 +90,13 @@ public class UserService {
     // 내 정보 조회(유저 취향 같이)
     public UserWithTagResponse getUserInfo(User user) {
         User findUser = validateUser(user);
-
+        Artist artist = null;
+        if (findUser.getUserRole().equals(UserRole.ROLE_ARTIST)) {
+            artist = artistRepository.findByUserId(findUser.getId()).get();
+        }
         List<UserRecommendation> userRecommendations = userRecommendationRepository.findByUserIdWithRecommendation(findUser.getId());
 
-        return new UserWithTagResponse(findUser, userRecommendations);
+        return new UserWithTagResponse(findUser, userRecommendations, artist);
     }
 
     // 닉네임 중복 체크

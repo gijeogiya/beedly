@@ -1,5 +1,6 @@
 package com.ssafy.beedly.dto.user.response;
 
+import com.ssafy.beedly.domain.Artist;
 import com.ssafy.beedly.domain.RecommendationTag;
 import com.ssafy.beedly.domain.User;
 import com.ssafy.beedly.domain.UserRecommendation;
@@ -30,7 +31,10 @@ public class UserWithTagResponse {
     private String userRole;
     private List<RecommendationTagDto> recommendationTagDtos = new ArrayList<>();
 
-    public UserWithTagResponse(User u, List<UserRecommendation> ur) {
+    private Long artistId;
+    private String artistProfileImg;
+
+    public UserWithTagResponse(User u, List<UserRecommendation> ur, Artist artist) {
         this.userId = u.getId();
         this.userEmail = u.getUserEmail();
         this.userName = u.getUserName();
@@ -41,6 +45,11 @@ public class UserWithTagResponse {
         this.userBirthday = u.getUserBirthday();
         this.userRole = u.getUserRole().toString();
         this.recommendationTagDtos = ur.stream().map(userRecommendation -> new RecommendationTagDto(userRecommendation)).collect(Collectors.toList());
+
+        if (artist != null) {
+            this.artistId = artist.getId();
+            this.artistProfileImg = artist.getArtistProfileImg();
+        }
     }
 }
 

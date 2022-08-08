@@ -3,6 +3,7 @@ package com.ssafy.beedly.controller;
 import com.ssafy.beedly.config.web.LoginUser;
 import com.ssafy.beedly.domain.User;
 import com.ssafy.beedly.domain.type.AuctionType;
+import com.ssafy.beedly.dto.bid.response.AbsenteeBidResponse;
 import com.ssafy.beedly.dto.user.common.UserCreateFlag;
 import com.ssafy.beedly.dto.user.kakao.KakaoUserResponse;
 import com.ssafy.beedly.dto.user.request.UserCreateRequest;
@@ -12,6 +13,7 @@ import com.ssafy.beedly.dto.user.response.DuplicatedNicknameResponse;
 import com.ssafy.beedly.dto.user.response.UserPurchaseResponse;
 import com.ssafy.beedly.dto.user.response.UserSalesResponse;
 import com.ssafy.beedly.dto.user.response.UserWithTagResponse;
+import com.ssafy.beedly.service.AbsenteeBidService;
 import com.ssafy.beedly.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -34,6 +36,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final AbsenteeBidService absenteeBidService;
 
     // 카카오 로그인
     @ApiOperation(value = "카카오 로그인", notes = "인가 코드를 받아서 서버에 넘겨주세요")
@@ -65,7 +68,7 @@ public class UserController {
     }
 
     // 내 정보 + 취향 태그
-    @ApiOperation(value = "내 정보 조회", notes = "내 정보")
+    @ApiOperation(value = "내 정보 조회 + 내 취향태그", notes = "내 정보 + 내 취향태그")
     @GetMapping
     public ResponseEntity<UserWithTagResponse> getUserInfo(@ApiIgnore @LoginUser User user) {
         return ResponseEntity.ok(userService.getUserInfo(user));
@@ -107,6 +110,13 @@ public class UserController {
             return ResponseEntity.ok(userService.searchSpecialPurchasePaidInfo(productSoldId, user));
         }
         return null;
+    }
+
+    // 내가 서면 응찰한 상품목록
+    @ApiOperation(value = "내가 서면 응찰한 상품 목록", notes = "내가 서면 응찰한 상품 리스트들")
+    @GetMapping("/absenteebid")
+    public ResponseEntity<List<AbsenteeBidResponse>> findMyAbsenteeBidList(@ApiIgnore @LoginUser User user) {
+        return ResponseEntity.ok(absenteeBidService.findMyAbsenteeBidList(user));
     }
 
     // 카카오 리다이렉트 url 인가 코드 받아오기 + 로그인 처리(백엔드 테스트용)
