@@ -6,6 +6,7 @@ import com.ssafy.beedly.domain.User;
 import com.ssafy.beedly.dto.SelectedTagsDto;
 import com.ssafy.beedly.service.UserRecommendationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +25,8 @@ public class UserRecommendationController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-//    @PostMapping
-//    public void getSelectedTags(@RequestBody SelectedTagsDto tags) {
-//
-//    }
+    @GetMapping("/list")
+    public ResponseEntity<?> getRecommendedProductList(@LoginUser User user) {
+        return ResponseEntity.ok(userRecommendationService.getRecommendedProduct(user));
+    }
 }

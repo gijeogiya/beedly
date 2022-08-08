@@ -50,8 +50,14 @@ public class User extends BaseEntity {
     @Column(name = "user_bday")
     private LocalDate userBirthday;
 
-    @Column(name = "user_score")
-    private Integer userScore;
+    @Column(name = "user_brightness")
+    private Integer userBrightness;
+
+    @Column(name = "user_saturation")
+    private Integer userSaturation;
+
+    @Column(name = "user_temperature")
+    private Integer userTemperature;
 
 
 //    private LocalDateTime userDeleteDate;
@@ -89,6 +95,12 @@ public class User extends BaseEntity {
         this.userTel = request.getTel();
         this.userAddr = request.getAddr();
         this.userBirthday = request.getBirthday();
+    }
+
+    public void updateScore(Integer brightness, Integer saturation, Integer temperature) {
+        this.userBrightness = brightness;
+        this.userSaturation = saturation;
+        this.userTemperature = temperature;
     }
 
     // 테스트용 생성자
