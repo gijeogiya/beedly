@@ -138,6 +138,13 @@ const StyledDiv = styled.div`
       justify-content: space-around;
       align-items: center;
     `}
+    ${(props) =>
+    props.Column_E &&
+    css`
+      flex-direction: column;
+      justify-content: flex-end;
+      
+    `}
 
     ${(props) =>
     props.Row_SB &&
@@ -152,6 +159,14 @@ const StyledDiv = styled.div`
     css`
       flex-direction: row;
       justify-content: space-around;
+      align-items: center;
+    `}
+
+    ${(props) =>
+    props.Row_C &&
+    css`
+      flex-direction: row;
+      justify-content: center;
       align-items: center;
     `}
 

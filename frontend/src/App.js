@@ -16,6 +16,10 @@ import MyPage from "./pages/MyPage";
 import MainPage from "./pages/Main";
 import { ProductRegister } from "./pages/ProductRegister";
 import { SpecialProductRegister } from "./pages/SpecialProductRegister";
+import SaleList from "./pages/SaleList";
+import MypageDetail from "./pages/MypageDetail";
+import UpdateMyPage from "./pages/UpdateMypage.jsx";
+import SignupTag from "./pages/SignupTag";
 const Layout = () => {
   return (
     <div>
@@ -53,6 +57,10 @@ function App() {
           <Route path="/specialAuction" element={<SpecialAuction />} />
           <Route path="/specialProduct" element={<SpecialProductRegister />} />
           <Route path="/productlist" element={<ProductList />} />
+          <Route path="/saleList" element={<SaleList />} />
+          <Route path="/mypageDetail" element={<MypageDetail />} />
+          <Route path="/updateMypage" element={<UpdateMyPage />} />
+          <Route path="/signupTag" element={<SignupTag />} />
         </Route>
         <Route path="/auctionSeller" element={<Auction grade="seller" />} />
         <Route path="/auctionBuyer" element={<Auction grade="buyer" />} />

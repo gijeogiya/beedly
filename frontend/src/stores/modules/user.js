@@ -10,7 +10,7 @@ const setUser = createAction(SET_USER, (user) => ({ user }));
 
 const initialState = {
   user: {
-    userEmail: "hi",
+    userId: "",
   },
 };
 
