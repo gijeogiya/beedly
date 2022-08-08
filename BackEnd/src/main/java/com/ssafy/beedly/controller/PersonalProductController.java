@@ -85,19 +85,22 @@ public class PersonalProductController {
 		return  ResponseEntity.status(HttpStatus.OK).build();
 	}
 	// 1-4. 상품 조회
+	// 1-4-1. 상품 아이디로 조회
 	@GetMapping("/{productId}")
-	public ResponseEntity<?> getProductInfo(@PathVariable("productId") Long id) throws Exception{
+	public ResponseEntity<?> getProductInfoById(@PathVariable("productId") Long id) throws Exception{
 		System.out.println(id);
 		PersonalProductDto dto = personalProductService.getProductById(id);
 		System.out.println(dto);
 		return ResponseEntity.ok(dto);
 	}
 
-	 // 1-4-1. 상품 상세 조회
+	 // 1-4-2. 상품 상세 조회
 	 @GetMapping("/close/{productId}")
 	 public ResponseEntity<?> getProductInfoClose(@LoginUser User user, @PathVariable("productId") Long productId){
 	 	return ResponseEntity.ok(personalProductService.getProductByIdClose(user.getId(), productId));
 	 }
+
+
 
 	// 2. 카테고리 별 SLICE로 product가져오기
 	//http://localhost:8080/personalProduct/list?categoryName=""&page=0&sort=startTime,DESC
@@ -117,6 +120,12 @@ public class PersonalProductController {
 	@GetMapping("/size/{width}/{height}")
 	public ResponseEntity<?> getProductInfoBySize(@PathVariable("width") Integer width, @PathVariable("height") Integer height, Pageable pageable){
 		return ResponseEntity.ok(personalProductService.getProductBySize(width, height, pageable));
+	}
+
+	// 5. 모든 searchTag 조회
+	@GetMapping("searchTag")
+	public  ResponseEntity<?> getSearchTagsInfo(Pageable pageable){
+		return ResponseEntity.ok(personalProductService.getSearchTagsInfo());
 	}
 
 
