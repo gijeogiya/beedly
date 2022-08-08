@@ -105,7 +105,9 @@ OpenVidu 2.22.0
 
 ### Site
 
-[http://i7a601.p.ssafy.io](https://i7a601.p.ssafy.io/api/swagger-ui/index.html)
+웹앱
+
+[http://i7a601.p.ssafy.io](https://i7a601.p.ssafy.io/)
 
 ### 개발 진행 중
 
