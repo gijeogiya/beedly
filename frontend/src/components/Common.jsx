@@ -7,6 +7,7 @@ import SearchIcon from "../assets/img/SearchIcon.svg";
 import ListIcon from "../assets/img/ListIcon.svg";
 import OnairIcon from "../assets/img/OnairIcon.svg";
 import MypageIcon from "../assets/img/MypageIcon.svg";
+import SampleProfile from "../assets/img/SampleProfile.png";
 import { Notice } from "./Notice";
 import { UserGuide } from "./UserGuide";
 // 고정스타일링
@@ -40,13 +41,13 @@ const FooterContent = ({ title, desc, setOpen, openGuid }) => {
           onClick={
             d === "공지사항"
               ? () => {
-                  setOpen(true);
-                }
+                setOpen(true);
+              }
               : d === "이용가이드"
-              ? () => {
+                ? () => {
                   openGuid(true);
                 }
-              : () => {}
+                : () => { }
           }
         >
           {d}
@@ -155,7 +156,7 @@ export function NavBar() {
     });
 
     return () => {
-      window.removeEventListener("scroll", () => {});
+      window.removeEventListener("scroll", () => { });
     };
   }, []);
   return (
@@ -193,6 +194,17 @@ const ProductImg = styled.img`
   src: ${(props) => props.src || ""};
 `;
 
+const Image = styled.img`
+  src: ${(props) => props.src || ""};
+  width: ${(props) => props.width || "28vw"};
+  height: ${(props) => props.height || "28vw"};
+  border-radius: 10%;
+  object-fit: cover;
+`
+export function StyledImg({ src, width, height, alt }) {
+  return <Image src={src} width={width} height={height} alt={alt}></Image>
+}
+
 const ProductFrame = styled.div`
   border-radius: 14px;
   width: 175px;
@@ -214,6 +226,17 @@ const ArtistImg = styled.img`
   src: ${(props) => props.src || ""};
   border-radius: 50%;
 `;
+
+
+const ProfileImg = styled.img`
+  width:25vw;
+  height:25vw;
+  object-fit: cover;
+  src: ${(props) => props.src || SampleProfile};
+  border-radius: 50%;
+`;
+export const StyledProfile = (props) =>
+  <ProfileImg src={props.src} {...props}></ProfileImg>
 
 //상품 프레임
 export function Product({
@@ -272,7 +295,7 @@ export function AuctionArtist({ title, artist, artistSrc }) {
 }
 
 //작가 프레임
-export function Artist({ artist, artistSrc }) {}
+export function Artist({ artist, artistSrc }) { }
 // const ArtistImg = styled.
 
 //텍스트 폼
@@ -286,9 +309,9 @@ const TextForm = styled.div`
 `;
 
 //텍스트 사이즈, 컬러, 웨이트, 글자를 설정할 수 있는 컴포넌트
-export function StyledText({ size, color, weight, text }) {
+export function StyledText({ size, color, weight, text, style }) {
   return (
-    <TextForm size={size} color={color} weight={weight}>
+    <TextForm size={size} color={color} weight={weight} style={style}>
       {text}
     </TextForm>
   );
