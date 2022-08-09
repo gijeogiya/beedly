@@ -166,12 +166,12 @@ export const ProductRegister = () => {
   const [width, setWidth] = useState("");
   const [depth, setDepth] = useState("");
   const [tags, setTags] = useState([
-    "수채화",
-    "유화",
-    "정물화",
-    "인물화",
-    "팝아트",
-    "풍경화",
+    { name: "수채화", id: 0 },
+    { name: "유화", id: 1 },
+    { name: "정물화", id: 2 },
+    { name: "인물화", id: 3 },
+    { name: "팝아트", id: 4 },
+    { name: "풍경화", id: 5 },
   ]);
   const [select, setSelect] = useState([]);
   const [open, setOpen] = useState(false);
@@ -652,16 +652,18 @@ export const ProductRegister = () => {
               {tags.map((tag, idx) => {
                 return (
                   <Button
-                    key={idx}
+                    key={tag.id}
                     onClick={() => {
-                      !select.includes(idx)
-                        ? setSelect((select) => [...select, idx])
-                        : setSelect(select.filter((Button) => Button !== idx));
+                      !select.includes(tag.id)
+                        ? setSelect((select) => [...select, tag.id])
+                        : setSelect(
+                            select.filter((Button) => Button !== tag.id)
+                          );
                     }}
-                    SmallThinWhite={!select.includes(idx) ? true : false}
-                    SmallThinYellow={select.includes(idx) ? true : false}
+                    SmallThinWhite={!select.includes(tag.id) ? true : false}
+                    SmallThinYellow={select.includes(tag.id) ? true : false}
                   >
-                    #{tag}
+                    #{tag.name}
                   </Button>
                 );
               })}

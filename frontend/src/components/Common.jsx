@@ -156,6 +156,7 @@ export function NavBar() {
 
     return () => {
       window.removeEventListener("scroll", () => {});
+      handleShow("hidden");
     };
   }, []);
   return (
