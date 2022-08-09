@@ -18,9 +18,9 @@ export function BannerTable() {
       <Grommet theme={GrommetTheme}>
         <Box width="medium" height="medium" overflow="hidden" fill={true} controls={false}>
           <Carousel fill={true} wrap={true} play={6000}>
-            <Image fit="cover" src={Banner1} />
-            <Image fit="cover" src={Banner2} />
-            <Image fit="cover" src={Banner3} />
+            <Image fill={true} fit="cover" src={Banner1} />
+            <Image fill={true} fit="cover" src={Banner2} />
+            <Image fill={true} fit="cover" src={Banner3} />
           </Carousel>
         </Box>
       </Grommet>
