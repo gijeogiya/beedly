@@ -1,5 +1,6 @@
 package com.ssafy.beedly.service;
 
+import com.ssafy.beedly.common.exception.DuplicateException;
 import com.ssafy.beedly.common.exception.NotFoundException;
 import com.ssafy.beedly.common.exception.NotMatchException;
 import com.ssafy.beedly.domain.*;
@@ -12,8 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
+import static com.ssafy.beedly.common.exception.DuplicateException.PERSONAL_AUCTION_PRODUCT_DUPLICATED;
 import static com.ssafy.beedly.common.exception.NotFoundException.*;
 import static com.ssafy.beedly.common.exception.NotMatchException.AUCTION_NOT_MATCH;
 import static com.ssafy.beedly.common.exception.NotMatchException.PRODUCT_OWNER_NOT_MATCH;
@@ -40,6 +43,12 @@ public class PersonalAuctionService {
         if (findProduct.getUser().getId() != user.getId()) {
             throw new NotMatchException(PRODUCT_OWNER_NOT_MATCH);
         }
+
+        List<PersonalAuction> findAuction = personalAuctionRepository.findByPersonalProductId(findProduct.getId());
+        if (findAuction.size() >= 1) {
+            throw new DuplicateException(PERSONAL_AUCTION_PRODUCT_DUPLICATED);
+        }
+
         PersonalAuction savePersonalAuction = personalAuctionRepository.save(PersonalAuction.createPersonalAuction(findProduct, user));
 
         return savePersonalAuction.getId();

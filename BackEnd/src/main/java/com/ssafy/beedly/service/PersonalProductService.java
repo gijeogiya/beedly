@@ -136,7 +136,7 @@ public class PersonalProductService {
 		List<SearchTag> searchTag = personalProductRepository.findSearchTagByProductId(findProduct.getId());
 		Optional<PersonalFavorite> personalFavorite = personalProductRepository.findUserIdByPersonalFavorite(findProduct.getId(), id);
 		Optional<AbsenteeBid> absenteeBid = personalProductRepository.findUserIdByAbsenteeBid(findProduct.getId(), id);
-		Optional<PersonalAuction> auctionInfo = personalAuctionRepository.findByProductId(findProduct.getId());
+		Optional<PersonalAuction> auctionInfo = personalAuctionRepository.findByOnAirProductId(findProduct.getId());
 
 
 
