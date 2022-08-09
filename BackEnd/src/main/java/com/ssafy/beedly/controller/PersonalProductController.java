@@ -101,7 +101,7 @@ public class PersonalProductController {
 	@ApiOperation(value = "상시 상품 상세 조회(상품 식별자로)", notes = "로그인한 유저가 이 상품에 서면응찰을 했는지, 했으면 그 가격, 이 상품에 찜을 했는지 여부, 현재 경매 진행중인지 여부 정보들 함께")
 	@ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
 	@GetMapping("/{productId}")
-	public ResponseEntity<PersonalProductCloseDto> getProductInfoClose(@LoginUser User user, @PathVariable("productId") Long productId){
+	public ResponseEntity<PersonalProductCloseDto> getProductInfoClose(@ApiIgnore @LoginUser User user, @PathVariable("productId") Long productId){
 		return ResponseEntity.ok(personalProductService.getProductByIdClose(user.getId(), productId));
 	}
 
