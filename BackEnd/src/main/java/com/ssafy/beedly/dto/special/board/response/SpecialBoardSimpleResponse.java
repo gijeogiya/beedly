@@ -1,5 +1,6 @@
 package com.ssafy.beedly.dto.special.board.response;
 
+import com.ssafy.beedly.domain.SpecialAuction;
 import com.ssafy.beedly.domain.SpecialBoard;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,17 @@ public class SpecialBoardSimpleResponse {
     private Long userId;
 
     public SpecialBoardSimpleResponse(SpecialBoard sb) {
+        this.boardId = sb.getId();
+        this.startTime = sb.getStartTime();
+        this.boardTitle = sb.getBoardTitle();
+        this.boardSubtitle = sb.getBoardSubtitle();
+        this.boardDesc = sb.getBoardDesc();
+        this.mainImgUri = sb.getMainImgUri();
+        this.userId = sb.getUser().getId();
+    }
+
+    public SpecialBoardSimpleResponse(SpecialAuction sa) {
+        SpecialBoard sb = sa.getSpecialBoard();
         this.boardId = sb.getId();
         this.startTime = sb.getStartTime();
         this.boardTitle = sb.getBoardTitle();

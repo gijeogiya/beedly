@@ -2,6 +2,7 @@ package com.ssafy.beedly.domain;
 
 import com.ssafy.beedly.domain.common.BaseEntity;
 import com.ssafy.beedly.domain.type.SoldStatus;
+import com.ssafy.beedly.domain.type.YN;
 import com.ssafy.beedly.dto.special.product.request.CreateSpecialProductRequest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -60,6 +61,10 @@ public class SpecialProduct extends BaseEntity {
     @OneToMany(mappedBy = "specialProduct")
     private List<SpecialProductImg> specialProductImgs = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "is_deleted", length = 1)
+    private YN isDeleted = YN.N;
+
     public static SpecialProduct createSpecialProduct(CreateSpecialProductRequest request, Category findCategory, SpecialBoard findBoard) {
         SpecialProduct specialProduct = new SpecialProduct();
         specialProduct.productName = request.getProductName();
@@ -89,5 +94,9 @@ public class SpecialProduct extends BaseEntity {
         this.depth = request.getDepth();
         this.artistName = request.getArtistName();
         this.category = category;
+    }
+
+    public void deleteSpecialProduct() {
+        this.isDeleted = YN.Y;
     }
 }
