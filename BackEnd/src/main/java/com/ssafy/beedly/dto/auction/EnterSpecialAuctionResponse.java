@@ -2,12 +2,15 @@ package com.ssafy.beedly.dto.auction;
 
 import com.ssafy.beedly.domain.SpecialAuction;
 import com.ssafy.beedly.domain.SpecialProduct;
+import com.ssafy.beedly.domain.SpecialProductImg;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -32,6 +35,9 @@ public class EnterSpecialAuctionResponse implements Serializable {
     @ApiModelProperty(notes = "작가 이름")
     private String artistName;
 
+    @ApiModelProperty(notes = "상품 이미지들")
+    private List<String> productImages = new ArrayList<>();
+
     public EnterSpecialAuctionResponse(Long auctionId, SpecialProduct sp) {
         this.auctionId = auctionId;
         this.productId = sp.getId();
@@ -39,5 +45,9 @@ public class EnterSpecialAuctionResponse implements Serializable {
         this.productDesc = sp.getProductDesc();
         this.startPrice = sp.getStartPrice();
         this.artistName = sp.getArtistName();
+        List<SpecialProductImg> images = sp.getSpecialProductImgs();
+        for (SpecialProductImg image : images) {
+            this.productImages.add(image.getImgUri());
+        }
     }
 }
