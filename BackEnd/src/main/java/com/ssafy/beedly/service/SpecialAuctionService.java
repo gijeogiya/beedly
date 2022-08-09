@@ -1,5 +1,6 @@
 package com.ssafy.beedly.service;
 
+import com.ssafy.beedly.common.exception.DuplicateException;
 import com.ssafy.beedly.common.exception.NotFoundException;
 import com.ssafy.beedly.common.exception.NotMatchException;
 import com.ssafy.beedly.domain.*;
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.ssafy.beedly.common.exception.DuplicateException.PERSONAL_AUCTION_PRODUCT_DUPLICATED;
+import static com.ssafy.beedly.common.exception.DuplicateException.SPECIAL_AUCTION_BOARD_DUPLICATED;
 import static com.ssafy.beedly.common.exception.NotFoundException.PRODUCT_NOT_FOUND;
 import static com.ssafy.beedly.common.exception.NotFoundException.SPECIAL_BOARD_NOT_FOUND;
 import static com.ssafy.beedly.common.exception.NotMatchException.SPECIAL_BOARD_OWNER_NOT_MATCH;
@@ -38,6 +41,12 @@ public class SpecialAuctionService {
         if (findSpecialBoard.getUser().getId() != user.getId()) {
             throw new NotMatchException(SPECIAL_BOARD_OWNER_NOT_MATCH);
         }
+
+        List<SpecialAuction> findAuction = specialAuctionRepository.findBySpecialBoardId(findSpecialBoard.getId());
+        if (findAuction.size() >= 1) {
+            throw new DuplicateException(SPECIAL_AUCTION_BOARD_DUPLICATED);
+        }
+
         SpecialAuction saveSpecialAuction = SpecialAuction.createSpecialAuction(findSpecialBoard, user);
 
         return saveSpecialAuction.getId();
