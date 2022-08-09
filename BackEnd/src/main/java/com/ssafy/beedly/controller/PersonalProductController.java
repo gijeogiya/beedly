@@ -6,7 +6,6 @@ import com.ssafy.beedly.dto.PersonalProductCloseDto;
 import com.ssafy.beedly.dto.personal.product.request.CreatePersonalProductRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -70,7 +69,7 @@ public class PersonalProductController {
 			" \" saturation : 2,\" " +
 			" \" temperature : 0\" " +
 			"}", produces = "multipart/form-data")
-	@ApiImplicitParam(name = "productId", value = "상시 상품 식별자", paramType = "path", dataType = "Long")
+	@ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
 	@PatchMapping("/{productId}")
 	public ResponseEntity<?> updateProductInfo(@ApiIgnore @LoginUser User user, @RequestPart CreatePersonalProductRequest request
 			, @RequestPart(required = false) List<MultipartFile> images,  @PathVariable Long productId){
@@ -80,7 +79,7 @@ public class PersonalProductController {
 
 	// 1-3. 상픔 삭제
 	@ApiOperation(value = "상시 상품 삭제", notes = "상시 상품 삭제")
-	@ApiImplicitParam(name = "productId", value = "상시 상품 식별자", paramType = "path", dataType = "Long")
+	@ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
 	@DeleteMapping("/{productId}")
 	public ResponseEntity<?> deleteProductInfo(@PathVariable Long productId){
 		personalProductService.delete(productId);
@@ -88,27 +87,26 @@ public class PersonalProductController {
 	}
 	// 1-4. 상품 조회
 	// 1-4-1. 상품 아이디로 조회
-	@ApiOperation(value = "상시 상품 조회(상품 식별자로)", notes = "상품 식별자로 상시 상품 조회")
-	@ApiImplicitParam(name = "productId", value = "상시 상품 식별자", paramType = "path", dataType = "Long")
-	@GetMapping("/{productId}")
-	public ResponseEntity<PersonalProductDto> getProductInfoById(@PathVariable("productId") Long id) throws Exception{
-		System.out.println(id);
-		PersonalProductDto dto = personalProductService.getProductById(id);
-		System.out.println(dto);
-		return ResponseEntity.ok(dto);
-	}
+//	@ApiOperation(value = "상시 상품 조회(상품 식별자로)", notes = "상품 식별자로 상시 상품 조회")
+//	@ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
+//	@GetMapping("/{productId}")
+//	public ResponseEntity<PersonalProductDto> getProductInfoById(@PathVariable("productId") Long id) throws Exception{
+//		System.out.println(id);
+//		PersonalProductDto dto = personalProductService.getProductById(id);
+//		System.out.println(dto);
+//		return ResponseEntity.ok(dto);
+//	}
 
 	 // 1-4-2. 상품 상세 조회
-	@ApiOperation(value = "상시 상품 상세 조회(상품 식별자로)", notes = "로그인한 유저가 이 상품에 서면응찰을 했는지, 했으면 그 가격, 이 상품에 찜을 했는지 여부")
-	@ApiImplicitParam(name = "productId", value = "상시 상품 식별자" , paramType = "path", dataType = "Long")
-	@GetMapping("/close/{productId}")
-	public ResponseEntity<PersonalProductCloseDto> getProductInfoClose(@LoginUser User user, @PathVariable("productId") Long productId){
+	@ApiOperation(value = "상시 상품 상세 조회(상품 식별자로)", notes = "로그인한 유저가 이 상품에 서면응찰을 했는지, 했으면 그 가격, 이 상품에 찜을 했는지 여부, 현재 경매 진행중인지 여부 정보들 함께")
+	@ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
+	@GetMapping("/{productId}")
+	public ResponseEntity<PersonalProductCloseDto> getProductInfoClose(@ApiIgnore @LoginUser User user, @PathVariable("productId") Long productId){
 		return ResponseEntity.ok(personalProductService.getProductByIdClose(user.getId(), productId));
 	}
 
 
-	@ApiOperation(value = "카테고리별로 상품 리스트 가져오기",  notes = "Pageable로 필요한거 적기 예시 ) http://localhost:8080/personalProduct/list?categoryName=\"\"&page=0&sort=startTime,DESC ")
-	@ApiImplicitParam(name = "category", value = "카테고리 이름" , paramType = "query", dataType = "String")
+
 	// 2. 카테고리 별 SLICE로 product가져오기
 	//http://localhost:8080/personalProduct/list?categoryName=""&page=0&sort=startTime,DESC
 	@GetMapping("/list")
@@ -116,8 +114,6 @@ public class PersonalProductController {
 		return ResponseEntity.ok(personalProductService.getProductByCategory(category, pageable));
 	}
 
-	@ApiOperation(value = "카테고리별로 진행중인 상품 리스트 가져오기",  notes = "Pageable로 필요한거 적기 예시 ) http://localhost:8080/personalProduct/list?categoryName=\"\"&page=0&sort=startTime,DESC ")
-	@ApiImplicitParam(name = "category", value = "카테고리 이름" , paramType = "query", dataType = "String")
 	// 3. 카테고리 별 SLICE로 진행중인 product가져오기
 	//http://localhost:8080/personalProduct/list/onAir?page=0&size=2&sort=startTime,DESC
 	@GetMapping("/list/onAir")
@@ -125,16 +121,11 @@ public class PersonalProductController {
 		return ResponseEntity.ok(personalProductService.getProductOnAirByCategory(category, pageable));
 	}
 
-	@ApiOperation(value = "상품 사이즈로 검색한 결과 가져오기",  notes = "Pageable로 필요한거 적기 예시 ) http://localhost:8080/personalProduct/list?categoryName=\"\"&page=0&sort=startTime,DESC ")
-	@ApiImplicitParams({
-		@ApiImplicitParam(name = "width" , value = "가로", paramType = "path", dataType = "int"),
-		@ApiImplicitParam(name = "height", value = "세로", paramType = "path", dataType = "int")})
 	// 4. 상품 사이즈별로 조회
 	@GetMapping("/size/{width}/{height}")
 	public ResponseEntity<?> getProductInfoBySize(@PathVariable("width") Integer width, @PathVariable("height") Integer height, Pageable pageable){
 		return ResponseEntity.ok(personalProductService.getProductBySize(width, height, pageable));
 	}
-
 
 	// 5. 모든 searchTag 조회
 	@GetMapping("searchTag")

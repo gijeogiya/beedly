@@ -49,7 +49,7 @@ public class SpecialBoardController {
     }
 
     // 진행 예정인 기획전 게시글 리스트 조회
-    @ApiOperation(value = "기획전 게시글 리스트 조회", notes = "조회 시점으로 경매 예정인 게시글들만 조회")
+    @ApiOperation(value = "경매 예정인 기획전 게시글 리스트 조회", notes = "조회 시점으로 경매 예정인 게시글들만 조회")
     @GetMapping("/special/board")
     public ResponseEntity<List<SpecialBoardSimpleResponse>> searchWaitingSpecialBoards() {
         return ResponseEntity.ok(specialBoardService.searchWaitingSpecialBoards());
@@ -81,10 +81,11 @@ public class SpecialBoardController {
         return ResponseEntity.ok().build();
     }
 
-    // 유진누나 연습 코드
-    @GetMapping
-    public void dfdfd(@RequestBody ListRequest dddd) {
-
+    // 현재 진행중인 기획전 게시판
+    @ApiOperation(value = "현재 진행중인 기획전 게시글 리스트 조회", notes = "현재 경매중인 기획전 게시글 조회")
+    @GetMapping("/special/board/onair")
+    public ResponseEntity<List<SpecialBoardSimpleResponse>> searchOnAirSpecialBoards() {
+        return ResponseEntity.ok(specialBoardService.searchOnAirSpecialBoards());
     }
 
 }
