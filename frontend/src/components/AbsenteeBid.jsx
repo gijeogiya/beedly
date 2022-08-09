@@ -6,10 +6,9 @@ import Button from "./Button";
 import CloseButton from "../assets/images/close.png";
 import { StyledHr, StyledText } from "./Common";
 import { useEffect } from "react";
-import { Box, Image, Pagination } from "grommet";
-import { Outlet, Route, Routes } from "react-router-dom";
-import { Search } from "grommet-icons";
-import { ProductRegister } from "../pages/ProductRegister";
+import { Box, Image } from "grommet";
+import { moneyFormat } from "../stores/modules/basicInfo";
+
 const HeaderDiv = styled.div`
   margin: 5px;
   display: flex;
@@ -30,7 +29,7 @@ const HeaderBox = ({ goBack }) => {
       <div style={{ width: "10vw" }}></div>
       <StyledText size="20px" weight="bold" text="서면 응찰" />
       <BackButton onClick={goBack}>
-        <img src={CloseButton} />
+        <img src={CloseButton} alt="" />
       </BackButton>
     </HeaderDiv>
   );
@@ -40,10 +39,6 @@ export const AbsenteeBid = ({ open, onDismiss, product }) => {
   const [clicked, setClicked] = useState(false);
 
   useEffect(() => {}, []);
-
-  const handleNotice = (e, i) => {
-    setClicked(true);
-  };
 
   return (
     <BottomSheet
@@ -76,7 +71,7 @@ export const AbsenteeBid = ({ open, onDismiss, product }) => {
           </Box>
         </Box>
         <Box>
-          <StyledText text={`${product.price}원`} />
+          <StyledText text={`${moneyFormat(product.price)}원`} />
           <StyledText text="희망 응찰가" />
           <StyledHr width="100%" />
           <StyledText text="예상 결제 금액" />

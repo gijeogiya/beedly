@@ -12,7 +12,7 @@ export const Temp = () => {
   const getProducts = async () => {
     const params = {
       categoryName: "회화",
-      page: 1,
+      page: 0,
       size: 20,
       sort: "createdDate,DESC",
     };

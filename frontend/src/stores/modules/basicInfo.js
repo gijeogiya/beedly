@@ -5,3 +5,7 @@ export const Category = [
   { label: "사진", value: 4 },
   { label: "입체", value: 5 },
 ];
+
+export const moneyFormat = (number) => {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};

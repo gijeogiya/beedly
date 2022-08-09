@@ -14,12 +14,14 @@ import ChatComponent from "../components/openvidu/components/chat/ChatComponent"
 import Button from "../components/Button";
 import { useRef } from "react";
 import { createRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { getAuctionProduct } from "../utils/api";
+import { moneyFormat } from "../stores/modules/basicInfo";
 
 const MainContent = styled.img`
   src: ${(props) => props.src || ""};
@@ -100,10 +102,6 @@ const ProductBox = styled.div`
   width: 80%;
   margin: 0 auto;
 `;
-
-const moneyFormat = (number) => {
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
 
 const AuctionInfoDiv = styled.div`
   display: flex;
@@ -401,7 +399,13 @@ function ExitButton({ handleClickOpen, handleClose, handleAuctionExit, open }) {
   );
 }
 
-export const Auction = ({ grade }) => {
+export const Auction = () => {
+  const location = useLocation();
+  const { grade } = location.state;
+  const { auctionId } = location.state;
+  const { userName } = location.state;
+  const [loading, setLoading] = useState(true);
+  console.log(location.state);
   const [visible, setVisible] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
   const [isCalled, setIsCalled] = useState(false);
@@ -419,17 +423,29 @@ export const Auction = ({ grade }) => {
   const [localUser, setLocalUser] = useState(undefined);
 
   useEffect(() => {
-    setBidInfo({
-      title: "Ice Age",
-      category: "회화",
-      artist: "무느스크 스키오스키",
-      productSrc: product1,
-      currentBidder: "이아현",
-      currentPrice: 310000,
-      callPrice: 10000,
-    });
-    setInitPrice(310000);
-  }, []);
+    if (loading) {
+      getAuctionProduct(
+        auctionId,
+        (response) => {
+          console.log(response);
+          setBidInfo({
+            title: response.data.productName,
+            category: "회화",
+            artist: response.data.userName,
+            productSrc: response.data.artistProfileImg,
+            currentBidder: "없음",
+            currentPrice: response.data.startPrice,
+            callPrice: 10000,
+          });
+          setInitPrice(response.data.startPrice);
+          setLoading(false);
+        },
+        (fail) => {
+          console.log(fail);
+        }
+      );
+    }
+  }, [loading]);
   // const bidInfo = {
   //   title: "Ice Age",
   //   category: "회화",
@@ -478,7 +494,9 @@ export const Auction = ({ grade }) => {
     setOpen(false);
   };
 
-  return (
+  return loading ? (
+    <div></div>
+  ) : (
     <div>
       {/* <MainContent src={image} /> */}
       <ErrorBoundary>
@@ -488,6 +506,8 @@ export const Auction = ({ grade }) => {
           grade={grade}
           ref={ref}
           openviduServerUrl="https://i7a601.p.ssafy.io:8443"
+          sessionName={auctionId}
+          userName={userName}
           // openviduServerUrl="https://localhost:4443"
         />
       </ErrorBoundary>

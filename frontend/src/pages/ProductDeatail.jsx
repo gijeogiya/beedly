@@ -4,41 +4,35 @@ import Button from "../components/Button";
 import BackBtn from "../assets/images/backButton.png";
 import MoreBtn from "../assets/images/more2.png";
 import LikeBtn from "../assets/images/like.png";
-import Product1 from "../assets/images/product1.png";
 import ShareBtn from "../assets/images/share.svg";
 import Clock from "../assets/images/clock.png";
+import FileText from "../assets/images/file-text.png";
 import { BackButton } from "./ProductRegister";
-import styled from "styled-components";
 import { StyledText } from "../components/Common";
 import { HorizonScrollRowTable } from "../components/HorizonScrollTable";
 import { useEffect } from "react";
-import { getPersonalProduct } from "../utils/api";
-import { useParams } from "react-router-dom";
-import { Category } from "../stores/modules/basicInfo";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-
-import CloseButton from "../assets/images/close.png";
+import { getPersonalProduct, registerAuction } from "../utils/api";
+import { useNavigate, useParams } from "react-router-dom";
+import { Category, moneyFormat } from "../stores/modules/basicInfo";
 import { AbsenteeBid } from "../components/AbsenteeBid";
-
+import { useSelector } from "react-redux";
 const HeaderBox = () => {
   return (
     <Box direction="row" justify="between" margin="small">
       <Box>
         <BackButton>
-          <img src={BackBtn} />
+          <img src={BackBtn} alt="" />
         </BackButton>
       </Box>
       <Box direction="row">
         <Box>
           <BackButton>
-            <img src={MoreBtn} />
+            <img src={MoreBtn} alt="" />
           </BackButton>
         </Box>
         <Box>
           <BackButton>
-            <img src={ShareBtn} />
+            <img src={ShareBtn} alt="" />
           </BackButton>
         </Box>
       </Box>
@@ -46,64 +40,172 @@ const HeaderBox = () => {
   );
 };
 
-const MainImg = styled.img`
-  width: 100%;
-`;
+// const MainImg = styled.img`
+//   width: 100%;
+// `;
 
 export const ProductDeatail = () => {
   const { id } = useParams();
+
   const [loading, setLoading] = useState(true);
+
   const [productName, setProductName] = useState("");
   const [productArtist, setProductArtist] = useState("");
+  const [artistId, setArtistId] = useState("");
   const [category, setCategory] = useState("카테고리");
   const [startTime, setStartTime] = useState("");
   const [startPrice, setStartPrice] = useState("");
   const [productDesc, setProductDesc] = useState("");
   const [productImages, setProductImages] = useState([]);
   const [productLike, setProductLike] = useState(0);
-  const [product, setProduct] = useState({});
+  const [soldStatus, setSoldStatus] = useState("");
+  const [nowDate, setNowDate] = useState(new Date());
+  const [artistNickname, setArtistNickname] = useState("");
+  // const [product, setProduct] = useState({});
   const [open, setOpen] = useState(false);
+  const [auctionId, setAuctionId] = useState("");
+  const [isOnAir, setIsOnAir] = useState("");
+  const User = useSelector((state) => state.user.user.user);
+  const navigate = useNavigate();
+  const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
+  // console.log("user : ", User);
   useEffect(() => {
     if (loading)
       getPersonalProduct(
         // id,
-        31,
+        id === undefined ? 32 : id,
         (response) => {
-          // console.log(response.data);
+          console.log(response.data);
           // const product = response.data;
-          setProductName(response.data.productName);
-          setProductArtist(response.data.userName);
-          setCategory(response.data.categoryId);
-          setStartTime(response.data.startTime);
-          setStartPrice(response.data.startPrice);
-          setProductDesc(response.data.productDesc);
-          setProductImages([...response.data.productImgs]);
-          setProductLike(response.data.favoriteCount);
-          setProduct(response.data);
-          console.log(response);
+          handleDataChanges(response.data);
+          // console.log(response);
+
           setLoading(false);
         },
         (fail) => {
           console.log(fail);
         }
       );
-  });
+
+    const ee = setInterval(() => {
+      if (!isStart()) setNowDate(new Date());
+    }, 1000);
+
+    return () => clearInterval(ee);
+  }, [loading, id]);
+
+  const handleDataChanges = (data) => {
+    setProductName(data.personalProductDto.productName);
+    setProductArtist(data.userName);
+    setCategory(data.personalProductDto.categoryId);
+    setStartTime(data.personalProductDto.startTime);
+    setStartPrice(data.personalProductDto.startPrice);
+    setProductDesc(data.productDesc);
+    setProductImages([...data.personalProductDto.productImgs]);
+    setProductLike(data.personalProductDto.favoriteCount);
+    setSoldStatus(data.personalProductDto.soldStatus);
+    setArtistNickname(data.personalProductDto.userNickname);
+    setArtistId(data.personalProductDto.userId);
+    setAuctionId(data.auctionId);
+    setIsOnAir(data.isOnAir);
+    // setProduct(data);
+  };
 
   const handleClose = () => {
     setOpen(false);
   };
 
+  const handleDate = (date) => {
+    let now = nowDate;
+    let dueDate = new Date(date);
+    let diff = dueDate.getTime() + KR_TIME_DIFF - now.getTime();
+    // console.log(diff);
+    if (diff <= 0)
+      return User.userId !== artistId ? "실시간 경매 입장" : "경매 시작";
+    else {
+      let sec = 1000;
+      let minute = sec * 60;
+      let hour = minute * 60;
+      let day = 24 * hour;
+      let month = day * 30;
+      if (diff / month >= 1) {
+        return `${diff / month}달 남음`;
+      } else if (diff / day >= 1) {
+        return `${parseInt(diff / day)}일 남음`;
+      } else {
+        return `${diff / hour >= 1 ? `${parseInt(diff / hour)}:` : ``}${
+          diff / minute >= 1
+            ? `${
+                parseInt((diff % hour) / minute) < 10
+                  ? `0${parseInt((diff % hour) / minute)}`
+                  : parseInt((diff % hour) / minute)
+              }:`
+            : ``
+        }${
+          parseInt((diff % minute) / sec) < 10
+            ? `0${parseInt((diff % minute) / sec)}`
+            : parseInt((diff % minute) / sec)
+        }`;
+      }
+    }
+  };
+
+  const handleAbsentee = () => {
+    if (!isStart()) setOpen(true);
+  };
+
+  const isStart = () => {
+    let dueDate = new Date(startTime);
+    let now = new Date();
+    return dueDate.getTime() <= now.getTime() ? true : false;
+  };
+
+  const enterAuction = () => {
+    if (isStart()) {
+      if (auctionId === null) {
+        if (artistId === User.userId) {
+          registerAuction(
+            id === undefined ? 32 : id,
+            (response) => {
+              console.log(response);
+              navigate("/personalAuction", {
+                state: {
+                  grade: artistId === User.userId ? "seller" : "buyer",
+                  auctionId: auctionId,
+                },
+              });
+            },
+            (fail) => {
+              console.log(fail);
+            }
+          );
+        } else {
+          alert("경매 시작 전 입니다.");
+        }
+      } else {
+        navigate("/personalAuction", {
+          state: {
+            grade: artistId === User.userId ? "seller" : "buyer",
+            auctionId: auctionId,
+            userName: User.userName,
+          },
+        });
+      }
+    } else {
+      alert("경매 시작 전입니다.");
+    }
+  };
+
   const stringToDate = (string) => {
+    // console.log(string);
     const date = string.split("T");
     const yyyyMMdd = date[0].split("-");
     const HHmm = date[1].split(":");
-    return (
-      `${yyyyMMdd[0]}년 ${parseInt(yyyyMMdd[1])}월 ${parseInt(
-        yyyyMMdd[2]
-      )}일  ${parseInt(HHmm[0])}시 ${
-        parseInt(HHmm[1]) != 0 ? `${parseInt(HHmm[1])}분` : ``
-      }` + ` 예정`
-    );
+    return `${yyyyMMdd[0]}년 ${parseInt(yyyyMMdd[1])}월 ${parseInt(
+      yyyyMMdd[2]
+    )}일  ${parseInt(HHmm[0])}시 ${
+      parseInt(HHmm[1]) !== 0 ? `${parseInt(HHmm[1])}분` : ``
+    } 예정`;
     // return date.toString("yyyy년 MM월 dd일 HH시 mm분 예정");
   };
   // const getProductInfo = async () => {
@@ -128,8 +230,10 @@ export const ProductDeatail = () => {
   //     }
   //   );
   // };
-  if (loading) return <div>Loading...</div>;
-  return (
+  // if (loading) return ;
+  return loading ? (
+    <div>Loading...</div>
+  ) : (
     <Box>
       <HeaderBox />
       <Box>
@@ -149,7 +253,7 @@ export const ProductDeatail = () => {
           />
           <StyledText text={productArtist} />
           <StyledText text={productName} />
-          <StyledText text={`${startPrice}원 ~`} />
+          <StyledText text={`${moneyFormat(startPrice)}원 ~`} />
           <StyledText text={stringToDate(startTime)} />
         </Box>
         <Box margin="small">
@@ -165,24 +269,43 @@ export const ProductDeatail = () => {
         <StyledText text="이 작품과 비슷한 작품" />
         <HorizonScrollRowTable />
       </Box>
-      <Box direction="row">
+      <Box direction="row" margin="small">
         <Box align="center" margin="small">
-          <BackButton>
-            <img src={LikeBtn} />
-          </BackButton>
-          <StyledText text={productLike} />
+          <Button
+            children={
+              <Box align="center">
+                <img src={LikeBtn} alt="" />
+                <StyledText text={productLike} />
+              </Box>
+            }
+          ></Button>
         </Box>
         <Box
           alignContent="center"
           align="center"
           justify="center"
           direction="row"
+          width="100%"
         >
-          <Button
-            MediumGreen
-            children="서면응찰"
-            onClick={() => setOpen(true)}
-          />
+          {User.userId !== artistId ? (
+            <Button
+              MediumGreen={!isStart()}
+              MediumGray={isStart()}
+              disabled={isStart()}
+              children={
+                <Box direction="row" margin="xsmall" justify="center">
+                  <img src={FileText} alt="" />
+                  <StyledText
+                    text="서면응찰"
+                    color="white"
+                    size="10px"
+                    style={{ marginLeft: "10px" }}
+                  />
+                </Box>
+              }
+              onClick={handleAbsentee}
+            />
+          ) : null}
           <AbsenteeBid
             open={open}
             onDismiss={handleClose}
@@ -194,46 +317,22 @@ export const ProductDeatail = () => {
               price: startPrice,
             }}
           />
-          {/* <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <Box direction="row" width="100%" justify="end">
-              <BackButton onClick={handleClose}>
-                <img src={CloseButton} />
-              </BackButton>
-            </Box>
-
-            <DialogContent>
-              <Box align="center">
-                <StyledText text="작품을 등록하시겠습니까?" weight="bold" />
-                <p />
-                <StyledText
-                  text="경매 시작가는 수정이 불가능합니다."
-                  color="red"
-                  size="10px"
-                />
-              </Box>
-            </DialogContent>
-            <DialogActions>
-              <Box direction="row" width="100%" justify="center">
-                <Button
-                  MediumBlack
-                  onClick={() => {}}
-                  children="작품 등록"
-                  autoFocus
-                ></Button>
-              </Box>
-            </DialogActions>
-          </Dialog> */}
           <Button
-            MediumBlack
+            onClick={enterAuction}
+            MediumBlack={User.userId !== artistId && !isStart()}
+            BigBlack={User.userId === artistId && !isStart()}
+            MideumRed={User.userId !== artistId && isStart()}
+            BigRed={User.userId === artistId && isStart()}
+            disabled={!isStart()}
             children={
-              <Box direction="row" margin="xsmall">
-                <img src={Clock} />
-                <StyledText text={startTime} color="white" />
+              <Box direction="row" margin="xsmall" justify="center">
+                <img src={Clock} alt="" />
+                <StyledText
+                  text={handleDate(startTime)}
+                  color="white"
+                  size="10px"
+                  style={{ marginLeft: "10px" }}
+                />
               </Box>
             }
           />

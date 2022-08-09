@@ -4,7 +4,7 @@ const API_SERVER = "https://i7a601.p.ssafy.io/api/";
 
 const API_SERVER_SPECIAL = API_SERVER + "admin/special/";
 const API_SERVER_PERSONAL = API_SERVER + "personalProduct/";
-
+const API_SERVER_AUCTION = API_SERVER + "auction/";
 const specialPostApi = axios.create({
   baseURL: API_SERVER_SPECIAL,
   headers: {
@@ -37,6 +37,14 @@ const personalGetApi = axios.create({
   },
 });
 
+const auctionApi = axios.create({
+  baseURL: API_SERVER_AUCTION,
+  headers: {
+    "Content-type": "application/json",
+    Authorization: `Bearer ` + localStorage.getItem("token"),
+  },
+});
+
 const registerSpecialBoard = (formData, success, fail) => {
   specialPostApi.post(`/board`, formData).then(success).catch(fail);
 };
@@ -49,12 +57,23 @@ const registerPersonalProduct = (formData, success, fail) => {
   personalPostApi.post(`/`, formData).then(success).catch(fail);
 };
 
-const getPersonalProduct = async (id, success, fail) => {
-  await personalGetApi.get(`/${id}`).then(success).catch(fail);
+const getPersonalProduct = async (productId, success, fail) => {
+  await personalGetApi.get(`/${productId}`).then(success).catch(fail);
 };
 
 const getTempProductList = async (params, success, fail) => {
   await personalGetApi(`/list`, { params }).then(success).catch(fail);
+};
+
+const registerAuction = async (productId, success, fail) => {
+  await auctionApi
+    .post(`/personal/product/${productId}`)
+    .then(success)
+    .catch(fail);
+};
+
+const getAuctionProduct = async (auctionId, success, fail) => {
+  await auctionApi.get(`/${auctionId}/personal`).then(success).catch(fail);
 };
 
 //토큰이 필요하지 않은 axios 처리
@@ -126,4 +145,6 @@ export {
   registerPersonalProduct,
   getPersonalProduct,
   getTempProductList,
+  registerAuction,
+  getAuctionProduct,
 };
