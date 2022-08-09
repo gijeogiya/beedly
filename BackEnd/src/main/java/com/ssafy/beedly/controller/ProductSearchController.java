@@ -35,7 +35,7 @@ public class ProductSearchController {
 	+ "기본으로 최신순, 20개씩 반환\n"
 	+ "sort, size는 필수 아님. page로 원하는 페이지 조회\n"
 	+ "무한 스크롤로 구현할거니 처음에는 page=0으로 조회하고 응답 데이터 중에 last가 false면 다음페이지 불러오는 형식으로 하면 될듯")
-	@ApiImplicitParam(name = "productName", value = "상품명")
+	@ApiImplicitParam(name = "productName", value = "상품명", paramType = "query", dataType = "String")
 	@GetMapping("product")
 	public ResponseEntity<Slice<PersonalProductDto>> getProductByProductName(@RequestParam("productName")String productName,
 																			 @PageableDefault(sort="createdDate", direction = Sort.Direction.DESC) Pageable pageable){
@@ -47,7 +47,7 @@ public class ProductSearchController {
 			+ "기본으로 최신순, 20개씩 반환\n"
 			+ "sort, size는 필수 아님. page로 원하는 페이지 조회\n"
 			+ "무한 스크롤로 구현할거니 처음에는 page=0으로 조회하고 응답 데이터 중에 last가 false면 다음페이지 불러오는 형식으로 하면 될듯")
-	@ApiImplicitParam(name = "userNickname", value = "작가 닉네임")
+	@ApiImplicitParam(name = "userNickname", value = "작가 닉네임", paramType = "query", dataType = "String")
 	@GetMapping("")
 	public ResponseEntity<Slice<PersonalProductDto>> getProductByProductNickname(@RequestParam("userNickname")String userNickname,
 																				 @PageableDefault(sort="createdDate", direction = Sort.Direction.DESC) Pageable pageable){
@@ -59,7 +59,7 @@ public class ProductSearchController {
 			+ "기본으로 최신순, 20개씩 반환\n"
 			+ "sort, size는 필수 아님. page로 원하는 페이지 조회\n"
 			+ "무한 스크롤로 구현할거니 처음에는 page=0으로 조회하고 응답 데이터 중에 last가 false면 다음페이지 불러오는 형식으로 하면 될듯")
-	@ApiImplicitParam(name = "tag", value = "검색 태그명")
+	@ApiImplicitParam(name = "tag", value = "검색 태그명", paramType = "query", dataType = "String")
 	@GetMapping("tag")
 	public ResponseEntity<Slice<PersonalProductDto>> getProductByTag(@RequestParam("tag")String tagName,
 																	 @PageableDefault(sort="createdDate", direction = Sort.Direction.DESC) Pageable pageable){
@@ -72,7 +72,7 @@ public class ProductSearchController {
 			+ "기본으로 최신순, 20개씩 반환\n"
 			+ "sort, size는 필수 아님. page로 원하는 페이지 조회\n"
 			+ "무한 스크롤로 구현할거니 처음에는 page=0으로 조회하고 응답 데이터 중에 last가 false면 다음페이지 불러오는 형식으로 하면 될듯")
-	@ApiImplicitParam(name = "artistId", value = "작가 식별자")
+	@ApiImplicitParam(name = "artistId", value = "작가 식별자", paramType = "query", dataType = "Long")
 	@GetMapping("artist")
 	public ResponseEntity<Slice<PersonalProductDto>> getProductByTerminated(@RequestParam("artistId")Long artistId,
 																			@PageableDefault(sort="createdDate", direction = Sort.Direction.DESC) Pageable pageable){
