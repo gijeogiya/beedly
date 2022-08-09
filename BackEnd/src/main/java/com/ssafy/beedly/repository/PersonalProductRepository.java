@@ -37,8 +37,8 @@ public interface PersonalProductRepository extends JpaRepository<PersonalProduct
     //////// ---------- 5. Product 상세 찾기
 
     //----------- 5-1. 해당 Product의 상시 게시글 찜의 사용자 아이디가 있는지?
-    @Query(value="select p.user from PersonalFavorite p where p.personalProduct.id = :productId and p.user.id = :userId")
-    Optional<User> findUserIdByPersonalFavorite(Long productId, Long userId);
+    @Query(value="select p from PersonalFavorite p where p.personalProduct.id = :productId and p.user.id = :userId")
+    Optional<PersonalFavorite> findUserIdByPersonalFavorite(Long productId, Long userId);
 
     //----------- 5-2. 서면 응찰을 했는지?
     @Query(value="select a from AbsenteeBid a where a.personalProduct.id = :productId and a.user.id = :userId")
