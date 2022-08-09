@@ -60,7 +60,7 @@ public class PersonalAuctionService {
                 .orElseThrow(() -> new NotFoundException(AUCTION_NOT_FOUND));
 
         User host = findPersonalAuction.getUser();
-        Artist findArtist = artistRepository.findByUserId(host.getId())
+        Artist findArtist = artistRepository.findArtistByUserId(host.getId())
                 .orElseThrow(() -> new NotFoundException(ARTIST_NOT_FOUND));
 
         return new EnterPersonalAuctionResponse(findPersonalAuction, findArtist, host);
