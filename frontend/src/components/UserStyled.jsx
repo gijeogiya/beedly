@@ -169,7 +169,13 @@ const StyledDiv = styled.div`
       justify-content: center;
       align-items: center;
     `}
-
+    ${(props) =>
+    props.Row_S &&
+    css`
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+    `}
     ${(props) =>
     props.MainContent &&
     css`
@@ -179,6 +185,13 @@ const StyledDiv = styled.div`
       min-height: 90vh;
     `}
 
+    ${(props) =>
+    props.MainContent2 &&
+    css`
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    `}
     ${(props) =>
     props.Content &&
     css`

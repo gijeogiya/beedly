@@ -140,6 +140,23 @@ const StyledButton = styled.button`
     `}
 
     ${(props) =>
+    props.TagYellow &&
+    css`
+      color: #1f1d1d;
+      background-color: rgba(255,209,0,0.7);
+      min-height: 32px;
+      max-width: 20%;
+    `}
+    ${(props) =>
+    props.TagGray &&
+    css`
+      color: #565656;
+      background-color: #d8d8d8;
+      min-height: 32px;
+      max-width: 20%;
+    `}
+
+    ${(props) =>
     props.XsmallBlack &&
     css`
       color: white;

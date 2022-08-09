@@ -13,7 +13,7 @@ export default function Purchseist() {
             <div>
                 <div style={{ display: "flex", justifyContent: "space-between", height: "5vh", alignItems: "center", padding: "0px 10px" }}>
                     <img alt="이전" src={beforeIcon} />
-                    <h4>판매내역</h4>
+                    <h4>구매내역</h4>
                     <h4 style={{ visibility: "hidden", }}>dd</h4>
                 </div>
                 <StyledHr

@@ -4,7 +4,6 @@ import { StyledHr, StyledProfile } from '../components/Common';
 import { FlexBox } from '../components/UserStyled';
 import SampleProfile from '../assets/img/SampleProfile.png'
 import { Link, useNavigate } from 'react-router-dom';
-import user from '../stores/modules/user';
 import { useState } from 'react';
 import { getUserInfoApi } from '../utils/api';
 import Button from '../components/Button';
@@ -29,33 +28,23 @@ export default function MypageDetail() {
             // 내 정보 조회
             getUserInfoApi((res) => {
                 setUser(res.data);
-                console.log(user);
             }, (err) => {
                 console.log(err);
             })
-            // 구매내역 조회
-            // getPurchaseApi((res) => {
-
-            // }, (err) => {
-
-            // })
-            // 판매내역 조회
-            // if (user.userRole == 'ROLE_ARTIST') {
-            //   getSalelApi((res) => {
-
-            //   }, (err) => {
-
-            //   })
-            // }
         }
     }, []);
+
+    // 뒤로가기
     const Goback = () => {
         Navigate(-1);
     }
+    // 로그아웃
     const Logout = () => {
         localStorage.removeItem("token");
         Navigate("/");
     }
+
+    //로그아웃 confirm 함수
     const useConfirm = (message = null, onConfirm, onCancel) => {
         if (!onConfirm || typeof onConfirm !== "function") {
             return;
