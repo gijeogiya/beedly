@@ -49,9 +49,15 @@ public class UserController {
         String accessToken = userCreateFlag.getAccessToken();
         userCreateFlag.setAccessToken(null);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .header(HttpHeaders.AUTHORIZATION, accessToken)
-                .body(userCreateFlag);
+        if (userCreateFlag.isCreateFlag()) {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .header(HttpHeaders.AUTHORIZATION, accessToken)
+                    .body(userCreateFlag);
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .header(HttpHeaders.AUTHORIZATION, accessToken)
+                    .body(userCreateFlag);
+        }
     }
 
     // 회원정보 수정
