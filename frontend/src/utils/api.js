@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useSelector } from "react-redux";
 
 const API_SERVER = "https://i7a601.p.ssafy.io/api/";
 
@@ -61,7 +60,7 @@ const instance = axios.create({
     contentType: "application/json",
   },
 });
-const BASEURL = "https://i7a601.p.ssafy.io/api/";
+// const BASEURL = "https://i7a601.p.ssafy.io/api/";
 // export const Token = () => {
 //   const Selector = useSelector((state) => state.user.user);
 //   return localStorage.getItem("token");
@@ -120,6 +119,19 @@ const getPurchaseDetailApi = async (
 const getSalelApi = async (success, fail) => {
   await authInstance.get(`/user/sale`).then(success).catch(fail);
 };
+
+//태그 목록 조회
+const getTagListApi = async (success, fail) => {
+  await instance.get(`/recommendationtag`).then(success).catch(fail);
+};
+
+//유저 태그 등록
+const registerTagApi = async (selectedTag, success, fail) => {
+  await authInstance
+    .post(`/userRecommendation`, { tags: selectedTag })
+    .then(success)
+    .catch(fail);
+};
 export {
   loginApi,
   checkNicknameApi,
@@ -131,4 +143,6 @@ export {
   registerPersonalProduct,
   getPersonalProduct,
   getSalelApi,
+  getTagListApi,
+  registerTagApi,
 };
