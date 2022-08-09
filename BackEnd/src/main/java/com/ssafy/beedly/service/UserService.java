@@ -62,11 +62,13 @@ public class UserService {
             defaultUserInfo.setUserGender(saveUser.getUserGender());
 
             userCreateFlag.setUserDefaultDto(defaultUserInfo);
+            userCreateFlag.setUserId(userId);
             // 관리자 계정 가입시키는거 로직 추가해야댐.
 
         } else { // 유저정보 있으면 바로 토큰 발급
             userId = findUser.get().getId();
             userCreateFlag.setCreateFlag(false);
+            userCreateFlag.setUserId(userId);
         }
         userCreateFlag.setAccessToken(jwtUtil.createToken(userId));
         return userCreateFlag;

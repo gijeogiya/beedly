@@ -1,15 +1,14 @@
 package com.ssafy.beedly.dto.auction;
 
-import com.ssafy.beedly.domain.Artist;
-import com.ssafy.beedly.domain.PersonalAuction;
-import com.ssafy.beedly.domain.PersonalProduct;
-import com.ssafy.beedly.domain.User;
+import com.ssafy.beedly.domain.*;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Data
@@ -32,6 +31,9 @@ public class EnterPersonalAuctionResponse implements Serializable {
     @ApiModelProperty(notes = "시작 가격", example = "500000")
     private Integer startPrice;
 
+    @ApiModelProperty(notes = "상품 이미지들")
+    private List<String> productImages = new ArrayList<>();
+
     @ApiModelProperty(notes = "작가 식별자", example = "1")
     private Long artistId;
 
@@ -53,6 +55,10 @@ public class EnterPersonalAuctionResponse implements Serializable {
         this.productName = p.getProductName();
         this.productDesc = p.getProductDesc();
         this.startPrice = p.getStartPrice();
+        List<PersonalProductImg> imgs = p.getProductImgs();
+        for (PersonalProductImg img : imgs) {
+            this.productImages.add(img.getImgUri());
+        }
 
         this.artistId = a.getId();
         this.artistProfileImg = a.getArtistProfileImg();
