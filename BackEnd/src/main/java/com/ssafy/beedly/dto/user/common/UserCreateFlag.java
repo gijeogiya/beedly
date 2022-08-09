@@ -14,4 +14,6 @@ public class UserCreateFlag {
 
     private UserDefaultDto userDefaultDto;
 
+    private Long userId;
+
 }
