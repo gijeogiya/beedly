@@ -4,6 +4,7 @@ import com.ssafy.beedly.domain.PersonalAuction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PersonalAuctionRepository extends JpaRepository<PersonalAuction, Long> {
@@ -13,6 +14,9 @@ public interface PersonalAuctionRepository extends JpaRepository<PersonalAuction
 
     // 상품 조회할때 이 상품이 경매 진행중인지 아닌지 조회
     @Query("select pa from PersonalAuction pa where pa.personalProduct.id = :productId and pa.activeFlag = true")
-    Optional<PersonalAuction> findByProductId(Long productId);
+    Optional<PersonalAuction> findByOnAirProductId(Long productId);
+
+    // 상시 상품이 이미 경매가 진행되었었는지
+    List<PersonalAuction> findByPersonalProductId(Long productId);
 
 }

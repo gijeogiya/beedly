@@ -13,4 +13,6 @@ public interface SpecialAuctionRepository extends JpaRepository<SpecialAuction, 
     @Query("select sa from SpecialAuction sa join fetch sa.specialBoard where sa.activeFlag = true ")
     List<SpecialAuction> findOnAirList();
 
+
+    List<SpecialAuction> findBySpecialBoardId(Long boardId);
 }
