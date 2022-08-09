@@ -11,6 +11,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ssafy.beedly.common.exception.NotFoundException;
 import com.ssafy.beedly.common.exception.NotMatchException;
 import com.ssafy.beedly.domain.*;
+import com.ssafy.beedly.domain.type.YN;
 import com.ssafy.beedly.dto.special.product.request.CreateSpecialProductRequest;
 import com.ssafy.beedly.repository.CategoryRepository;
 import com.ssafy.beedly.repository.SpecialBoardRepository;
@@ -96,7 +97,7 @@ public class SpecialProductService {
 		SpecialProduct specialProduct = specialProductRepository.findById(productId)
 				.orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
 
-		specialProductRepository.delete(specialProduct);
+		specialProduct.deleteSpecialProduct();
 	}
 
 	// 이미지 s3에 업로드

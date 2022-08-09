@@ -1,6 +1,7 @@
 package com.ssafy.beedly.domain;
 
 import com.ssafy.beedly.domain.common.BaseEntity;
+import com.ssafy.beedly.domain.type.YN;
 import com.ssafy.beedly.dto.special.board.request.CreateSpecialBoardRequest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -48,6 +49,10 @@ public class  SpecialBoard extends BaseEntity {
     @OneToOne(mappedBy = "specialBoard")
     private SpecialAuction specialAuction;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "is_deleted", length = 1)
+    private YN isDeleted = YN.N;
+
     public static SpecialBoard createSpecialBoard(User user, CreateSpecialBoardRequest request, String imageUri) {
         SpecialBoard specialBoard = new SpecialBoard();
         specialBoard.startTime = request.getStartTime();
@@ -68,5 +73,9 @@ public class  SpecialBoard extends BaseEntity {
 
     public void updateImage(String imageUrl) {
         this.mainImgUri = imageUrl;
+    }
+
+    public void deleteSpecialBoard() {
+        this.isDeleted = YN.Y;
     }
 }
