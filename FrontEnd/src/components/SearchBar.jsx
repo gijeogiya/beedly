@@ -62,7 +62,7 @@ export function SearchBar({ handleSubmit, value, setValue }) {
                     value={value}
                     onChange={handleChange}
                     />
-                    <SearchSummitButton type="submit"><img src={SearchingIcon} style={{"height":"24px", "padding": "6px 0 6px 0"}}/></SearchSummitButton>
+                    <SearchSummitButton type="submit"><img src={SearchingIcon} alt='Searching Icon' style={{"height":"24px", "padding": "6px 0 6px 0"}}/></SearchSummitButton>
                 </SearchForm>
             </SearchArea>
 
