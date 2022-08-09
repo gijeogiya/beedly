@@ -31,8 +31,8 @@ export function SizePickCard({title, size, background_color}) {
         <SizePickFrame>
             <SizePickButton style={background_color}>
                 <SizePickText>
-                    <div style={{"font-size":"20px", "font-weight":"900", "color":"#1f1d1d", "padding":"10px"}}>{title}</div>
-                    <div style={{"font-size":"15px", "font-weight":"500", "color":"#1f1d1d"}}>{size}</div>
+                    <div style={{"font-size":"18px", "font-weight":"900", "color":"#1f1d1d", "padding":"10px"}}>{title}</div>
+                    <div style={{"font-size":"14px", "font-weight":"500", "color":"#1f1d1d"}}>{size}</div>
                 </SizePickText>
             </SizePickButton>
         </SizePickFrame>
