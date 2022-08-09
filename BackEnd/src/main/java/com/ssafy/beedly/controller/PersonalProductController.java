@@ -87,21 +87,21 @@ public class PersonalProductController {
 	}
 	// 1-4. 상품 조회
 	// 1-4-1. 상품 아이디로 조회
-	@ApiOperation(value = "상시 상품 조회(상품 식별자로)", notes = "상품 식별자로 상시 상품 조회")
-	@ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
-	@GetMapping("/{productId}")
-	public ResponseEntity<PersonalProductDto> getProductInfoById(@PathVariable("productId") Long id) throws Exception{
-		System.out.println(id);
-		PersonalProductDto dto = personalProductService.getProductById(id);
-		System.out.println(dto);
-		return ResponseEntity.ok(dto);
-	}
+//	@ApiOperation(value = "상시 상품 조회(상품 식별자로)", notes = "상품 식별자로 상시 상품 조회")
+//	@ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
+//	@GetMapping("/{productId}")
+//	public ResponseEntity<PersonalProductDto> getProductInfoById(@PathVariable("productId") Long id) throws Exception{
+//		System.out.println(id);
+//		PersonalProductDto dto = personalProductService.getProductById(id);
+//		System.out.println(dto);
+//		return ResponseEntity.ok(dto);
+//	}
 
 	 // 1-4-2. 상품 상세 조회
-	@ApiOperation(value = "상시 상품 상세 조회(상품 식별자로)", notes = "로그인한 유저가 이 상품에 서면응찰을 했는지, 했으면 그 가격, 이 상품에 찜을 했는지 여부")
+	@ApiOperation(value = "상시 상품 상세 조회(상품 식별자로)", notes = "로그인한 유저가 이 상품에 서면응찰을 했는지, 했으면 그 가격, 이 상품에 찜을 했는지 여부, 현재 경매 진행중인지 여부 정보들 함께")
 	@ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
-	@GetMapping("/close/{productId}")
-	public ResponseEntity<PersonalProductCloseDto> getProductInfoClose(@LoginUser User user, @PathVariable("productId") Long productId){
+	@GetMapping("/{productId}")
+	public ResponseEntity<PersonalProductCloseDto> getProductInfoClose(@ApiIgnore @LoginUser User user, @PathVariable("productId") Long productId){
 		return ResponseEntity.ok(personalProductService.getProductByIdClose(user.getId(), productId));
 	}
 

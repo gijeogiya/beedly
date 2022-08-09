@@ -51,6 +51,7 @@ public class PersonalProductService {
 	private final PersonalProductImgRepository personalProductImgRepository;
 	private final ArtistRepository artistRepository;
 	private final UserRepository userRepository;
+	private final PersonalAuctionRepository personalAuctionRepository;
 
 	// 상품 등록 + 이미지
 	@Transactional
@@ -125,31 +126,38 @@ public class PersonalProductService {
 
 	 @Transactional
 	 public PersonalProductCloseDto getProductByIdClose(Long id, Long productId){
-		Boolean isFavorite = false;
-		Boolean isAbsentee = false;
-		List<String> tagNames = new ArrayList<>();
+		 PersonalProduct findProduct = personalProductRepository.findById(productId)
+				 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
 
-		List<SearchTag> searchTag = personalProductRepository.findSearchTagByProductId(productId);
-		Optional<User> user = personalProductRepository.findUserIdByPersonalFavorite(productId, id);
-		Optional<AbsenteeBid> absenteeBid = personalProductRepository.findUserIdByAbsenteeBid(productId, id);
-		PersonalProductCloseDto personalProductCloseDto = new PersonalProductCloseDto();
-		personalProductCloseDto.setProductId(productId);
+//		Boolean isFavorite = false;
+//		Boolean isAbsentee = false;
+//		List<String> tagNames = new ArrayList<>();
 
-		if(user.isPresent()) isFavorite = true;
-		personalProductCloseDto.setIsFavorite(isFavorite);
-		if(absenteeBid.isPresent()){
-			isAbsentee = true;
-			personalProductCloseDto.setAbsenteeBidPrice(absenteeBid.get().getAbsenteeBidPrice());
-		}
-		personalProductCloseDto.setIsAbsenteeBid(isAbsentee);
+		List<SearchTag> searchTag = personalProductRepository.findSearchTagByProductId(findProduct.getId());
+		Optional<PersonalFavorite> personalFavorite = personalProductRepository.findUserIdByPersonalFavorite(findProduct.getId(), id);
+		Optional<AbsenteeBid> absenteeBid = personalProductRepository.findUserIdByAbsenteeBid(findProduct.getId(), id);
+		Optional<PersonalAuction> auctionInfo = personalAuctionRepository.findByProductId(findProduct.getId());
 
-		 for (SearchTag tag : searchTag) {
-			 tagNames.add(tag.getSearchTagName());
-		 }
 
-		personalProductCloseDto.setTagNames(tagNames);
 
-		return personalProductCloseDto;
+//		PersonalProductCloseDto personalProductCloseDto = new PersonalProductCloseDto();
+//		personalProductCloseDto.setProductId(productId);
+//
+//		if(personalFavorite.isPresent()) isFavorite = true;
+//		personalProductCloseDto.setIsFavorite(isFavorite);
+//		if(absenteeBid.isPresent()){
+//			isAbsentee = true;
+//			personalProductCloseDto.setAbsenteeBidPrice(absenteeBid.get().getAbsenteeBidPrice());
+//		}
+//		personalProductCloseDto.setIsAbsenteeBid(isAbsentee);
+//
+//		 for (SearchTag tag : searchTag) {
+//			 tagNames.add(tag.getSearchTagName());
+//		 }
+//
+//		personalProductCloseDto.setTagNames(tagNames);
+
+		return new PersonalProductCloseDto(findProduct, searchTag, personalFavorite, absenteeBid, auctionInfo);
 	 }
 
 	@Transactional
