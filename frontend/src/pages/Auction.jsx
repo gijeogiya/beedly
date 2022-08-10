@@ -456,19 +456,30 @@ export const Auction = () => {
         (response) => {
           console.log("sub log : ", response);
           const data = JSON.parse(response.body);
-          if (data.isSold === undefined) {
-            console.log("subs log !!! undefined!!!");
-            setCurrentPrice((prev) =>
-              data.bidPrice !== null ? (prev = data.bidPrice) : prev
-            );
-            setCurrentBidder((prev) =>
-              data.userNickname !== null ? (prev = data.userNickname) : prev
-            );
-          } else if (data.isSold) {
-            //낙찰
-            setIsSold((prev) => (prev = true));
-          } else {
-            //유찰
+          if (data.isFinished === undefined) {
+            if (data.isSold === null) {
+              console.log("subs log !!! undefined!!!");
+              setCurrentPrice((prev) =>
+                data.bidPrice !== null ? (prev = data.bidPrice) : prev
+              );
+              setCurrentBidder((prev) =>
+                data.userNickname !== null ? (prev = data.userNickname) : prev
+              );
+            } else if (data.isSold) {
+              //낙찰
+              setIsSold((prev) => (prev = true));
+            } else {
+              //유찰
+            }
+          } else if (data.isFinished) {
+            //경매 종료
+            if (window.confirm("경매가 종료되었습니다.")) {
+              client.current.deactivate();
+              ref.current.componentWillUnmount();
+            } else {
+              client.current.deactivate();
+              ref.current.componentWillUnmount();
+            }
           }
         }
       );
@@ -551,7 +562,7 @@ export const Auction = () => {
       ).then(initSocketClient());
     }
     return () => disConnect();
-  }, [loading, productId, isSold]);
+  }, [loading, productId]);
 
   // const bidInfo = {
   //   title: "Ice Age",
@@ -598,7 +609,7 @@ export const Auction = () => {
   const handleAuctionExit = () => {
     if (grade === "seller") {
       // 판매자일 경우에만 실행
-      if (!client.current.connected) return;
+      // if (!client.current.connected) return;
       if (!isSold) {
         //낙찰 정보 퍼블리시
         client.current.publish({
@@ -611,7 +622,8 @@ export const Auction = () => {
           }),
         });
         handleClose();
-      } else {
+      } else if (isSold) {
+        console.log("경매 종료");
         //경매 종료하기
         client.current.publish({
           destination: "/pub/auction/personal/product/bidding",
@@ -622,6 +634,7 @@ export const Auction = () => {
             productId: productId,
           }),
         });
+        handleClose();
         client.current.deactivate();
         ref.current.componentWillUnmount();
       }
