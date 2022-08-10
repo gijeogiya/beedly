@@ -9,14 +9,14 @@ const StyledProductCard = styled.div`
     display:flex;
     flex-direction:column;
     justify-content:space-between;
-    width:200px;
+    width:180px;
     padding-right:14px;
     padding-top:14px;
 `;
 
 const StyledProductCardImgFrame = styled.div`
     position:relative;
-    width:200px;
+    width:180px;
     display:flex;
     flex-direction:column;
     justify-content: flex-end;
@@ -25,8 +25,8 @@ const StyledProductCardImgFrame = styled.div`
 
 const StyledRectangleRowImg = styled.img`
     border-radius:8px;
-    width:200px;
-    height:200px;
+    width:180px;
+    height:180px;
     object-fit: cover;
 `;
 
@@ -90,7 +90,7 @@ export function ProductCard() {
                 <StyledCardInfTextFrame>
                     <div style={{"fontSize": "14px", "fontWeight": "700"}}>해리아현</div>
                     <div style={{"fontSize": "14px"}}>고양이와 함께 춤을</div>
-                    <div style={{"fontSize": "12px"}}>{false ? `24명 시청중` : `2022년 12월 22일 13시 예정`}</div>
+                    <div style={{"fontSize": "12px"}}>{false ? `24명 시청중` : `12월 22일 13시 예정`}</div>
                 </StyledCardInfTextFrame>
             </StyledCardInfBox>
         </StyledProductCard>
