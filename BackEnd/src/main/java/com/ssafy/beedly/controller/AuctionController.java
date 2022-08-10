@@ -4,10 +4,7 @@ import com.ssafy.beedly.config.data.CacheKey;
 import com.ssafy.beedly.config.security.util.JwtUtil;
 import com.ssafy.beedly.config.web.LoginUser;
 import com.ssafy.beedly.domain.User;
-import com.ssafy.beedly.dto.auction.CreateAuctionResponse;
-import com.ssafy.beedly.dto.auction.EnterPersonalAuctionResponse;
-import com.ssafy.beedly.dto.auction.EnterSpecialAuctionResponse;
-import com.ssafy.beedly.dto.auction.SuccessfulBidResponse;
+import com.ssafy.beedly.dto.auction.*;
 import com.ssafy.beedly.dto.bid.request.BidMessageRequest;
 import com.ssafy.beedly.dto.bid.response.BidMessageResponse;
 import com.ssafy.beedly.dto.bid.type.MessageType;
@@ -76,23 +73,31 @@ public class AuctionController {
 
         if (request.getType().equals("E")) { // 처음 들어왔을 때, 최신 입찰정보 가져오기
             bidMessageResponse = personalBidService.getLatestBidInfo(request);
+            // 입찰정보 뿌리기
+            messagingTemplate.convertAndSend("/sub/auction/personal/" + request.getAuctionId(), bidMessageResponse);
         } else if (request.getType().equals("B")) { // 입찰하기
             bidMessageResponse = personalBidService.createBid(userId, request);
+            // 입찰정보 뿌리기
+            messagingTemplate.convertAndSend("/sub/auction/personal/" + request.getAuctionId(), bidMessageResponse);
+        } else if (request.getType().equals("SB")) { // 낙찰 확정
+            SuccessfulBidResponse successfulBidResponse = personalAuctionService.successfulBid(request.getProductId());
+            // 입찰정보 뿌리기
+            messagingTemplate.convertAndSend("/sub/auction/personal/" + request.getAuctionId(), successfulBidResponse);
+        } else if (request.getType().equals("F")) { // 경매종료
+            personalAuctionService.closePersonalAuction(userId, request.getAuctionId());
+            messagingTemplate.convertAndSend("/sub/auction/personal/" + request.getAuctionId(), new FinishAuctionResponse("경매가 종료되었습니다.", true));
         }
-
-        // 입찰정보 뿌리기
-        messagingTemplate.convertAndSend("/sub/auction/personal/" + request.getAuctionId(), bidMessageResponse);
     }
 
     // 상시 경매방 종료
-    @ApiOperation(value = "상시 경매방 종료", notes = "상시 경매방 종료하기")
-    @ApiImplicitParam(name = "auctionId", value = "상시 경매방 식별자")
-    @PatchMapping("/auction/{auctionId}/personal")
-    public ResponseEntity closePersonalAuction(@ApiIgnore @LoginUser User user, @PathVariable Long auctionId) {
-        personalAuctionService.closePersonalAuction(user, auctionId);
-
-        return ResponseEntity.ok().build();
-    }
+//    @ApiOperation(value = "상시 경매방 종료", notes = "상시 경매방 종료하기")
+//    @ApiImplicitParam(name = "auctionId", value = "상시 경매방 식별자")
+//    @PatchMapping("/auction/{auctionId}/personal")
+//    public ResponseEntity closePersonalAuction(@ApiIgnore @LoginUser User user, @PathVariable Long auctionId) {
+//        personalAuctionService.closePersonalAuction(user, auctionId);
+//
+//        return ResponseEntity.ok().build();
+//    }
 
     // 기획전 경매방 생성
     @ApiOperation(value = "기획전 경매방 생성", notes = "기획전 게시글 식별자로 기획전 경매방 생성")
@@ -139,12 +144,12 @@ public class AuctionController {
     }
 
     // 상시 경매 상품 낙찰 확정
-    @ApiOperation("상시 경매 상품 낙찰 확정")
-    @ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
-    @PostMapping("/personal/successful/bid/product/{productId}")
-    public ResponseEntity<SuccessfulBidResponse> successfulBidPersonalAuction(@PathVariable Long productId) {
-        return ResponseEntity.ok(personalAuctionService.successfulBid(productId));
-    }
+//    @ApiOperation("상시 경매 상품 낙찰 확정")
+//    @ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
+//    @PostMapping("/personal/successful/bid/product/{productId}")
+//    public ResponseEntity<SuccessfulBidResponse> successfulBidPersonalAuction(@PathVariable Long productId) {
+//        return ResponseEntity.ok(personalAuctionService.successfulBid(productId));
+//    }
 
     // 기획전 경매 상품 낙찰 확정
     @ApiOperation("기획전 경매 상품 낙찰 확정")
