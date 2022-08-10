@@ -6,7 +6,11 @@ import MoreImage from "../assets/images/more.png";
 import Button from "../components/Button";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { getUserInfoApi } from "../utils/api";
+import { getPurchaseApi, getSalelApi, getUserInfoApi } from "../utils/api";
+import user from "../stores/modules/user";
+import { Link, useNavigate } from "react-router-dom";
+import SaleList from "./SaleList";
+
 const ContainerBox = ({ title2 }) => {
   return (
     <Box
@@ -26,6 +30,7 @@ const ContainerBox = ({ title2 }) => {
         bottom: "20px",
       }}
     >
+
       <Box
         align="center"
         border={title2 === "관심 작가" ? false : "right"}
@@ -57,20 +62,26 @@ const ContainerBox = ({ title2 }) => {
   );
 };
 
-const Sector = ({ gridArea, title1, title2 }) => {
+const Sector = ({ gridArea, title1, title2, Link1, Link2 }) => {
   return (
     <Box gridArea={gridArea}>
       <Box alignContent="center">
         <Box direction="row" justify="between" width="80vw">
           <StyledText weight="bold" text={title1}></StyledText>
-          <StyledText text="더보기"></StyledText>
+          <Link to={`/${Link1}`}>
+            <StyledText text="더보기"></StyledText>
+          </Link>
         </Box>
         <ContainerBox />
       </Box>
       <Box>
         <Box direction="row" justify="between">
           <StyledText weight="bold" text={title2}></StyledText>
-          <StyledText text="더보기"></StyledText>
+          <Link to={`/${Link2}`}>
+            <StyledText text="더보기"></StyledText>
+          </Link>
+
+
         </Box>
         <ContainerBox title2={title2} />
       </Box>
@@ -87,22 +98,41 @@ const BackButton = styled.button`
 `;
 
 export default function MyPage() {
-  const Selector = useSelector((state) => state.user.user);
-  const [token, setToken] = useState("");
+  //user정보 가져오기
+  // const Selector = useSelector(state => state.user.user);
+  const Navigate = useNavigate('');
+  const [user, setUser] = useState({
+    userName: '',
+    userRole: '',
+    userEmail: '',
+  });
   useEffect(() => {
-    if (Selector === null) {
-      window.location.href = "/login";
+    // 아직 로그인 된 상태가 아니라면
+    if (localStorage.getItem("token") === null) {
+      // 로그인하라고 보내주기
+      Navigate('/login');
     } else {
-      console.log(Selector);
-      setToken(localStorage.getItem("token"));
-      // getUserInfoApi(
-      //   (response) => {
-      //     console.log(response);
-      //   },
-      //   (fail) => {
-      //     console.log(fail);
-      //   }
-      // );
+      // 내 정보 조회
+      getUserInfoApi((res) => {
+        setUser(res.data);
+        console.log(user);
+      }, (err) => {
+        console.log(err);
+      })
+      // 구매내역 조회
+      // getPurchaseApi((res) => {
+
+      // }, (err) => {
+
+      // })
+      // 판매내역 조회
+      // if (user.userRole == 'ROLE_ARTIST') {
+      //   getSalelApi((res) => {
+
+      //   }, (err) => {
+
+      //   })
+      // }
     }
   }, []);
   return (
@@ -133,17 +163,18 @@ export default function MyPage() {
         <Box direction="row">
           <Avatar src={ArtistPng} margin="5px"></Avatar>
           <Box margin="5px">
-            <Box direction="row" align="end">
-              <StyledText text="권기정" weight="bold" size="18px" />
-              <StyledText text="관리자" size="12px" />
+            <Box direction="row" align="end" style={{ marginBottom: "10px" }}>
+              <StyledText text={user.userName} weight="bold" size="18px" />
+              <StyledText style={{ marginLeft: "10px", }} text={user.userRole === 'USER_ARTIST' ? '작가님' : '구매자'} size="12px" />
             </Box>
-            <StyledText text="msg012525@gmail.com" size="14px" />
+            <StyledText text={user.userEmail} size="14px" />
           </Box>
         </Box>
-
-        <BackButton>
-          <img src={MoreImage} />
-        </BackButton>
+        <Link to="/mypageDetail">
+          <BackButton>
+            <img src={MoreImage} />
+          </BackButton>
+        </Link>
       </Box>
       <StyledHr
         gridArea="firstHr"
@@ -151,9 +182,9 @@ export default function MyPage() {
         height="2px"
         color="lightgray"
       />
-      <Sector gridArea="buysold" title1="구매내역" title2="판매내역" />
+      <Sector gridArea="buysold" title1="구매내역" title2="판매내역" Link1="SaleList" />
       <StyledHr gridArea="secHr" width="99vw" height="2px" color="lightgray" />
-      <Sector gridArea="like" title1="관심작품" title2="관심 작가" />
+      <Sector gridArea="like" title1="관심작품" title2="관심 작가" Link1="SaleList" />
     </Grid>
   );
 }

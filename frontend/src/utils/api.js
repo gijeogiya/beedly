@@ -83,7 +83,11 @@ const instance = axios.create({
     contentType: "application/json",
   },
 });
-const BASEURL = "https://i7a601.p.ssafy.io/api/";
+// const BASEURL = "https://i7a601.p.ssafy.io/api/";
+// export const Token = () => {
+//   const Selector = useSelector((state) => state.user.user);
+//   return localStorage.getItem("token");
+// };
 // token이 필요한 axios 처리
 const authInstance = axios.create({
   baseURL: "https://i7a601.p.ssafy.io/api/",
@@ -134,6 +138,23 @@ const getPurchaseDetailApi = async (
     .catch(fail);
 };
 
+//판매내역 상세조회
+const getSalelApi = async (success, fail) => {
+  await authInstance.get(`/user/sale`).then(success).catch(fail);
+};
+
+//태그 목록 조회
+const getTagListApi = async (success, fail) => {
+  await instance.get(`/recommendationtag`).then(success).catch(fail);
+};
+
+//유저 태그 등록
+const registerTagApi = async (selectedTag, success, fail) => {
+  await authInstance
+    .post(`/userRecommendation`, { tags: selectedTag })
+    .then(success)
+    .catch(fail);
+};
 export {
   loginApi,
   checkNicknameApi,
@@ -147,4 +168,7 @@ export {
   getTempProductList,
   registerAuction,
   getAuctionProduct,
+  getSalelApi,
+  getTagListApi,
+  registerTagApi,
 };
