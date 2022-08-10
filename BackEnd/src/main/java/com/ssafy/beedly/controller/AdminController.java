@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("admin")
@@ -21,8 +22,8 @@ public class AdminController {
 
     // 1. 작가 신청 받기
     @ApiOperation(value = "작가 신청서 받기", notes = "작가 신청서를 받아서 artist승인 테이블에 승인 여부 false로 저장")
-    @GetMapping("/application}")
-    ResponseEntity<?> setArtistApplication(@LoginUser User user){
+    @GetMapping("/application")
+    ResponseEntity<?> setArtistApplication(@ApiIgnore @LoginUser User user){
         adminService.saveArtistApplication(user.getId());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
