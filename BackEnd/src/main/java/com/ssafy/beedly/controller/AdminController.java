@@ -36,4 +36,10 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @ApiOperation(value= "아직 승인안된 작가들 리스트 받기")
+    @ApiImplicitParam
+    @GetMapping("/applicationLList")
+    ResponseEntity<?> getApplicationList(){
+        return ResponseEntity.ok(adminService.getArtistList());
+    }
 }
