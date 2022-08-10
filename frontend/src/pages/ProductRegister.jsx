@@ -14,6 +14,12 @@ import DialogContent from "@mui/material/DialogContent";
 
 import CloseButton from "../assets/images/close.png";
 
+import "codemirror-colorpicker/dist/codemirror-colorpicker.css";
+import { Color, ColorPicker } from "codemirror-colorpicker";
+import { registerPersonalProduct } from "../utils/api";
+import { useNavigate } from "react-router-dom";
+import { Category } from "../stores/modules/basicInfo";
+
 const titleSize = "16px";
 
 const HeaderDiv = styled.div`
@@ -116,7 +122,7 @@ const PreviewDiv = styled.div`
   margin: 3px;
 `;
 
-const BackButton = styled.button`
+export const BackButton = styled.button`
   background: none;
   font-size: 12px;
   font-family: Noto Sans KR, sans-serif;
@@ -133,10 +139,24 @@ const Preview = ({ src }) => {
   );
 };
 
+const ImageBtn = styled.img`
+  background: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  &:hover {
+    background: rgb(77, 77, 77);
+    color: #fff;
+  }
+`;
+
 export const ProductRegister = () => {
   const [productName, setProductName] = useState("");
   const [productArtist, setProductArtist] = useState("");
-  const [category, setCategory] = useState("카테고리");
+  const [category, setCategory] = useState(0);
   const [startTime, setStartTime] = useState("");
   const [startPrice, setStartPrice] = useState("");
   const [productDesc, setProductDesc] = useState("");
@@ -146,19 +166,44 @@ export const ProductRegister = () => {
   const [width, setWidth] = useState("");
   const [depth, setDepth] = useState("");
   const [tags, setTags] = useState([
-    "수채화",
-    "유화",
-    "정물화",
-    "인물화",
-    "팝아트",
-    "풍경화",
+    { name: "수채화", id: 0 },
+    { name: "유화", id: 1 },
+    { name: "정물화", id: 2 },
+    { name: "인물화", id: 3 },
+    { name: "팝아트", id: 4 },
+    { name: "풍경화", id: 5 },
   ]);
   const [select, setSelect] = useState([]);
   const [open, setOpen] = useState(false);
-  // useEffect(() => {
-  //   const t = ["수채화", "유화", "정물화", "인물화", "팝아트", "풍경화"];
-  //   setTags(t);
-  // }, []);
+  const [paletteColors, setPaletteColors] = useState([]);
+  const [saturation, setSaturation] = useState();
+  const [brightness, setBrightness] = useState();
+  const [temperature, setTemperature] = useState();
+  const [request, setRequest] = useState({});
+  useEffect(() => {
+    // const t = ["수채화", "유화", "정물화", "인물화", "팝아트", "풍경화"];
+    // setTags(t);
+
+    // setBrightness(brightness);
+    // setTemperature(temperature);
+    // setSaturation(saturation);
+    // console.log("useEffect ", brightness, saturation, temperature);
+
+    const req = {
+      productName: productName,
+      productDesc: productDesc,
+      startPrice: startPrice,
+      height: height,
+      width: width,
+      depth: depth,
+      startTime: startTime,
+      categoryId: category,
+      brightness: brightness,
+      saturation: saturation,
+      temperature: temperature,
+    };
+    setRequest(req);
+  }, [saturation, temperature, brightness, productImages]);
   const DateInputButton = forwardRef(({ value, onClick }, ref) => (
     <button onClick={onClick} ref={ref} style={style3}>
       {value === "" ? "날짜를 선택하세요" : value}
@@ -166,7 +211,7 @@ export const ProductRegister = () => {
   ));
 
   const handlePrev = (event, { files }) => {
-    console.log("first files:", files);
+    // console.log("first files:", files);
 
     const fileList = [...files];
 
@@ -180,11 +225,11 @@ export const ProductRegister = () => {
     });
     setProductImages([...files]);
     setPrevs([...arr]);
-    console.log(productImages);
+    // console.log(productImages);
   };
 
   const handleChangeFile = (event, { files }) => {
-    console.log(files);
+    // console.log(files);
     setProductImages(files);
     //fd.append("file", event.target.files)
     setPrevs([]);
@@ -210,20 +255,6 @@ export const ProductRegister = () => {
       }
     }
   };
-
-  const ImageBtn = styled.img`
-    background: #fff;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 10px;
-    &:hover {
-      background: rgb(77, 77, 77);
-      color: #fff;
-    }
-  `;
 
   const ImageInput = ({ handleImageUpload }) => {
     return (
@@ -283,11 +314,159 @@ export const ProductRegister = () => {
   };
 
   const handleClickRegister = () => {
+    setColor(prevs[0]);
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const setColor = (url) => {
+    // console.log("컬러 찾기 시작", url);
+    // console.log("col", Color);
+    Color.ImageToRGB(url, { maxWidth: 100 }, (results) => {
+      // colorCount 만큼의 색상 추출
+      // console.log(results);
+      // console.log("애로우 시작");
+      // Color.palette(results, 5).map((color) => {
+
+      //   // console.log("대비 : ", s);
+
+      // });
+
+      // console.log(saturations, saturations.length);
+
+      let saturations = 0;
+      let brightnesses = 0;
+      Color.palette(results, 5).map((color) => {
+        // console.log(color);
+        const s = Color.contrast(color);
+        saturations = saturations + s;
+        // console.log(color);
+        color = color.replace("#", "");
+        let bigint = parseInt(color, 16);
+        // console.log("밝기 인트 : ", bigint);
+        let r = (bigint >> 16) & 255;
+        let g = (bigint >> 8) & 255;
+        let b = bigint & 255;
+        // console.log(r, g, b);
+        const br = Math.ceil(r * 0.2126 + g * 0.7152 + b * 0.0722);
+
+        brightnesses = brightnesses + br;
+      });
+      // console.log("밝기 : ", brightnesses, brightnesses.length);
+      let saturation = parseInt(saturations / 5.0);
+      saturation = ((saturation + 1) * 10.0) / 256.0 - 5;
+      setSaturation(saturation);
+      let brightness = parseInt(brightnesses / 5.0);
+      brightness = ((brightness + 1) * 10.0) / 256.0 - 5;
+      setBrightness(brightness);
+      // console.log(brightnesses);
+
+      let temp = { red: 0, blue: 0 };
+      Color.palette(results, 100).map((color) => {
+        color = color.replace("#", "");
+        var bigint = parseInt(color, 16);
+        // console.log("온드 인트 : ", bigint);
+        var r = (bigint >> 16) & 255;
+        var g = (bigint >> 8) & 255;
+        var b = bigint & 255;
+        // console.log(r, g, b);
+        let red;
+        let blue;
+        if (r < 200 && b < 200 && g < 200) {
+          red = r > b ? 1 : 0;
+          blue = b > r ? 1 : 0;
+          temp.red = temp.red + red;
+          temp.blue = temp.blue + blue;
+        }
+        return {
+          red,
+          blue,
+        };
+      });
+      // console.log(temp);
+      let temperature = parseInt(
+        (temp.red * ((temp.red + temp.blue) / 100) -
+          temp.blue * ((temp.red + temp.blue) / 100)) *
+          0.05
+      );
+      // console.log("color 안에서 ", saturation, brightness, temperature);
+      // setPaletteColors([...colors]);
+      // console.log(colors);
+
+      setTemperature(temperature);
+    });
+    // console.log(paletteColors);
+  };
+
+  const isValied = () => {
+    if (
+      productName === "" ||
+      productDesc === "" ||
+      startPrice === "" ||
+      height === "" ||
+      width === "" ||
+      depth === "" ||
+      startTime === "" ||
+      category === "" ||
+      prevs[0] === "" ||
+      brightness === 0 ||
+      saturation === 0 ||
+      temperature === 0
+    )
+      return false;
+    else return true;
+  };
+  const navigate = useNavigate();
+  const registerProduct = async () => {
+    // setColor(prevs[0]);
+    // if (isValied()) {
+    // console.log("작품 등록 호출!!");
+
+    // const request = {
+    //   productName: productName,
+    //   productDesc: productDesc,
+    //   startPrice: startPrice,
+    //   height: height,
+    //   width: width,
+    //   depth: depth,
+    //   startTime: startTime,
+    //   categoryId: category,
+    //   brightness: brightness,
+    //   saturation: saturation,
+    //   temperature: temperature,
+    // };
+
+    // console.log(request);
+    const formData = new FormData();
+    console.log(productImages);
+    for (let i = 0; i < productImages.length; i++) {
+      formData.append("images", productImages[i]);
+    }
+    // formData.append("images", productImages);
+    // console.log(productImages);
+    const blob = new Blob([JSON.stringify(request)], {
+      type: "application/json",
+    });
+    formData.append("request", blob);
+
+    registerPersonalProduct(
+      formData,
+      (response) => {
+        console.log(response);
+        //상세 페이지로 이동
+        navigate(`/productDetail/${response.data}`);
+      },
+      (fail) => {
+        console.log(fail);
+      }
+    );
+
+    // } else {
+    //   alert("모든 정보를 입력하세요.");
+    // }
   };
 
   return (
@@ -317,11 +496,13 @@ export const ProductRegister = () => {
             <Box width="medium" direction="row" justify="end">
               <Select
                 size="10px"
-                options={["회화", "판화", "에디션", "사진", "입체"]}
+                labelKey="label"
+                valueKey={{ key: "value", reduce: true }}
+                options={Category}
                 placeholder="선택하세요"
                 value={category}
-                onChange={({ option }) => {
-                  setCategory(option);
+                onChange={({ value: nextValue }) => {
+                  setCategory(nextValue);
                 }}
               />
             </Box>
@@ -471,16 +652,18 @@ export const ProductRegister = () => {
               {tags.map((tag, idx) => {
                 return (
                   <Button
-                    key={idx}
+                    key={tag.id}
                     onClick={() => {
-                      !select.includes(idx)
-                        ? setSelect((select) => [...select, idx])
-                        : setSelect(select.filter((Button) => Button !== idx));
+                      !select.includes(tag.id)
+                        ? setSelect((select) => [...select, tag.id])
+                        : setSelect(
+                            select.filter((Button) => Button !== tag.id)
+                          );
                     }}
-                    SmallThinWhite={!select.includes(idx) ? true : false}
-                    SmallThinYellow={select.includes(idx) ? true : false}
+                    SmallThinWhite={!select.includes(tag.id) ? true : false}
+                    SmallThinYellow={select.includes(tag.id) ? true : false}
                   >
-                    #{tag}
+                    #{tag.name}
                   </Button>
                 );
               })}
@@ -517,9 +700,12 @@ export const ProductRegister = () => {
               </DialogContent>
               <DialogActions>
                 <Box direction="row" width="100%" justify="center">
-                  <Button MediumBlack onClick={() => {}} autoFocus>
-                    작품 등록
-                  </Button>
+                  <Button
+                    MediumBlack
+                    onClick={registerProduct}
+                    children="작품 등록"
+                    autoFocus
+                  ></Button>
                 </Box>
               </DialogActions>
             </Dialog>
