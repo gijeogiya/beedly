@@ -85,7 +85,7 @@ public class WebSocketTest {
 //        StompHeaders stompHeaders = new StompHeaders();
 //        stompHeaders.add(HttpHeaders.AUTHORIZATION, TEST_AUTHORIZATION);
 //        session = webSocketStompClient
-//                .connect("ws://localhost:" + port + "/ws-stomp", null, stompHeaders, new StompSessionHandlerAdapter() {
+//                .connect("ws://localhost:" + port + "/api/ws-stomp", null, stompHeaders, new StompSessionHandlerAdapter() {
 //                }, new Object[0]).get(60, TimeUnit.SECONDS);
 //
 //        stompHeaders = new StompHeaders();
@@ -122,7 +122,7 @@ public class WebSocketTest {
 //        StompHeaders stompHeaders = new StompHeaders();
 //        stompHeaders.add(HttpHeaders.AUTHORIZATION, TEST_AUTHORIZATION);
 //        session = webSocketStompClient
-//                .connect("ws://localhost:" + port + "/ws-stomp", null, stompHeaders, new StompSessionHandlerAdapter() {
+//                .connect("ws://localhost:" + port + "/api/ws-stomp", null, stompHeaders, new StompSessionHandlerAdapter() {
 //                }, new Object[0]).get(60, TimeUnit.SECONDS);
 //
 //        stompHeaders = new StompHeaders();
