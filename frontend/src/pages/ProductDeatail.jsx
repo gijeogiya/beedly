@@ -109,7 +109,7 @@ export const ProductDeatail = () => {
           // console.log(response.data);
           // const product = response.data;
           handleDataChanges(response.data);
-          // console.log(response);
+          console.log(response);
 
           setLoading(false);
         },
