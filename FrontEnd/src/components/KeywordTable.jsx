@@ -18,7 +18,7 @@ const RecentlyKeywordFrame = styled.div`
 const RecentlyKeywordButton = styled.button`
     background-color:#ffffff;
     padding: 8px 3px 8px 8px;
-    font-size: 14px;
+    fontsize: 14px;
     margin: 0px 8px 12px 0px;
     border: 1px solid #ebebeb;
     border-radius:16px;
