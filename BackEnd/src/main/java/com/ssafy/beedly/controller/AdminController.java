@@ -38,7 +38,6 @@ public class AdminController {
     }
 
     @ApiOperation(value= "아직 승인안된 작가들 리스트 받기")
-    @ApiImplicitParam
     @GetMapping("/applicationLList")
     ResponseEntity<?> getApplicationList(){
         return ResponseEntity.ok(adminService.getArtistList());
