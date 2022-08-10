@@ -39,17 +39,19 @@ public class UserRecommendationService {
     @Transactional
     public void add(User user, List<Long> tags) {
         delete(user);
-        int userScore = 0;
+        User findUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        int b = 0,s = 0,t = 0;
         for (Long tag: tags) {
             RecommendationTag recommendationTag = recommendationTagRepository.findById(tag)
                     .orElseThrow(() -> new NotFoundException(TAG_NOT_FOUND));
             UserRecommendation userRecommendation = UserRecommendation.createUserRecommendation(user, recommendationTag);
             userRecommendationRepository.save(userRecommendation);
-//            userScore += recommendationTag.getRecTagBrightness() + recommendationTag.getRecTagSaturation() + recommendationTag.getRecTagTemperature();
-            User findUser = userRepository.findById(user.getId())
-                    .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
-            findUser.updateScore(recommendationTag.getRecTagBrightness(), recommendationTag.getRecTagSaturation(), recommendationTag.getRecTagTemperature());
+            b += recommendationTag.getRecTagBrightness();
+            s += recommendationTag.getRecTagSaturation();
+            t += recommendationTag.getRecTagTemperature();
         }
+        findUser.updateScore(b, s, t);
     }
 
     @Transactional
