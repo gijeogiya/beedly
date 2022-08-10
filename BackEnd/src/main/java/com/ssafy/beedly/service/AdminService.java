@@ -5,16 +5,21 @@ import com.ssafy.beedly.domain.Artist;
 import com.ssafy.beedly.domain.ArtistApproval;
 import com.ssafy.beedly.domain.User;
 import com.ssafy.beedly.domain.type.UserRole;
+import com.ssafy.beedly.dto.ArtistApprovalDto;
 import com.ssafy.beedly.repository.ArtistApprovalRepository;
 import com.ssafy.beedly.repository.ArtistRepository;
 import com.ssafy.beedly.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.ssafy.beedly.common.exception.NotFoundException.ARTIST_NOT_FOUND;
 import static com.ssafy.beedly.domain.type.UserRole.ROLE_ARTIST;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -40,5 +45,12 @@ public class AdminService {
         artistApprovalRepository.save(ArtistApproval.createArtistApproval(true, user));
         artistRepository.save(Artist.createArtist(user));
         return;
+    }
+
+    @Transactional
+    public Slice<ArtistApprovalDto> getArtistList(){
+        Slice <ArtistApprovalDto> userList =
+            artistApprovalRepository.findFalseArtistBy().map(artistApproval -> new ArtistApprovalDto(artistApproval));
+        return userList;
     }
 }
