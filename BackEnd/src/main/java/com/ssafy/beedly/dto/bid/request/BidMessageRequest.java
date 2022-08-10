@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BidMessageRequest {
 
-    private MessageType type;
+    private String type;
     private Long auctionId;
     private Long productId;
     private Integer bidPrice;

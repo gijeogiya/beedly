@@ -68,11 +68,15 @@ public class AuctionController {
     public void personalProductBidding(BidMessageRequest request, @Header(HttpHeaders.AUTHORIZATION) String bearerToken) {
         Long userId = Long.valueOf(jwtUtil.getSubject(bearerToken.substring(7)));
 
-        BidMessageResponse bidMessageResponse = null;
+        BidMessageResponse bidMessageResponse = new BidMessageResponse();
+        System.out.println(request);
+        System.out.println("Message Type: " + request.getType());
+        System.out.println(request.getType().equals("E"));
+        System.out.println(request.getType().equals("B"));
 
-        if (MessageType.ENTER.equals(request.getType())) { // 처음 들어왔을 때, 최신 입찰정보 가져오기
+        if (request.getType().equals("E")) { // 처음 들어왔을 때, 최신 입찰정보 가져오기
             bidMessageResponse = personalBidService.getLatestBidInfo(request);
-        } else if (MessageType.BIDDING.equals(request.getType())) { // 입찰하기
+        } else if (request.getType().equals("B")) { // 입찰하기
             bidMessageResponse = personalBidService.createBid(userId, request);
         }
 
@@ -113,10 +117,10 @@ public class AuctionController {
     public void specialProductBidding(BidMessageRequest request, @Header(HttpHeaders.AUTHORIZATION) String bearerToken) {
         Long userId = Long.valueOf(jwtUtil.getSubject(bearerToken.substring(7)));
 
-        BidMessageResponse bidMessageResponse = null;
-        if (MessageType.ENTER.equals(request.getType())) { // 처음 들어왔을 때, 최신 입찰정보 가져오기
+        BidMessageResponse bidMessageResponse = new BidMessageResponse();
+        if (request.getType().equals("E")) { // 처음 들어왔을 때, 최신 입찰정보 가져오기
             bidMessageResponse = specialBidService.getLatestBidInfo(request);
-        } else if (MessageType.BIDDING.equals(request.getType())) { // 입찰하기
+        } else if (request.getType().equals("B")) { // 입찰하기
             bidMessageResponse = specialBidService.createBid(userId, request);
         }
 
