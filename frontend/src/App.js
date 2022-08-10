@@ -18,6 +18,11 @@ import { ProductRegister } from "./pages/ProductRegister";
 import { SpecialProductRegister } from "./pages/SpecialProductRegister";
 import { ProductDeatail } from "./pages/ProductDeatail";
 import { Temp } from "./pages/Temp";
+import SaleList from "./pages/SaleList";
+import MypageDetail from "./pages/MypageDetail";
+import UpdateMyPage from "./pages/UpdateMypage.jsx";
+import SignupTag from "./pages/SignupTag";
+
 const Layout = () => {
   return (
     <div>
@@ -44,7 +49,7 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<ProductDeatail />} />
+          <Route index element={<MainPage />} />
           <Route path="/search" element={<Search />} />
           <Route path="/productRegister" element={<ProductRegister />} />
           <Route path="/onair" element={<Onair />} />
@@ -55,7 +60,13 @@ function App() {
           <Route path="/specialAuction" element={<SpecialAuction />} />
           <Route path="/specialProduct" element={<SpecialProductRegister />} />
           <Route path="/productlist" element={<ProductList />} />
+
           <Route path="/productDetail/:id" element={<ProductDeatail />} />
+
+          <Route path="/saleList" element={<SaleList />} />
+          <Route path="/mypageDetail" element={<MypageDetail />} />
+          <Route path="/updateMypage" element={<UpdateMyPage />} />
+          <Route path="/signupTag" element={<SignupTag />} />
         </Route>
         <Route path="/personalAuction" element={<Auction />} />
         <Route path="/auctionSeller" element={<Auction grade="seller" />} />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { CategoryBar } from "../components/MainCategoryBar";
 import { BannerTable } from "../components/MainBanner";
@@ -6,6 +6,7 @@ import {
   HorizonScrollRowTable,
   HorizonScrollColTable,
 } from "../components/HorizonScrollTable";
+import { useSelector } from 'react-redux';
 
 const StyledTableTitle = styled.div`
   font-size: 16px;
@@ -13,17 +14,22 @@ const StyledTableTitle = styled.div`
   padding-left: 20px;
   font-weight: 900;
 `;
-
 const StyledTableSubtitle = styled.div`
   font-size: 14px;
   padding-left: 20px;
   font-weight: 500;
   color: rgba(31, 29, 29, 0.4);
-`;
+  `;
 
 export default function MainPage() {
+  const Selector = useSelector(state => state.user.user);
+  useEffect(() => {
+
+  }, []);
   return (
     <div>
+      {Selector.userEmail}
+      {Selector.userId}
       <CategoryBar />
       <BannerTable />
       <div

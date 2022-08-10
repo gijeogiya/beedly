@@ -138,6 +138,13 @@ const StyledDiv = styled.div`
       justify-content: space-around;
       align-items: center;
     `}
+    ${(props) =>
+    props.Column_E &&
+    css`
+      flex-direction: column;
+      justify-content: flex-end;
+      
+    `}
 
     ${(props) =>
     props.Row_SB &&
@@ -156,6 +163,20 @@ const StyledDiv = styled.div`
     `}
 
     ${(props) =>
+    props.Row_C &&
+    css`
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    `}
+    ${(props) =>
+    props.Row_S &&
+    css`
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+    `}
+    ${(props) =>
     props.MainContent &&
     css`
       flex-direction: column;
@@ -164,6 +185,13 @@ const StyledDiv = styled.div`
       min-height: 90vh;
     `}
 
+    ${(props) =>
+    props.MainContent2 &&
+    css`
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    `}
     ${(props) =>
     props.Content &&
     css`
