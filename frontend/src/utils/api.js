@@ -1,115 +1,7 @@
 import axios from "axios";
 
-const API_SERVER = "https://i7a601.p.ssafy.io/api/";
+export const API_SERVER = "https://i7a601.p.ssafy.io/api/";
 
-const API_SERVER_SPECIAL = API_SERVER + "admin/special/";
-const API_SERVER_PERSONAL = API_SERVER + "personalProduct/";
-const API_SERVER_AUCTION = API_SERVER + "auction/";
-const API_SERVER_ABSENTEEBID = API_SERVER + "absenteeBid/";
-
-const specialPostApi = axios.create({
-  baseURL: API_SERVER_SPECIAL,
-  headers: {
-    "Content-type": "multipart/form-data",
-    Authorization: `Bearer ` + localStorage.getItem("token"),
-  },
-});
-
-const specialGetApi = axios.create({
-  baseURL: API_SERVER_SPECIAL,
-  headers: {
-    "Content-type": "application/json",
-    Authorization: `Bearer ` + localStorage.getItem("token"),
-  },
-});
-
-const personalPostApi = axios.create({
-  baseURL: API_SERVER_PERSONAL,
-  headers: {
-    "Content-type": "multipart/form-data",
-    Authorization: `Bearer ` + localStorage.getItem("token"),
-  },
-});
-
-const personalGetApi = axios.create({
-  baseURL: API_SERVER_PERSONAL,
-  headers: {
-    "Content-type": "application/json",
-    Authorization: `Bearer ` + localStorage.getItem("token"),
-  },
-});
-
-const auctionApi = axios.create({
-  baseURL: API_SERVER_AUCTION,
-  headers: {
-    "Content-type": "application/json",
-    Authorization: `Bearer ` + localStorage.getItem("token"),
-  },
-});
-
-const absenteeBidApi = axios.create({
-  baseURL: API_SERVER_ABSENTEEBID,
-  headers: {
-    "Content-type": "application/json",
-    Authorization: `Bearer ` + localStorage.getItem("token"),
-  },
-});
-
-const registerSpecialBoard = (formData, success, fail) => {
-  specialPostApi.post(`/board`, formData).then(success).catch(fail);
-};
-
-const getData = (params, success, fail) => {
-  specialGetApi.get(`/URL`, { params: params }).then(success).catch(fail);
-};
-
-const registerPersonalProduct = (formData, success, fail) => {
-  personalPostApi.post(`/`, formData).then(success).catch(fail);
-};
-
-const getPersonalProduct = async (productId, success, fail) => {
-  await personalGetApi.get(`/${productId}`).then(success).catch(fail);
-};
-
-const getTempProductList = async (params, success, fail) => {
-  await personalGetApi(`/list`, { params }).then(success).catch(fail);
-};
-
-const registerAuction = async (productId, success, fail) => {
-  await auctionApi
-    .post(`/personal/product/${productId}`)
-    .then(success)
-    .catch(fail);
-};
-
-const getAuctionProduct = async (auctionId, success, fail) => {
-  await auctionApi.get(`/${auctionId}/personal`).then(success).catch(fail);
-};
-
-const postAbsenteeBid = async (params, success, fail) => {
-  await absenteeBidApi
-    .post(`/product/${params.productId}`, {
-      absenteeBidPrice: params.absenteeBidPrice,
-    })
-    .then(success)
-    .catch(fail);
-};
-
-const updateAbsenteeBid = async (params, success, fail) => {
-  await absenteeBidApi
-    .patch(`${params.absenteeBidId}`, {
-      absenteeBidPrice: params.absenteeBidPrice,
-    })
-    .then(success)
-    .catch(fail);
-};
-
-const deleteAbsenteeBid = async (params, success, fail) => {
-  await absenteeBidApi
-    .delete(`${params.absenteeBidId}`)
-    .then(success)
-    .catch(fail);
-};
 //토큰이 필요하지 않은 axios 처리
 const instance = axios.create({
   baseURL: "https://i7a601.p.ssafy.io/api/",
@@ -190,18 +82,13 @@ const registerTagApi = async (selectedTag, success, fail) => {
     .catch(fail);
 };
 export {
+  axios,
   loginApi,
   checkNicknameApi,
   getUserInfoApi,
   updateUserInfoApi,
   getPurchaseApi,
   getPurchaseDetailApi,
-  registerSpecialBoard,
-  registerPersonalProduct,
-  getPersonalProduct,
-  getTempProductList,
-  registerAuction,
-  getAuctionProduct,
   getSalelApi,
   getTagListApi,
   registerTagApi,

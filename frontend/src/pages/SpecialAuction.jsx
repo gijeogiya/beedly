@@ -23,7 +23,7 @@ import BackButtonImage from "../assets/images/backButton.png";
 
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import { registerSpecialBoard } from "../utils/api";
+import { registerSpecialBoard } from "../utils/apis/SpecialBoardAPI";
 import { ImageBtn, ImageInput, Preview } from "./SpecialProductRegister";
 import ImageInputPic from "../assets/images/imageInput.png";
 

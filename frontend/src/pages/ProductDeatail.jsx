@@ -11,14 +11,26 @@ import { BackButton } from "./ProductRegister";
 import { StyledHr, StyledText } from "../components/Common";
 import { HorizonScrollRowTable } from "../components/HorizonScrollTable";
 import { useEffect } from "react";
-import { getPersonalProduct, registerAuction } from "../utils/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { Category, moneyFormat } from "../stores/modules/basicInfo";
 import { AbsenteeBid } from "../components/AbsenteeBid";
 import { useSelector } from "react-redux";
-import { Dialog, DialogActions, DialogContent } from "@mui/material";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 import CloseButton from "../assets/images/close.png";
 import { Input2, Input3 } from "../components/UserStyled";
+import styled from "styled-components";
+import { getPersonalProduct } from "../utils/apis/PersonalProductAPI";
+import {
+  deleteAbsenteeBid,
+  postAbsenteeBid,
+  updateAbsenteeBid,
+} from "../utils/apis/absenteeBidAPI";
+import { registerAuction } from "../utils/apis/AuctionAPI";
 const HeaderBox = () => {
   return (
     <Box direction="row" justify="between" margin="small">
@@ -47,8 +59,16 @@ const HeaderBox = () => {
 //   width: 100%;
 // `;
 
+export const DialogCloseButton = styled.button`
+  background: none;
+  font-size: 12px;
+  font-family: Noto Sans KR, sans-serif;
+  border: 0px;
+  width: 10vw;
+`;
+
 export const ProductDeatail = () => {
-  const { id } = useParams();
+  const { productId } = useParams();
 
   const [loading, setLoading] = useState(true);
 
@@ -69,18 +89,24 @@ export const ProductDeatail = () => {
   const [auctionId, setAuctionId] = useState("");
   const [isOnAir, setIsOnAir] = useState("");
   const [absenteeBidPrice, setAbsenteeBidPrice] = useState();
+  const [isAbsenteeBid, setIsAbsenteeBid] = useState();
   const [absenteeBidId, setAbsenteeBidId] = useState("");
   const User = useSelector((state) => state.user.user.user);
   const navigate = useNavigate();
   const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
   // console.log("user : ", User);
   useEffect(() => {
+    if (!User) {
+      alert("로그인이 필요합니다.");
+      window.location.href = "/login";
+    }
+
     if (loading)
       getPersonalProduct(
         // id,
-        id === undefined ? 32 : id,
+        productId,
         (response) => {
-          console.log(response.data);
+          // console.log(response.data);
           // const product = response.data;
           handleDataChanges(response.data);
           // console.log(response);
@@ -99,7 +125,7 @@ export const ProductDeatail = () => {
     return () => {
       clearInterval(ee);
     };
-  }, [loading]);
+  }, [loading, absenteeBidPrice]);
 
   const handleDataChanges = (data) => {
     setProductName(data.personalProductDto.productName);
@@ -112,8 +138,9 @@ export const ProductDeatail = () => {
     setProductLike(data.personalProductDto.favoriteCount);
     setSoldStatus(data.personalProductDto.soldStatus);
     setArtistNickname(data.personalProductDto.userNickname);
-    setArtistId(data.personalProductDto.userId + 1);
+    setArtistId(data.personalProductDto.userId);
     setAuctionId(data.auctionId);
+    setIsAbsenteeBid(data.isAbsenteeBid);
     setIsOnAir(data.isOnAir);
     setAbsenteeBidPrice(
       data.absenteeBidPrice === null ? "" : data.absenteeBidPrice
@@ -165,7 +192,81 @@ export const ProductDeatail = () => {
     if (!isStart()) setOpen(true);
   };
 
-  const postAbsentee = () => {};
+  const isValidAbsentee = () => {
+    if (absenteeBidPrice === 0 || absenteeBidPrice === "") return false;
+    return true;
+  };
+
+  const postAbsentee = () => {
+    if (isValidAbsentee()) {
+      if (window.confirm("응찰하시겠습니까?")) {
+        let params = {
+          productId: productId,
+          absenteeBidPrice: absenteeBidPrice,
+        };
+        postAbsenteeBid(
+          params,
+          (response) => {
+            console.log(response);
+            alert("응찰되었습니다.");
+            handleClose();
+            window.location.replace(`/productDetail/${productId}`);
+          },
+          (fail) => {
+            console.log(fail);
+          }
+        );
+      }
+    } else {
+      alert("희망 응찰가를 입력하세요!");
+    }
+  };
+
+  const updateAbsentee = () => {
+    if (isValidAbsentee()) {
+      if (window.confirm("수정하시겠습니까?")) {
+        let params = {
+          absenteeBidId: absenteeBidId,
+          absenteeBidPrice: absenteeBidPrice,
+        };
+        updateAbsenteeBid(
+          params,
+          (response) => {
+            console.log(response);
+            alert("수정되었습니다.");
+            handleClose();
+            window.location.replace(`/productDetail/${productId}`);
+          },
+          (fail) => {
+            console.log(fail);
+          }
+        );
+      }
+    } else {
+      alert("희망 응찰가를 입력하세요!");
+    }
+  };
+
+  const deleteAbsentee = () => {
+    if (window.confirm("철회하시겠습니까?")) {
+      let params = {
+        absenteeBidId: absenteeBidId,
+        absenteeBidPrice: absenteeBidPrice,
+      };
+      deleteAbsenteeBid(
+        params,
+        (response) => {
+          console.log(response);
+          alert("철회되었습니다.");
+          handleClose();
+          window.location.replace(`/productDetail/${productId}`);
+        },
+        (fail) => {
+          console.log(fail);
+        }
+      );
+    }
+  };
 
   const isStart = () => {
     let dueDate = new Date(startTime);
@@ -178,13 +279,13 @@ export const ProductDeatail = () => {
       if (auctionId === null) {
         if (artistId === User.userId) {
           registerAuction(
-            id === undefined ? 32 : id,
+            productId,
             (response) => {
               console.log(response);
               navigate("/personalAuction", {
                 state: {
                   grade: artistId === User.userId ? "seller" : "buyer",
-                  auctionId: auctionId,
+                  auctionId: response.data.auctionId,
                 },
               });
             },
@@ -309,7 +410,7 @@ export const ProductDeatail = () => {
                 <Box direction="row" margin="xsmall" justify="center">
                   <img src={FileText} alt="" />
                   <StyledText
-                    text="서면응찰"
+                    text={isAbsenteeBid ? "서면응찰 수정" : "서면응찰"}
                     color="white"
                     size="10px"
                     style={{ marginLeft: "10px" }}
@@ -326,11 +427,17 @@ export const ProductDeatail = () => {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <Box direction="row" width="100%" justify="end">
-              <BackButton onClick={handleClose}>
-                <img src={CloseButton} />
-              </BackButton>
-            </Box>
+            <DialogTitle>
+              <Box direction="row" width="100%" justify="between">
+                <Box width="10vw" />
+                <StyledText weight="bold" size="16px" text="서면 응찰" />
+                <DialogCloseButton onClick={handleClose}>
+                  <Box direction="row" justify="center">
+                    <img src={CloseButton} />
+                  </Box>
+                </DialogCloseButton>
+              </Box>
+            </DialogTitle>
             <DialogContent>
               <Box margin="large">
                 <Box direction="row" justify="start">
@@ -369,10 +476,11 @@ export const ProductDeatail = () => {
                         setAbsenteeBidPrice(e.target.value);
                       }}
                       style={{
+                        color: "#D00000",
                         width: "30vw",
                       }}
                     />
-                    <StyledText text="원" weight="bold" />
+                    <StyledText color="#D00000" text="원" weight="bold" />
                   </Box>
                   <StyledHr width="100%" />
                   <Box direction="row" justify="between">
@@ -390,9 +498,24 @@ export const ProductDeatail = () => {
               </Box>
             </DialogContent>
             <DialogActions>
-              <Box direction="row" width="100%" justify="center">
-                <Button SmallRed children="응찰하기" />
-              </Box>
+              {isAbsenteeBid ? (
+                <Box direction="row" width="100%" justify="center">
+                  <Button
+                    SmallBlue
+                    children="수정하기"
+                    onClick={updateAbsentee}
+                  />
+                  <Button
+                    SmallBlack
+                    children="철회하기"
+                    onClick={deleteAbsentee}
+                  />
+                </Box>
+              ) : (
+                <Box direction="row" width="100%" justify="center">
+                  <Button SmallRed children="응찰하기" onClick={postAbsentee} />
+                </Box>
+              )}
             </DialogActions>
           </Dialog>
           {/* <AbsenteeBid

@@ -16,7 +16,7 @@ import CloseButton from "../assets/images/close.png";
 
 import "codemirror-colorpicker/dist/codemirror-colorpicker.css";
 import { Color, ColorPicker } from "codemirror-colorpicker";
-import { registerPersonalProduct } from "../utils/api";
+import { registerPersonalProduct } from "../utils/apis/PersonalProductAPI";
 import { useNavigate } from "react-router-dom";
 import { Category } from "../stores/modules/basicInfo";
 
