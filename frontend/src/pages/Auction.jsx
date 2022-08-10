@@ -625,6 +625,9 @@ export const Auction = () => {
         client.current.deactivate();
         ref.current.componentWillUnmount();
       }
+    } else {
+      client.current.deactivate();
+      ref.current.componentWillUnmount();
     }
   };
 
