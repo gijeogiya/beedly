@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { getTempProductList } from "../utils/api";
+import { getTempProductList } from "../utils/apis/PersonalProductAPI";
 
 export const Temp = () => {
   const [products, setProducts] = useState([]);

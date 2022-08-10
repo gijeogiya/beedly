@@ -20,7 +20,10 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { getAuctionProduct } from "../utils/api";
+import {
+  getAuctionProduct,
+  postAuctionFinished,
+} from "../utils/apis/AuctionAPI";
 import { moneyFormat } from "../stores/modules/basicInfo";
 import SockJS from "sockjs-client";
 import * as StompJs from "@stomp/stompjs";
@@ -165,6 +168,7 @@ function ProductFrame({
   handleClose,
   handleAuctionExit,
   handleClickOpen,
+  isSold,
 }) {
   return (
     <ProductContainer>
@@ -222,13 +226,23 @@ function ProductFrame({
       </ProductBox>
       <ButtonContainer>
         {grade !== undefined && grade === "buyer" ? (
-          <BidButton disabled={visible} visible={visible} onClick={bidProduct}>
-            {visible ? "입찰완료" : "입찰하기"}
-          </BidButton>
+          isSold ? (
+            <BidButton disabled visible={visible}>
+              {`낙찰완료`}
+            </BidButton>
+          ) : (
+            <BidButton
+              disabled={visible}
+              visible={visible}
+              onClick={bidProduct}
+            >
+              {visible ? "입찰완료" : "입찰하기"}
+            </BidButton>
+          )
         ) : (
           <Box justify="center" alignContent="center" align="center">
             <Button MideumRed onClick={handleClickOpen}>
-              종료하기
+              {isSold ? "종료하기" : "낙찰하기"}
             </Button>
             <Dialog
               open={open}
@@ -237,11 +251,13 @@ function ProductFrame({
               aria-describedby="alert-dialog-description"
             >
               <DialogTitle id="alert-dialog-title">
-                {"경매 종료하기"}
+                {isSold ? "경매 종료하기" : "경매 낙찰하기"}
               </DialogTitle>
               <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                  정말 경매를 종료하시겠습니까?
+                  {isSold
+                    ? "정말 경매를 종료하시겠습니까?"
+                    : "정말 낙찰하시겠습니까?"}
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
@@ -249,7 +265,7 @@ function ProductFrame({
                   취소
                 </Button>
                 <Button SmallBlack onClick={handleAuctionExit} autoFocus>
-                  경매 종료
+                  {isSold ? "경매 종료" : "경매 낙찰"}
                 </Button>
               </DialogActions>
             </Dialog>
@@ -337,6 +353,7 @@ function BottomUi({
   currentPrice,
   callPrice,
   currentBidder,
+  isSold,
 }) {
   return (
     <Conatainer controls="arrows">
@@ -358,6 +375,7 @@ function BottomUi({
         handleClose={handleClose}
         handleAuctionExit={handleAuctionExit}
         handleClickOpen={handleClickOpen}
+        isSold={isSold}
       ></ProductFrame>
     </Conatainer>
   );
@@ -413,6 +431,7 @@ export const Auction = () => {
   const [visible, setVisible] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
   const [isCalled, setIsCalled] = useState(false);
+  const [isSold, setIsSold] = useState(false);
   const [initPrice, setInitPrice] = useState(0);
   const [open, setOpen] = useState(false);
   const [currentBidder, setCurrentBidder] = useState("");
@@ -430,15 +449,27 @@ export const Auction = () => {
   const handleBid = () => {};
 
   const subscribe = () => {
-    if (client.current != null) {
+    if (client.current.connected) {
       console.log("subs!!!!!!!!!");
       client.current.subscribe(
         "/sub/auction/personal/" + auctionId,
         (response) => {
           console.log("sub log : ", response);
           const data = JSON.parse(response.body);
-          setCurrentPrice((prev) => (prev = data.bidPrice));
-          setCurrentBidder((prev) => (prev = data.userNickname));
+          if (data.isSold === undefined) {
+            console.log("subs log !!! undefined!!!");
+            setCurrentPrice((prev) =>
+              data.bidPrice !== null ? (prev = data.bidPrice) : prev
+            );
+            setCurrentBidder((prev) =>
+              data.userNickname !== null ? (prev = data.userNickname) : prev
+            );
+          } else if (data.isSold) {
+            //낙찰
+            setIsSold((prev) => (prev = true));
+          } else {
+            //유찰
+          }
         }
       );
     }
@@ -473,7 +504,7 @@ export const Auction = () => {
 
     client.current.onConnect = (frame) => {
       console.log("client init !!! ", frame);
-      if (client.current != null)
+      if (client.current.connected)
         client.current.publish({
           destination: "/pub/auction/personal/product/bidding",
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
@@ -511,7 +542,7 @@ export const Auction = () => {
           setCurrentPrice(response.data.startPrice);
           setInitPrice(response.data.startPrice);
           setProductId(response.data.productId);
-          setCallPrice(10000);
+          setCallPrice(parseInt(response.data.startPrice / 20));
           setLoading(false);
         },
         (fail) => {
@@ -520,7 +551,7 @@ export const Auction = () => {
       ).then(initSocketClient());
     }
     return () => disConnect();
-  }, [loading, productId]);
+  }, [loading, productId, isSold]);
 
   // const bidInfo = {
   //   title: "Ice Age",
@@ -554,7 +585,7 @@ export const Auction = () => {
     });
 
     console.log(currentPrice, initPrice);
-    if (!isCalled && initPrice + 30000 < currentPrice) {
+    if (!isCalled && parseInt(initPrice * 1.2) < currentPrice) {
       console.log("call!@@");
       setIsCalled(true);
       setCallPrice((prev) => prev + Math.floor(prev * 0.5));
@@ -565,8 +596,36 @@ export const Auction = () => {
   const ref = createRef();
   const navigate = useNavigate();
   const handleAuctionExit = () => {
-    client.current.deactivate();
-    ref.current.componentWillUnmount();
+    if (grade === "seller") {
+      // 판매자일 경우에만 실행
+      if (!client.current.connected) return;
+      if (!isSold) {
+        //낙찰 정보 퍼블리시
+        client.current.publish({
+          destination: "/pub/auction/personal/product/bidding",
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+          body: JSON.stringify({
+            type: "SB",
+            auctionId: auctionId,
+            productId: productId,
+          }),
+        });
+        handleClose();
+      } else {
+        //경매 종료하기
+        client.current.publish({
+          destination: "/pub/auction/personal/product/bidding",
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+          body: JSON.stringify({
+            type: "F",
+            auctionId: auctionId,
+            productId: productId,
+          }),
+        });
+        client.current.deactivate();
+        ref.current.componentWillUnmount();
+      }
+    }
   };
 
   const handleGoBack = () => {
@@ -636,6 +695,7 @@ export const Auction = () => {
           currentBidder={currentBidder}
           currentPrice={currentPrice}
           callPrice={callPrice}
+          isSold={isSold}
         />
       </Grommet>
     </div>

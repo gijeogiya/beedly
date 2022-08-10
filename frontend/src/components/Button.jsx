@@ -122,6 +122,13 @@ const StyledButton = styled.button`
       width: 20vw;
     `}
     ${(props) =>
+    props.SmallBlue &&
+    css`
+      color: white;
+      background: #5484e2;
+      width: 20vw;
+    `}
+    ${(props) =>
     props.SmallThinYellow &&
     css`
       color: #1f1d1d;
@@ -143,7 +150,7 @@ const StyledButton = styled.button`
     props.TagYellow &&
     css`
       color: #1f1d1d;
-      background-color: rgba(255,209,0,0.7);
+      background-color: rgba(255, 209, 0, 0.7);
       min-height: 32px;
       max-width: 20%;
     `}

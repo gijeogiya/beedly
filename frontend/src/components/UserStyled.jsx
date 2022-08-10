@@ -33,14 +33,15 @@ const InputStyle2 = styled.input`
 const InputStyle3 = styled.input`
   font-weight: bold;
   font-family: "Noto Sans KR", sans-serif;
-  width: 30vw;
+  width: 40vw;
   height: 30px;
   border: none;
   border-bottom: 1px solid #ccc;
-  padding: 5px 15px;
-  margin: 5px 0px;
-  color: black;
+  color: #d00000;
   text-align: right;
+  ::placeholder {
+    color: #d14b4b;
+  }
 `;
 
 export const SizeInput = styled.input`

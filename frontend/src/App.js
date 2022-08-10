@@ -1,6 +1,6 @@
 import "./App.css";
 import { LogoHeader, Footer, NavBar } from "./components/Common";
-import { Outlet, Route, Routes } from "react-router-dom";
+import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 // import Main from "./pages/Main";
 import Search from "./pages/Search";
 import ProductList from "./pages/ProductList";
@@ -22,8 +22,18 @@ import SaleList from "./pages/SaleList";
 import MypageDetail from "./pages/MypageDetail";
 import UpdateMyPage from "./pages/UpdateMypage.jsx";
 import SignupTag from "./pages/SignupTag";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const Layout = () => {
+  // const navigate = useNavigate();
+  // const User = useSelector((state) => state.user.user.user);
+  // useEffect(() => {
+  //   if (User === "") {
+  //     navigate("/login");
+  //   }
+  // });
+
   return (
     <div>
       <LogoHeader />
@@ -60,7 +70,10 @@ function App() {
           <Route path="/specialAuction" element={<SpecialAuction />} />
           <Route path="/specialProduct" element={<SpecialProductRegister />} />
           <Route path="/productlist" element={<ProductList />} />
-          <Route path="/productDetail/:id" element={<ProductDeatail />} />
+          <Route
+            path="/productDetail/:productId"
+            element={<ProductDeatail />}
+          />
           <Route path="/saleList" element={<SaleList />} />
           <Route path="/mypageDetail" element={<MypageDetail />} />
           <Route path="/updateMypage" element={<UpdateMyPage />} />
