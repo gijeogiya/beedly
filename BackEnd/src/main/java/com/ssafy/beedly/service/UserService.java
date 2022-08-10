@@ -2,6 +2,7 @@ package com.ssafy.beedly.service;
 
 import com.ssafy.beedly.client.KakaoLoginApi;
 import com.ssafy.beedly.common.exception.NotFoundException;
+import com.ssafy.beedly.common.exception.NotMatchException;
 import com.ssafy.beedly.config.security.util.JwtUtil;
 import com.ssafy.beedly.domain.*;
 import com.ssafy.beedly.domain.type.UserRole;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.ssafy.beedly.common.exception.NotFoundException.*;
+import static com.ssafy.beedly.common.exception.NotMatchException.SOLD_NOT_MATCH;
 
 @Slf4j
 @Service
@@ -138,13 +140,23 @@ public class UserService {
     // 상시 구매내역 결제정보 조회
     public UserPurchasePaidResponse searchPersonalPurchasePaidInfo(Long productSoldId, User user) {
         // 본인 구매내역 맞는지 방어로직 추가하기
-        return new UserPurchasePaidResponse(userQueryRepository.searchPersonalPurchasePaidInfo(productSoldId));
+        PersonalSold findSoldInfo = userQueryRepository.searchPersonalPurchasePaidInfo(productSoldId);
+        if (findSoldInfo.getUser().getId() != user.getId()) {
+            throw new NotMatchException(SOLD_NOT_MATCH);
+        }
+
+        return new UserPurchasePaidResponse(findSoldInfo);
     }
 
     // 기획전 구매내역 결제정보 조회
     public UserPurchasePaidResponse searchSpecialPurchasePaidInfo(Long productSoldId, User user) {
         // 본인 구매내역 맞는지 방어로직 추가하기
-        return new UserPurchasePaidResponse(userQueryRepository.searchSpecialPurchasePaidInfo(productSoldId));
+        SpecialSold findSoldInfo = userQueryRepository.searchSpecialPurchasePaidInfo(productSoldId);
+        if (findSoldInfo.getUser().getId() != user.getId()) {
+            throw new NotMatchException(SOLD_NOT_MATCH);
+        }
+
+        return new UserPurchasePaidResponse(findSoldInfo);
     }
 
     /* ******************************* 연습코드 ********************************* */
