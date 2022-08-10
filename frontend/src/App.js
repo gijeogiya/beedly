@@ -16,6 +16,8 @@ import MyPage from "./pages/MyPage";
 import MainPage from "./pages/Main";
 import { ProductRegister } from "./pages/ProductRegister";
 import { SpecialProductRegister } from "./pages/SpecialProductRegister";
+import { ProductDeatail } from "./pages/ProductDeatail";
+import { Temp } from "./pages/Temp";
 const Layout = () => {
   return (
     <div>
@@ -42,7 +44,7 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<MainPage />} />
+          <Route index element={<ProductDeatail />} />
           <Route path="/search" element={<Search />} />
           <Route path="/productRegister" element={<ProductRegister />} />
           <Route path="/onair" element={<Onair />} />
@@ -53,7 +55,9 @@ function App() {
           <Route path="/specialAuction" element={<SpecialAuction />} />
           <Route path="/specialProduct" element={<SpecialProductRegister />} />
           <Route path="/productlist" element={<ProductList />} />
+          <Route path="/productDetail/:id" element={<ProductDeatail />} />
         </Route>
+        <Route path="/personalAuction" element={<Auction />} />
         <Route path="/auctionSeller" element={<Auction grade="seller" />} />
         <Route path="/auctionBuyer" element={<Auction grade="buyer" />} />
         <Route path="/user/kakao/callback" element={<Kakao />}></Route>
