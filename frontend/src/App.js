@@ -60,9 +60,7 @@ function App() {
           <Route path="/specialAuction" element={<SpecialAuction />} />
           <Route path="/specialProduct" element={<SpecialProductRegister />} />
           <Route path="/productlist" element={<ProductList />} />
-
           <Route path="/productDetail/:id" element={<ProductDeatail />} />
-
           <Route path="/saleList" element={<SaleList />} />
           <Route path="/mypageDetail" element={<MypageDetail />} />
           <Route path="/updateMypage" element={<UpdateMyPage />} />

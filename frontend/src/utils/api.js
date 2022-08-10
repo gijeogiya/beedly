@@ -5,6 +5,8 @@ const API_SERVER = "https://i7a601.p.ssafy.io/api/";
 const API_SERVER_SPECIAL = API_SERVER + "admin/special/";
 const API_SERVER_PERSONAL = API_SERVER + "personalProduct/";
 const API_SERVER_AUCTION = API_SERVER + "auction/";
+const API_SERVER_ABSENTEEBID = API_SERVER + "absenteeBid/";
+
 const specialPostApi = axios.create({
   baseURL: API_SERVER_SPECIAL,
   headers: {
@@ -45,6 +47,14 @@ const auctionApi = axios.create({
   },
 });
 
+const absenteeBidApi = axios.create({
+  baseURL: API_SERVER_ABSENTEEBID,
+  headers: {
+    "Content-type": "application/json",
+    Authorization: `Bearer ` + localStorage.getItem("token"),
+  },
+});
+
 const registerSpecialBoard = (formData, success, fail) => {
   specialPostApi.post(`/board`, formData).then(success).catch(fail);
 };
@@ -76,6 +86,30 @@ const getAuctionProduct = async (auctionId, success, fail) => {
   await auctionApi.get(`/${auctionId}/personal`).then(success).catch(fail);
 };
 
+const postAbsenteeBid = async (params, success, fail) => {
+  await absenteeBidApi
+    .post(`/product/${params.productId}`, {
+      absenteeBidPrice: params.absenteeBidPrice,
+    })
+    .then(success)
+    .catch(fail);
+};
+
+const updateAbsenteeBid = async (params, success, fail) => {
+  await absenteeBidApi
+    .patch(`${params.absenteeBidId}`, {
+      absenteeBidPrice: params.absenteeBidPrice,
+    })
+    .then(success)
+    .catch(fail);
+};
+
+const deleteAbsenteeBid = async (params, success, fail) => {
+  await absenteeBidApi
+    .delete(`${params.absenteeBidId}`)
+    .then(success)
+    .catch(fail);
+};
 //토큰이 필요하지 않은 axios 처리
 const instance = axios.create({
   baseURL: "https://i7a601.p.ssafy.io/api/",

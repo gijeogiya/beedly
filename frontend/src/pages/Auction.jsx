@@ -22,6 +22,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { getAuctionProduct } from "../utils/api";
 import { moneyFormat } from "../stores/modules/basicInfo";
+import SockJS from "sockjs-client";
+import * as StompJs from "@stomp/stompjs";
 
 const MainContent = styled.img`
   src: ${(props) => props.src || ""};
@@ -158,7 +160,7 @@ function ProductFrame({
   callPrice,
   visible,
   grade,
-  f,
+  bidProduct,
   open,
   handleClose,
   handleAuctionExit,
@@ -220,7 +222,7 @@ function ProductFrame({
       </ProductBox>
       <ButtonContainer>
         {grade !== undefined && grade === "buyer" ? (
-          <BidButton disabled={visible} visible={visible} onClick={f}>
+          <BidButton disabled={visible} visible={visible} onClick={bidProduct}>
             {visible ? "입찰완료" : "입찰하기"}
           </BidButton>
         ) : (
@@ -301,8 +303,6 @@ const ChatFrame = styled.div`
   height: 100%;
 `;
 
-const ChattingDiv = styled.div``;
-
 const ChatBox = ({ localUser, grade }) => {
   return (
     <ChatFrame>
@@ -327,13 +327,16 @@ const Conatainer = styled(Carousel)`
 function BottomUi({
   bidInfo,
   visible,
-  f,
+  bidProduct,
   localUser,
   grade,
   handleClose,
   handleAuctionExit,
   open,
   handleClickOpen,
+  currentPrice,
+  callPrice,
+  currentBidder,
 }) {
   return (
     <Conatainer controls="arrows">
@@ -345,12 +348,12 @@ function BottomUi({
         category={bidInfo.category}
         artist={bidInfo.artist}
         productSrc={bidInfo.productSrc}
-        currentBidder={bidInfo.currentBidder}
-        currentPrice={bidInfo.currentPrice}
-        callPrice={bidInfo.callPrice}
+        currentBidder={currentBidder}
+        currentPrice={currentPrice}
+        callPrice={callPrice}
         visible={visible}
         grade={grade}
-        f={f}
+        bidProduct={bidProduct}
         open={open}
         handleClose={handleClose}
         handleAuctionExit={handleAuctionExit}
@@ -400,27 +403,97 @@ function ExitButton({ handleClickOpen, handleClose, handleAuctionExit, open }) {
 }
 
 export const Auction = () => {
+  const client = useRef({});
   const location = useLocation();
   const { grade } = location.state;
   const { auctionId } = location.state;
   const { userName } = location.state;
   const [loading, setLoading] = useState(true);
-  console.log(location.state);
+  // console.log(location.state);
   const [visible, setVisible] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
   const [isCalled, setIsCalled] = useState(false);
   const [initPrice, setInitPrice] = useState(0);
   const [open, setOpen] = useState(false);
+  const [currentBidder, setCurrentBidder] = useState("");
+  const [currentPrice, setCurrentPrice] = useState("");
+  const [callPrice, setCallPrice] = useState("");
+  const [productId, setProductId] = useState("");
   const [bidInfo, setBidInfo] = useState({
     title: "",
     category: "",
     artist: "",
     productSrc: "",
-    currentBidder: "",
-    currentPrice: 0,
-    callPrice: 0,
   });
   const [localUser, setLocalUser] = useState(undefined);
+
+  const handleBid = () => {};
+
+  const subscribe = () => {
+    if (client.current != null) {
+      console.log("subs!!!!!!!!!");
+      client.current.subscribe(
+        "/sub/auction/personal/" + auctionId,
+        (response) => {
+          console.log("sub log : ", response);
+          const data = JSON.parse(response.body);
+          setCurrentPrice((prev) => (prev = data.bidPrice));
+          setCurrentBidder((prev) => (prev = data.userNickname));
+        }
+      );
+    }
+  };
+
+  const initSocketClient = () => {
+    client.current = new StompJs.Client({
+      brokerURL: "wss://i7a601.p.ssafy.io/api/ws-stomp",
+      connectHeaders: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      webSocketFactory: () => {
+        return SockJS("https://i7a601.p.ssafy.io/api/ws-stomp");
+      },
+      debug: (str) => {
+        console.log("stomp debug!!!", str);
+      },
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+
+      onStompError: (frame) => {
+        // Will be invoked in case of error encountered at Broker
+        // Bad login/passcode typically will cause an error
+        // Complaint brokers will set `message` header with a brief message. Body may contain details.
+        // Compliant brokers will terminate the connection after any error
+        console.log("Broker reported error: " + frame.headers["message"]);
+        console.log("Additional details: " + frame.body);
+        // client.deactivate();
+      },
+    });
+
+    client.current.onConnect = (frame) => {
+      console.log("client init !!! ", frame);
+      if (client.current != null)
+        client.current.publish({
+          destination: "/pub/auction/personal/product/bidding",
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+          body: JSON.stringify({
+            type: "E",
+            auctionId: auctionId,
+            productId: productId,
+          }),
+        });
+      subscribe();
+    };
+
+    client.current.activate();
+  };
+
+  const disConnect = () => {
+    if (client.current != null) {
+      if (client.current.connected) client.current.deactivate();
+    }
+  };
 
   useEffect(() => {
     if (loading) {
@@ -432,20 +505,23 @@ export const Auction = () => {
             title: response.data.productName,
             category: "회화",
             artist: response.data.userName,
-            productSrc: response.data.artistProfileImg,
-            currentBidder: "없음",
-            currentPrice: response.data.startPrice,
-            callPrice: 10000,
+            productSrc: response.data.productImages[0],
           });
+          setCurrentBidder("없음");
+          setCurrentPrice(response.data.startPrice);
           setInitPrice(response.data.startPrice);
+          setProductId(response.data.productId);
+          setCallPrice(10000);
           setLoading(false);
         },
         (fail) => {
           console.log(fail);
         }
-      );
+      ).then(initSocketClient());
     }
-  }, [loading]);
+    return () => disConnect();
+  }, [loading, productId]);
+
   // const bidInfo = {
   //   title: "Ice Age",
   //   category: "회화",
@@ -462,25 +538,36 @@ export const Auction = () => {
       return temp;
     });
   };
-  function handleVisible() {
-    changeValue("currentPrice", 0 + bidInfo.currentPrice + bidInfo.callPrice);
-    console.log(bidInfo.currentPrice, initPrice);
-    if (!isCalled && initPrice + 30000 < bidInfo.currentPrice) {
+
+  //응찰, 응찰 성공, 응찰 실패
+  const handleVisible = () => {
+    if (!client.current.connected) return;
+    client.current.publish({
+      destination: "/pub/auction/personal/product/bidding",
+      headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+      body: JSON.stringify({
+        type: "B",
+        auctionId: auctionId,
+        productId: productId,
+        bidPrice: currentPrice + callPrice,
+      }),
+    });
+
+    console.log(currentPrice, initPrice);
+    if (!isCalled && initPrice + 30000 < currentPrice) {
       console.log("call!@@");
       setIsCalled(true);
-      changeValue(
-        "callPrice",
-        0 + bidInfo.callPrice + Math.floor(bidInfo.callPrice * 0.5)
-      );
+      setCallPrice((prev) => prev + Math.floor(prev * 0.5));
     }
     setVisible(!visible);
-  }
+  };
 
   const ref = createRef();
   const navigate = useNavigate();
-  function handleAuctionExit() {
+  const handleAuctionExit = () => {
+    client.current.deactivate();
     ref.current.componentWillUnmount();
-  }
+  };
 
   const handleGoBack = () => {
     navigate(-1);
@@ -526,7 +613,7 @@ export const Auction = () => {
         artistSrc={artist}
       />
 
-      <PriceBox price={bidInfo.currentPrice} callPrice={bidInfo.callPrice} />
+      <PriceBox price={currentPrice} callPrice={callPrice} />
       <Grommet theme={GrommetTheme}>
         {visible && (
           <Notification
@@ -539,13 +626,16 @@ export const Auction = () => {
         <BottomUi
           bidInfo={bidInfo}
           visible={visible}
-          f={handleVisible}
+          bidProduct={handleVisible}
           localUser={localUser}
           grade={grade}
           handleClickOpen={handleClickOpen}
           handleClose={handleClose}
           handleAuctionExit={handleAuctionExit}
           open={open}
+          currentBidder={currentBidder}
+          currentPrice={currentPrice}
+          callPrice={callPrice}
         />
       </Grommet>
     </div>
