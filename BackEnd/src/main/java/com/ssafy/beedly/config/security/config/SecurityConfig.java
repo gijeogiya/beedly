@@ -62,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
-                .antMatchers("/ws-stomp/**", "/api/port","/actuator/health").permitAll()
+                .antMatchers("/api/ws-stomp/**", "/api/port","/actuator/health").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users", "/api/users/login").permitAll()
                 .anyRequest().permitAll()
                 //.anyRequest().hasAnyRole("USER", "ADMIN")
