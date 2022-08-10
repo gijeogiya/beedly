@@ -41,13 +41,13 @@ const FooterContent = ({ title, desc, setOpen, openGuid }) => {
           onClick={
             d === "공지사항"
               ? () => {
-                setOpen(true);
-              }
+                  setOpen(true);
+                }
               : d === "이용가이드"
-                ? () => {
+              ? () => {
                   openGuid(true);
                 }
-                : () => { }
+              : () => {}
           }
         >
           {d}
@@ -139,25 +139,30 @@ export function NavBar() {
   const [show, handleShow] = useState("visible");
   const [opacity, setOpacity] = useState("1");
   useEffect(() => {
+    let mounted = true;
     window.addEventListener("scroll", () => {
-      nowScrollTop = window.scrollY;
-      let fixBoxHeight = "50";
-      if (nowScrollTop > lastScrollTop && nowScrollTop > fixBoxHeight) {
-        handleShow("hidden");
-        setOpacity("0");
-      } else {
-        if (nowScrollTop + window.innerHeight < document.body.offsetHeight) {
-          //Scroll up (하단 고정메뉴 보임)
-          handleShow("visible");
-          setOpacity("1");
+      if (mounted) {
+        nowScrollTop = window.scrollY;
+        let fixBoxHeight = "50";
+        if (nowScrollTop > lastScrollTop && nowScrollTop > fixBoxHeight) {
+          handleShow("hidden");
+          setOpacity("0");
+          // console.log("down ", show);
+        } else {
+          if (nowScrollTop + window.innerHeight < document.body.offsetHeight) {
+            //Scroll up (하단 고정메뉴 보임)
+            handleShow("visible");
+            setOpacity("1");
+            // console.log("up ", show);
+          }
         }
+        lastScrollTop = nowScrollTop;
       }
-      lastScrollTop = nowScrollTop;
     });
 
     return () => {
-      window.removeEventListener("scroll", () => { });
-      handleShow("hidden");
+      // window.removeEventListener("scroll", () => { });
+      mounted = false;
     };
   }, []);
   return (
@@ -201,9 +206,9 @@ const Image = styled.img`
   height: ${(props) => props.height || "28vw"};
   border-radius: 10%;
   object-fit: cover;
-`
+`;
 export function StyledImg({ src, width, height, alt }) {
-  return <Image src={src} width={width} height={height} alt={alt}></Image>
+  return <Image src={src} width={width} height={height} alt={alt}></Image>;
 }
 
 const ProductFrame = styled.div`
@@ -228,16 +233,16 @@ const ArtistImg = styled.img`
   border-radius: 50%;
 `;
 
-
 const ProfileImg = styled.img`
-  width:25vw;
-  height:25vw;
+  width: 25vw;
+  height: 25vw;
   object-fit: cover;
   src: ${(props) => props.src || SampleProfile};
   border-radius: 50%;
 `;
-export const StyledProfile = (props) =>
+export const StyledProfile = (props) => (
   <ProfileImg src={props.src} {...props}></ProfileImg>
+);
 
 //상품 프레임
 export function Product({
@@ -296,7 +301,7 @@ export function AuctionArtist({ title, artist, artistSrc }) {
 }
 
 //작가 프레임
-export function Artist({ artist, artistSrc }) { }
+export function Artist({ artist, artistSrc }) {}
 // const ArtistImg = styled.
 
 //텍스트 폼
