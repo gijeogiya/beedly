@@ -30,7 +30,7 @@ public class PersonalBidService {
     // 방에 첫 입장 후, 최신 입찰정보 가져오기
     public BidMessageResponse getLatestBidInfo(BidMessageRequest request) {
         Optional<PersonalBid> findLatestBidInfo = personalBidRepository.findFirstByPersonalProductIdOrderByBidPriceDesc(request.getProductId());
-        BidMessageResponse bidResponse = null;
+        BidMessageResponse bidResponse = new BidMessageResponse();
         if (findLatestBidInfo.isPresent()) {
             bidResponse = new BidMessageResponse(findLatestBidInfo.get());
         }
