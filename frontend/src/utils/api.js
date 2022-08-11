@@ -173,6 +173,30 @@ const artistApproveApi = async (userId, success, fail) => {
     .then(success)
     .catch(fail);
 };
+
+// 태그 보기
+const getUserTagApi = async (success, fail) => {
+  await authInstance.get(`/userRecommendation/list`).then(success).catch(fail);
+};
+// Product API
+
+// 생방송 중인 상품 목록 가져오기
+const getOnairApi = async (page, size, sort, success, fail) => {
+  await instance
+    .get(`personalProduct/list/onAir?page=${page}&size=${size}&sort=${sort}`)
+    .then(success)
+    .catch(fail);
+};
+
+// 작가 목록 가져오기
+const getArtistApi = async (page, size, sort, success, fail) => {
+  await instance
+    .get(`artist?page=${page}&size=${size}&sort=${sort}`)
+    .then(success)
+    .catch(fail);
+};
+
+//
 export {
   loginApi,
   checkNicknameApi,
@@ -192,4 +216,7 @@ export {
   artistApplicationApi,
   applicationListApi,
   artistApproveApi,
+  getOnairApi,
+  getArtistApi,
+  getUserTagApi,
 };

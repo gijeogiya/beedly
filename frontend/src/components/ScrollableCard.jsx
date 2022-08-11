@@ -73,24 +73,65 @@ const StyledCardInfTextFrame = styled.div`
     padding-left: 5px;
 `;
 
-export function ProductCard() {
+export function ProductCard({ product }) {
+    const now = new Date();
+    const start = new Date(product.startTime);
+    const date = product.startTime.split("T");
+    const yyyyMMdd = date[0].split("-");
+    const HHmm = date[1].split(":");
+    const checkTime = () => {
+        if (parseInt(now.getFullYear) >= parseInt(yyyyMMdd[0]) &&
+            parseInt(now.getMonth + 1) >= parseInt(yyyyMMdd[1]) &&
+            parseInt(now.getDate) >= parseInt(yyyyMMdd[2]) &&
+            parseInt(now.getHours) >= parseInt(HHmm[0]) &&
+            parseInt(now.getMinutes) >= parseInt(HHmm[1])
+        ) {
+            // 아직 진행 예정
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    const getTime = () => {
+
+        let diff = now - start;
+        const diffDays = Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+        diff -= diffDays * (1000 * 60 * 60 * 24);
+        const diffHours = Math.floor(diff / (1000 * 60 * 60));
+        diff -= diffHours * (1000 * 60 * 60);
+        const diffMin = Math.floor(diff / (1000 * 60));
+        diff -= diffMin * (1000 * 60);
+        const diffSec = Math.floor(diff / 1000);
+        return `${diffDays < 10 ? `0${diffDays}` : diffDays}일 ${diffHours < 10 ? `0${diffHours}` : diffHours}: ${diffMin < 10 ? `0${diffMin}` : diffMin}: ${diffSec < 10 ? `0${diffSec}` : diffSec}`
+
+    }
+
+    const isOnair = () => {
+        return true;
+    }
     return (
         <StyledProductCard>
             <StyledProductCardImgFrame>
-                <StyledRectangleRowImg src={SampleProduct} />
+                <StyledRectangleRowImg src={product.productImgs[0]} />
                 <AuctionStateBox>
                     <StyledAuctionStateIcon src={true ? OnairStateIcon : BeforeStateIcon} />
-                        {true ? " 실시간" : " 25:10:12"}
+                    {checkTime ? "실시간" : getTime}
                 </AuctionStateBox>
             </StyledProductCardImgFrame>
             <StyledCardInfBox>
                 <StyledCardArtistImgFrame>
-                    <StyledCardArtistImg src={SampleProfile} />
+                    <StyledCardArtistImg src={product.artistImg} />
                 </StyledCardArtistImgFrame>
-                <StyledCardInfTextFrame>
-                    <div style={{"fontSize": "14px", "fontWeight": "700"}}>해리아현</div>
-                    <div style={{"fontSize": "14px"}}>고양이와 함께 춤을</div>
-                    <div style={{"fontSize": "12px"}}>{false ? `24명 시청중` : `12월 22일 13시 예정`}</div>
+                <StyledCardInfTextFrame >
+                    <div style={{ "fontSize": "14px", "fontWeight": "700", whiteSpace: "pre-line" }}>{product.userName}</div>
+                    <div style={{
+                        "fontSize": "14px", whiteSpace: "pre-line",
+                    }}>{product.productName}</div>
+                    <div style={{ "fontSize": "12px", whiteSpace: "pre-line", }}>{isOnair ? `시청중` : `${yyyyMMdd[0]}년 ${parseInt(yyyyMMdd[1])}월 ${parseInt(
+                        yyyyMMdd[2]
+                    )}일  ${parseInt(HHmm[0])}시 ${parseInt(HHmm[1]) !== 0 ? `${parseInt(HHmm[1])}분` : ``
+                        } 예정`}</div>
                 </StyledCardInfTextFrame>
             </StyledCardInfBox>
         </StyledProductCard>
@@ -132,17 +173,17 @@ const StyledProfileCardInfBox = styled.div`
     background-image:linear-gradient(0deg,rgba(0,0,0,.5),rgba(0,0,0,0) 30%);
 `;
 
-export function ArtistCard() {
+export function ArtistCard({ artist }) {
     return (
         <StyledProfileCard>
-              <StyledProfileCardImgFrame>
-                <StyledRectangleColImg src={SampleBackground} />
+            <StyledProfileCardImgFrame>
+                <StyledRectangleColImg src={artist.artistBgImg} />
                 <StyledProfileCardInfBox>
-                    <StyledCardArtistImgFrame style={{"padding": "12px"}}>
-                        <StyledCardArtistImg style={{"border": "2px solid white"}} src={SampleProfile} />
+                    <StyledCardArtistImgFrame style={{ "padding": "12px" }}>
+                        <StyledCardArtistImg style={{ "border": "2px solid white" }} src={artist.artistProfileImg} />
                     </StyledCardArtistImgFrame>
-                    <div style={{"padding":"12px", "color":"white", "fontSize":"14px"}}>
-                        해리아현
+                    <div style={{ "padding": "12px", "color": "white", "fontSize": "14px" }}>
+                        {artist.userNickname}
                     </div>
                 </StyledProfileCardInfBox>
             </StyledProfileCardImgFrame>
