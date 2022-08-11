@@ -167,10 +167,16 @@ public class PersonalProductService {
 		return products;
 	}
 
-//	@Transactional
+	@Transactional
 	public Slice<PersonalProductDto> getProductOnAirByCategory(String categoryName, Pageable pageable){
 		Slice<PersonalProductDto> products = personalProductRepository.findProductOnAirByCategory(categoryName, pageable)
 				.map(PersonalProductDto::new);
+		return products;
+	}
+
+	@Transactional
+	public Slice<PersonalProductDto> getProductOnAir(Pageable pageable){
+		Slice<PersonalProductDto> products = personalProductRepository.findProductOnAir(pageable).map(PersonalProductDto::new);
 		return products;
 	}
 

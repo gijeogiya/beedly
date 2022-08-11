@@ -1,5 +1,7 @@
 package com.ssafy.beedly.repository;
 
+import java.util.Optional;
+
 import com.ssafy.beedly.domain.ArtistApproval;
 import com.ssafy.beedly.domain.User;
 
@@ -12,4 +14,6 @@ public interface ArtistApprovalRepository extends JpaRepository<ArtistApproval, 
 	@Query("select a from ArtistApproval a join fetch a.user where a.approvalFlag = false")
 	Slice<ArtistApproval> findFalseArtistBy();
 
+	@Query("select a from ArtistApproval a where a.user.id = :artistId")
+	Optional<ArtistApproval> findByUserId(Long artistId);
 }

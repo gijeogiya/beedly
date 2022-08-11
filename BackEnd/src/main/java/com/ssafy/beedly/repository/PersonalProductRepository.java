@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.DoubleStream;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,4 +48,8 @@ public interface PersonalProductRepository extends JpaRepository<PersonalProduct
     //---------- 5-3. Tag가 무엇인지?
     @Query(value="select s from SearchTag s join fetch s.tags t where t.personalProduct.id = :productId")
     List<SearchTag> findSearchTagByProductId(Long productId);
+
+    //---------- 6. 진행중인 경매 모두 불러오기
+    @Query(value="select pa from PersonalAuction pa join fetch pa.personalProduct p where  pa.activeFlag = true")
+    Slice<PersonalAuction> findProductOnAir(Pageable pageable);
 }

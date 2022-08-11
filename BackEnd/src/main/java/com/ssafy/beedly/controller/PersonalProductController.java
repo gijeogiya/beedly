@@ -119,9 +119,15 @@ public class PersonalProductController {
 	@ApiImplicitParam(name = "category", value = "카테고리 이름" , paramType = "query", dataType = "String")
 	// 3. 카테고리 별 SLICE로 진행중인 product가져오기
 	//http://localhost:8080/personalProduct/list/onAir?page=0&size=2&sort=startTime,DESC
-	@GetMapping("/list/onAir")
+	@GetMapping("/list/onAirByCategory")
 	public ResponseEntity<?> getProductInfoOnAirByCategory(@RequestParam("categoryName") String category,  Pageable pageable) throws Exception{
 		return ResponseEntity.ok(personalProductService.getProductOnAirByCategory(category, pageable));
+	}
+
+	@ApiOperation(value= "진행중인 상품 리스트 가져오기")
+	@GetMapping("/list/onAir")
+	public ResponseEntity<?> getProductInfoOnAir(Pageable pageable) throws Exception{
+		return ResponseEntity.ok(personalProductService.getProductOnAir(pageable));
 	}
 
 	@ApiOperation(value = "상품 사이즈로 검색한 결과 가져오기",  notes = "Pageable로 필요한거 적기 예시 ) http://localhost:8080/personalProduct/list?categoryName=\"\"&page=0&sort=startTime,DESC ")
