@@ -168,7 +168,7 @@ export const ProductDeatail = () => {
     setProductLike(data.personalProductDto.favoriteCount);
     setSoldStatus(data.personalProductDto.soldStatus);
     setArtistNickname(data.personalProductDto.userNickname);
-    setArtistId(data.personalProductDto.userId);
+    setArtistId(data.personalProductDto.userId+1);
     setAuctionId(data.auctionId);
     setIsAbsenteeBid(data.isAbsenteeBid);
     setFavoriteCount(data.personalProductDto.favoriteCount);
