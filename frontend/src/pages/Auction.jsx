@@ -477,7 +477,6 @@ export const Auction = () => {
               else
                 setIsSuccess((prev) => prev = false);
             } else if (data.isSold) {
-              alert("낙찰을 축하합니다!");
               //낙찰
               setIsSold((prev) => (prev = true));
             } else {
@@ -488,6 +487,7 @@ export const Auction = () => {
             //경매 종료
             if (userName === data.userName) {
               //낙찰된 사람
+              alert("낙찰을 축하합니다!");
               client.deactivate();
               ref.current.handleUnmount(data.soldId);
             } else {
