@@ -14,10 +14,12 @@ public class ArtistApprovalDto {
 	Long userId;
 	String userEmail;
 	String userNickname;
+	String userName;
 
 	public ArtistApprovalDto(ArtistApproval artistApproval){
 		this.userId = artistApproval.getUser().getId();
 		this.userEmail = artistApproval.getUser().getUserEmail();
 		this.userNickname = artistApproval.getUser().getUserNickname();
+		this.userName = artistApproval.getUser().getUserName();
 	}
 }

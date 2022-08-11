@@ -33,4 +33,10 @@ public class ArtistApproval extends BaseEntity {
         artistApproval.approvalFlag = approvalFlag;
         return artistApproval;
     }
+
+    public void updateArtistApproval(boolean approvalFlag, User user) {
+        this.user = user;
+        this.approvalFlag = approvalFlag;
+    }
+
 }

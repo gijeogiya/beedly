@@ -25,20 +25,22 @@ public class AdminController {
     @GetMapping("/application")
     ResponseEntity<?> setArtistApplication(@ApiIgnore @LoginUser User user){
         adminService.saveArtistApplication(user.getId());
+
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     // 2. 작가 등급 올려주기
     @ApiOperation(value = "작가 승인해서 등급올리기", notes = "작가 승인 한 후에, 등급 올리고 artist테이블에 정보 추가")
     @ApiImplicitParam(name = "userId", value = "유저아이디", paramType = "path", dataType = "Long")
-    @PatchMapping("updgrade/{userId}")
+    @PatchMapping("/upgrade/{userId}")
     ResponseEntity<?> upgradeArtist(@PathVariable Long userId){
         adminService.upgradeArtist(userId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    // 3. 작가들 리스트 받기
     @ApiOperation(value= "아직 승인안된 작가들 리스트 받기")
-    @GetMapping("/applicationLList")
+    @GetMapping("/applicationList")
     ResponseEntity<?> getApplicationList(){
         return ResponseEntity.ok(adminService.getArtistList());
     }

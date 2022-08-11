@@ -1,5 +1,7 @@
 package com.ssafy.beedly.service;
 
+import static com.ssafy.beedly.common.exception.NotFoundException.*;
+
 import com.ssafy.beedly.common.exception.NotFoundException;
 import com.ssafy.beedly.domain.Artist;
 import com.ssafy.beedly.domain.ArtistApproval;
@@ -16,10 +18,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.ssafy.beedly.common.exception.NotFoundException.ARTIST_NOT_FOUND;
-import static com.ssafy.beedly.domain.type.UserRole.ROLE_ARTIST;
-
-import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -31,8 +30,9 @@ public class AdminService {
     private final UserRepository userRepository;
     private final ArtistRepository artistRepository;
     @Transactional
-    public void saveArtistApplication(Long artistId){
-        User user = userRepository.findById(artistId).orElseThrow(() -> new NotFoundException(ARTIST_NOT_FOUND));
+    public void saveArtistApplication(Long userId){
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ARTIST_NOT_FOUND));
+        if(artistApprovalRepository.findByUserId(userId).isPresent()) return;
         artistApprovalRepository.save(ArtistApproval.createArtistApproval(false, user));
         return;
     }
@@ -42,7 +42,11 @@ public class AdminService {
         User user = userRepository.findById(artistId).orElseThrow(() -> new NotFoundException(ARTIST_NOT_FOUND));
         user.setUserRole(UserRole.valueOf("ROLE_ARTIST"));
         userRepository.save(user);
-        artistApprovalRepository.save(ArtistApproval.createArtistApproval(true, user));
+
+        ArtistApproval artistApproval = artistApprovalRepository.findByUserId(artistId).orElseThrow(()-> new NotFoundException(APPROVAL_NOT_FOUND));
+        artistApproval.updateArtistApproval(true, user);
+        artistApprovalRepository.save(artistApproval);
+        if(artistRepository.findArtistByUserId(artistId).isPresent()) return;
         artistRepository.save(Artist.createArtist(user));
         return;
     }
@@ -53,4 +57,5 @@ public class AdminService {
             artistApprovalRepository.findFalseArtistBy().map(artistApproval -> new ArtistApprovalDto(artistApproval));
         return userList;
     }
+
 }
