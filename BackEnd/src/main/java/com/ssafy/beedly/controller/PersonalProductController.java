@@ -46,9 +46,10 @@ public class PersonalProductController {
 		"  \"depth\": 5,\n" +
 		" \"startTime\": \"2013-09-29T18:46:19Z,\"\n " +
 		"  \"categoryId\": 1,\n" +
-		" \" brightness : 3,\" " +
-		" \" saturation : 2,\" " +
-		" \" temperature : 0\" " +
+		" \" brightness\" : 3,\n " +
+		" \" saturation\" : 2,\n " +
+		" \" temperature\" : 0\n " +
+			" \" searchTags\" : [1, 2, 7, 9] " +
 		"}", produces = "multipart/form-data")
 	@PostMapping
 	public ResponseEntity<?> saveProductInfo(@ApiIgnore @LoginUser User user, @RequestPart CreatePersonalProductRequest request, @RequestPart(required = false) List<MultipartFile> images){
@@ -66,9 +67,10 @@ public class PersonalProductController {
 		"  \"depth\": 5,\n" +
 		" \"startTime\": \"2013-09-29T18:46:19Z,\"\n " +
 		"  \"categoryId\": 1,\n" +
-		" \" brightness : 3,\" " +
-		" \" saturation : 2,\" " +
-		" \" temperature : 0\" " +
+			" \" brightness\" : 3,\n " +
+			" \" saturation\" : 2,\n " +
+			" \" temperature\" : 0\n " +
+			" \" searchTags \": [1, 2, 7, 9] " +
 		"}", produces = "multipart/form-data")
 	@ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
 	@PatchMapping("/{productId}")
