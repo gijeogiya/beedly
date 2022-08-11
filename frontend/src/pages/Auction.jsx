@@ -456,48 +456,50 @@ export const Auction = () => {
   const subscribe = () => {
     if (client != null) {
       console.log("subs!!!!!!!!!");
-      client.subscribe(
-        "/sub/auction/personal/" + auctionId,
-        (response) => {
-          console.log("sub log : ", response);
-          const data = JSON.parse(response.body);
-          if (data.finished === undefined) {
-            if (data.isSold === null) {
-              console.log("subs log !!! undefined!!!");
-              
-              setCurrentPrice((prev) =>
-                data.bidPrice !== null ? (prev = data.bidPrice) : prev
-              );
-              setCurrentBidder((prev) =>
-                data.userName !== null ? (prev = data.userName) : prev
-              );
-              console.log("입찰 성공 ", currentBidder);
-              if (data.userName === userName)
-                setIsSuccess((prev) => prev = true);
-              else
-                setIsSuccess((prev) => prev = false);
-            } else if (data.isSold) {
-              //낙찰
-              setIsSold((prev) => (prev = true));
-            } else {
-              //유찰
-            }
-          } else if (data.finished) {
-            console.log("경매 종료!!! " ,userName, data.userName);
-            //경매 종료
-            if (userName === data.userName) {
-              //낙찰된 사람
-              alert("낙찰을 축하합니다!");
-              client.deactivate();
-              ref.current.handleUnmount(data.soldId);
-            } else {
-              alert("경매가 종료되었습니다.");
-              client.deactivate();
-              ref.current.componentWillUnmount();
-            }
+      client.subscribe("/sub/auction/personal/" + auctionId, (response) => {
+        console.log("sub log : ", response);
+        const data = JSON.parse(response.body);
+        if (data.finished === undefined) {
+          if (data.isSold === null) {
+            console.log("subs log !!! undefined!!!");
+
+            setCurrentPrice((prev) =>
+              data.bidPrice !== null ? (prev = data.bidPrice) : prev
+            );
+            setCurrentBidder((prev) =>
+              data.userName !== null ? (prev = data.userName) : prev
+            );
+            console.log("입찰 성공 ", currentBidder);
+            if (data.userName === userName)
+              setIsSuccess((prev) => (prev = true));
+            else setIsSuccess((prev) => (prev = false));
+          } else if (data.isSold) {
+            //낙찰
+            setIsSold((prev) => (prev = true));
+          } else {
+            //유찰
+          }
+        } else if (data.finished) {
+          console.log("경매 종료!!! ", userName, data.userName);
+          //경매 종료
+          if (userName === data.userName) {
+            //낙찰된 사람
+            alert("낙찰을 축하합니다!");
+            client.deactivate();
+            //ref.current.componentWillUnmount();
+            navigate("/purchase", {
+              state: {
+                auctionType: "P",
+                soldId: data.soldId,
+              },
+            });
+          } else {
+            alert("경매가 종료되었습니다.");
+            client.deactivate();
+            ref.current.componentWillUnmount();
           }
         }
-      );
+      });
     }
   };
 
@@ -597,7 +599,7 @@ export const Auction = () => {
 
   //응찰, 응찰 성공, 응찰 실패
   const handleVisible = () => {
-    if (client ==  null) return;
+    if (client == null) return;
     client.publish({
       destination: "/pub/auction/personal/product/bidding",
       headers: { Authorization: "Bearer " + localStorage.getItem("token") },
@@ -617,7 +619,6 @@ export const Auction = () => {
     }
     setVisible(!visible);
   };
-
 
   const handleAuctionExit = () => {
     if (grade === "seller") {
@@ -657,7 +658,7 @@ export const Auction = () => {
     }
   };
   const handleGoBack = () => {
-     navigate(-1);
+    navigate(-1);
   };
 
   const handleGoBack2 = (success) => {
@@ -695,6 +696,7 @@ export const Auction = () => {
           openviduServerUrl="https://i7a601.p.ssafy.io:8443"
           sessionName={auctionId}
           userName={userName}
+          handleGoBack2={handleGoBack2}
           // openviduServerUrl="https://localhost:4443"
         />
       </ErrorBoundary>
