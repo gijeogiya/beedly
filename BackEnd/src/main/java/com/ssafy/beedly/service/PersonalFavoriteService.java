@@ -28,6 +28,7 @@ public class PersonalFavoriteService {
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         PersonalProduct findProduct = personalProductRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
+        findProduct.addFavoriteCount();
 
         return personalFavoriteRepository.save(PersonalFavorite.createPersonalFavorite(findUser, findProduct)).getId();
     }
@@ -38,6 +39,9 @@ public class PersonalFavoriteService {
         if (personalFavorite.getUser().getId() != user.getId()) {
             throw new NotMatchException(FAVORITE_NOT_MATCH);
         }
+        PersonalProduct personalProduct = personalProductRepository.findById(personalFavorite.getPersonalProduct().getId())
+                .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
+        personalProduct.minusFavoriteCount();
 
         personalFavoriteRepository.delete(personalFavorite);
     }
