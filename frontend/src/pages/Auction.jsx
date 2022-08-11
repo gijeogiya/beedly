@@ -471,6 +471,7 @@ export const Auction = () => {
               setCurrentBidder((prev) =>
                 data.userName !== null ? (prev = data.userName) : prev
               );
+              console.log("입찰 성공 ", currentBidder);
               if (data.userName === userName)
                 setIsSuccess((prev) => prev = true);
               else
@@ -483,9 +484,9 @@ export const Auction = () => {
               //유찰
             }
           } else if (data.finished) {
-            console.log("경매 종료!!! " ,userName, currentBidder);
+            console.log("경매 종료!!! " ,userName, data.userName);
             //경매 종료
-            if (userName === currentBidder) {
+            if (userName === data.userName) {
               //낙찰된 사람
               client.deactivate();
               ref.current.handleUnmount(data.soldId);
