@@ -463,7 +463,7 @@ export const Auction = () => {
                 data.bidPrice !== null ? (prev = data.bidPrice) : prev
               );
               setCurrentBidder((prev) =>
-                data.userNickname !== null ? (prev = data.userNickname) : prev
+                data.userName !== null ? (prev = data.userName) : prev
               );
             } else if (data.isSold) {
               //낙찰
