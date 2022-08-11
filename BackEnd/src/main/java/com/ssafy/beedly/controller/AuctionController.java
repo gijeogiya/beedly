@@ -50,7 +50,6 @@ public class AuctionController {
     }
 
     // 상시 경매방 입장(방 정보 + 상품 정보 + 작가정보도 같이 리턴)
-
     @ApiOperation(value = "상시 경매방 입장", notes = "상시 경매방 입장(방 정보 + 상품 정보 + 작가정보도 같이 리턴)")
     @ApiImplicitParam(name = "auctionId", value = "상시 경매방 식별자")
     @Cacheable(value = CacheKey.PERSONAL_AUCTION_BOARD, key = "#auctionId", unless = "#result == null", cacheManager = "cacheManager")
@@ -60,7 +59,7 @@ public class AuctionController {
 
     }
 
-    // 상시 경매 입찰하기
+    // 상시 경매 웹소켓 통신
     @MessageMapping("/auction/personal/product/bidding")
     public void personalProductBidding(BidMessageRequest request, @Header(HttpHeaders.AUTHORIZATION) String bearerToken) {
         Long userId = Long.valueOf(jwtUtil.getSubject(bearerToken.substring(7)));
@@ -117,7 +116,7 @@ public class AuctionController {
 
     }
 
-    // 기획전 경매 입찰하기
+    // 기획전 경매 웹소켓 통신
     @MessageMapping("/auction/special/product/bidding")
     public void specialProductBidding(BidMessageRequest request, @Header(HttpHeaders.AUTHORIZATION) String bearerToken) {
         Long userId = Long.valueOf(jwtUtil.getSubject(bearerToken.substring(7)));
@@ -125,23 +124,28 @@ public class AuctionController {
         BidMessageResponse bidMessageResponse = new BidMessageResponse();
         if (request.getType().equals("E")) { // 처음 들어왔을 때, 최신 입찰정보 가져오기
             bidMessageResponse = specialBidService.getLatestBidInfo(request);
+            messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), bidMessageResponse);
         } else if (request.getType().equals("B")) { // 입찰하기
             bidMessageResponse = specialBidService.createBid(userId, request);
+            messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), bidMessageResponse);
+        } else if (request.getType().equals("SB")) { // 낙찰 정보 뿌리기
+            SuccessfulBidResponse successfulBidResponse = specialAuctionService.successfulBid(request.getProductId());
+            messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), successfulBidResponse);
+        } else if (request.getType().equals("F")) { // 경매 종료
+            specialAuctionService.closeSpecialAuction(request.getAuctionId());
+            messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), new FinishAuctionResponse("경매가 종료되었습니다.", true));
         }
-
-        // 입찰정보 뿌리기
-        messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), bidMessageResponse);
     }
 
     // 기획전 경매방 종료
-    @ApiOperation(value = "기획전 경매방 종료", notes = "기획전 경매방 종료하기")
-    @ApiImplicitParam(name = "auctionId", value = "기획전 경매방 식별자")
-    @PatchMapping("/auction/{auctionId}/special")
-    public ResponseEntity closeSpecialAuction(@PathVariable Long auctionId) {
-        specialAuctionService.closeSpecialAuction(auctionId);
-
-        return ResponseEntity.ok().build();
-    }
+//    @ApiOperation(value = "기획전 경매방 종료", notes = "기획전 경매방 종료하기")
+//    @ApiImplicitParam(name = "auctionId", value = "기획전 경매방 식별자")
+//    @PatchMapping("/auction/{auctionId}/special")
+//    public ResponseEntity closeSpecialAuction(@PathVariable Long auctionId) {
+//        specialAuctionService.closeSpecialAuction(auctionId);
+//
+//        return ResponseEntity.ok().build();
+//    }
 
     // 상시 경매 상품 낙찰 확정
 //    @ApiOperation("상시 경매 상품 낙찰 확정")
@@ -152,11 +156,11 @@ public class AuctionController {
 //    }
 
     // 기획전 경매 상품 낙찰 확정
-    @ApiOperation("기획전 경매 상품 낙찰 확정")
-    @ApiImplicitParam(name = "productId", value = "기획전 상품 식별자")
-    @PostMapping("/special/successful/bid/product/{productId}")
-    public ResponseEntity<SuccessfulBidResponse> successfulBidSpecialAuction(@PathVariable Long productId) {
-        return ResponseEntity.ok(specialAuctionService.successfulBid(productId));
-    }
+//    @ApiOperation("기획전 경매 상품 낙찰 확정")
+//    @ApiImplicitParam(name = "productId", value = "기획전 상품 식별자")
+//    @PostMapping("/special/successful/bid/product/{productId}")
+//    public ResponseEntity<SuccessfulBidResponse> successfulBidSpecialAuction(@PathVariable Long productId) {
+//        return ResponseEntity.ok(specialAuctionService.successfulBid(productId));
+//    }
 
 }
