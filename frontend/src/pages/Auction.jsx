@@ -459,13 +459,19 @@ export const Auction = () => {
           if (data.finished === undefined) {
             if (data.isSold === null) {
               console.log("subs log !!! undefined!!!");
+              
               setCurrentPrice((prev) =>
                 data.bidPrice !== null ? (prev = data.bidPrice) : prev
               );
               setCurrentBidder((prev) =>
                 data.userName !== null ? (prev = data.userName) : prev
               );
+              if (currentBidder === userName)
+                setIsSuccess((prev) => prev = true);
+              else
+                setIsSuccess((prev) => prev = false);
             } else if (data.isSold) {
+              alert("낙찰을 축하합니다!");
               //낙찰
               setIsSold((prev) => (prev = true));
             } else {
@@ -473,11 +479,10 @@ export const Auction = () => {
             }
           } else if (data.finished) {
             //경매 종료
-            if (userName === data.userName) {
+            if (userName === currentBidder) {
               //낙찰된 사람
-              alert("낙찰을 축하합니다!");
               client.current.deactivate();
-              ref.current.componentWillUnmount(data.soldId);
+              ref.current.handleUnmount(data.soldId);
             } else {
               alert("경매가 종료되었습니다.");
               client.current.deactivate();
