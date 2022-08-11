@@ -62,6 +62,7 @@ function App() {
           <Route index element={<MainPage />} />
           <Route path="/search" element={<Search />} />
           <Route path="/productRegister" element={<ProductRegister />} />
+          <Route path="/productModify" element={<ProductRegister />} />
           <Route path="/onair" element={<Onair />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/login" element={<Login />} />

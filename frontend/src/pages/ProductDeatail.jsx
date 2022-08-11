@@ -1,4 +1,4 @@
-import { Box, Carousel, Image } from "grommet";
+import { Box, Carousel, Image, Menu, Spinner } from "grommet";
 import React, { useState } from "react";
 import Button from "../components/Button";
 import BackBtn from "../assets/images/backButton.png";
@@ -31,22 +31,45 @@ import {
   updateAbsenteeBid,
 } from "../utils/apis/absenteeBidAPI";
 import { registerAuction } from "../utils/apis/AuctionAPI";
-const HeaderBox = () => {
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import {
+  deletePersonalFavorite,
+  postPersonalFavorite,
+} from "../utils/apis/PersonalFavoriteAPI";
+const HeaderBox = ({
+  isSeller,
+  goBack,
+  sharePage,
+  deleteProduct,
+  modifyProduct,
+}) => {
   return (
     <Box direction="row" justify="between" margin="small">
       <Box>
-        <BackButton>
-          <img src={BackBtn} alt="" onClick={() => {}} />
+        <BackButton onClick={goBack}>
+          <img src={BackBtn} alt="" />
         </BackButton>
       </Box>
       <Box direction="row">
         <Box>
-          <BackButton>
-            <img src={MoreBtn} alt="" />
-          </BackButton>
+          {isSeller && (
+            <Menu
+              icon={false}
+              label={<img src={MoreBtn} alt="" />}
+              items={[
+                { label: "수정", onClick: modifyProduct },
+                { label: "삭제", onClick: deleteProduct },
+              ]}
+              dropAlign={{
+                top: "top",
+                right: "right",
+              }}
+            />
+          )}
         </Box>
         <Box>
-          <BackButton>
+          <BackButton onClick={sharePage}>
             <img src={ShareBtn} alt="" />
           </BackButton>
         </Box>
@@ -92,6 +115,9 @@ export const ProductDeatail = () => {
   const [isAbsenteeBid, setIsAbsenteeBid] = useState();
   const [absenteeBidId, setAbsenteeBidId] = useState("");
   const User = useSelector((state) => state.user.user.user);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [favoriteCount, setFavoriteCount] = useState();
+  const [favoriteId, setFavoriteId] = useState();
   const navigate = useNavigate();
   const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
   // console.log("user : ", User);
@@ -101,31 +127,35 @@ export const ProductDeatail = () => {
       window.location.href = "/login";
     }
 
-    if (loading)
-      getPersonalProduct(
-        // id,
-        productId,
-        (response) => {
-          // console.log(response.data);
-          // const product = response.data;
-          handleDataChanges(response.data);
-          console.log(response);
-
-          setLoading(false);
-        },
-        (fail) => {
-          console.log(fail);
-        }
-      );
+    if (loading) getProductInfo();
 
     const ee = setInterval(() => {
       if (!isStart()) setNowDate(new Date());
+      if (nowDate > startTime) getProductInfo();
     }, 1000);
 
     return () => {
       clearInterval(ee);
     };
   }, [loading, absenteeBidPrice]);
+
+  const getProductInfo = () => {
+    getPersonalProduct(
+      // id,
+      productId,
+      (response) => {
+        // console.log(response.data);
+        // const product = response.data;
+        handleDataChanges(response.data);
+        console.log(response);
+
+        setLoading(false);
+      },
+      (fail) => {
+        console.log(fail);
+      }
+    );
+  };
 
   const handleDataChanges = (data) => {
     setProductName(data.personalProductDto.productName);
@@ -141,12 +171,27 @@ export const ProductDeatail = () => {
     setArtistId(data.personalProductDto.userId);
     setAuctionId(data.auctionId);
     setIsAbsenteeBid(data.isAbsenteeBid);
+    setFavoriteCount(data.personalProductDto.favoriteCount);
+    setFavoriteId(data.favoriteId);
+    setIsFavorite(data.isFavorite);
     setIsOnAir(data.isOnAir);
     setAbsenteeBidPrice(
       data.absenteeBidPrice === null ? "" : data.absenteeBidPrice
     );
     setAbsenteeBidId(data.absenteeBidId === null ? "" : data.absenteeBidId);
     // setProduct(data);
+  };
+
+  const goBack = () => {
+    navigate(-1);
+  };
+
+  const sharePage = () => {
+    window.navigator.share({
+      title: `Beedly - ${productArtist} 작가님의 ${productName}`,
+      text: `${productDesc}`,
+      url: window.location.href,
+    });
   };
 
   const handleClose = () => {
@@ -157,9 +202,12 @@ export const ProductDeatail = () => {
     let now = nowDate;
     let dueDate = new Date(date);
     let diff = dueDate.getTime() + KR_TIME_DIFF - now.getTime();
+
     // console.log(diff);
-    if (diff <= 0)
+    if (diff <= 0 && isStart())
       return User.userId !== artistId ? "실시간 경매 입장" : "경매 시작";
+    else if (diff <= 0 && !isStart())
+      return User.userId !== artistId ? "실시간 경매 준비중" : "경매 시작";
     else {
       let sec = 1000;
       let minute = sec * 60;
@@ -268,9 +316,54 @@ export const ProductDeatail = () => {
     }
   };
 
+  const handleFavorite = () => {
+    //좋아요를 눌렀다면
+    if (isFavorite) {
+      deletePersonalFavorite(
+        favoriteId,
+        (response) => {
+          console.log(response);
+          getProductInfo();
+        },
+        (fail) => {
+          console.log(fail);
+        }
+      );
+    } else {
+      postPersonalFavorite(
+        productId,
+        (response) => {
+          console.log(response);
+          getProductInfo();
+        },
+        (fail) => {
+          console.log(fail);
+        }
+      );
+    }
+  };
+
+  const isAbsenteePossible = () => {
+    let dueDate = new Date(startTime);
+    let now = new Date();
+    if (isStart()) return false;
+    if (dueDate.getTime() <= now.getTime()) return false;
+    return true;
+  };
+
   const isStart = () => {
     let dueDate = new Date(startTime);
     let now = new Date();
+    if (isOnAir) return true;
+    if (dueDate.getTime() <= now.getTime() && isOnAir) return true;
+    if (
+      dueDate.getTime() <= now.getTime() &&
+      !isOnAir &&
+      User.userId === artistId
+    )
+      return true;
+    else return false;
+
     return dueDate.getTime() <= now.getTime() ? true : false;
   };
 
@@ -322,6 +415,20 @@ export const ProductDeatail = () => {
     } 예정`;
     // return date.toString("yyyy년 MM월 dd일 HH시 mm분 예정");
   };
+
+  const deleteProduct = () => {
+    if (window.confirm("삭제하시겠습니까?")) {
+      alert("삭제");
+    }
+  };
+  const modifyProduct = () => {
+    navigate("/productModify", {
+      state: {
+        productId: productId,
+      },
+    });
+  };
+
   // const getProductInfo = async () => {
   //   await getPersonalProduct(
   //     // id,
@@ -346,10 +453,18 @@ export const ProductDeatail = () => {
   // };
   // if (loading) return ;
   return loading ? (
-    <div>Loading...</div>
+    <Box width="100%" height="100%" justify="center">
+      <Spinner />
+    </Box>
   ) : (
     <Box>
-      <HeaderBox />
+      <HeaderBox
+        isSeller={artistId === User.userId}
+        goBack={goBack}
+        sharePage={sharePage}
+        deleteProduct={deleteProduct}
+        modifyProduct={modifyProduct}
+      />
       <Box>
         {/* <MainImg src={Product1} /> */}
         <Carousel fill wrap={true} play={3000} controls="arrows">
@@ -386,10 +501,12 @@ export const ProductDeatail = () => {
       <Box direction="row" margin="small">
         <Box align="center" margin="small">
           <Button
+            Blank
+            onClick={handleFavorite}
             children={
               <Box align="center">
-                <img src={LikeBtn} alt="" />
-                <StyledText text={productLike} />
+                {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                <StyledText text={favoriteCount} />
               </Box>
             }
           ></Button>
@@ -403,9 +520,9 @@ export const ProductDeatail = () => {
         >
           {User.userId !== artistId ? (
             <Button
-              MediumGreen={!isStart()}
-              MediumGray={isStart()}
-              disabled={isStart()}
+              MediumGreen={isAbsenteePossible()}
+              MediumGray={!isAbsenteePossible()}
+              disabled={!isAbsenteePossible()}
               children={
                 <Box direction="row" margin="xsmall" justify="center">
                   <img src={FileText} alt="" />
@@ -420,115 +537,6 @@ export const ProductDeatail = () => {
               onClick={handleAbsentee}
             />
           ) : null}
-
-          <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle>
-              <Box direction="row" width="100%" justify="between">
-                <Box width="10vw" />
-                <StyledText weight="bold" size="16px" text="서면 응찰" />
-                <DialogCloseButton onClick={handleClose}>
-                  <Box direction="row" justify="center">
-                    <img src={CloseButton} />
-                  </Box>
-                </DialogCloseButton>
-              </Box>
-            </DialogTitle>
-            <DialogContent>
-              <Box margin="large">
-                <Box direction="row" justify="start">
-                  <Box width="50%">
-                    <Image
-                      src={productImages[0]}
-                      fit="contain"
-                      style={{
-                        borderRadius: "7px",
-                      }}
-                    />
-                  </Box>
-                  <Box margin={{ left: "15px" }} justify="center">
-                    <StyledText
-                      text={Category[category].label}
-                      weight="bold"
-                      size="18px"
-                      style={{ textDecoration: "underline" }}
-                    />
-                    <StyledText text={productName} />
-                    <StyledText text={productArtist} />
-                  </Box>
-                </Box>
-                <Box>
-                  <Box direction="row" justify="between">
-                    <StyledText text="시작가" weight="bold" />
-                    <StyledText text={`${moneyFormat(startPrice)}원`} />
-                  </Box>
-                  <Box direction="row" justify="between">
-                    <StyledText text="희망 응찰가" weight="bold" />
-                    <Input3
-                      Thin
-                      placeholder={`${moneyFormat(startPrice)}`}
-                      value={absenteeBidPrice}
-                      onChange={(e) => {
-                        setAbsenteeBidPrice(e.target.value);
-                      }}
-                      style={{
-                        color: "#D00000",
-                        width: "30vw",
-                      }}
-                    />
-                    <StyledText color="#D00000" text="원" weight="bold" />
-                  </Box>
-                  <StyledHr width="100%" />
-                  <Box direction="row" justify="between">
-                    <Box>
-                      <StyledText text="예상 결제 금액" weight="bold" />
-                      <StyledText text="(입찰가+수수료+배송료)" size="8px" />
-                    </Box>
-                    <StyledText
-                      text={`${moneyFormat(
-                        parseInt(absenteeBidPrice * 1.2)
-                      )}원`}
-                    />
-                  </Box>
-                </Box>
-              </Box>
-            </DialogContent>
-            <DialogActions>
-              {isAbsenteeBid ? (
-                <Box direction="row" width="100%" justify="center">
-                  <Button
-                    SmallBlue
-                    children="수정하기"
-                    onClick={updateAbsentee}
-                  />
-                  <Button
-                    SmallBlack
-                    children="철회하기"
-                    onClick={deleteAbsentee}
-                  />
-                </Box>
-              ) : (
-                <Box direction="row" width="100%" justify="center">
-                  <Button SmallRed children="응찰하기" onClick={postAbsentee} />
-                </Box>
-              )}
-            </DialogActions>
-          </Dialog>
-          {/* <AbsenteeBid
-            open={open}
-            onDismiss={handleClose}
-            product={{
-              image: productImages[0],
-              category: Category[category].label,
-              name: productName,
-              artist: productArtist,
-              price: startPrice,
-            }}
-          /> */}
           <Button
             onClick={enterAuction}
             MediumBlack={User.userId !== artistId && !isStart()}
@@ -548,8 +556,138 @@ export const ProductDeatail = () => {
               </Box>
             }
           />
+          {soldStatus !== "STANDBY" && (
+            <Button
+              onClick={() => {}}
+              BigGray={
+                User.userId !== artistId
+                  ? true
+                  : soldStatus === "SUCCESS"
+                  ? true
+                  : false
+              }
+              BigBlack={
+                User.userId !== artistId
+                  ? false
+                  : soldStatus === "SUCCESS"
+                  ? false
+                  : true
+              }
+              disabled={
+                User.userId !== artistId
+                  ? true
+                  : soldStatus === "SUCCESS"
+                  ? true
+                  : false
+              }
+              children={
+                <Box direction="row" margin="xsmall" justify="center">
+                  <img src={FileText} alt="" />
+                  <StyledText
+                    text={
+                      User.userId !== artistId
+                        ? "종료된 경매 입니다."
+                        : soldStatus === "SUCCESS"
+                        ? "경매 종료"
+                        : "재등록"
+                    }
+                    color="white"
+                    size="10px"
+                    style={{ marginLeft: "10px" }}
+                  />
+                </Box>
+              }
+            />
+          )}
         </Box>
       </Box>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle>
+          <Box direction="row" width="100%" justify="between">
+            <Box width="10vw" />
+            <StyledText weight="bold" size="16px" text="서면 응찰" />
+            <DialogCloseButton onClick={handleClose}>
+              <Box direction="row" justify="center">
+                <img src={CloseButton} />
+              </Box>
+            </DialogCloseButton>
+          </Box>
+        </DialogTitle>
+        <DialogContent>
+          <Box margin="large">
+            <Box direction="row" justify="start">
+              <Box width="50%">
+                <Image
+                  src={productImages[0]}
+                  fit="contain"
+                  style={{
+                    borderRadius: "7px",
+                  }}
+                />
+              </Box>
+              <Box margin={{ left: "15px" }} justify="center">
+                <StyledText
+                  text={Category[category].label}
+                  weight="bold"
+                  size="18px"
+                  style={{ textDecoration: "underline" }}
+                />
+                <StyledText text={productName} />
+                <StyledText text={productArtist} />
+              </Box>
+            </Box>
+            <Box>
+              <Box direction="row" justify="between">
+                <StyledText text="시작가" weight="bold" />
+                <StyledText text={`${moneyFormat(startPrice)}원`} />
+              </Box>
+              <Box direction="row" justify="between">
+                <StyledText text="희망 응찰가" weight="bold" />
+                <Input3
+                  Thin
+                  placeholder={`${moneyFormat(startPrice)}`}
+                  value={absenteeBidPrice}
+                  onChange={(e) => {
+                    setAbsenteeBidPrice(e.target.value);
+                  }}
+                  style={{
+                    color: "#D00000",
+                    width: "30vw",
+                  }}
+                />
+                <StyledText color="#D00000" text="원" weight="bold" />
+              </Box>
+              <StyledHr width="100%" />
+              <Box direction="row" justify="between">
+                <Box>
+                  <StyledText text="예상 결제 금액" weight="bold" />
+                  <StyledText text="(입찰가+수수료+배송료)" size="8px" />
+                </Box>
+                <StyledText
+                  text={`${moneyFormat(parseInt(absenteeBidPrice * 1.2))}원`}
+                />
+              </Box>
+            </Box>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          {isAbsenteeBid ? (
+            <Box direction="row" width="100%" justify="center">
+              <Button SmallBlue children="수정하기" onClick={updateAbsentee} />
+              <Button SmallBlack children="철회하기" onClick={deleteAbsentee} />
+            </Box>
+          ) : (
+            <Box direction="row" width="100%" justify="center">
+              <Button SmallRed children="응찰하기" onClick={postAbsentee} />
+            </Box>
+          )}
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
