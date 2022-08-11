@@ -41,7 +41,7 @@ public class PersonalProductDto {
 	private Integer height;
 
 	@ApiModelProperty(notes = "상시 상품 가로")
-	private Integer weight;
+	private Integer width;
 
 	@ApiModelProperty(notes = "상시 상품 높이")
 	private Integer depth;
@@ -94,7 +94,7 @@ public class PersonalProductDto {
 		this.productDesc = personalProduct.getProductDesc();
 		this.startPrice = personalProduct.getStartPrice();
 		this.height = personalProduct.getHeight();
-		this.weight = personalProduct.getWidth();
+		this.width = personalProduct.getWidth();
 		this.depth = personalProduct.getDepth();
 		this.soldStatus = personalProduct.getSoldStatus();
 		this.startTime = personalProduct.getStartTime();
@@ -126,7 +126,7 @@ public class PersonalProductDto {
 		this.productDesc = personalProduct.getProductDesc();
 		this.startPrice = personalProduct.getStartPrice();
 		this.height = personalProduct.getHeight();
-		this.weight = personalProduct.getWidth();
+		this.width = personalProduct.getWidth();
 		this.depth = personalProduct.getDepth();
 		this.soldStatus = personalProduct.getSoldStatus();
 		this.startTime = personalProduct.getStartTime();
@@ -151,7 +151,7 @@ public class PersonalProductDto {
 		this.productDesc = personalProduct.getProductDesc();
 		this.startPrice = personalProduct.getStartPrice();
 		this.height = personalProduct.getHeight();
-		this.weight = personalProduct.getWidth();
+		this.width = personalProduct.getWidth();
 		this.depth = personalProduct.getDepth();
 		this.soldStatus = personalProduct.getSoldStatus();
 		this.startTime = personalProduct.getStartTime();
