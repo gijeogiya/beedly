@@ -18,6 +18,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -78,6 +80,13 @@ public class PersonalProductDto {
 	@ApiModelProperty(notes = "등록한 작가 프로필 이미지")
 	private String artistImg;
 
+	@ApiModelProperty(notes = "밝기")
+	private Integer brightness;
+	@ApiModelProperty(notes = "채도")
+	private Integer saturation;
+	@ApiModelProperty(notes = "온도")
+	private Integer temperature;
+
 
 	public PersonalProductDto(PersonalProduct personalProduct){
 		this.id = personalProduct.getId();
@@ -104,6 +113,10 @@ public class PersonalProductDto {
 		this.artistImg = personalProduct.getArtist().getArtistProfileImg();
 //		this.artistImg = personalProduct.getArtist().getArtistBgImg();
 		//this.personalSoldId = personalProduct.getPersonalSold().getId();
+
+		this.brightness = personalProduct.getBrightness();
+		this.saturation = personalProduct.getSaturation();
+		this.temperature = personalProduct.getTemperature();
 	}
 
 	public PersonalProductDto(PersonalAuction personalAuction){
@@ -126,6 +139,9 @@ public class PersonalProductDto {
 		}
 		this.artistImg = personalProduct.getArtist().getArtistBgImg();
 		//this.personalSoldId = personalProduct.getPersonalSold().getId();
+		this.brightness = personalProduct.getBrightness();
+		this.saturation = personalProduct.getSaturation();
+		this.temperature = personalProduct.getTemperature();
 	}
 
 	public PersonalProductDto(PersonalSearchTag personalSearchTag){
@@ -153,5 +169,8 @@ public class PersonalProductDto {
 		}
 		this.artistImg = personalProduct.getArtist().getArtistBgImg();
 		//this.personalSoldId = personalProduct.getPersonalSold().getId();
+		this.brightness = personalProduct.getBrightness();
+		this.saturation = personalProduct.getSaturation();
+		this.temperature = personalProduct.getTemperature();
 	}
 }
