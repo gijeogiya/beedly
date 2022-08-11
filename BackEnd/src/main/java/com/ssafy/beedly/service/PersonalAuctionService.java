@@ -7,7 +7,9 @@ import com.ssafy.beedly.domain.*;
 import com.ssafy.beedly.domain.type.BidType;
 import com.ssafy.beedly.domain.type.SoldStatus;
 import com.ssafy.beedly.dto.auction.EnterPersonalAuctionResponse;
+import com.ssafy.beedly.dto.auction.FinishAuctionResponse;
 import com.ssafy.beedly.dto.auction.SuccessfulBidResponse;
+import com.ssafy.beedly.dto.bid.request.BidMessageRequest;
 import com.ssafy.beedly.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -69,14 +71,24 @@ public class PersonalAuctionService {
 
     // 상시 경매방 종료
     @Transactional
-    public void closePersonalAuction(Long userId, Long auctionId) {
-        PersonalAuction findPersonalAuction = personalAuctionRepository.findByIdWithProductAndUser(auctionId)
+    public FinishAuctionResponse closePersonalAuction(Long userId, BidMessageRequest request) {
+        PersonalAuction findPersonalAuction = personalAuctionRepository.findByIdWithProductAndUser(request.getAuctionId())
                 .orElseThrow(() -> new NotFoundException(AUCTION_NOT_FOUND));
         if (findPersonalAuction.getUser().getId() != userId) {
             throw new NotMatchException(AUCTION_NOT_MATCH);
         }
 
         findPersonalAuction.closeAuction();
+
+        Optional<PersonalSold> findSoldInfo = personalSoldRepository.findPersonalSoldByPersonalProductId(request.getProductId());
+        FinishAuctionResponse finishAuctionResponse = new FinishAuctionResponse();
+        finishAuctionResponse.setFinished(true);
+        if (findSoldInfo.isPresent()) {
+            finishAuctionResponse.setSoldId(findSoldInfo.get().getId());
+            finishAuctionResponse.setUserName(findSoldInfo.get().getUser().getUserName());
+        }
+
+        return finishAuctionResponse;
     }
 
     // 상시 경매 낙찰 확정
