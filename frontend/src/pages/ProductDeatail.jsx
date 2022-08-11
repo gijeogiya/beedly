@@ -24,7 +24,10 @@ import {
 import CloseButton from "../assets/images/close.png";
 import { Input2, Input3 } from "../components/UserStyled";
 import styled from "styled-components";
-import { getPersonalProduct } from "../utils/apis/PersonalProductAPI";
+import {
+  deletePersonalProduct,
+  getPersonalProduct,
+} from "../utils/apis/PersonalProductAPI";
 import {
   deleteAbsenteeBid,
   postAbsenteeBid,
@@ -168,7 +171,7 @@ export const ProductDeatail = () => {
     setProductLike(data.personalProductDto.favoriteCount);
     setSoldStatus(data.personalProductDto.soldStatus);
     setArtistNickname(data.personalProductDto.userNickname);
-    setArtistId(data.personalProductDto.userId+1);
+    setArtistId(data.personalProductDto.userId);
     setAuctionId(data.auctionId);
     setIsAbsenteeBid(data.isAbsenteeBid);
     setFavoriteCount(data.personalProductDto.favoriteCount);
@@ -418,7 +421,16 @@ export const ProductDeatail = () => {
 
   const deleteProduct = () => {
     if (window.confirm("삭제하시겠습니까?")) {
-      alert("삭제");
+      deletePersonalProduct(
+        productId,
+        (response) => {
+          console.log(response);
+          alert("삭제");
+        },
+        (fail) => {
+          console.log(fail);
+        }
+      );
     }
   };
   const modifyProduct = () => {
@@ -518,7 +530,7 @@ export const ProductDeatail = () => {
           direction="row"
           width="100%"
         >
-          {User.userId !== artistId ? (
+          {soldStatus === "STANDBY" && User.userId !== artistId ? (
             <Button
               MediumGreen={isAbsenteePossible()}
               MediumGray={!isAbsenteePossible()}
@@ -537,25 +549,27 @@ export const ProductDeatail = () => {
               onClick={handleAbsentee}
             />
           ) : null}
-          <Button
-            onClick={enterAuction}
-            MediumBlack={User.userId !== artistId && !isStart()}
-            BigBlack={User.userId === artistId && !isStart()}
-            MideumRed={User.userId !== artistId && isStart()}
-            BigRed={User.userId === artistId && isStart()}
-            disabled={!isStart()}
-            children={
-              <Box direction="row" margin="xsmall" justify="center">
-                <img src={Clock} alt="" />
-                <StyledText
-                  text={handleDate(startTime)}
-                  color="white"
-                  size="10px"
-                  style={{ marginLeft: "10px" }}
-                />
-              </Box>
-            }
-          />
+          {soldStatus === "STANDBY" && (
+            <Button
+              onClick={enterAuction}
+              MediumBlack={User.userId !== artistId && !isStart()}
+              BigBlack={User.userId === artistId && !isStart()}
+              MideumRed={User.userId !== artistId && isStart()}
+              BigRed={User.userId === artistId && isStart()}
+              disabled={!isStart()}
+              children={
+                <Box direction="row" margin="xsmall" justify="center">
+                  <img src={Clock} alt="" />
+                  <StyledText
+                    text={handleDate(startTime)}
+                    color="white"
+                    size="10px"
+                    style={{ marginLeft: "10px" }}
+                  />
+                </Box>
+              }
+            />
+          )}
           {soldStatus !== "STANDBY" && (
             <Button
               onClick={() => {}}

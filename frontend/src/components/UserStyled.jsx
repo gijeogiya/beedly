@@ -100,13 +100,14 @@ export function Input({
     />
   );
 }
-export function Input2({ placeholder, onChange, value }) {
+export function Input2({ placeholder, onChange, value, disabled }) {
   return (
     <InputStyle2
       type="text"
       placeholder={placeholder}
       onChange={onChange}
       value={value}
+      disabled={disabled}
     />
   );
 }
