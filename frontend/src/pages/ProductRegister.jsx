@@ -16,8 +16,11 @@ import CloseButton from "../assets/images/close.png";
 
 import "codemirror-colorpicker/dist/codemirror-colorpicker.css";
 import { Color, ColorPicker } from "codemirror-colorpicker";
-import { registerPersonalProduct } from "../utils/apis/PersonalProductAPI";
-import { useNavigate } from "react-router-dom";
+import {
+  getPersonalProduct,
+  registerPersonalProduct,
+} from "../utils/apis/PersonalProductAPI";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Category } from "../stores/modules/basicInfo";
 
 const titleSize = "16px";
@@ -28,11 +31,15 @@ const HeaderDiv = styled.div`
   justify-content: space-between;
 `;
 
-const HeaderBox = ({ goBack }) => {
+const HeaderBox = ({ productId, goBack }) => {
   return (
     <HeaderDiv>
       <div style={{ width: "10vw" }}></div>
-      <StyledText size="20px" weight="bold" text="작품 등록" />
+      <StyledText
+        size="20px"
+        weight="bold"
+        text={productId === null ? "작품 등록" : "작품 수정"}
+      />
       <BackButton onClick={goBack}>
         <img src={CloseButton} />
       </BackButton>
@@ -154,6 +161,8 @@ const ImageBtn = styled.img`
 `;
 
 export const ProductRegister = () => {
+  const location = useLocation();
+  const productId = location.state !== null ? location.state.productId : null;
   const [productName, setProductName] = useState("");
   const [productArtist, setProductArtist] = useState("");
   const [category, setCategory] = useState(0);
@@ -180,6 +189,7 @@ export const ProductRegister = () => {
   const [brightness, setBrightness] = useState();
   const [temperature, setTemperature] = useState();
   const [request, setRequest] = useState({});
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     // const t = ["수채화", "유화", "정물화", "인물화", "팝아트", "풍경화"];
     // setTags(t);
@@ -189,21 +199,78 @@ export const ProductRegister = () => {
     // setSaturation(saturation);
     // console.log("useEffect ", brightness, saturation, temperature);
 
-    const req = {
-      productName: productName,
-      productDesc: productDesc,
-      startPrice: startPrice,
-      height: height,
-      width: width,
-      depth: depth,
-      startTime: startTime,
-      categoryId: category,
-      brightness: brightness,
-      saturation: saturation,
-      temperature: temperature,
-    };
-    setRequest(req);
-  }, [saturation, temperature, brightness, productImages]);
+    // personalProductDto": {
+    //   "artistId": 0,
+    //   "artistImg": "string",
+    //   "categoryId": 0,
+    //   "categoryName": "string",
+    //   "depth": 0,
+    //   "favoriteCount": 0,
+    //   "height": 0,
+    //   "id": 0,
+    //   "productDesc": "string",
+    //   "productImgs": [
+    //     "string"
+    //   ],
+    //   "productName": "string",
+    //   "soldStatus": "FAIL",
+    //   "startPrice": 0,
+    //   "startTime": "2022-08-11T04:28:13.781Z",
+    //   "userId": 0,
+    //   "userName": "string",
+    //   "userNickname": "string",
+    //   "weight": 0
+    // },
+
+    if (productId) {
+      if (loading)
+        getPersonalProduct(productId, (response) => {
+          console.log(response);
+          let data = response.data.personalProductDto;
+
+          setProductName(data.productName);
+          setProductDesc(data.productDesc);
+          setStartPrice(data.startPrice);
+          setHeight(data.height);
+          setWidth(data.width || 0);
+          setDepth(data.depth);
+          setStartTime(new Date(data.startTime));
+          setCategory(data.categoryId);
+          setBrightness(data.brightness);
+          setSaturation(data.saturation);
+          setTemperature(data.temperature);
+          setPrevs([...data.productImgs]);
+          setProductImages([...data.productImgs]);
+          // setRequest(req);
+        });
+    }
+
+    // const req = {
+    //   productName: productName,
+    //   productDesc: productDesc,
+    //   startPrice: startPrice,
+    //   height: height,
+    //   width: width,
+    //   depth: depth,
+    //   startTime: startTime,
+    //   categoryId: category,
+    //   brightness: brightness,
+    //   saturation: saturation,
+    //   temperature: temperature,
+    // };
+    // setRequest(req);
+    return () => setLoading(false);
+  }, [saturation, temperature, brightness]);
+
+  const urlToFile = async (url) => {
+    const response = await fetch(url);
+    const data = await response.blob();
+    const ext = url.split(".").pop(); // url 구조에 맞게 수정할 것
+    const filename = url.split("/").pop(); // url 구조에 맞게 수정할 것
+    const metadata = { type: `image/png` };
+    return new File([data], filename, metadata);
+  };
+
   const DateInputButton = forwardRef(({ value, onClick }, ref) => (
     <button onClick={onClick} ref={ref} style={style3}>
       {value === "" ? "날짜를 선택하세요" : value}
@@ -420,6 +487,11 @@ export const ProductRegister = () => {
     else return true;
   };
   const navigate = useNavigate();
+
+  const goBack = () => {
+    navigate(-1);
+  };
+
   const registerProduct = async () => {
     // setColor(prevs[0]);
     // if (isValied()) {
@@ -472,7 +544,7 @@ export const ProductRegister = () => {
   return (
     <Grommet theme={GrTheme}>
       <Box>
-        <HeaderBox />
+        <HeaderBox productId={productId} goBack={goBack} />
         <Box width="90vw" alignSelf="center">
           <Box margin="small" direction="row">
             <Box width="small" justify="center">
@@ -672,7 +744,7 @@ export const ProductRegister = () => {
           <Box alignSelf="center">
             <Button
               BigBlack
-              children="작품 등록"
+              children={productId ? "작품 수정" : "작품 등록"}
               onClick={handleClickRegister}
             ></Button>
             <Dialog

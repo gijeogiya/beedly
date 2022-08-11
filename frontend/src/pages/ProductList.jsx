@@ -16,7 +16,7 @@ export default function ProductListPage() {
         <Link to="/specialProduct">기획전 경매 상품 등록화면</Link>
       </button>
       <button>
-        <Link to="/productDetail/40">40번 작품</Link>
+        <Link to="/productDetail/39">39번 작품</Link>
       </button>
     </Box>
   );
