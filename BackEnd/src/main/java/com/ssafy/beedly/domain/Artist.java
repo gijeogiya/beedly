@@ -38,6 +38,8 @@ public class Artist extends BaseEntity {
     public static Artist createArtist(User user){
         Artist artist = new Artist();
         artist.user = user;
+        artist.artistProfileImg = "https://beedly-img.s3.ap-northeast-2.amazonaws.com/default.jpg";
+        artist.artistBgImg = "https://beedly-img.s3.ap-northeast-2.amazonaws.com/default_back.jpg";
         artist.favoriteCount = 0;
         return artist;
     }
@@ -48,5 +50,17 @@ public class Artist extends BaseEntity {
 
     public void minusFavoriteCount() {
         this.favoriteCount -= 1;
+    }
+
+    public void updateDesc(String desc) {
+        this.artistDesc = desc;
+    }
+
+    public void updateProfilImg(String imageUrl) {
+        this.artistProfileImg = imageUrl;
+    }
+
+    public void updateBackGroundImg(String imageUrl) {
+        this.artistBgImg = imageUrl;
     }
 }

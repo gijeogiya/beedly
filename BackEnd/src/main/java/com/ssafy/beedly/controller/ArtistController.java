@@ -3,6 +3,7 @@ package com.ssafy.beedly.controller;
 import com.ssafy.beedly.config.web.LoginUser;
 import com.ssafy.beedly.domain.User;
 import com.ssafy.beedly.dto.ArtistDto;
+import com.ssafy.beedly.dto.artist.ArtistDescRequest;
 import com.ssafy.beedly.service.ArtistFavoriteService;
 import com.ssafy.beedly.service.ArtistService;
 import io.swagger.annotations.Api;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Optional;
@@ -50,6 +52,30 @@ public class ArtistController {
     @DeleteMapping("/favorite/{favoriteId}")
     public ResponseEntity deleteArtistFavorite(@ApiIgnore @LoginUser User user, @PathVariable Long favoriteId) {
         artistFavoriteService.deleteArtistFavorite(user, favoriteId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(notes = "작가 설명 수정하기", value = "로그인 유저가 작가일 때 작가 설명 수정하기")
+    @PatchMapping("/info/desc")
+    public ResponseEntity updateArtistDesc(@ApiIgnore @LoginUser User user, @RequestBody ArtistDescRequest artistDescRequest) {
+        artistService.updateArtistDesc(user, artistDescRequest);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(notes = "작가 프로필 이미지 수정하기", value = "로그인 유저가 작가일 때 프로필 이미지 수정하기")
+    @PatchMapping("/info/profile")
+    public ResponseEntity updateProfileImg(@ApiIgnore @LoginUser User user, @RequestParam MultipartFile image) {
+        artistService.updateProfileImg(user, image);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(notes = "작가 배경 이미지 수정하기", value = "로그인 유저가 작가일 때 배경 이미지 수정하기")
+    @PatchMapping("/info/background")
+    public ResponseEntity updateBackGroundImg(@ApiIgnore @LoginUser User user, @RequestParam MultipartFile image) {
+        artistService.updateBackGroundImg(user, image);
 
         return ResponseEntity.ok().build();
     }
