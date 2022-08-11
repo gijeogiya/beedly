@@ -15,6 +15,7 @@ public class BidMessageResponse {
     private String userName;
     private String userNickname;
     private Integer bidPrice;
+    private Boolean isSold;
 
     public BidMessageResponse(PersonalBid pb) {
         User bidder = pb.getUser();

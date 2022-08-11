@@ -147,4 +147,14 @@ public class PersonalProduct extends BaseEntity {
         this.saturation = request.getSaturation();
         this.temperature = request.getTemperature();
     }
+
+    public void addFavoriteCount() {
+        this.favoriteCount += 1;
+    }
+
+    public void minusFavoriteCount() {
+        if (this.favoriteCount >= 1) {
+            this.favoriteCount -= 1;
+        }
+    }
 }

@@ -96,6 +96,9 @@ public class User extends BaseEntity {
         user.userEmail = kakaoAuccount.getEmail();
         user.userGender = kakaoAuccount.getGender().equals("male") ? Gender.M : Gender.F;
         user.userRole = UserRole.ROLE_USER;
+        user.userBrightness = 0;
+        user.userSaturation = 0;
+        user.userTemperature = 0;
 
         return user;
     }

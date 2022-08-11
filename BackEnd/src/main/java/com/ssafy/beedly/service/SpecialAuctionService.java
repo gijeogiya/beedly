@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.ssafy.beedly.common.exception.DuplicateException.PERSONAL_AUCTION_PRODUCT_DUPLICATED;
-import static com.ssafy.beedly.common.exception.DuplicateException.SPECIAL_AUCTION_BOARD_DUPLICATED;
+import static com.ssafy.beedly.common.exception.DuplicateException.*;
 import static com.ssafy.beedly.common.exception.NotFoundException.PRODUCT_NOT_FOUND;
 import static com.ssafy.beedly.common.exception.NotFoundException.SPECIAL_BOARD_NOT_FOUND;
 import static com.ssafy.beedly.common.exception.NotMatchException.SPECIAL_BOARD_OWNER_NOT_MATCH;
@@ -75,6 +74,10 @@ public class SpecialAuctionService {
     public SuccessfulBidResponse successfulBid(Long productId) {
         SpecialProduct findProduct = specialProductRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
+        List<SpecialSold> findSoldInfo = specialSoldRepository.findBySpecialProductId(productId);
+        if (findSoldInfo.size() >= 1) {
+            throw new DuplicateException(PRODUCT_SOLD_DUPLICATED);
+        }
 
         Optional<SpecialBid> bestOnSiteBid = specialBidRepository.findFirstBySpecialProductIdOrderByBidPriceDesc(findProduct.getId());
 
