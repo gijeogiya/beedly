@@ -16,7 +16,7 @@ const GrommetTheme = {
 export function BannerTable() {
     return (
       <Grommet theme={GrommetTheme}>
-        <Box width="medium" height="medium" overflow="hidden" fill={true} controls={false}>
+        <Box width="medium" fit="cover" height="medium" overflow="hidden" fill={true} controls={false}>
           <Carousel fill={true} wrap={true} play={6000}>
             <Image fill={true} fit="cover" src={Banner1} />
             <Image fill={true} fit="cover" src={Banner2} />
