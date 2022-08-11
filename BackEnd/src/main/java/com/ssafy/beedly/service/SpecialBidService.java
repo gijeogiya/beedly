@@ -4,6 +4,7 @@ import com.ssafy.beedly.common.exception.NotFoundException;
 import com.ssafy.beedly.domain.SpecialBid;
 import com.ssafy.beedly.domain.SpecialProduct;
 import com.ssafy.beedly.domain.User;
+import com.ssafy.beedly.domain.type.SoldStatus;
 import com.ssafy.beedly.dto.bid.request.BidMessageRequest;
 import com.ssafy.beedly.dto.bid.response.BidMessageResponse;
 import com.ssafy.beedly.repository.SpecialBidRepository;
@@ -30,9 +31,16 @@ public class SpecialBidService {
     // 방에 첫 입장 후, 최신 입찰정보 가져오기
     public BidMessageResponse getLatestBidInfo(BidMessageRequest request) {
         Optional<SpecialBid> findLatestBidInfo = specialBidRepository.findFirstBySpecialProductIdOrderByBidPriceDesc(request.getProductId());
+        SpecialProduct findProduct = specialProductRepository.findById(request.getProductId())
+                .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
         BidMessageResponse bidResponse = new BidMessageResponse();
         if (findLatestBidInfo.isPresent()) {
             bidResponse = new BidMessageResponse(findLatestBidInfo.get());
+        }
+        if (findProduct.getSoldStatus() == SoldStatus.STANDBY) {
+            bidResponse.setIsSold(false);
+        } else {
+            bidResponse.setIsSold(true);
         }
 
         return bidResponse;
