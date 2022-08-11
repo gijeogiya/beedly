@@ -94,7 +94,7 @@ export default function MypageDetail() {
                     </div>
                     <div>
                         <h5>Role</h5>
-                        <div style={styledp}>{user.userRole === "USER_ARTIST" ? "작가님" : "구매자"}</div>
+                        <div style={styledp}>{user.userRole === "ROLE_ARTIST" ? "작가님" : "구매자"}</div>
                         <StyledHr
                             width="80vw"
                             height="0.5px"

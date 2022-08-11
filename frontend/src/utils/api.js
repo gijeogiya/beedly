@@ -155,6 +155,24 @@ const registerTagApi = async (selectedTag, success, fail) => {
     .then(success)
     .catch(fail);
 };
+
+// artist 신청서 받기
+const artistApplicationApi = async (success, fail) => {
+  await authInstance.get(`/admin/application`).then(success).catch(fail);
+};
+
+// 승인 안된 작가 리스트 조회
+const applicationListApi = async (success, fail) => {
+  await authInstance.get(`/admin/applicationList`).then(success).catch(fail);
+};
+
+// 작가 승인
+const artistApproveApi = async (userId, success, fail) => {
+  await authInstance
+    .patch(`/admin/upgrade/${userId}`)
+    .then(success)
+    .catch(fail);
+};
 export {
   loginApi,
   checkNicknameApi,
@@ -171,4 +189,7 @@ export {
   getSalelApi,
   getTagListApi,
   registerTagApi,
+  artistApplicationApi,
+  applicationListApi,
+  artistApproveApi,
 };
