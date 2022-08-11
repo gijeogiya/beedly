@@ -97,7 +97,7 @@ class VideoRoomComponent extends Component {
     window.removeEventListener("beforeunload", this.onbeforeunload);
     window.removeEventListener("resize", this.updateLayout);
     window.removeEventListener("resize", this.checkSize);
-    this.leaveSession(success);
+    this.leaveSession2(success);
   }
   onbeforeunload(event) {
     this.leaveSession();
@@ -255,7 +255,7 @@ class VideoRoomComponent extends Component {
     );
   }
 
-  leaveSession(success) {
+  leaveSession() {
     const mySession = this.state.session;
 
     if (mySession) {
@@ -269,7 +269,38 @@ class VideoRoomComponent extends Component {
         type: "chat",
       });
       mySession.disconnect();
-      this.props.handleGoBack(success);
+      this.props.handleGoBack();
+    }
+
+    // Empty all properties...
+    this.OV = null;
+    this.setState({
+      session: undefined,
+      subscribers: [],
+      mySessionId: "SessionA",
+      myUserName: "OpenVidu_User" + Math.floor(Math.random() * 100),
+      localUser: undefined,
+    });
+    if (this.props.leaveSession) {
+      this.props.leaveSession();
+    }
+  }
+
+  leaveSession2(success) {
+    const mySession = this.state.session;
+
+    if (mySession) {
+      const data = {
+        message: "님이 퇴장했습니다.",
+        nickname: localUser.getNickname(),
+        streamId: localUser.getStreamManager().stream.streamId,
+      };
+      localUser.getStreamManager().stream.session.signal({
+        data: JSON.stringify(data),
+        type: "chat",
+      });
+      mySession.disconnect();
+      this.props.handleGoBack2(success);
     }
 
     // Empty all properties...

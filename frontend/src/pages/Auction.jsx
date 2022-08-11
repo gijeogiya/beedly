@@ -656,8 +656,11 @@ export const Auction = () => {
       ref.current.componentWillUnmount();
     }
   };
+  const handleGoBack = () => {
+     navigate(-1);
+  };
 
-  const handleGoBack = (success) => {
+  const handleGoBack2 = (success) => {
     //낙찰페이지로 이동
     if (success)
       navigate("/purchase", {
