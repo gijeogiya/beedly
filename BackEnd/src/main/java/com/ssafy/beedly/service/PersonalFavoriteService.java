@@ -10,6 +10,7 @@ import com.ssafy.beedly.repository.PersonalProductRepository;
 import com.ssafy.beedly.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.ssafy.beedly.common.exception.NotFoundException.*;
 import static com.ssafy.beedly.common.exception.NotMatchException.FAVORITE_NOT_MATCH;
@@ -23,6 +24,7 @@ public class PersonalFavoriteService {
     private final UserRepository userRepository;
 
     // 상시 상품에 찜하기
+    @Transactional
     public Long createFavoriteProduct(User user, Long productId) {
         User findUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
@@ -33,6 +35,7 @@ public class PersonalFavoriteService {
         return personalFavoriteRepository.save(PersonalFavorite.createPersonalFavorite(findUser, findProduct)).getId();
     }
 
+    @Transactional
     public void deleteFavoriteProduct(User user, Long favoriteId) {
         PersonalFavorite personalFavorite = personalFavoriteRepository.findById(favoriteId)
                 .orElseThrow(() -> new NotFoundException(FAVORITE_NOT_FOUND));
