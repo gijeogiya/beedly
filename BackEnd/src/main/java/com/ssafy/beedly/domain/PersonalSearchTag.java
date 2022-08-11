@@ -27,4 +27,12 @@ public class PersonalSearchTag extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "search_tag_id")
     private SearchTag searchTag;
+
+    public static PersonalSearchTag createPersonalSearchTag(PersonalProduct save, SearchTag searchTag) {
+        PersonalSearchTag personalSearchTag = new PersonalSearchTag();
+        personalSearchTag.personalProduct = save;
+        personalSearchTag.searchTag = searchTag;
+
+        return personalSearchTag;
+    }
 }
