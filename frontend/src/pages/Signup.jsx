@@ -3,9 +3,8 @@ import Button from "../components/Button"
 import { FlexBox, Input } from "../components/UserStyled"
 import qs from 'qs';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import DaumPostcode from 'react-daum-postcode';
-import { actionCreators as userActions } from "../stores/modules/user";
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 import 'react-date-range/dist/styles.css'; // main css file
@@ -54,15 +53,14 @@ const postmodal = {
 export default function Signup() {
     const Navigate = useNavigate();
     //datepicker
+    // eslint-disable-next-line
     const [locale, setLocale] = React.useState('ko');
     const [date, setDate] = useState(new Date());
     const [showCalender, setShowCalender] = useState(false);
 
     // redux에 있는 데이터 가져오기. state.(module).(data)
-    const user = useSelector(state => state.user.user);
+    const user = useSelector(state => state.user.user.user);
 
-    //다시 redux와 통신해야 하므로
-    const dispatch = useDispatch();
 
     //url에 있는 쿼리 가져와서 어떤 role로 회원가입하려는지 확인.
     const { search } = useLocation();
@@ -72,21 +70,19 @@ export default function Signup() {
     //회원가입 버튼 눌렀을 때
     const Join = () => {
         // 유효성 검사
-        if (userName == '') { window.alert("이름을 입력해주세요"); }
-        else if (userTel == '') { window.alert("전화번호를 입력해주세요"); }
-        else if (userEmail == '') { window.alert("이메일를 입력해주세요"); }
-        else if (userBirthdate == '') { window.alert("생년월일를 입력해주세요"); }
-        else if (userNickname == '' || !isNicknameCheck) { window.alert("닉네임 중복체크를 완료해주세요"); }
-        else if (userAddr == '') { window.alert("주소를 입력해주세요"); }
+        if (userName === '') { window.alert("이름을 입력해주세요"); }
+        else if (userTel === '') { window.alert("전화번호를 입력해주세요"); }
+        else if (userEmail === '') { window.alert("이메일를 입력해주세요"); }
+        else if (userBirthdate === '') { window.alert("생년월일를 입력해주세요"); }
+        else if (userNickname === '' || !isNicknameCheck) { window.alert("닉네임 중복체크를 완료해주세요"); }
+        else if (userAddr === '') { window.alert("주소를 입력해주세요"); }
         else {
             //회원가입을 하려고 하면 해당 데이터를 state에 저장하려고 함.
             const user = {
                 addr: userAddr + " " + userDetailaddr,
-                // user_gender: userGender,
                 birthday: userBirthdate,
                 name: userName,
                 nickname: userNickname,
-                // userRole: userRole,
                 tel: userTel,
             }
             console.log(user);
@@ -100,10 +96,11 @@ export default function Signup() {
             console.log("test");
             if (userRole === 'ROLE_ARTIST') {
                 // 증빙서류 제출 페이지로 가야함 ( user 객체 가지고 가야함.) 
+                Navigate('/signupArtist')
             } else { // 구매자라면 회원가입 성공
                 //태그 선택 페이지로 이동
+                Navigate('/signupTag')
             }
-            Navigate("/");
 
         }
 
@@ -115,13 +112,11 @@ export default function Signup() {
     // 닉네임 중복 체크
     const [isNicknameCheck, setNicknameCheck] = useState(false);
     const [checkalert, setcheckalert] = useState('');
-    const [response, setResponse] = useState();
     const CheckNickname = () => {
-        if (userNickname == '') {
+        if (userNickname === '') {
             setcheckalert("닉네임을 입력해주세요")
         } else {
             checkNicknameApi(userNickname, (res) => {
-                setResponse(res.data.available);
                 if (res.data.available === true) {
                     setcheckalert("해당 닉네임을 가진 사용자가 있습니다.");
                 } else {
@@ -139,8 +134,8 @@ export default function Signup() {
     // useState
     const [userAddr, setAddr] = useState('');
     const [userDetailaddr, setdetailAddr] = useState('');
+    // eslint-disable-next-line
     const [userEmail, setEmail] = useState(user.userEmail);
-    // const [userGender, setGender] = useState(user.userGender);
     const [userName, setName] = useState('');
     const [userNickname, setNickName] = useState('');
     const [userTel, setTel] = useState('');
@@ -150,8 +145,6 @@ export default function Signup() {
 
     // onChange 함수
     const onChangeDetailAddr = (e) => { setdetailAddr(e.target.value); }
-    // const onChangeEmail = (e) => { setEmail(e.target.value); console.log(userEmail); }
-    // const onChangeGender = (e) => { setGender(e.target.value); console.log(userGender); }
     const onChangeName = (e) => { setName(e.target.value); }
     const onChangeNickName = (e) => { setNickName(e.target.value); setNicknameCheck(false); setcheckalert("") }
     const onChangeTel = (e) => { setTel(e.target.value); }
@@ -161,7 +154,7 @@ export default function Signup() {
         let fullAddr = data.address;
         let extraAddr = '';
 
-        if (data.addressType == 'R') {
+        if (data.addressType === 'R') {
             if (data.bname !== '') {
                 extraAddr += data.bname;
             }
@@ -212,26 +205,6 @@ export default function Signup() {
                     <h3 style={heading2}>Email</h3>
                     <Input value={userEmail} readOnly />
                 </div>
-
-                {/* <div style={flexrowbox}>
-                    <h3 style={heading2}>성별</h3>
-                    <div style={flexrowbox2}>
-                        <RadioButton
-                            name="gender"
-                            label="남"
-                            value="M"
-                            checked={userGender === "M"}
-                            onChange={onChangeGender}
-                        />
-                        <RadioButton
-                            name="gender"
-                            label="여"
-                            value="W"
-                            checked={userGender === "W"}
-                            onChange={onChangeGender}
-                        />
-                    </div>
-                </div> */}
 
                 <div style={flexrowbox}>
                     <div style={{ display: "flex", justifyContent: "flex-start" }}>

@@ -1,8 +1,6 @@
 import React from "react";
 import Button from "../components/Button";
-import { useNavigate } from "react-router-dom";
-import { Input, Hr, FlexBox } from "../components/UserStyled";
-import Loading from "../components/Loading";
+import { FlexBox } from "../components/UserStyled";
 import Logo from "../assets/img/logoClear.png"
 const flexbox = {
   display: "flex",
@@ -18,7 +16,6 @@ const REDIRECT_URI = "http://localhost:3000/user/kakao/callback";
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 const test = () => {
   console.log(KAKAO_AUTH_URL);
-
   window.location.href = KAKAO_AUTH_URL;
 };
 export default function login() {
