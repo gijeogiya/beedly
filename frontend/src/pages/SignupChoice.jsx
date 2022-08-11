@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import Button from "../components/Button"
 import { FlexBox, Hr } from "../components/UserStyled"
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from "react-redux";
 
 const SignupInput = {
   display: "flex",
@@ -12,36 +11,22 @@ const SignupInput = {
   alignItems: "center",
   minHeight: "40vh",
 }
-const MainContent = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  minHeight: "90vh",
-}
 const Choice = {
   display: "flex",
   justifyContent: "space-around",
 }
-
+// 유저가 ROLE 선택하는 페이지
 export default function Signup() {
   const [role, setRole] = useState('');
-  const [borderstyle, setborderstyle] = useState('0px');
   const Navigate = useNavigate();
+
+  // 다음을 누르면 해당 유저의 ROLE정보를 가지고 signup페이지로 이동
   const Signup2 = () => {
     Navigate(`/signup2?role=${role}`)
   }
-  const [state, setState] = useState([
-    {
-      startDate: new Date(),
-      endDate: null,
-      key: 'selection'
-    }
-  ]);
-  const userid = useSelector(state => state.user.user.userId);
+
   return (
     <FlexBox MainContent>
-      {userid}
       <h3>회원가입</h3>
       <div style={SignupInput}>
         <Hr Thin />
