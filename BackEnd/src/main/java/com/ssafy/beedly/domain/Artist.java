@@ -32,9 +32,21 @@ public class Artist extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "favorite_count")
+    private Integer favoriteCount;
+
     public static Artist createArtist(User user){
         Artist artist = new Artist();
         artist.user = user;
+        artist.favoriteCount = 0;
         return artist;
+    }
+
+    public void addFavoriteCount() {
+        this.favoriteCount += 1;
+    }
+
+    public void minusFavoriteCount() {
+        this.favoriteCount -= 1;
     }
 }
