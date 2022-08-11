@@ -13,7 +13,7 @@ const authInstance = axios.create({
 const getPurchaseProduct = async (params, success, fail) => {
   await authInstance
     .get(`/purchase/${params.productSoldId}`, {
-      auctionType: params.auctionType,
+      params: { auctionType: params.auctionType },
     })
     .then(success)
     .catch(fail);

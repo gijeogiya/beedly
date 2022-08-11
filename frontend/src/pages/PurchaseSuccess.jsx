@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { getPurchaseProduct } from "../utils/apis/UserAPI"
 
 export const PurchaseSuccess = () => {
   const location = useLocation();
@@ -29,5 +30,5 @@ export const PurchaseSuccess = () => {
     );
   };
 
-  return <div>{}</div>;
+  return <div>hi</div>;
 };
