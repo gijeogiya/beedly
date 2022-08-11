@@ -100,8 +100,8 @@ public class UserService {
     public UserWithTagResponse getUserInfo(User user) {
         User findUser = validateUser(user);
         Artist artist = null;
-        if (findUser.getUserRole().equals(UserRole.ROLE_ARTIST)) {
-            artist = artistRepository.findByUserId(findUser.getId()).get();
+        if (findUser.getUserRole() == UserRole.ROLE_ARTIST) {
+            artist = artistRepository.findArtistByUserId(findUser.getId()).get();
         }
         List<UserRecommendation> userRecommendations = userRecommendationRepository.findByUserIdWithRecommendation(findUser.getId());
 
