@@ -456,7 +456,7 @@ export const Auction = () => {
         (response) => {
           console.log("sub log : ", response);
           const data = JSON.parse(response.body);
-          if (data.isFinished === undefined) {
+          if (data.finished === undefined) {
             if (data.isSold === null) {
               console.log("subs log !!! undefined!!!");
               setCurrentPrice((prev) =>
@@ -471,15 +471,11 @@ export const Auction = () => {
             } else {
               //유찰
             }
-          } else if (data.isFinished) {
+          } else if (data.finished) {
             //경매 종료
-            if (window.confirm("경매가 종료되었습니다.")) {
-              client.current.deactivate();
-              ref.current.componentWillUnmount();
-            } else {
-              client.current.deactivate();
-              ref.current.componentWillUnmount();
-            }
+            alert("경매가 종료되었습니다.");
+            client.current.deactivate();
+            ref.current.componentWillUnmount();
           }
         }
       );
