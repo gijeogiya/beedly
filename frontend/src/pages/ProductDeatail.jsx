@@ -393,6 +393,7 @@ export const ProductDeatail = () => {
           alert("경매 시작 전 입니다.");
         }
       } else {
+        console.log("상품 화면 유저 정보 ", User);
         navigate("/personalAuction", {
           state: {
             grade: artistId === User.userId ? "seller" : "buyer",

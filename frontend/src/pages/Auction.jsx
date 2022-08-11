@@ -420,8 +420,11 @@ function ExitButton({ handleClickOpen, handleClose, handleAuctionExit, open }) {
   );
 }
 
+var client = null;
+
 export const Auction = () => {
-  const client = useRef({});
+  const ref = useRef();
+
   const location = useLocation();
   const { grade } = location.state;
   const { auctionId } = location.state;
@@ -434,10 +437,12 @@ export const Auction = () => {
   const [isSold, setIsSold] = useState(false);
   const [initPrice, setInitPrice] = useState(0);
   const [open, setOpen] = useState(false);
-  const [currentBidder, setCurrentBidder] = useState("");
+  const [currentBidder, setCurrentBidder] = useState("없음");
   const [currentPrice, setCurrentPrice] = useState("");
   const [callPrice, setCallPrice] = useState("");
   const [productId, setProductId] = useState("");
+
+  const navigate = useNavigate();
   const [bidInfo, setBidInfo] = useState({
     title: "",
     category: "",
@@ -449,9 +454,9 @@ export const Auction = () => {
   const handleBid = () => {};
 
   const subscribe = () => {
-    if (client.current.connected) {
+    if (client != null) {
       console.log("subs!!!!!!!!!");
-      client.current.subscribe(
+      client.subscribe(
         "/sub/auction/personal/" + auctionId,
         (response) => {
           console.log("sub log : ", response);
@@ -466,7 +471,7 @@ export const Auction = () => {
               setCurrentBidder((prev) =>
                 data.userName !== null ? (prev = data.userName) : prev
               );
-              if (currentBidder === userName)
+              if (data.userName === userName)
                 setIsSuccess((prev) => prev = true);
               else
                 setIsSuccess((prev) => prev = false);
@@ -478,14 +483,15 @@ export const Auction = () => {
               //유찰
             }
           } else if (data.finished) {
+            console.log("경매 종료!!! " ,userName, currentBidder);
             //경매 종료
             if (userName === currentBidder) {
               //낙찰된 사람
-              client.current.deactivate();
+              client.deactivate();
               ref.current.handleUnmount(data.soldId);
             } else {
               alert("경매가 종료되었습니다.");
-              client.current.deactivate();
+              client.deactivate();
               ref.current.componentWillUnmount();
             }
           }
@@ -495,7 +501,7 @@ export const Auction = () => {
   };
 
   const initSocketClient = () => {
-    client.current = new StompJs.Client({
+    client = new StompJs.Client({
       brokerURL: "wss://i7a601.p.ssafy.io/api/ws-stomp",
       connectHeaders: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -521,10 +527,10 @@ export const Auction = () => {
       },
     });
 
-    client.current.onConnect = (frame) => {
+    client.onConnect = (frame) => {
       console.log("client init !!! ", frame);
-      if (client.current.connected)
-        client.current.publish({
+      if (client != null)
+        client.publish({
           destination: "/pub/auction/personal/product/bidding",
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
           body: JSON.stringify({
@@ -536,12 +542,12 @@ export const Auction = () => {
       subscribe();
     };
 
-    client.current.activate();
+    client.activate();
   };
 
   const disConnect = () => {
-    if (client.current != null) {
-      if (client.current.connected) client.current.deactivate();
+    if (client != null) {
+      if (client.connected) client.deactivate();
     }
   };
 
@@ -557,7 +563,6 @@ export const Auction = () => {
             artist: response.data.userName,
             productSrc: response.data.productImages[0],
           });
-          setCurrentBidder("없음");
           setCurrentPrice(response.data.startPrice);
           setInitPrice(response.data.startPrice);
           setProductId(response.data.productId);
@@ -591,8 +596,8 @@ export const Auction = () => {
 
   //응찰, 응찰 성공, 응찰 실패
   const handleVisible = () => {
-    if (!client.current.connected) return;
-    client.current.publish({
+    if (client ==  null) return;
+    client.publish({
       destination: "/pub/auction/personal/product/bidding",
       headers: { Authorization: "Bearer " + localStorage.getItem("token") },
       body: JSON.stringify({
@@ -612,15 +617,14 @@ export const Auction = () => {
     setVisible(!visible);
   };
 
-  const ref = createRef();
-  const navigate = useNavigate();
+
   const handleAuctionExit = () => {
     if (grade === "seller") {
       // 판매자일 경우에만 실행
       // if (!client.current.connected) return;
       if (!isSold) {
         //낙찰 정보 퍼블리시
-        client.current.publish({
+        client.publish({
           destination: "/pub/auction/personal/product/bidding",
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
           body: JSON.stringify({
@@ -633,7 +637,7 @@ export const Auction = () => {
       } else if (isSold) {
         console.log("경매 종료");
         //경매 종료하기
-        client.current.publish({
+        client.publish({
           destination: "/pub/auction/personal/product/bidding",
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
           body: JSON.stringify({
@@ -643,11 +647,11 @@ export const Auction = () => {
           }),
         });
         handleClose();
-        client.current.deactivate();
+        client.deactivate();
         ref.current.componentWillUnmount();
       }
     } else {
-      client.current.deactivate();
+      client.deactivate();
       ref.current.componentWillUnmount();
     }
   };
