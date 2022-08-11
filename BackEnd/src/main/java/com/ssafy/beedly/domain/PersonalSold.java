@@ -48,4 +48,8 @@ public class PersonalSold extends BaseEntity {
 
         return personalSold;
     }
+
+    public void updatePaidFlag() {
+        this.paidFlag = true;
+    }
 }
