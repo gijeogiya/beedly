@@ -99,7 +99,9 @@ class VideoRoomComponent extends Component {
     window.removeEventListener("resize", this.checkSize);
     this.leaveSession(success);
   }
-
+  onbeforeunload(event) {
+    this.leaveSession();
+  }
   joinSession() {
     this.OV = new OpenVidu();
 
