@@ -48,4 +48,8 @@ public class SpecialSold extends BaseEntity {
 
         return specialSold;
     }
+
+    public void updatePaidFlag() {
+        this.paidFlag = true;
+    }
 }

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.ssafy.beedly.common.exception.DuplicateException.PERSONAL_AUCTION_PRODUCT_DUPLICATED;
+import static com.ssafy.beedly.common.exception.DuplicateException.PRODUCT_SOLD_DUPLICATED;
 import static com.ssafy.beedly.common.exception.NotFoundException.*;
 import static com.ssafy.beedly.common.exception.NotMatchException.AUCTION_NOT_MATCH;
 import static com.ssafy.beedly.common.exception.NotMatchException.PRODUCT_OWNER_NOT_MATCH;
@@ -68,10 +69,10 @@ public class PersonalAuctionService {
 
     // 상시 경매방 종료
     @Transactional
-    public void closePersonalAuction(User user, Long auctionId) {
+    public void closePersonalAuction(Long userId, Long auctionId) {
         PersonalAuction findPersonalAuction = personalAuctionRepository.findByIdWithProductAndUser(auctionId)
                 .orElseThrow(() -> new NotFoundException(AUCTION_NOT_FOUND));
-        if (findPersonalAuction.getUser().getId() != user.getId()) {
+        if (findPersonalAuction.getUser().getId() != userId) {
             throw new NotMatchException(AUCTION_NOT_MATCH);
         }
 
@@ -83,6 +84,10 @@ public class PersonalAuctionService {
     public SuccessfulBidResponse successfulBid(Long productId) {
         PersonalProduct findProduct = personalProductRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
+        List<PersonalSold> findSoldInfo = personalSoldRepository.findByPersonalProductId(productId);
+        if (findSoldInfo.size() >= 1) {
+            throw new DuplicateException(PRODUCT_SOLD_DUPLICATED);
+        }
 
         Optional<PersonalBid> bestOnSiteBid = personalBidRepository.findFirstByPersonalProductIdOrderByBidPriceDesc(findProduct.getId());
         Optional<AbsenteeBid> bestAbsenteeBid = absenteeBidRepository.findFirstByPersonalProductIdOrderByAbsenteeBidPriceDesc(findProduct.getId());
