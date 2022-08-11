@@ -5,7 +5,7 @@ import { FlexBox } from '../components/UserStyled';
 import SampleProfile from '../assets/img/SampleProfile.png'
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { getUserInfoApi } from '../utils/api';
+import { getUserInfoApi, getUserTagApi } from '../utils/api';
 import Button from '../components/Button';
 
 const styledp = {
@@ -19,19 +19,28 @@ export default function MypageDetail() {
         userRole: '',
         userEmail: '',
     });
+    const [loading, setloading] = useState(true);
+    const [taglist, setTagList] = useState([]);
     useEffect(() => {
         // 아직 로그인 된 상태가 아니라면
         if (localStorage.getItem("token") === null) {
             // 로그인하라고 보내주기
             Navigate('/login');
         } else {
-            // 내 정보 조회
-            getUserInfoApi((res) => {
-                setUser(res.data);
-            }, (err) => {
-                console.log(err);
-            })
+            if (loading) {
+                // 내 정보 조회
+                getUserInfoApi((res) => {
+                    console.log(res);
+                    setUser(res.data);
+                    setTagList(res.data.recommendationTagDtos);
+                    setloading(false);
+                }, (err) => {
+                    console.log(err);
+                })
+            }
+
         }
+
     }, []);
 
     // 뒤로가기
@@ -139,12 +148,17 @@ export default function MypageDetail() {
                     </div>
                     <div>
                         <h5>태그</h5>
-                        <div style={styledp}>{user.userAddr}</div>
-                        <StyledHr
-                            width="80vw"
-                            height="0.5px"
-                            color="lightgray"
-                        />
+                        <FlexBox Row_SB style={{ flexWrap: "wrap", padding: "6px 10px" }}>
+
+                            {taglist.map((item, idx) =>
+                                <Button
+
+                                    key={idx}
+                                    TagYellow
+                                    style={{ margin: "6px 3px ", flex: '1 1 20%', wordWrap: "break-word", maxWidth: "25%", padding: "5px 3px" }}># {item.name}</Button>
+                            )}
+                        </FlexBox>
+
                     </div>
                 </div>
                 <br />
