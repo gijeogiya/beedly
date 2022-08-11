@@ -473,9 +473,16 @@ export const Auction = () => {
             }
           } else if (data.finished) {
             //경매 종료
-            alert("경매가 종료되었습니다.");
-            client.current.deactivate();
-            ref.current.componentWillUnmount();
+            if (userName === data.userName) {
+              //낙찰된 사람
+              alert("낙찰을 축하합니다!");
+              client.current.deactivate();
+              ref.current.componentWillUnmount(data.soldId);
+            } else {
+              alert("경매가 종료되었습니다.");
+              client.current.deactivate();
+              ref.current.componentWillUnmount();
+            }
           }
         }
       );
@@ -640,8 +647,17 @@ export const Auction = () => {
     }
   };
 
-  const handleGoBack = () => {
-    navigate(-1);
+  const handleGoBack = (success) => {
+    //낙찰페이지로 이동
+    if (success)
+      navigate("/purchase", {
+        state: {
+          auctionType: "P",
+          soldId: success,
+        },
+      });
+    //그냥 뒤로가기
+    else navigate(-1);
   };
 
   const handleClickOpen = () => {

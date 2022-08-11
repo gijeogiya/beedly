@@ -19,6 +19,7 @@ import { Color, ColorPicker } from "codemirror-colorpicker";
 import {
   getPersonalProduct,
   registerPersonalProduct,
+  updatePersonalProduct,
 } from "../utils/apis/PersonalProductAPI";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Category } from "../stores/modules/basicInfo";
@@ -240,35 +241,45 @@ export const ProductRegister = () => {
           setSaturation(data.saturation);
           setTemperature(data.temperature);
           setPrevs([...data.productImgs]);
-          setProductImages([...data.productImgs]);
+          urlToFile(data.productImgs);
           // setRequest(req);
         });
     }
 
-    // const req = {
-    //   productName: productName,
-    //   productDesc: productDesc,
-    //   startPrice: startPrice,
-    //   height: height,
-    //   width: width,
-    //   depth: depth,
-    //   startTime: startTime,
-    //   categoryId: category,
-    //   brightness: brightness,
-    //   saturation: saturation,
-    //   temperature: temperature,
-    // };
-    // setRequest(req);
-    return () => setLoading(false);
-  }, [saturation, temperature, brightness]);
+    const req = {
+      productName: productName,
+      productDesc: productDesc,
+      startPrice: startPrice,
+      height: height,
+      width: width,
+      depth: depth,
+      startTime: startTime,
+      categoryId: category,
+      brightness: brightness,
+      saturation: saturation,
+      temperature: temperature,
+    };
+    setRequest(req);
 
-  const urlToFile = async (url) => {
-    const response = await fetch(url);
-    const data = await response.blob();
-    const ext = url.split(".").pop(); // url 구조에 맞게 수정할 것
-    const filename = url.split("/").pop(); // url 구조에 맞게 수정할 것
-    const metadata = { type: `image/png` };
-    return new File([data], filename, metadata);
+    return () => setLoading(false);
+  }, [saturation, temperature, brightness, prevs]);
+
+  const urlToFile = (urls) => {
+    let arr = [];
+    urls.map(async (url) => {
+      // const response = await fetch(url);
+      // const data = await response.blob();
+      // const metadata = { type: `image/png`, crossOrigin: "anonymous" };
+      var image = new Image();
+      image.onload = function () {};
+      image.crossOrigin = "Anonymous";
+      image.src = url + "?not-from-cache-please";
+      // let img = new File([data], metadata);
+      // img.toBlob(() => {}, "image/png");
+      arr.push(image);
+    });
+    console.log("arr : ", arr);
+    setProductImages([...arr]);
   };
 
   const DateInputButton = forwardRef(({ value, onClick }, ref) => (
@@ -277,51 +288,51 @@ export const ProductRegister = () => {
     </button>
   ));
 
-  const handlePrev = (event, { files }) => {
-    // console.log("first files:", files);
+  // const handlePrev = (event, { files }) => {
+  //   // console.log("first files:", files);
 
-    const fileList = [...files];
+  //   const fileList = [...files];
 
-    const arr = [];
-    fileList.map((file, idx) => {
-      let reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = function (e) {
-        arr.push(e.target.result);
-      };
-    });
-    setProductImages([...files]);
-    setPrevs([...arr]);
-    // console.log(productImages);
-  };
+  //   const arr = [];
+  //   fileList.map((file, idx) => {
+  //     let reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = function (e) {
+  //       arr.push(e.target.result);
+  //     };
+  //   });
+  //   setProductImages([...files]);
+  //   setPrevs([...arr]);
+  //   // console.log(productImages);
+  // };
 
-  const handleChangeFile = (event, { files }) => {
-    // console.log(files);
-    setProductImages(files);
-    //fd.append("file", event.target.files)
-    setPrevs([]);
-    for (var i = 0; i < files.length; i++) {
-      if (files[i]) {
-        let reader = new FileReader();
-        reader.readAsDataURL(files[i]); // 1. 파일을 읽어 버퍼에 저장합니다.
-        // 파일 상태 업데이트
-        reader.onloadend = () => {
-          // 2. 읽기가 완료되면 아래코드가 실행됩니다.
-          const base64 = reader.result;
-          // console.log(base64);
-          if (base64) {
-            //  images.push(base64.toString())
-            var base64Sub = base64.toString();
+  // const handleChangeFile = (event, { files }) => {
+  //   // console.log(files);
+  //   setProductImages(files);
+  //   //fd.append("file", event.target.files)
+  //   setPrevs([]);
+  //   for (var i = 0; i < files.length; i++) {
+  //     if (files[i]) {
+  //       let reader = new FileReader();
+  //       reader.readAsDataURL(files[i]); // 1. 파일을 읽어 버퍼에 저장합니다.
+  //       // 파일 상태 업데이트
+  //       reader.onloadend = () => {
+  //         // 2. 읽기가 완료되면 아래코드가 실행됩니다.
+  //         const base64 = reader.result;
+  //         // console.log(base64);
+  //         if (base64) {
+  //           //  images.push(base64.toString())
+  //           var base64Sub = base64.toString();
 
-            setPrevs((prevs) => [...prevs, base64Sub]);
-            //  setImgBase64(newObj);
-            // 파일 base64 상태 업데이트
-            //  console.log(images)
-          }
-        };
-      }
-    }
-  };
+  //           setPrevs((prevs) => [...prevs, base64Sub]);
+  //           //  setImgBase64(newObj);
+  //           // 파일 base64 상태 업데이트
+  //           //  console.log(images)
+  //         }
+  //       };
+  //     }
+  //   }
+  // };
 
   const ImageInput = ({ handleImageUpload }) => {
     return (
@@ -380,9 +391,40 @@ export const ProductRegister = () => {
     }
   };
 
+  const fileToUrlFile = (arr) => {
+    let fileURLs = [];
+    let files = [];
+    let file;
+    console.log("convert : ", arr);
+    for (let i = 0; i < arr.length; i++) {
+      file = arr[i];
+      files[i] = file;
+      let reader = new FileReader();
+      reader.onload = () => {
+        // console.log(reader.result);
+        fileURLs[i] = reader.result;
+        setPrevs([...fileURLs]);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleClickRegister = () => {
-    setColor(prevs[0]);
-    setOpen(true);
+    if (productId) {
+      console.log("수정");
+      let prev = productImages[0];
+      let reader = new FileReader();
+      reader.onload = () => {
+        // console.log(reader.result);
+        prev = reader.result;
+        reader.readAsDataURL(prev);
+      };
+      setColor(prev);
+      setOpen(true);
+    } else {
+      setColor(prevs[0]);
+      setOpen(true);
+    }
   };
 
   const handleClose = () => {
@@ -392,6 +434,7 @@ export const ProductRegister = () => {
   const setColor = (url) => {
     // console.log("컬러 찾기 시작", url);
     // console.log("col", Color);
+    // console.log(url);
     Color.ImageToRGB(url, { maxWidth: 100 }, (results) => {
       // colorCount 만큼의 색상 추출
       // console.log(results);
@@ -478,10 +521,7 @@ export const ProductRegister = () => {
       depth === "" ||
       startTime === "" ||
       category === "" ||
-      prevs[0] === "" ||
-      brightness === 0 ||
-      saturation === 0 ||
-      temperature === 0
+      prevs[0] === ""
     )
       return false;
     else return true;
@@ -489,56 +529,84 @@ export const ProductRegister = () => {
   const navigate = useNavigate();
 
   const goBack = () => {
-    navigate(-1);
+    navigate("/productList");
   };
 
   const registerProduct = async () => {
     // setColor(prevs[0]);
-    // if (isValied()) {
-    // console.log("작품 등록 호출!!");
+    if (isValied()) {
+      // console.log("작품 등록 호출!!");
 
-    // const request = {
-    //   productName: productName,
-    //   productDesc: productDesc,
-    //   startPrice: startPrice,
-    //   height: height,
-    //   width: width,
-    //   depth: depth,
-    //   startTime: startTime,
-    //   categoryId: category,
-    //   brightness: brightness,
-    //   saturation: saturation,
-    //   temperature: temperature,
-    // };
+      const request = {
+        productName: productName,
+        productDesc: productDesc,
+        startPrice: startPrice,
+        height: height,
+        width: width,
+        depth: depth,
+        startTime: startTime,
+        categoryId: category,
+        brightness: brightness,
+        saturation: saturation,
+        temperature: temperature,
+      };
 
-    // console.log(request);
-    const formData = new FormData();
-    console.log(productImages);
-    for (let i = 0; i < productImages.length; i++) {
-      formData.append("images", productImages[i]);
-    }
-    // formData.append("images", productImages);
-    // console.log(productImages);
-    const blob = new Blob([JSON.stringify(request)], {
-      type: "application/json",
-    });
-    formData.append("request", blob);
-
-    registerPersonalProduct(
-      formData,
-      (response) => {
-        console.log(response);
-        //상세 페이지로 이동
-        navigate(`/productDetail/${response.data}`);
-      },
-      (fail) => {
-        console.log(fail);
+      // console.log(request);
+      const formData = new FormData();
+      console.log(productImages);
+      for (let i = 0; i < productImages.length; i++) {
+        formData.append("images", productImages[i]);
       }
-    );
+      // formData.append("images", productImages);
+      // console.log(productImages);
+      const blob = new Blob([JSON.stringify(request)], {
+        type: "application/json",
+      });
+      formData.append("request", blob);
 
-    // } else {
-    //   alert("모든 정보를 입력하세요.");
-    // }
+      if (productId) {
+        updatePersonalProduct(
+          productId,
+          formData,
+          (response) => {
+            console.log(response);
+            //상세 페이지로 이동
+            navigate(`/productDetail/${productId}`);
+          },
+          (fail) => {
+            console.log(fail);
+          }
+        );
+      } else {
+        registerPersonalProduct(
+          formData,
+          (response) => {
+            console.log(response);
+            //상세 페이지로 이동
+            navigate(`/productDetail/${response.data}`);
+          },
+          (fail) => {
+            console.log(fail);
+          }
+        );
+      }
+    } else {
+      console.log(
+        productName,
+        productDesc,
+        startPrice,
+        height,
+        width,
+        depth,
+        startTime,
+        category,
+        prevs[0],
+        brightness,
+        saturation,
+        temperature
+      );
+      alert("모든 정보를 입력하세요.");
+    }
   };
 
   return (
@@ -586,6 +654,7 @@ export const ProductRegister = () => {
             <Box width="medium" direction="row" justify="center">
               <Input2
                 Thin
+                disabled={productId ? true : false}
                 placeholder="경매 시작가를 입력하세요."
                 value={startPrice}
                 onChange={(e) => {
@@ -761,7 +830,10 @@ export const ProductRegister = () => {
 
               <DialogContent>
                 <Box align="center">
-                  <StyledText text="작품을 등록하시겠습니까?" weight="bold" />
+                  <StyledText
+                    text={`작품을 ${productId ? "수정" : "등록"}하시겠습니까?`}
+                    weight="bold"
+                  />
                   <p />
                   <StyledText
                     text="경매 시작가는 수정이 불가능합니다."

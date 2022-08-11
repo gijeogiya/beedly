@@ -93,8 +93,11 @@ class VideoRoomComponent extends Component {
     this.leaveSession();
   }
 
-  onbeforeunload(event) {
-    this.leaveSession();
+  componentWillUnmount(success) {
+    window.removeEventListener("beforeunload", this.onbeforeunload);
+    window.removeEventListener("resize", this.updateLayout);
+    window.removeEventListener("resize", this.checkSize);
+    this.leaveSession(success);
   }
 
   joinSession() {
@@ -250,7 +253,7 @@ class VideoRoomComponent extends Component {
     );
   }
 
-  leaveSession() {
+  leaveSession(success) {
     const mySession = this.state.session;
 
     if (mySession) {
@@ -264,8 +267,7 @@ class VideoRoomComponent extends Component {
         type: "chat",
       });
       mySession.disconnect();
-
-      this.props.handleGoBack();
+      this.props.handleGoBack(success);
     }
 
     // Empty all properties...
@@ -281,6 +283,7 @@ class VideoRoomComponent extends Component {
       this.props.leaveSession();
     }
   }
+
   camStatusChanged() {
     localUser.setVideoActive(!localUser.isVideoActive());
     localUser.getStreamManager().publishVideo(localUser.isVideoActive());

@@ -22,12 +22,26 @@ const registerPersonalProduct = (formData, success, fail) => {
   personalPostApi.post(`/`, formData).then(success).catch(fail);
 };
 
+const updatePersonalProduct = (productId, formData, success, fail) => {
+  personalPostApi.patch(`/${productId}`, formData).then(success).catch(fail);
+};
+
 const getPersonalProduct = async (productId, success, fail) => {
   await personalGetApi.get(`/${productId}`).then(success).catch(fail);
 };
 
 const getTempProductList = async (params, success, fail) => {
-  await personalGetApi(`/list`, { params }).then(success).catch(fail);
+  await personalGetApi.get(`/list`, { params }).then(success).catch(fail);
 };
 
-export { registerPersonalProduct, getPersonalProduct, getTempProductList };
+const deletePersonalProduct = async (productId, success, fail) => {
+  await personalGetApi.delete(`${productId}`).then(success).catch(fail);
+};
+
+export {
+  registerPersonalProduct,
+  getPersonalProduct,
+  getTempProductList,
+  deletePersonalProduct,
+  updatePersonalProduct,
+};
