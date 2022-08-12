@@ -5,7 +5,7 @@ import BackButtonImage from "../assets/images/backButton.png";
 
 
 const BarWarp = styled.div`
-    padding: 12px 24px 12px 10px;
+    padding: 8px 24px 8px 10px;
     border-bottom: 1px solid #ebebeb;
     display: flex;
     justify-content: space-between;
@@ -40,7 +40,7 @@ export function ArtistDetailBar({}) {
             <button style={{"border":"0", "backgroundColor":"white",}}>
                 <img src={LikeIcon} style={{"width":"18px"}}/>
                 <div>
-                    123
+                    139
                 </div>
             </button>
         </BarWarp>
