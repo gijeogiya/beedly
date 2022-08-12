@@ -8,6 +8,8 @@ import { Category, moneyFormat } from "../stores/modules/basicInfo";
 import { getPersonalProduct } from "../utils/apis/PersonalProductAPI";
 import { getPurchaseProduct } from "../utils/apis/UserAPI";
 
+const REDIRECT_URL = "http://localhost:3000/";
+
 export const PurchaseSuccess = () => {
   const location = useLocation();
   // const { soldId } = location.state;
@@ -55,7 +57,7 @@ export const PurchaseSuccess = () => {
       buyer_tel: userTel,
       buyer_addr: userAddr,
       buyer_postcode: "",
-      m_redirect_url: "http://localhost:3000/purchaseDetail",
+      m_redirect_url: REDIRECT_URL + "purchaseDetail",
     };
     IMP.request_pay(data, callback);
   };
