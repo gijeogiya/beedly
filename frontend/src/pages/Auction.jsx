@@ -462,19 +462,19 @@ export const Auction = () => {
         if (data.finished === undefined) {
           if (data.isSold === null) {
             console.log("subs log !!! undefined!!!");
-
             setCurrentPrice((prev) =>
               data.bidPrice !== null ? (prev = data.bidPrice) : prev
             );
             setCurrentBidder((prev) =>
               data.userName !== null ? (prev = data.userName) : prev
             );
-            console.log("입찰 성공 ", currentBidder);
+
             if (data.userName === userName)
               setIsSuccess((prev) => (prev = true));
             else setIsSuccess((prev) => (prev = false));
           } else if (data.isSold) {
             //낙찰
+            console.log("낙찰 데이터 : ", data);
             setIsSold((prev) => (prev = true));
           } else {
             //유찰
@@ -486,17 +486,17 @@ export const Auction = () => {
             //낙찰된 사람
             alert("낙찰을 축하합니다!");
             client.deactivate();
-            //ref.current.componentWillUnmount();
-            navigate("/purchase", {
-              state: {
-                auctionType: "P",
-                soldId: data.soldId,
-              },
-            });
+            ref.current.handleUnmount(data.soldId);
+            // navigate("/purchase", {
+            //   state: {
+            //     auctionType: "P",
+            //     soldId: data.soldId,
+            //   },
+            // });
           } else {
             alert("경매가 종료되었습니다.");
             client.deactivate();
-            ref.current.componentWillUnmount();
+            ref.current.handleUnmount(null);
           }
         }
       });
@@ -663,7 +663,7 @@ export const Auction = () => {
 
   const handleGoBack2 = (success) => {
     //낙찰페이지로 이동
-    if (success)
+    if (success !== null)
       navigate("/purchase", {
         state: {
           auctionType: "P",
