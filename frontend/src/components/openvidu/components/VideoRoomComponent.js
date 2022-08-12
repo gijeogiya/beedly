@@ -90,18 +90,18 @@ class VideoRoomComponent extends Component {
     window.removeEventListener("beforeunload", this.onbeforeunload);
     window.removeEventListener("resize", this.updateLayout);
     window.removeEventListener("resize", this.checkSize);
-    this.leaveSession();
+    // this.leaveSession();
   }
 
   handleUnmount(success) {
-    window.removeEventListener("beforeunload", this.onbeforeunload);
-    window.removeEventListener("resize", this.updateLayout);
-    window.removeEventListener("resize", this.checkSize);
-    this.leaveSession2(success);
+    this.componentWillUnmount();
+    if (success !== null) this.leaveSession2(success);
+    else this.leaveSession();
   }
   onbeforeunload(event) {
     this.leaveSession();
   }
+
   joinSession() {
     this.OV = new OpenVidu();
 
@@ -269,7 +269,6 @@ class VideoRoomComponent extends Component {
         type: "chat",
       });
       mySession.disconnect();
-      this.props.handleGoBack();
     }
 
     // Empty all properties...
@@ -277,12 +276,12 @@ class VideoRoomComponent extends Component {
     this.setState({
       session: undefined,
       subscribers: [],
-      mySessionId: "SessionA",
-      myUserName: "OpenVidu_User" + Math.floor(Math.random() * 100),
+      mySessionId: undefined,
+      myUserName: undefined,
       localUser: undefined,
     });
-    if (this.props.leaveSession) {
-      this.props.leaveSession();
+    if (this.props.handleGoBack) {
+      this.props.handleGoBack();
     }
   }
 
@@ -300,7 +299,6 @@ class VideoRoomComponent extends Component {
         type: "chat",
       });
       mySession.disconnect();
-      this.props.handleGoBack2(success);
     }
 
     // Empty all properties...
@@ -308,12 +306,12 @@ class VideoRoomComponent extends Component {
     this.setState({
       session: undefined,
       subscribers: [],
-      mySessionId: "SessionA",
-      myUserName: "OpenVidu_User" + Math.floor(Math.random() * 100),
+      mySessionId: undefined,
+      myUserName: undefined,
       localUser: undefined,
     });
-    if (this.props.leaveSession) {
-      this.props.leaveSession();
+    if (this.props.handleGoBack2) {
+      this.props.handleGoBack2(success);
     }
   }
 
