@@ -1,7 +1,4 @@
 import styled from "styled-components";
-import SampleProduct from '../assets/img/SampleProduct.png';
-import SampleProfile from '../assets/img/SampleProfile.png';
-import SampleBackground from '../assets/img/SampleBackground.png';
 import OnairStateIcon from '../assets/img/OnairStateIcon.svg';
 import BeforeStateIcon from '../assets/img/BeforeStateIcon.svg';
 
@@ -32,7 +29,7 @@ const StyledRectangleRowImg = styled.img`
 
 const AuctionStateBox = styled.div`
     color: white;
-    background-color: ${true ? "red" : "gray" || "gray"};
+    background-color: ${(true) ? "red" : "gray" || "gray"};
     display: inline-block;
     position: absolute;
     font-size: 12px;
@@ -41,7 +38,8 @@ const AuctionStateBox = styled.div`
     border-radius:3px;
     margin:12px;
 `;
-
+const AuctionStateBoxProps = (backcolor) =>
+    <AuctionStateBox props={backcolor}></AuctionStateBox>
 const StyledAuctionStateIcon = styled.img`
     height: 9px;
 `;
@@ -79,13 +77,8 @@ export function ProductCard({ product }) {
     const date = product.startTime.split("T");
     const yyyyMMdd = date[0].split("-");
     const HHmm = date[1].split(":");
-    const checkTime = () => {
-        if (parseInt(now.getFullYear) >= parseInt(yyyyMMdd[0]) &&
-            parseInt(now.getMonth + 1) >= parseInt(yyyyMMdd[1]) &&
-            parseInt(now.getDate) >= parseInt(yyyyMMdd[2]) &&
-            parseInt(now.getHours) >= parseInt(HHmm[0]) &&
-            parseInt(now.getMinutes) >= parseInt(HHmm[1])
-        ) {
+    const CheckTime = () => {
+        if (start > now) {
             // 아직 진행 예정
             return false;
         } else {
@@ -95,28 +88,25 @@ export function ProductCard({ product }) {
 
     const getTime = () => {
 
-        let diff = now - start;
-        const diffDays = Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+        let diff = start - now;
+        const diffDays = Math.floor((start.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
         diff -= diffDays * (1000 * 60 * 60 * 24);
         const diffHours = Math.floor(diff / (1000 * 60 * 60));
         diff -= diffHours * (1000 * 60 * 60);
         const diffMin = Math.floor(diff / (1000 * 60));
         diff -= diffMin * (1000 * 60);
         const diffSec = Math.floor(diff / 1000);
-        return `${diffDays < 10 ? `0${diffDays}` : diffDays}일 ${diffHours < 10 ? `0${diffHours}` : diffHours}: ${diffMin < 10 ? `0${diffMin}` : diffMin}: ${diffSec < 10 ? `0${diffSec}` : diffSec}`
+        return `${diffDays < 10 ? ` 0${diffDays}` : diffDays}일 ${diffHours < 10 ? `0${diffHours}` : diffHours}: ${diffMin < 10 ? `0${diffMin}` : diffMin}: ${diffSec < 10 ? `0${diffSec}` : diffSec}`
 
     }
 
-    const isOnair = () => {
-        return true;
-    }
     return (
         <StyledProductCard>
             <StyledProductCardImgFrame>
                 <StyledRectangleRowImg src={product.productImgs[0]} />
-                <AuctionStateBox>
-                    <StyledAuctionStateIcon src={true ? OnairStateIcon : BeforeStateIcon} />
-                    {checkTime ? "실시간" : getTime}
+                <AuctionStateBox style={{ backgroundColor: CheckTime() ? "red" : "gray" }}>
+                    <StyledAuctionStateIcon src={CheckTime() ? OnairStateIcon : BeforeStateIcon} />
+                    {CheckTime() ? "실시간" : getTime()}
                 </AuctionStateBox>
             </StyledProductCardImgFrame>
             <StyledCardInfBox>
@@ -124,14 +114,11 @@ export function ProductCard({ product }) {
                     <StyledCardArtistImg src={product.artistImg} />
                 </StyledCardArtistImgFrame>
                 <StyledCardInfTextFrame >
-                    <div style={{ "fontSize": "14px", "fontWeight": "700", whiteSpace: "pre-line" }}>{product.userName}</div>
+                    <div style={{ "fontSize": "14px", "fontWeight": "700", whiteSpace: "pre-line" }}>{product.userNickname}</div>
                     <div style={{
                         "fontSize": "14px", whiteSpace: "pre-line",
                     }}>{product.productName}</div>
-                    <div style={{ "fontSize": "12px", whiteSpace: "pre-line", }}>{isOnair ? `시청중` : `${yyyyMMdd[0]}년 ${parseInt(yyyyMMdd[1])}월 ${parseInt(
-                        yyyyMMdd[2]
-                    )}일  ${parseInt(HHmm[0])}시 ${parseInt(HHmm[1]) !== 0 ? `${parseInt(HHmm[1])}분` : ``
-                        } 예정`}</div>
+                    <div style={{ "fontSize": "12px", whiteSpace: "pre-line", }}>{CheckTime() ? `시청중` : `${start.getMonth() + 1}월 ${start.getDate()}일 ${start.getHours()}시 ` + `${start.getMinutes()}분 예정`}</div>
                 </StyledCardInfTextFrame>
             </StyledCardInfBox>
         </StyledProductCard>

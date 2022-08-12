@@ -24,8 +24,8 @@ export function HorizonScrollRowTable({ list }) {
   }
   return (
     <StyledHorizonTable>
-      {list.map((product) =>
-        <div className='card' key={product.id} onClick={(e) => GoProductDetail(product.id)} value={product.id}><ProductCard product={product} /></div>
+      {list.map((product, idx) =>
+        <div className='card' key={idx} onClick={(e) => GoProductDetail(product.id)} value={product.id}><ProductCard product={product} /></div>
       )}
     </StyledHorizonTable>
   )
@@ -38,8 +38,8 @@ export function HorizonScrollColTable({ list }) {
   }
   return (
     <StyledHorizonTable>
-      {list.map((artist) =>
-        <div className='card' key={artist.id} onClick={(e) => GoArtistDetail(artist.id)}><ArtistCard artist={artist} /></div>
+      {list.map((artist, idx) =>
+        <div className='card' key={idx} onClick={(e) => GoArtistDetail(artist.id)}><ArtistCard artist={artist} /></div>
       )}
     </StyledHorizonTable>
   )

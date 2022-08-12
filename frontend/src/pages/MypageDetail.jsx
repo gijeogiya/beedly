@@ -5,8 +5,9 @@ import { FlexBox } from '../components/UserStyled';
 import SampleProfile from '../assets/img/SampleProfile.png'
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { getUserInfoApi, getUserTagApi } from '../utils/api';
+import { getUserInfoApi } from '../utils/api';
 import Button from '../components/Button';
+import Plus from '../assets/img/PlusIcon.svg';
 
 const styledp = {
     fontSize: "14px",
@@ -21,6 +22,7 @@ export default function MypageDetail() {
     });
     const [loading, setloading] = useState(true);
     const [taglist, setTagList] = useState([]);
+
     useEffect(() => {
         // 아직 로그인 된 상태가 아니라면
         if (localStorage.getItem("token") === null) {
@@ -40,7 +42,7 @@ export default function MypageDetail() {
             }
 
         }
-
+        // eslint-disable-next-line
     }, []);
 
     // 뒤로가기
@@ -147,8 +149,8 @@ export default function MypageDetail() {
                         />
                     </div>
                     <div>
-                        <h5>태그</h5>
-                        <FlexBox Row_SB style={{ flexWrap: "wrap", padding: "6px 10px" }}>
+                        <h5 style={{ marginBottom: "3px" }}>태그</h5>
+                        <FlexBox Row_S style={{ flexWrap: "wrap", padding: "6px 10px" }}>
 
                             {taglist.map((item, idx) =>
                                 <Button
@@ -157,6 +159,9 @@ export default function MypageDetail() {
                                     TagYellow
                                     style={{ margin: "6px 3px ", flex: '1 1 20%', wordWrap: "break-word", maxWidth: "25%", padding: "5px 3px" }}># {item.name}</Button>
                             )}
+                            <Link to="/updateTag" style={{ marginLeft: "20px" }}>
+                                <img src={Plus} alt="태그 수정" />
+                            </Link>
                         </FlexBox>
 
                     </div>

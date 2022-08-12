@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import SearchingIcon from '../assets/img/SearchingIcon.svg';
 
@@ -46,21 +48,30 @@ const SearchTextInput = styled.input`
 
 
 
-export function SearchBar({ handleSubmit, value, setValue }) {
+export function SearchBar() {
+    const Navigate = useNavigate();
+    const [keyword, setKeyword] = useState("");
     const handleChange = (e) => {
-        setValue(e.target.value);
+        console.log(e.target.value)
+        setKeyword(e.target.value);
     };
-
+    const HandleSubmit = (e) => {
+        e.preventDefault();
+        const data = {
+            searchCategory: "keyword",
+            keyword: keyword,
+        };
+        Navigate("/searchResult", { state: data });
+    }
     return (
         <SearchWarp>
             <SearchArea>
-                <SearchForm onSubmit={handleSubmit}>
+                <SearchForm onSubmit={(e) => HandleSubmit(e)}>
                     <img src={SearchingIcon} alt='Searching Icon' style={{ "height": "20px", "padding": "10px 0 10px 10px" }} />
                     <SearchTextInput
                         type="text"
-                        name="value"
                         placeholder="작품명, 작가명 등"
-                        value={value}
+                        value={keyword}
                         onChange={handleChange}
                     />
                 </SearchForm>
