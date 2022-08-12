@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import XIcon from '../assets/img/XIcon.svg';
 
@@ -18,10 +20,11 @@ const RecentlyKeywordFrame = styled.div`
 const RecentlyKeywordButton = styled.button`
     background-color:#ffffff;
     padding: 8px 3px 8px 8px;
-    fontsize: 14px;
+    font-size: 14px;
     margin: 0px 8px 12px 0px;
     border: 1px solid #ebebeb;
     border-radius:16px;
+    display:flex;
 `;
 
 const RecentlyKeywordRemoveButton = styled.button`
@@ -51,69 +54,47 @@ const RecommendKeywordButton = styled.button`
 `;
 
 
-export function RecentlyKeywordTable() {
+export function RecentlyKeywordTable({ list }) {
+    console.log(list)
+    const Navigate = useNavigate();
+    const [RecentKeywordList, setRecentKeywordList] = useState([]);
+    useEffect(() => {
+        setRecentKeywordList(list)
+    }, [list])
+
+    const SearchByKeyword = (keyword) => {
+        const data = {
+            searchCategory: "keyword",
+            keyword: keyword
+        }
+        Navigate("/searchResult", { state: data });
+    }
+
+    const DeleteKeyword = (keyword) => {
+        console.log(keyword)
+        const nextlist = [];
+        for (let index = 0; index < RecentKeywordList.length; index++) {
+            if (RecentKeywordList[index] !== keyword) {
+                nextlist.push(RecentKeywordList[index]);
+            }
+        }
+        localStorage.setItem("RecentSearchList", JSON.stringify(nextlist));
+        setRecentKeywordList(nextlist);
+    }
+
     return (
         <RecentlyKeywordFrame>
-            <RecentlyKeywordButton>
-                강아지
-                <RecentlyKeywordRemoveButton>
-                    <RecentlyKeywordRemoveImg src={XIcon}/>
-                </RecentlyKeywordRemoveButton>
-            </RecentlyKeywordButton>
-            <RecentlyKeywordButton>
-                코드
-                <RecentlyKeywordRemoveButton>
-                    <RecentlyKeywordRemoveImg src={XIcon}/>
-                </RecentlyKeywordRemoveButton>    
-            </RecentlyKeywordButton>
-            <RecentlyKeywordButton>
-                재권박
-                <RecentlyKeywordRemoveButton>
-                    <RecentlyKeywordRemoveImg src={XIcon}/>
-                </RecentlyKeywordRemoveButton>
-            </RecentlyKeywordButton>
-            <RecentlyKeywordButton>
-                우영우
-                <RecentlyKeywordRemoveButton>
-                    <RecentlyKeywordRemoveImg src={XIcon}/>
-                </RecentlyKeywordRemoveButton>
-            </RecentlyKeywordButton>
-            <RecentlyKeywordButton>
-                유랑나
-                <RecentlyKeywordRemoveButton>
-                    <RecentlyKeywordRemoveImg src={XIcon}/>
-                </RecentlyKeywordRemoveButton>
-            </RecentlyKeywordButton>
-            <RecentlyKeywordButton>
-                날씨
-                <RecentlyKeywordRemoveButton>
-                    <RecentlyKeywordRemoveImg src={XIcon}/>
-                </RecentlyKeywordRemoveButton>
-            </RecentlyKeywordButton>
-            <RecentlyKeywordButton>
-                태극기휘날리며
-                <RecentlyKeywordRemoveButton>
-                    <RecentlyKeywordRemoveImg src={XIcon}/>
-                </RecentlyKeywordRemoveButton>
-            </RecentlyKeywordButton>
-            <RecentlyKeywordButton>
-                산새들
-                <RecentlyKeywordRemoveButton>
-                    <RecentlyKeywordRemoveImg src={XIcon}/>
-                </RecentlyKeywordRemoveButton>
-            </RecentlyKeywordButton>
-            <RecentlyKeywordButton>
-                화사한
-                <RecentlyKeywordRemoveButton>
-                    <RecentlyKeywordRemoveImg src={XIcon}/>
-                </RecentlyKeywordRemoveButton>
-            </RecentlyKeywordButton>
-            <RecentlyKeywordButton>
-                도시
-                <RecentlyKeywordRemoveButton>
-                    <RecentlyKeywordRemoveImg src={XIcon}/>
-                </RecentlyKeywordRemoveButton>
-            </RecentlyKeywordButton>
+            {RecentKeywordList.map((keyword, idx) =>
+                <RecentlyKeywordButton key={idx}>
+                    <div onClick={(e) => SearchByKeyword(keyword)}>{keyword}</div>
+
+                    <RecentlyKeywordRemoveButton>
+                        <RecentlyKeywordRemoveImg src={XIcon} onClick={(e) => DeleteKeyword(keyword)} />
+                    </RecentlyKeywordRemoveButton>
+                </RecentlyKeywordButton>
+            )}
+
+
         </RecentlyKeywordFrame>
 
     );

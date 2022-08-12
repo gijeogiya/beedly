@@ -222,19 +222,16 @@ export const ProductDeatail = () => {
       } else if (diff / day >= 1) {
         return `${parseInt(diff / day)}일 남음`;
       } else {
-        return `${diff / hour >= 1 ? `${parseInt(diff / hour)}:` : ``}${
-          diff / minute >= 1
-            ? `${
-                parseInt((diff % hour) / minute) < 10
-                  ? `0${parseInt((diff % hour) / minute)}`
-                  : parseInt((diff % hour) / minute)
-              }:`
-            : ``
-        }${
-          parseInt((diff % minute) / sec) < 10
+        return `${diff / hour >= 1 ? `${parseInt(diff / hour)}:` : ``}${diff / minute >= 1
+          ? `${parseInt((diff % hour) / minute) < 10
+            ? `0${parseInt((diff % hour) / minute)}`
+            : parseInt((diff % hour) / minute)
+          }:`
+          : ``
+          }${parseInt((diff % minute) / sec) < 10
             ? `0${parseInt((diff % minute) / sec)}`
             : parseInt((diff % minute) / sec)
-        }`;
+          }`;
       }
     }
   };
@@ -414,9 +411,8 @@ export const ProductDeatail = () => {
     const HHmm = date[1].split(":");
     return `${yyyyMMdd[0]}년 ${parseInt(yyyyMMdd[1])}월 ${parseInt(
       yyyyMMdd[2]
-    )}일  ${parseInt(HHmm[0])}시 ${
-      parseInt(HHmm[1]) !== 0 ? `${parseInt(HHmm[1])}분` : ``
-    } 예정`;
+    )}일  ${parseInt(HHmm[0])}시 ${parseInt(HHmm[1]) !== 0 ? `${parseInt(HHmm[1])}분` : ``
+      } 예정`;
     // return date.toString("yyyy년 MM월 dd일 HH시 mm분 예정");
   };
 
@@ -507,10 +503,10 @@ export const ProductDeatail = () => {
           <div>태그들 태그들</div>
         </Box>
       </Box>
-      <Box margin="small">
+      {/* <Box margin="small">
         <StyledText text="이 작품과 비슷한 작품" />
         <HorizonScrollRowTable />
-      </Box>
+      </Box> */}
       <Box direction="row" margin="small">
         <Box align="center" margin="small">
           <Button

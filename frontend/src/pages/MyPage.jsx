@@ -4,9 +4,8 @@ import { StyledHr, StyledText } from "../components/Common";
 import ArtistPng from "../assets/images/artist.png";
 import MoreImage from "../assets/images/more.png";
 import styled from "styled-components";
-import { getPurchaseApi, getSalelApi, getUserInfoApi } from "../utils/api";
+import { getUserInfoApi } from "../utils/api";
 import { Link, useNavigate } from "react-router-dom";
-import SaleList from "./SaleList";
 import { FlexBox } from "../components/UserStyled";
 
 const ContainerBox = ({ title2 }) => {
@@ -118,6 +117,7 @@ export default function MyPage() {
       //   })
       // }
     }
+    // eslint-disable-next-line
   }, []);
   const CheckRole = () => {
     if (user.userRole === 'ROLE_USER') {
@@ -167,7 +167,7 @@ export default function MyPage() {
           </Box>
           <Link to="/mypageDetail">
             <BackButton>
-              <img src={MoreImage} />
+              <img src={MoreImage} alt="더보기" />
             </BackButton>
           </Link>
         </Box>
