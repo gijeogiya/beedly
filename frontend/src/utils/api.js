@@ -165,5 +165,4 @@ export {
   getRecommendationProductApi,
   getPersonalProductListApi,
   getProductListBySizeApi,
-  getData,
 };
