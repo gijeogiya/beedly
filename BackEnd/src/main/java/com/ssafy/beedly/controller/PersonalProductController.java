@@ -88,15 +88,11 @@ public class PersonalProductController {
 	}
 	// 1-4. 상품 조회
 	// 1-4-1. 상품 아이디로 조회
-	//	@ApiOperation(value = "상시 상품 조회(상품 식별자로)", notes = "상품 식별자로 상시 상품 조회")
-	//	@ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
-	//	@GetMapping("/{productId}")
-	//	public ResponseEntity<PersonalProductDto> getProductInfoById(@PathVariable("productId") Long id) throws Exception{
-	//		System.out.println(id);
-	//		PersonalProductDto dto = personalProductService.getProductById(id);
-	//		System.out.println(dto);
-	//		return ResponseEntity.ok(dto);
-	//	}
+		@ApiOperation(value = "상시 상품 조회(상품 식별자로)", notes = "상품 식별자로 상시 상품 조회")
+		@GetMapping()
+		public ResponseEntity<?> getAllProductInfoBy(Pageable pageable) throws Exception{
+			return ResponseEntity.ok(personalProductService.getProductBy(pageable));
+		}
 
 	// 1-4-2. 상품 상세 조회
 	@ApiOperation(value = "상시 상품 상세 조회(상품 식별자로)", notes = "로그인한 유저가 이 상품에 서면응찰을 했는지, 했으면 그 가격, 이 상품에 찜을 했는지 여부, 현재 경매 진행중인지 여부 정보들 함께")
@@ -140,6 +136,13 @@ public class PersonalProductController {
 		return ResponseEntity.ok(personalProductService.getProductBySize(width, height, pageable));
 	}
 
+	@ApiOperation(value = "상품 사이즈카테고리로로 검색한 결과 가져오기",  notes = "size 종류 = small, medium, large, xlarge" )
+	@GetMapping("/sizeCategory/{size}")
+	public ResponseEntity<?> getProductBySizeCategory(@PathVariable("size") String size, Pageable pageable){
+		return ResponseEntity.ok(personalProductService.getProductBySizeCategory(pageable, size));
+	}
+
+
 
 	@ApiOperation(value = "모든 searchTag정보 가져오기")
 	// 5. 모든 searchTag 조회
@@ -147,6 +150,8 @@ public class PersonalProductController {
 	public  ResponseEntity<?> getSearchTagsInfo(Pageable pageable){
 		return ResponseEntity.ok(personalProductService.getSearchTagsInfo());
 	}
+
+
 
 
 }

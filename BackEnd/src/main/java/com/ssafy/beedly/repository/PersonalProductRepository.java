@@ -26,7 +26,10 @@ public interface PersonalProductRepository extends JpaRepository<PersonalProduct
     @Query(value="select p from PersonalProduct p join fetch p.category c where c.categoryName = :categoryName")
     Slice<PersonalProduct> findProductByCategory(@Param("categoryName")String categoryName, @Param("pageable") Pageable pageable);
 
-    ///------------ 2. 현재 진행중인 상품 카테고리별로 정렬하기
+    @Query(value="select p from PersonalProduct p")
+    Slice<PersonalProduct> findProductBy(@Param("pageable") Pageable pageable);
+
+    ///------------ 3. 현재 진행중인 상품 카테고리별로 정렬하기
     @Query(value="select pa from PersonalAuction pa join fetch pa.personalProduct p"
             +" join fetch p.category c"+" where c.categoryName = :categoryName and  pa.activeFlag = true")
     Slice<PersonalAuction> findProductOnAirByCategory(@Param("categoryName")String categoryName, @Param("pageable") Pageable pageable);
@@ -52,4 +55,18 @@ public interface PersonalProductRepository extends JpaRepository<PersonalProduct
     //---------- 6. 진행중인 경매 모두 불러오기
     @Query(value="select pa from PersonalAuction pa join fetch pa.personalProduct p where  pa.activeFlag = true")
     Slice<PersonalAuction> findProductOnAir(Pageable pageable);
+
+    //---------- 7. 사이즈별로 가져오기
+    @Query(value="select p from PersonalProduct p where p.width <= 70 and p.height <= 70")
+    Slice<PersonalAuction> findProductBySmallSize(Pageable pageable);
+
+    @Query(value="select p from PersonalProduct p where p.width between 70 and 90 and p.height between 70 and 90")
+    Slice<PersonalAuction> findProductByMediumSize(Pageable pageable);
+
+    @Query(value="select p from PersonalProduct p where p.width between 90 and 120 and p.height between 90 and 120")
+    Slice<PersonalAuction> findProductByLargeSize(Pageable pageable);
+
+    @Query(value="select p from PersonalProduct p where p.width >= 120 and p.height >= 120")
+    Slice<PersonalAuction> findProductByXLargeSize(Pageable pageable);
+
 }
