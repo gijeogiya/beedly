@@ -36,7 +36,8 @@ const ArtistDetailSubInf = styled.div`
     padding: 64px 0 0 26px;
 `;
 
-export function ArtistDetailCard() {
+export function ArtistDetailCard({ artist }) {
+    console.log(artist);
 
     return (
         <div
@@ -47,13 +48,13 @@ export function ArtistDetailCard() {
         >
             <ArtistDetailMainInf>
                 <StyledCardArtistImgFrame>
-                    <StyledCardArtistImg src={SampleProfile} />
+                    <StyledCardArtistImg src={artist.artistProfileImg === null ? SampleProfile : artist.artistProfileImg} />
                 </StyledCardArtistImgFrame>
-                <div style={{"fontSize": "16px", "fontWeight": "700", "padding":"46px 0 0 14px"}}>해리아현</div>
+                <div style={{ "fontSize": "16px", "fontWeight": "700", "padding": "46px 0 0 14px" }}>{artist.userNickname}</div>
             </ArtistDetailMainInf>
-            <ArtistDetailBackgroundImg src={SampleBackground}/>
+            <ArtistDetailBackgroundImg src={artist.artistBgImg === null ? SampleBackground : artist.artistBgImg} />
             <ArtistDetailSubInf>
-                <div style={{"width": "300px", "fontSize":"14px"}}>광교에서 빵을 굽는 초보 작가입니다.<br/>매달 어쩌고 저쩌고 이것은 작가 상세 설명입니다.<br/>문의는 인스타 DM으로 부탁드립니다.🙏<br/> @gwangkyobbang</div>
+                <div style={{ "width": "300px", "fontSize": "14px" }}>{artist.artistDesc}</div>
             </ArtistDetailSubInf>
 
         </div>

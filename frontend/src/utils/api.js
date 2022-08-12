@@ -100,6 +100,11 @@ const artistApproveApi = async (userId, success, fail) => {
     .catch(fail);
 };
 
+// 작가 상세 조회
+const artistDetailApi = async (artistId, success, fail) => {
+  await authInstance.get(`/artist/${artistId}`).then(success).catch(fail);
+};
+
 // Product API
 // 유저를 위한 맞춤추천 상품 조회
 const getRecommendationProductApi = async (success, fail) => {
@@ -165,4 +170,5 @@ export {
   getRecommendationProductApi,
   getPersonalProductListApi,
   getProductListBySizeApi,
+  artistDetailApi,
 };

@@ -30,7 +30,7 @@ import { useEffect } from "react";
 import { PurchaseDetail } from "./pages/PurchaseDetail";
 
 import UpdateTag from "./pages/UpdateTag";
-
+import ArtistDetail from "./pages/ArtistDetail";
 import SignupAritst from "./pages/SignupArtist";
 import AdminUserManage from "./pages/AdminUserManage";
 
@@ -84,6 +84,7 @@ function App() {
             path="/productDetail/:productId"
             element={<ProductDeatail />}
           />
+          <Route path="/artistDetail/:artistId" element={<ArtistDetail />} />
           <Route path="/PurchaseDetail" element={<PurchaseDetail />} />
           <Route path="/saleList" element={<SaleList />} />
           <Route path="/mypageDetail" element={<MypageDetail />} />

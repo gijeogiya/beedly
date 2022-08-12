@@ -27,7 +27,6 @@ const SearchForm = styled.form`
 `;
 
 const SearchTextInput = styled.input`
-    font-color: black;
     padding: 0 40px 0 10px;
     height: 40px;
     outline: none;
@@ -81,8 +80,8 @@ export function SearchBar() {
                     />
                 </SearchForm>
             </SearchArea>
-            <button style={{"border":"0", "backgroundColor":"white", "paddingLeft":"15px"}}>
-                <img src={XIcon} style={{"width":"18px"}}/>
+            <button style={{ "border": "0", "backgroundColor": "white", "paddingLeft": "15px" }}>
+                <img src={XIcon} style={{ "width": "18px" }} />
             </button>
         </SearchWarp>
     );
