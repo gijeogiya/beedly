@@ -90,9 +90,14 @@ class VideoRoomComponent extends Component {
     window.removeEventListener("beforeunload", this.onbeforeunload);
     window.removeEventListener("resize", this.updateLayout);
     window.removeEventListener("resize", this.checkSize);
-    this.leaveSession();
+    // this.leaveSession();
   }
 
+  handleUnmount(success) {
+    this.componentWillUnmount();
+    if (success !== null) this.leaveSession2(success);
+    else this.leaveSession();
+  }
   onbeforeunload(event) {
     this.leaveSession();
   }
@@ -264,8 +269,6 @@ class VideoRoomComponent extends Component {
         type: "chat",
       });
       mySession.disconnect();
-
-      this.props.handleGoBack();
     }
 
     // Empty all properties...
@@ -273,14 +276,45 @@ class VideoRoomComponent extends Component {
     this.setState({
       session: undefined,
       subscribers: [],
-      mySessionId: "SessionA",
-      myUserName: "OpenVidu_User" + Math.floor(Math.random() * 100),
+      mySessionId: undefined,
+      myUserName: undefined,
       localUser: undefined,
     });
-    if (this.props.leaveSession) {
-      this.props.leaveSession();
+    if (this.props.handleGoBack) {
+      this.props.handleGoBack();
     }
   }
+
+  leaveSession2(success) {
+    const mySession = this.state.session;
+
+    if (mySession) {
+      const data = {
+        message: "님이 퇴장했습니다.",
+        nickname: localUser.getNickname(),
+        streamId: localUser.getStreamManager().stream.streamId,
+      };
+      localUser.getStreamManager().stream.session.signal({
+        data: JSON.stringify(data),
+        type: "chat",
+      });
+      mySession.disconnect();
+    }
+
+    // Empty all properties...
+    this.OV = null;
+    this.setState({
+      session: undefined,
+      subscribers: [],
+      mySessionId: undefined,
+      myUserName: undefined,
+      localUser: undefined,
+    });
+    if (this.props.handleGoBack2) {
+      this.props.handleGoBack2(success);
+    }
+  }
+
   camStatusChanged() {
     localUser.setVideoActive(!localUser.isVideoActive());
     localUser.getStreamManager().publishVideo(localUser.isVideoActive());
