@@ -22,11 +22,14 @@ import SaleList from "./pages/SaleList";
 import MypageDetail from "./pages/MypageDetail";
 import UpdateMyPage from "./pages/UpdateMypage.jsx";
 import SignupTag from "./pages/SignupTag";
+
 import { PurchaseSuccess } from "./pages/PurchaseSuccess";
 import SearchResult from "./pages/SearchResult";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { PurchaseDetail } from "./pages/PurchaseDetail";
+
+import UpdateTag from "./pages/UpdateTag";
 
 import SignupAritst from "./pages/SignupArtist";
 import AdminUserManage from "./pages/AdminUserManage";
@@ -86,8 +89,10 @@ function App() {
           <Route path="/mypageDetail" element={<MypageDetail />} />
           <Route path="/updateMypage" element={<UpdateMyPage />} />
           <Route path="/signupTag" element={<SignupTag />} />
+
           <Route path="/searchResult" element={<SearchResult />} />
 
+          <Route path="/updateTag" element={<UpdateTag />} />
           <Route path="/signupArtist" element={<SignupAritst />} />
           <Route path="/adminUserManage" element={<AdminUserManage />} />
 
