@@ -25,6 +25,7 @@ import SignupTag from "./pages/SignupTag";
 import { PurchaseSuccess } from "./pages/PurchaseSuccess";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import { PurchaseDetail } from "./pages/PurchaseDetail";
 
 const Layout = () => {
   // const navigate = useNavigate();
@@ -76,6 +77,7 @@ function App() {
             path="/productDetail/:productId"
             element={<ProductDeatail />}
           />
+          <Route path="/PurchaseDetail" element={<PurchaseDetail />} />
           <Route path="/saleList" element={<SaleList />} />
           <Route path="/mypageDetail" element={<MypageDetail />} />
           <Route path="/updateMypage" element={<UpdateMyPage />} />

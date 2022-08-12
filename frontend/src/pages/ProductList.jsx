@@ -1,8 +1,19 @@
 import { Box } from "grommet";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function ProductListPage() {
+  const navigate = useNavigate();
+
+  const purchaseTest = () => {
+    navigate("/purchase", {
+      state: {
+        auctionType: "P",
+        soldId: 27,
+        productId: 74,
+      },
+    });
+  };
   return (
     <Box margin="small">
       ProductListPage
@@ -18,6 +29,7 @@ export default function ProductListPage() {
       <button>
         <Link to="/productDetail/39">39번 작품</Link>
       </button>
+      <button onClick={purchaseTest}>27번 결제</button>
     </Box>
   );
 }
