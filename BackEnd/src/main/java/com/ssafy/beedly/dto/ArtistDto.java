@@ -39,6 +39,9 @@ public class ArtistDto {
     @ApiModelProperty(notes = "작가 찜 식별자(찜했으면 식별자, 찜 안했으면 null)")
     private Long favoriteId;
 
+    @ApiModelProperty(notes = "이 작가를 좋아요 한 수")
+    private Integer favoriteCount;
+
     public ArtistDto(Artist artist) {
         this.artistId = artist.getId();
         this.artistDesc = artist.getArtistDesc();
@@ -46,6 +49,7 @@ public class ArtistDto {
         this.artistBgImg = artist.getArtistBgImg();
         this.userId = artist.getUser().getId();
         this.userNickname = artist.getUser().getUserNickname();
+        this.favoriteCount = artist.getFavoriteCount();
     }
 
     public ArtistDto(Artist artist, Optional<ArtistFavorite> favorite) {
@@ -55,7 +59,7 @@ public class ArtistDto {
         this.artistBgImg = artist.getArtistBgImg();
         this.userId = artist.getUser().getId();
         this.userNickname = artist.getUser().getUserNickname();
-
+        this.favoriteCount = artist.getFavoriteCount();
         if (favorite.isPresent()) {
             this.isMyFavorite = true;
             this.favoriteId = favorite.get().getId();
