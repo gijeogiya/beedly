@@ -472,12 +472,18 @@ export const Auction = () => {
             if (data.userName === userName)
               setIsSuccess((prev) => (prev = true));
             else setIsSuccess((prev) => (prev = false));
-          } else if (data.isSold) {
+          } else if (data.isSold === true) {
             //낙찰
             console.log("낙찰 데이터 : ", data);
             setIsSold((prev) => (prev = true));
-          } else {
-            //유찰
+          } else if (data.isSold === false) {
+            //처음 입장
+            setCurrentPrice((prev) =>
+              data.bidPrice !== null ? (prev = data.bidPrice) : prev
+            );
+            setCurrentBidder((prev) =>
+              data.userName !== null ? (prev = data.userName) : prev
+            );
           }
         } else if (data.finished) {
           console.log("경매 종료!!! ", userName, data.userName);
@@ -664,10 +670,10 @@ export const Auction = () => {
   const handleGoBack2 = (success) => {
     //낙찰페이지로 이동
     if (success !== null)
-      navigate("/purchase", {
+      navigate(`/purchase/${success}`, {
         state: {
           auctionType: "P",
-          soldId: success,
+          // soldId: success,
           productId: productId,
         },
       });

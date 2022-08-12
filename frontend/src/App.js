@@ -97,7 +97,8 @@ function App() {
           <Route path="/signupArtist" element={<SignupAritst />} />
           <Route path="/adminUserManage" element={<AdminUserManage />} />
 
-          <Route path="/purchase" element={<PurchaseSuccess />} />
+          <Route path="/purchase/:soldId" element={<PurchaseSuccess />} />
+          <Route path="/purchaseDetail/:soldId" element={<PurchaseDetail />} />
         </Route>
         <Route path="/personalAuction" element={<Auction />} />
         <Route path="/auctionSeller" element={<Auction grade="seller" />} />
