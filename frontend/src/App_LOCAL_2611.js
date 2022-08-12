@@ -22,11 +22,9 @@ import SaleList from "./pages/SaleList";
 import MypageDetail from "./pages/MypageDetail";
 import UpdateMyPage from "./pages/UpdateMypage.jsx";
 import SignupTag from "./pages/SignupTag";
-import { PurchaseSuccess } from "./pages/PurchaseSuccess";
 
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
-import { PurchaseDetail } from "./pages/PurchaseDetail";
 
 import SignupAritst from "./pages/SignupArtist";
 import AdminUserManage from "./pages/AdminUserManage";
@@ -68,7 +66,6 @@ function App() {
           <Route index element={<MainPage />} />
           <Route path="/search" element={<Search />} />
           <Route path="/productRegister" element={<ProductRegister />} />
-          <Route path="/productModify" element={<ProductRegister />} />
           <Route path="/onair" element={<Onair />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/login" element={<Login />} />
@@ -81,16 +78,12 @@ function App() {
             path="/productDetail/:productId"
             element={<ProductDeatail />}
           />
-          <Route path="/PurchaseDetail" element={<PurchaseDetail />} />
           <Route path="/saleList" element={<SaleList />} />
           <Route path="/mypageDetail" element={<MypageDetail />} />
           <Route path="/updateMypage" element={<UpdateMyPage />} />
           <Route path="/signupTag" element={<SignupTag />} />
-
           <Route path="/signupArtist" element={<SignupAritst />} />
           <Route path="/adminUserManage" element={<AdminUserManage />} />
-
-          <Route path="/purchase" element={<PurchaseSuccess />} />
         </Route>
         <Route path="/personalAuction" element={<Auction />} />
         <Route path="/auctionSeller" element={<Auction grade="seller" />} />

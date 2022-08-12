@@ -23,13 +23,9 @@ import MypageDetail from "./pages/MypageDetail";
 import UpdateMyPage from "./pages/UpdateMypage.jsx";
 import SignupTag from "./pages/SignupTag";
 import { PurchaseSuccess } from "./pages/PurchaseSuccess";
-
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { PurchaseDetail } from "./pages/PurchaseDetail";
-
-import SignupAritst from "./pages/SignupArtist";
-import AdminUserManage from "./pages/AdminUserManage";
 
 const Layout = () => {
   // const navigate = useNavigate();
@@ -86,10 +82,6 @@ function App() {
           <Route path="/mypageDetail" element={<MypageDetail />} />
           <Route path="/updateMypage" element={<UpdateMyPage />} />
           <Route path="/signupTag" element={<SignupTag />} />
-
-          <Route path="/signupArtist" element={<SignupAritst />} />
-          <Route path="/adminUserManage" element={<AdminUserManage />} />
-
           <Route path="/purchase" element={<PurchaseSuccess />} />
         </Route>
         <Route path="/personalAuction" element={<Auction />} />

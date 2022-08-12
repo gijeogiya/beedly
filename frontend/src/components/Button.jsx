@@ -172,6 +172,15 @@ const StyledButton = styled.button`
       height: 30px;
       font-size: 8px;
     `}
+
+    ${(props) =>
+    props.Blank &&
+    css`
+      color: black;
+      background: none;
+      width: 15vw;
+      font-size: 8px;
+    `}
 `;
 
 export default function Button({ children, ...props }) {
