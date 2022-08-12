@@ -58,15 +58,15 @@ public interface PersonalProductRepository extends JpaRepository<PersonalProduct
 
     //---------- 7. 사이즈별로 가져오기
     @Query(value="select p from PersonalProduct p where p.width <= 70 and p.height <= 70")
-    Slice<PersonalAuction> findProductBySmallSize(Pageable pageable);
+    Slice<PersonalProduct> findProductBySmallSize(Pageable pageable);
 
     @Query(value="select p from PersonalProduct p where p.width between 70 and 90 and p.height between 70 and 90")
-    Slice<PersonalAuction> findProductByMediumSize(Pageable pageable);
+    Slice<PersonalProduct> findProductByMediumSize(Pageable pageable);
 
     @Query(value="select p from PersonalProduct p where p.width between 90 and 120 and p.height between 90 and 120")
-    Slice<PersonalAuction> findProductByLargeSize(Pageable pageable);
+    Slice<PersonalProduct> findProductByLargeSize(Pageable pageable);
 
     @Query(value="select p from PersonalProduct p where p.width >= 120 and p.height >= 120")
-    Slice<PersonalAuction> findProductByXLargeSize(Pageable pageable);
+    Slice<PersonalProduct> findProductByXLargeSize(Pageable pageable);
 
 }

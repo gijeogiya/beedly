@@ -227,6 +227,7 @@ public class PersonalProductService {
 		else if(size.equals("medium")) products = personalProductRepository.findProductByMediumSize(pageable).map(PersonalProductDto::new);
 		else if(size.equals("large")) products = personalProductRepository.findProductByLargeSize(pageable).map(PersonalProductDto::new);
 		else products = personalProductRepository.findProductByXLargeSize(pageable).map(PersonalProductDto::new);
+
 		return products;
 	}
 
