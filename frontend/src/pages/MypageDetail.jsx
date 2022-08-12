@@ -88,8 +88,8 @@ export default function MypageDetail() {
             <FlexBox MainContent>
 
                 <h3>마이페이지</h3>
-                <StyledProfile src={SampleProfile}></StyledProfile>
                 <div style={{ width: "80vw" }}>
+                    {user.userRole === "ROLE_ARTIST" ? <Link to={`/artistDetail/${user.artistId}`} style={{ textDecoration: "none", color: "black" }}><h4>내 페이지</h4></Link> : ''}
                     <FlexBox Row_SB>
                         <h4>프로필 정보</h4>
                         <Link to="/updateMypage" style={{ textDecoration: "none", color: "black" }}><p>편집</p></Link>
@@ -105,7 +105,10 @@ export default function MypageDetail() {
                     </div>
                     <div>
                         <h5>Role</h5>
-                        <div style={styledp}>{user.userRole === "ROLE_ARTIST" ? "작가님" : "구매자"}</div>
+                        <FlexBox Row_SB>
+                            <div style={styledp}>{user.userRole === "ROLE_ARTIST" ? "작가님" : "구매자"}</div>
+                            {user.userRole === "ROLE_USER" ? <Button XsmallBlack onClick={(e) => Navigate("/signupArtist")}>작가로 전환</Button> : null}
+                        </FlexBox>
                         <StyledHr
                             width="80vw"
                             height="0.5px"

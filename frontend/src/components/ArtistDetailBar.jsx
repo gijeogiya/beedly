@@ -24,7 +24,7 @@ const BackButton = styled.button`
 
 
 
-export function ArtistDetailBar({}) {
+export function ArtistDetailBar({ artist }) {
 
     const navigate = useNavigate('');
 
@@ -37,8 +37,8 @@ export function ArtistDetailBar({}) {
             <BackButton onClick={goBack}>
                 <img src={BackButtonImage} />
             </BackButton>
-            <button style={{"border":"0", "backgroundColor":"white",}}>
-                <img src={LikeIcon} style={{"width":"18px"}}/>
+            <button style={{ "border": "0", "backgroundColor": "white", }}>
+                <img src={LikeIcon} style={{ "width": "18px" }} />
                 <div>
                     139
                 </div>
