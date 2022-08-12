@@ -159,6 +159,12 @@ public class PersonalProductService {
 
 		return new PersonalProductCloseDto(findProduct, searchTag, personalFavorite, absenteeBid, auctionInfo);
 	 }
+	@Transactional
+	public Slice<PersonalProductDto> getProductBy(Pageable pageable){
+		Slice<PersonalProductDto> products = personalProductRepository.findProductBy(pageable)
+			.map(PersonalProductDto::new);
+		return products;
+	}
 
 	@Transactional
 	public Slice<PersonalProductDto> getProductByCategory(String categoryName, Pageable pageable){
@@ -189,6 +195,16 @@ public class PersonalProductService {
 	public Slice<PersonalProductDto> getProductBySize(Integer width, Integer height, Pageable pageable){
 		Slice<PersonalProductDto> products = personalProductRepository.findProductBySize(width, height, pageable)
 				.map(PersonalProductDto::new);
+		return products;
+	}
+
+	@Transactional
+	public Slice<PersonalProductDto> getProductBySizeCategory(Pageable pageable, String size){
+		Slice<PersonalProductDto> products;
+		if(size.equals("small")) products = personalProductRepository.findProductBySmallSize(pageable).map(PersonalProductDto::new);
+		else if(size.equals("medium")) products = personalProductRepository.findProductByMediumSize(pageable).map(PersonalProductDto::new);
+		else if(size.equals("large")) products = personalProductRepository.findProductByLargeSize(pageable).map(PersonalProductDto::new);
+		else products = personalProductRepository.findProductByXLargeSize(pageable).map(PersonalProductDto::new);
 		return products;
 	}
 

@@ -137,6 +137,10 @@ public class PersonalProductDto {
 		for (PersonalProductImg productImg : productImgs) {
 			this.productImgs.add(productImg.getImgUri());
 		}
+		this.userId = personalProduct.getUser().getId();
+		this.userName = personalProduct.getUser().getUserName();
+		this.userNickname = personalProduct.getUser().getUserNickname();
+		this.artistId = personalProduct.getArtist().getId();
 		this.artistImg = personalProduct.getArtist().getArtistBgImg();
 		//this.personalSoldId = personalProduct.getPersonalSold().getId();
 		this.brightness = personalProduct.getBrightness();
