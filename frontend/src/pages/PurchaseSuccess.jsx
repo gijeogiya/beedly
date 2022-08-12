@@ -1,7 +1,7 @@
 import { Box, Carousel, Image, Spinner } from "grommet";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import { StyledHr, StyledText } from "../components/Common";
 import { Category, moneyFormat } from "../stores/modules/basicInfo";
@@ -10,7 +10,8 @@ import { getPurchaseProduct } from "../utils/apis/UserAPI";
 
 export const PurchaseSuccess = () => {
   const location = useLocation();
-  const { soldId } = location.state;
+  // const { soldId } = location.state;
+  const { soldId } = useParams();
   const { auctionType } = location.state;
   const { productId } = location.state;
 
@@ -46,8 +47,8 @@ export const PurchaseSuccess = () => {
     IMP.init("imp10157701");
     const data = {
       pg: "kakaopay",
-      merchant_uid: auctionType + "_order_no_" + soldId, // 상점에서 관리하는 주문 번호
-      name: "주문명: " + productName,
+      merchant_uid: auctionType + "_order_no_" + 3, // 상점에서 관리하는 주문 번호
+      name: "주문명: " + product.name,
       amount: finalPrice,
       buyer_email: userEmail,
       buyer_name: userName,
@@ -73,6 +74,15 @@ export const PurchaseSuccess = () => {
     if (success) {
       //결제 성공
       alert("결제 성공");
+      navigate(`/purchaseDetail/${soldId}`, {
+        state: {
+          error_msg: error_msg,
+          merchant_uid: merchant_uid,
+          success: success,
+          soldId: soldId,
+          auctionType: auctionType,
+        },
+      });
     } else {
       alert(`결제 실패 : ${error_msg}`);
     }
@@ -131,18 +141,20 @@ export const PurchaseSuccess = () => {
     return (
       <Box>
         {/* 헤더 */}
-        <Box
-          alignContent="center"
-          justify="center"
-          align="center"
-          margin="medium"
-        >
-          <StyledText text="낙찰을 축하합니다!" size="20px" weight="bold" />
-          <StyledText
-            text="제한 시간 내에 결제를 완료해주세요"
-            color="#9d9d9d"
-          />
-        </Box>
+        {!paidFlag && (
+          <Box
+            alignContent="center"
+            justify="center"
+            align="center"
+            margin="medium"
+          >
+            <StyledText text="낙찰을 축하합니다!" size="20px" weight="bold" />
+            <StyledText
+              text="제한 시간 내에 결제를 완료해주세요"
+              color="#9d9d9d"
+            />
+          </Box>
+        )}
         {/* 상품 화면 */}
         <Box>
           {/* <MainImg src={Product1} /> */}
@@ -219,6 +231,13 @@ export const PurchaseSuccess = () => {
           </Box>
         </Box>
         <Box direction="row" justify="center">
+          {!paidFlag && (
+            <Button
+              BigYellow
+              children="카카오페이로 결제하기"
+              onClick={onClickPayMent}
+            />
+          )}
           <Button
             BigYellow
             children="카카오페이로 결제하기"
