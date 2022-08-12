@@ -9,10 +9,12 @@ import com.ssafy.beedly.domain.type.SoldStatus;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.ssafy.beedly.domain.*;
 import com.ssafy.beedly.domain.type.SoldStatus;
 
+import com.ssafy.beedly.dto.SearchTagDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,7 +43,7 @@ public class PersonalProductDto {
 	private Integer height;
 
 	@ApiModelProperty(notes = "상시 상품 가로")
-	private Integer weight;
+	private Integer width;
 
 	@ApiModelProperty(notes = "상시 상품 높이")
 	private Integer depth;
@@ -87,6 +89,9 @@ public class PersonalProductDto {
 	@ApiModelProperty(notes = "온도")
 	private Integer temperature;
 
+	@ApiModelProperty(notes = "검색태그 리스트들")
+	private List<SearchTagDto> searchTagDtos = new ArrayList<>();
+
 
 	public PersonalProductDto(PersonalProduct personalProduct){
 		this.id = personalProduct.getId();
@@ -94,7 +99,7 @@ public class PersonalProductDto {
 		this.productDesc = personalProduct.getProductDesc();
 		this.startPrice = personalProduct.getStartPrice();
 		this.height = personalProduct.getHeight();
-		this.weight = personalProduct.getWidth();
+		this.width = personalProduct.getWidth();
 		this.depth = personalProduct.getDepth();
 		this.soldStatus = personalProduct.getSoldStatus();
 		this.startTime = personalProduct.getStartTime();
@@ -117,6 +122,9 @@ public class PersonalProductDto {
 		this.brightness = personalProduct.getBrightness();
 		this.saturation = personalProduct.getSaturation();
 		this.temperature = personalProduct.getTemperature();
+		this.searchTagDtos = personalProduct.getSearchTags()
+				.stream().map(personalSearchTag -> new com.ssafy.beedly.dto.SearchTagDto(personalSearchTag.getSearchTag()))
+				.collect(Collectors.toList());
 	}
 
 	public PersonalProductDto(PersonalAuction personalAuction){
@@ -126,7 +134,7 @@ public class PersonalProductDto {
 		this.productDesc = personalProduct.getProductDesc();
 		this.startPrice = personalProduct.getStartPrice();
 		this.height = personalProduct.getHeight();
-		this.weight = personalProduct.getWidth();
+		this.width = personalProduct.getWidth();
 		this.depth = personalProduct.getDepth();
 		this.soldStatus = personalProduct.getSoldStatus();
 		this.startTime = personalProduct.getStartTime();
@@ -146,16 +154,19 @@ public class PersonalProductDto {
 		this.brightness = personalProduct.getBrightness();
 		this.saturation = personalProduct.getSaturation();
 		this.temperature = personalProduct.getTemperature();
+		this.searchTagDtos = personalProduct.getSearchTags()
+				.stream().map(personalSearchTag -> new com.ssafy.beedly.dto.SearchTagDto(personalSearchTag.getSearchTag()))
+				.collect(Collectors.toList());
 	}
 
-	public PersonalProductDto(PersonalSearchTag personalSearchTag){
-		PersonalProduct personalProduct = personalSearchTag.getPersonalProduct();
+	public PersonalProductDto(PersonalSearchTag pSearchTag){
+		PersonalProduct personalProduct = pSearchTag.getPersonalProduct();
 		this.id = personalProduct.getId();
 		this.productName = personalProduct.getProductName();
 		this.productDesc = personalProduct.getProductDesc();
 		this.startPrice = personalProduct.getStartPrice();
 		this.height = personalProduct.getHeight();
-		this.weight = personalProduct.getWidth();
+		this.width = personalProduct.getWidth();
 		this.depth = personalProduct.getDepth();
 		this.soldStatus = personalProduct.getSoldStatus();
 		this.startTime = personalProduct.getStartTime();
@@ -176,5 +187,8 @@ public class PersonalProductDto {
 		this.brightness = personalProduct.getBrightness();
 		this.saturation = personalProduct.getSaturation();
 		this.temperature = personalProduct.getTemperature();
+		this.searchTagDtos = personalProduct.getSearchTags()
+				.stream().map(personalSearchTag -> new com.ssafy.beedly.dto.SearchTagDto(personalSearchTag.getSearchTag()))
+				.collect(Collectors.toList());
 	}
 }

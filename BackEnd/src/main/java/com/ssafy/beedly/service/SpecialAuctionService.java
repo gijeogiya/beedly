@@ -7,6 +7,7 @@ import com.ssafy.beedly.domain.*;
 import com.ssafy.beedly.domain.type.SoldStatus;
 import com.ssafy.beedly.dto.auction.EnterSpecialAuctionResponse;
 import com.ssafy.beedly.dto.auction.SuccessfulBidResponse;
+import com.ssafy.beedly.dto.bid.request.BidMessageRequest;
 import com.ssafy.beedly.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -62,7 +63,7 @@ public class SpecialAuctionService {
 
     // 기획전 경매방 종료
     @Transactional
-    public void closeSpecialAuction(Long auctionId) {
+    public void closeSpecialAuction(Long auctionId, BidMessageRequest request) {
         SpecialAuction specialAuction = specialAuctionRepository.findById(auctionId)
                 .orElseThrow(() -> new NotFoundException(SPECIAL_BOARD_NOT_FOUND));
 

@@ -80,6 +80,9 @@ public class PersonalProduct extends BaseEntity {
 
     @Column(name="p_temperature")
     private Integer temperature;
+
+    @OneToMany(mappedBy = "personalProduct")
+    private List<PersonalSearchTag> searchTags = new ArrayList<>();
         
 
     public PersonalProduct(String productName) {

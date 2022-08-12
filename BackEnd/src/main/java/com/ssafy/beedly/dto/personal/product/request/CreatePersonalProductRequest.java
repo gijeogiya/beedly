@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -45,5 +47,8 @@ public class CreatePersonalProductRequest {
 
     @ApiModelProperty(notes = "온도")
     private Integer temperature;
+
+    @ApiModelProperty(notes = "검색 태그 식별자들")
+    private List<Long> searchTags = new ArrayList<>();
 
 }

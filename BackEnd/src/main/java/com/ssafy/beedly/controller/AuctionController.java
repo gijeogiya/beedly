@@ -83,8 +83,8 @@ public class AuctionController {
             // 입찰정보 뿌리기
             messagingTemplate.convertAndSend("/sub/auction/personal/" + request.getAuctionId(), successfulBidResponse);
         } else if (request.getType().equals("F")) { // 경매종료
-            personalAuctionService.closePersonalAuction(userId, request.getAuctionId());
-            messagingTemplate.convertAndSend("/sub/auction/personal/" + request.getAuctionId(), new FinishAuctionResponse("경매가 종료되었습니다.", true));
+            FinishAuctionResponse finishAuctionResponse = personalAuctionService.closePersonalAuction(userId, request);
+            messagingTemplate.convertAndSend("/sub/auction/personal/" + request.getAuctionId(), finishAuctionResponse);
         }
     }
 
@@ -132,8 +132,8 @@ public class AuctionController {
             SuccessfulBidResponse successfulBidResponse = specialAuctionService.successfulBid(request.getProductId());
             messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), successfulBidResponse);
         } else if (request.getType().equals("F")) { // 경매 종료
-            specialAuctionService.closeSpecialAuction(request.getAuctionId());
-            messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), new FinishAuctionResponse("경매가 종료되었습니다.", true));
+            specialAuctionService.closeSpecialAuction(userId, request);
+            messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), new FinishSpecialAuctionResponse(true, "경매가 종료되었습니다."));
         }
     }
 

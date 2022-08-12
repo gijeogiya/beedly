@@ -52,6 +52,8 @@ public class PersonalProductService {
 	private final ArtistRepository artistRepository;
 	private final UserRepository userRepository;
 	private final PersonalAuctionRepository personalAuctionRepository;
+	private final PersonalSearchTagRepository personalSearchTagRepository;
+
 
 	// 상품 등록 + 이미지
 	@Transactional
@@ -68,6 +70,15 @@ public class PersonalProductService {
 				.orElseThrow(() -> new NotFoundException(ARTIST_NOT_FOUND));
 
 		PersonalProduct save = personalProductRepository.save(PersonalProduct.createPersonalProduct(request, findCategory, findUser, artist));
+
+
+		List<Long> searchTags = request.getSearchTags();
+		for (Long searchTagId : searchTags) {
+			SearchTag searchTag = searchTagRepository.findById(searchTagId)
+					.orElseThrow(() -> new NotFoundException(TAG_NOT_FOUND));
+
+			personalSearchTagRepository.save(PersonalSearchTag.createPersonalSearchTag(save, searchTag));
+		}
 
 		// 이미지 s3에 업로드
 		uploadImageS3(images, save);
@@ -93,6 +104,17 @@ public class PersonalProductService {
 		}
 
 		findProduct.updatePersonalProduct(request, findCategory);
+
+		List<PersonalSearchTag> findPersonalSearchTags = personalSearchTagRepository.findByPersonalProductId(productId);
+		personalSearchTagRepository.deleteAllInBatch(findPersonalSearchTags);
+		List<Long> searchTags = request.getSearchTags();
+		for (Long searchTagId : searchTags) {
+			SearchTag searchTag = searchTagRepository.findById(searchTagId)
+					.orElseThrow(() -> new NotFoundException(TAG_NOT_FOUND));
+
+			personalSearchTagRepository.save(PersonalSearchTag.createPersonalSearchTag(findProduct, searchTag));
+		}
+
 
 		if (images != null) {
 			List<PersonalProductImg> findImages = personalProductImgRepository.findAllByPersonalProductId(findProduct.getId());

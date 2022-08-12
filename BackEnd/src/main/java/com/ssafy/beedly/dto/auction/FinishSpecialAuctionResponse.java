@@ -5,12 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class FinishAuctionResponse {
+@NoArgsConstructor
+public class FinishSpecialAuctionResponse {
 
-    private boolean isFinished;
-    private String userName;
-    private Long soldId;
-
+    public Boolean isFinished;
+    public String message;
 }
