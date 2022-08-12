@@ -1,8 +1,10 @@
-import React from 'react'
+import React from 'react';
 import styled from "styled-components";
 import { SearchBar } from "../components/SearchBar";
 import { SizePickCard } from "../components/SizePickCard";
 import { RecommendKeywordTable, RecentlyKeywordTable } from "../components/KeywordTable";
+import { HorizonScrollColTable } from "../components/HorizonScrollTable";
+import { ProductCard } from "../components/ProductCard";
 
 const StyledTableTitle = styled.div`
   font-size: 16px;
@@ -18,9 +20,16 @@ const SizePickCardTable = styled.div`
     justify-content:center;
 `;
 
+const ProductTable = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    width: 348px;
+`;
+
 export default function SearchPage() {
     return (
-        <div style={{"padding-bottom":"20px"}}>
+        // 검색 전 화면
+        <div style={{"paddingBottom":"40px"}}>
             <SearchBar/>
             <StyledTableTitle>최근 검색어</StyledTableTitle>
             <RecentlyKeywordTable/>
@@ -37,5 +46,27 @@ export default function SearchPage() {
             </SizePickCardTable>
             <StyledTableTitle></StyledTableTitle>
         </div>
+
+
+//         // 검색 후 화면
+//             <div style={{"paddingBottom":"40px"}}>
+//                 <SearchBar/>
+//                 <StyledTableTitle>검색 결과</StyledTableTitle>
+//                 <StyledTableTitle>Artist</StyledTableTitle>
+//                 <HorizonScrollColTable />
+//                 <StyledTableTitle>Product</StyledTableTitle>
+//                     <div style={{"display":"flex", "justifyContent":"center"}}>
+//                         <ProductTable>
+//                             <ProductCard/>
+//                             <ProductCard/>
+//                             <ProductCard/>
+//                             <ProductCard/>
+//                             <ProductCard/>
+//                             <ProductCard/>
+//                             <ProductCard/>
+//                         </ProductTable>
+//                     </div>
+//             </div>
+
     )
 }
