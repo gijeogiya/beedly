@@ -28,4 +28,11 @@ public class ArtistFavorite extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public static ArtistFavorite createArtistFavorite(User findUser, Artist findArtist) {
+        ArtistFavorite artistFavorite = new ArtistFavorite();
+        artistFavorite.artist = findArtist;
+        artistFavorite.user = findUser;
+
+        return artistFavorite;
+    }
 }

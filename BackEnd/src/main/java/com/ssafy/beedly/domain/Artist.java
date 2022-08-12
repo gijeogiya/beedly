@@ -32,9 +32,35 @@ public class Artist extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "favorite_count")
+    private Integer favoriteCount;
+
     public static Artist createArtist(User user){
         Artist artist = new Artist();
         artist.user = user;
+        artist.artistProfileImg = "https://beedly-img.s3.ap-northeast-2.amazonaws.com/default.jpg";
+        artist.artistBgImg = "https://beedly-img.s3.ap-northeast-2.amazonaws.com/default_back.jpg";
+        artist.favoriteCount = 0;
         return artist;
+    }
+
+    public void addFavoriteCount() {
+        this.favoriteCount += 1;
+    }
+
+    public void minusFavoriteCount() {
+        this.favoriteCount -= 1;
+    }
+
+    public void updateDesc(String desc) {
+        this.artistDesc = desc;
+    }
+
+    public void updateProfilImg(String imageUrl) {
+        this.artistProfileImg = imageUrl;
+    }
+
+    public void updateBackGroundImg(String imageUrl) {
+        this.artistBgImg = imageUrl;
     }
 }

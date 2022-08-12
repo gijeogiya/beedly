@@ -9,10 +9,7 @@ import com.ssafy.beedly.dto.user.kakao.KakaoUserResponse;
 import com.ssafy.beedly.dto.user.request.UserCreateRequest;
 import com.ssafy.beedly.dto.user.request.UserLoginRequest;
 import com.ssafy.beedly.dto.user.request.UserUpdateRequest;
-import com.ssafy.beedly.dto.user.response.DuplicatedNicknameResponse;
-import com.ssafy.beedly.dto.user.response.UserPurchaseResponse;
-import com.ssafy.beedly.dto.user.response.UserSalesResponse;
-import com.ssafy.beedly.dto.user.response.UserWithTagResponse;
+import com.ssafy.beedly.dto.user.response.*;
 import com.ssafy.beedly.service.AbsenteeBidService;
 import com.ssafy.beedly.service.UserService;
 import io.swagger.annotations.Api;
@@ -98,20 +95,21 @@ public class UserController {
     }
 
     // 구매내역 결제정보 조회
-    @ApiOperation(value = "구매상품 결제정보 조회")
+    @ApiOperation(value = "구매상품 결제정보 조회", notes = "")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "productSoldId", value = "상품 식별자(productId)가 아닌 판매 식별자(productSoldId)"),
+            @ApiImplicitParam(name = "soldId", value = "상품 식별자(productId)가 아닌 판매 식별자(soldId)"),
             @ApiImplicitParam(name = "auctionType", value = "상시 경매 상품이면 P, 기획전 경매 상품이면 S")
     }
     )
-    @GetMapping("/purchase/{productSoldId}")
-    public ResponseEntity<?> searchPurchasePaidInfo(@ApiIgnore @LoginUser User user, @PathVariable Long productSoldId, @RequestParam String auctionType) {
+    @GetMapping("/purchase/{soldId}")
+    public ResponseEntity<UserPurchasePaidResponse> searchPurchasePaidInfo(@ApiIgnore @LoginUser User user, @PathVariable Long soldId, @RequestParam String auctionType) {
         if (auctionType.equals(AuctionType.P.toString())) {
-            return ResponseEntity.ok(userService.searchPersonalPurchasePaidInfo(productSoldId, user));
+            return ResponseEntity.ok(userService.searchPersonalPurchasePaidInfo(soldId, user));
         } else if (auctionType.equals(AuctionType.S.toString())) {
-            return ResponseEntity.ok(userService.searchSpecialPurchasePaidInfo(productSoldId, user));
+            return ResponseEntity.ok(userService.searchSpecialPurchasePaidInfo(soldId, user));
         }
-        return null;
+
+        return ResponseEntity.ok(new UserPurchasePaidResponse());
     }
 
     // 내가 서면 응찰한 상품목록
