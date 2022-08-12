@@ -174,13 +174,13 @@ const artistApproveApi = async (userId, success, fail) => {
     .catch(fail);
 };
 
-// 태그 보기
-const getUserTagApi = async (success, fail) => {
+// Product API
+// 유저를 위한 맞춤추천 상품 조회
+const getRecommendationProductApi = async (success, fail) => {
   await authInstance.get(`/userRecommendation/list`).then(success).catch(fail);
 };
-// Product API
 
-// 생방송 중인 상품 목록 가져오기
+// 생방송 중인 상품 목록 조회
 const getOnairApi = async (page, size, sort, success, fail) => {
   await instance
     .get(`personalProduct/list/onAir?page=${page}&size=${size}&sort=${sort}`)
@@ -196,7 +196,30 @@ const getArtistApi = async (page, size, sort, success, fail) => {
     .catch(fail);
 };
 
-//
+// 상시 경매 작품 조회
+const getPersonalProductListApi = async (page, size, sort, success, fail) => {
+  await instance
+    .get(`personalProduct?page=${page}&size=${size}&sort=${sort}`)
+    .then(success)
+    .catch(fail);
+};
+
+// 상품 사이즈카테고리로 작품 조회
+const getProductListBySizeApi = async (
+  productSize,
+  page,
+  size,
+  sort,
+  success,
+  fail
+) => {
+  await instance
+    .get(
+      `personalProduct/sizeCategory/${productSize}?page=${page}&size=${size}&sort=${sort}`
+    )
+    .then(success)
+    .catch(fail);
+};
 export {
   loginApi,
   checkNicknameApi,
@@ -218,5 +241,8 @@ export {
   artistApproveApi,
   getOnairApi,
   getArtistApi,
-  getUserTagApi,
+  getRecommendationProductApi,
+  getPersonalProductListApi,
+  getProductListBySizeApi,
+  getData,
 };

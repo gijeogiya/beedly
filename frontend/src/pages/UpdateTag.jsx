@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../assets/img/logoClear.png'
 import Button from '../components/Button';
 import { FlexBox } from '../components/UserStyled'
-import { getTagListApi, registerTagApi } from '../utils/api';
+import { getTagListApi, getUserInfoApi, registerTagApi } from '../utils/api';
 export default function SignupTag() {
     const [loading, setloading] = useState(true);
     const Navigate = useNavigate('');
@@ -12,20 +12,30 @@ export default function SignupTag() {
     const [selectedTag, setSeletedTag] = useState([]);
     useEffect(() => {
         if (loading) {
+
             getTagListApi((res) => {
                 setTagList(res.data);
-                console.log(tagList);
+
                 setloading(false)
             }, (err) => {
                 console.log(err);
             })
-        }
-        // eslint-disable-next-line
-    }, [loading]);
 
-    const Next = () => {
-        Navigate("/");
-    }
+            getUserInfoApi((res) => {
+                console.log(res.data.recommendationTagDtos.id);
+                const tagIdList = [];
+                for (let index = 0; index < res.data.recommendationTagDtos.length; index++) {
+                    tagIdList[index] = res.data.recommendationTagDtos[index].id - 1;
+
+                }
+                setSeletedTag(tagIdList);
+
+            }, (err) => {
+                console.log(err);
+            })
+
+        }
+    }, [loading]);
 
     const selectTag = () => {
         setSeletedTag(selectedTag.sort(function (a, b) { return a - b }));
@@ -38,7 +48,7 @@ export default function SignupTag() {
             console.log(res);
             console.log("성공");
 
-            Navigate("/");
+            Navigate(-1);
 
         }, (err) => {
             console.log(err);
@@ -79,7 +89,6 @@ export default function SignupTag() {
                     </FlexBox>
                     <br />
                     <FlexBox Row_SB style={{ padding: "5vh" }}>
-                        <Button MediumBlack style={{ width: "38vw" }} onClick={Next}>다음에 할게요</Button>
                         <Button MediumYellow style={{ width: "38vw" }} onClick={selectTag}>완료했어요</Button>
                     </FlexBox>
                 </FlexBox>
