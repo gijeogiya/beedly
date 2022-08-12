@@ -10,7 +10,8 @@ const StyledProductCard = styled.div`
     flex-direction:column;
     justify-content:space-between;
     width:180px;
-    padding-right:14px;
+    padding-right:7px;
+    padding-left: 7px;
     padding-top:14px;
 `;
 
@@ -80,7 +81,7 @@ export function ProductCard() {
                 <StyledRectangleRowImg src={SampleProduct} />
                 <AuctionStateBox>
                     <StyledAuctionStateIcon src={true ? OnairStateIcon : BeforeStateIcon} />
-                        {true ? " 실시간" : " 25:10:12"}
+                    {true ? " 실시간" : " 25:10:12"}
                 </AuctionStateBox>
             </StyledProductCardImgFrame>
             <StyledCardInfBox>
@@ -88,9 +89,9 @@ export function ProductCard() {
                     <StyledCardArtistImg src={SampleProfile} />
                 </StyledCardArtistImgFrame>
                 <StyledCardInfTextFrame>
-                    <div style={{"fontSize": "14px", "fontWeight": "700"}}>해리아현</div>
-                    <div style={{"fontSize": "14px"}}>고양이와 함께 춤을</div>
-                    <div style={{"fontSize": "12px"}}>{false ? `24명 시청중` : `12월 22일 13시 예정`}</div>
+                    <div style={{ "fontSize": "14px", "fontWeight": "700" }}>해리아현</div>
+                    <div style={{ "fontSize": "14px" }}>고양이와 함께 춤을</div>
+                    <div style={{ "fontSize": "12px" }}>{false ? `24명 시청중` : `12월 22일 13시 예정`}</div>
                 </StyledCardInfTextFrame>
             </StyledCardInfBox>
         </StyledProductCard>
@@ -135,13 +136,13 @@ const StyledProfileCardInfBox = styled.div`
 export function ArtistCard() {
     return (
         <StyledProfileCard>
-              <StyledProfileCardImgFrame>
+            <StyledProfileCardImgFrame>
                 <StyledRectangleColImg src={SampleBackground} />
                 <StyledProfileCardInfBox>
-                    <StyledCardArtistImgFrame style={{"padding": "12px"}}>
-                        <StyledCardArtistImg style={{"border": "2px solid white"}} src={SampleProfile} />
+                    <StyledCardArtistImgFrame style={{ "padding": "12px" }}>
+                        <StyledCardArtistImg style={{ "border": "2px solid white" }} src={SampleProfile} />
                     </StyledCardArtistImgFrame>
-                    <div style={{"padding":"12px", "color":"white", "fontSize":"14px"}}>
+                    <div style={{ "padding": "12px", "color": "white", "fontSize": "14px" }}>
                         해리아현
                     </div>
                 </StyledProfileCardInfBox>
