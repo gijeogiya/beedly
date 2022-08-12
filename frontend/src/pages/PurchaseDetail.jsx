@@ -1,6 +1,6 @@
 import { Box, Image } from "grommet";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import { StyledHr, StyledText } from "../components/Common";
 import { moneyFormat } from "../stores/modules/basicInfo";
@@ -10,7 +10,7 @@ import { BackButton } from "./ProductRegister";
 export const PurchaseDetail = () => {
   const params = new URLSearchParams(window.location.search);
   const [loading, setLoading] = useState(true);
-
+  const location = useLocation();
   const [userAddr, setUserAddr] = useState();
   const [userName, setUserName] = useState();
   const [userTel, setUserTel] = useState();
@@ -20,11 +20,16 @@ export const PurchaseDetail = () => {
   const [product, setProduct] = useState({});
   const [userEmail, setUserEmail] = useState();
   const navigate = useNavigate();
-  let success = params.get("imp_success");
-  let errorMsg = params.get("error_msg");
-  let merchantUid = params.get("merchant_uid");
-  let soldId = merchantUid.split("_")[3];
-  let auctionType = merchantUid.split("_")[0];
+  let success =
+    params !== null ? params.get("imp_success") : location.state.success;
+  let errorMsg = params !== null ? params.get("error_msg") : null;
+  let merchantUid = params !== null ? params.get("merchant_uid") : null;
+  let soldId =
+    location.state !== null ? location.state.soldId : merchantUid.split("_")[3];
+  let auctionType =
+    location.state !== null
+      ? location.state.auctionType
+      : merchantUid.split("_")[0];
   // auctionType + "_order_no_" + soldId,
 
   useEffect(() => {
@@ -67,7 +72,7 @@ export const PurchaseDetail = () => {
     return (
       <Box align="center">
         <StyledText text="결제에 실패했습니다." />
-        <StyledText text="알 수 없는 오류가 발생했습니다." />
+        <StyledText text={errorMsg} />
         <Box direction="row" justify="center">
           <Button children="뒤로가기" onClick={goBack} />
         </Box>

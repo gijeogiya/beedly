@@ -6,10 +6,10 @@ export default function ProductListPage() {
   const navigate = useNavigate();
 
   const purchaseTest = () => {
-    navigate("/purchase", {
+    navigate(`/purchase/27`, {
       state: {
         auctionType: "P",
-        soldId: 27,
+        // soldId: 27,
         productId: 74,
       },
     });
