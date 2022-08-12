@@ -650,11 +650,11 @@ export const Auction = () => {
         });
         handleClose();
         client.deactivate();
-        ref.current.componentWillUnmount();
+        ref.current.handleUnmount(null);
       }
     } else {
       client.deactivate();
-      ref.current.componentWillUnmount();
+      ref.current.handleUnmount(null);
     }
   };
   const handleGoBack = () => {
@@ -668,6 +668,7 @@ export const Auction = () => {
         state: {
           auctionType: "P",
           soldId: success,
+          productId: productId,
         },
       });
     //그냥 뒤로가기
