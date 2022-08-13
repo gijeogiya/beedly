@@ -2,7 +2,12 @@ import { Box, FileInput, Grid, Grommet, Select } from "grommet";
 import React, { forwardRef, useState } from "react";
 import { useEffect } from "react";
 import { StyledText } from "../components/Common";
-import { Input2, SizeInput, STextArea } from "../components/UserStyled";
+import {
+  FlexBox,
+  Input2,
+  SizeInput,
+  STextArea,
+} from "../components/UserStyled";
 import DatePicker from "react-datepicker";
 import { ko } from "date-fns/esm/locale";
 import styled from "styled-components";
@@ -23,6 +28,7 @@ import {
 } from "../utils/apis/PersonalProductAPI";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Category } from "../stores/modules/basicInfo";
+import { getSearchTag } from "../utils/apis/TagAPI";
 
 const titleSize = "16px";
 
@@ -175,14 +181,7 @@ export const ProductRegister = () => {
   const [height, setHeight] = useState("");
   const [width, setWidth] = useState("");
   const [depth, setDepth] = useState("");
-  const [tags, setTags] = useState([
-    { name: "수채화", id: 0 },
-    { name: "유화", id: 1 },
-    { name: "정물화", id: 2 },
-    { name: "인물화", id: 3 },
-    { name: "팝아트", id: 4 },
-    { name: "풍경화", id: 5 },
-  ]);
+  const [tags, setTags] = useState([]);
   const [select, setSelect] = useState([]);
   const [open, setOpen] = useState(false);
   const [paletteColors, setPaletteColors] = useState([]);
@@ -223,8 +222,17 @@ export const ProductRegister = () => {
     //   "weight": 0
     // },
 
-    if (productId) {
-      if (loading)
+    if (loading) {
+      getSearchTag(
+        (response) => {
+          console.log(response);
+          setTags([...response.data]);
+        },
+        (fail) => {
+          console.log(fail);
+        }
+      );
+      if (productId)
         getPersonalProduct(productId, (response) => {
           console.log(response);
           let data = response.data.personalProductDto;
@@ -242,8 +250,12 @@ export const ProductRegister = () => {
           setTemperature(data.temperature);
           setPrevs([...data.productImgs]);
           urlToFile(data.productImgs);
+          setSelect([...response.data.tagNames]);
+          // handleTags(response.data.tagNames);
           // setRequest(req);
         });
+
+      setLoading(false);
     }
 
     const req = {
@@ -258,11 +270,26 @@ export const ProductRegister = () => {
       brightness: brightness,
       saturation: saturation,
       temperature: temperature,
+      searchTags: select,
     };
     setRequest(req);
 
     return () => setLoading(false);
   }, [saturation, temperature, brightness, prevs]);
+
+  // const handleTags = (tagNames) => {
+  //   console.log(tagNames);
+  //   console.log(tags);
+  //   for (let i = 0; i < tagNames.length; i++) {
+  //     for (let j = 0; j < tags.length; j++) {
+  //       if (tags[j].searchTagName === tagNames[i]) {
+  //         console.log(tags[j]);
+  //         setSelect([...select, tags[j].id]);
+  //       }
+  //     }
+  //   }
+  //   console.log(select);
+  // };
 
   const urlToFile = (urls) => {
     let arr = [];
@@ -549,6 +576,7 @@ export const ProductRegister = () => {
         brightness: brightness,
         saturation: saturation,
         temperature: temperature,
+        searchTags: select,
       };
 
       // console.log(request);
@@ -789,7 +817,61 @@ export const ProductRegister = () => {
 
           <Box margin={{ top: "20px" }}>
             <StyledText text="Tag" size={titleSize} weight="bold" />
-            <Grid columns={{ count: 4, size: "auto" }} gap="xsmall">
+
+            <FlexBox Row_SB style={{ flexWrap: "wrap", padding: "6px 10px" }}>
+              {!productId &&
+                tags.map((tag, idx) => (
+                  <Button
+                    key={idx}
+                    onClick={() => {
+                      !select.includes(idx)
+                        ? setSelect((select) => [...select, idx])
+                        : setSelect(select.filter((Button) => Button !== idx));
+                    }}
+                    TagGray={!select.includes(idx) ? true : false}
+                    TagYellow={select.includes(idx) ? true : false}
+                    style={{
+                      margin: "6px 3px ",
+                      flex: "1 1 20%",
+                      wordWrap: "break-word",
+                      maxWidth: "25%",
+                      padding: "5px 3px",
+                    }}
+                  >
+                    # {tag.searchTagName}
+                  </Button>
+                ))}
+              {productId &&
+                tags.map((tag, idx) => (
+                  <Button
+                    key={idx}
+                    onClick={() => {
+                      !select.includes(tag.searchTagName)
+                        ? setSelect((select) => [...select, tag.searchTagName])
+                        : setSelect(
+                            select.filter(
+                              (Button) => Button !== tag.searchTagName
+                            )
+                          );
+                    }}
+                    TagGray={!select.includes(tag.searchTagName) ? true : false}
+                    TagYellow={
+                      select.includes(tag.searchTagName) ? true : false
+                    }
+                    style={{
+                      margin: "6px 3px ",
+                      flex: "1 1 20%",
+                      wordWrap: "break-word",
+                      maxWidth: "25%",
+                      padding: "5px 3px",
+                    }}
+                  >
+                    # {tag.searchTagName}
+                  </Button>
+                ))}
+            </FlexBox>
+
+            {/* <Grid columns={{ count: 4, size: "auto" }} gap="xsmall">
               {tags.map((tag, idx) => {
                 return (
                   <Button
@@ -804,11 +886,11 @@ export const ProductRegister = () => {
                     SmallThinWhite={!select.includes(tag.id) ? true : false}
                     SmallThinYellow={select.includes(tag.id) ? true : false}
                   >
-                    #{tag.name}
+                    #{tag.searchTagName}
                   </Button>
                 );
               })}
-            </Grid>
+            </Grid> */}
           </Box>
           <Box alignSelf="center">
             <Button

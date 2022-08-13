@@ -1,4 +1,4 @@
-import { Box, Image } from "grommet";
+import { Box, Image, Spinner } from "grommet";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
@@ -21,9 +21,15 @@ export const PurchaseDetail = () => {
   const [userEmail, setUserEmail] = useState();
   const navigate = useNavigate();
   let success =
-    params !== null ? params.get("imp_success") : location.state.success;
-  let errorMsg = params !== null ? params.get("error_msg") : null;
-  let merchantUid = params !== null ? params.get("merchant_uid") : null;
+    location.state !== null
+      ? location.state.success
+      : params.get("imp_success");
+  let errorMsg =
+    location.state !== null ? location.state.errorMsg : params.get("error_msg");
+  let merchantUid =
+    location.state !== null
+      ? location.state.merchantUid
+      : params.get("merchant_uid");
   let soldId =
     location.state !== null ? location.state.soldId : merchantUid.split("_")[3];
   let auctionType =
@@ -34,7 +40,7 @@ export const PurchaseDetail = () => {
 
   useEffect(() => {
     console.log(success + ", " + errorMsg + ", " + soldId);
-    if (success === "true") {
+    if (success === true) {
       if (loading) getPurchaseInfo();
     }
     return () => setLoading(false);
@@ -56,6 +62,7 @@ export const PurchaseDetail = () => {
         setFinalPrice(purchaseData.finalPrice);
         setPaidFlag(purchaseData.paidFlag);
         setUserEmail(user.userEmail);
+        setLoading(false);
       },
       (fail) => {
         console.log(fail);
@@ -68,7 +75,8 @@ export const PurchaseDetail = () => {
   };
 
   // return <div>{success + ", " + errorMsg + ", " + soldId}</div>;
-  if (success === "false")
+  if (loading) return <Spinner />;
+  if (success === false)
     return (
       <Box align="center">
         <StyledText text="결제에 실패했습니다." />

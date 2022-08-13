@@ -17,3 +17,5 @@ const postPersonalPay = async (soldId, success, fail) => {
 const postSpecialPay = async (soldId, success, fail) => {
   await payApi.post(`/special/sold/${soldId}`).then(success).catch(fail);
 };
+
+export { postPersonalPay, postSpecialPay };
