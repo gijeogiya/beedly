@@ -8,6 +8,14 @@ import { getUserInfoApi } from "../utils/api";
 import { Link, useNavigate } from "react-router-dom";
 import { FlexBox } from "../components/UserStyled";
 
+const BackButton = styled.button`
+  background: none;
+  font-size: 12px;
+  font-family: Noto Sans KR, sans-serif;
+  border: 0px;
+  width: 10vw;
+`;
+
 const ContainerBox = ({ title2 }) => {
   return (
     <Box
@@ -27,7 +35,6 @@ const ContainerBox = ({ title2 }) => {
         bottom: "20px",
       }}
     >
-
       <Box
         align="center"
         border={title2 === "관심 작가" ? false : "right"}
@@ -61,7 +68,6 @@ const ContainerBox = ({ title2 }) => {
 
 const Sector = ({ title, link }) => {
   return (
-
     <Box alignContent="center">
       <Box direction="row" justify="between" width="80vw">
         <StyledText weight="bold" text={title}></StyledText>
@@ -73,35 +79,30 @@ const Sector = ({ title, link }) => {
     </Box>
   );
 };
-const BackButton = styled.button`
-  background: none;
-  font-size: 12px;
-  font-family: Noto Sans KR, sans-serif;
-  border: 0px;
-  width: 10vw;
-`;
 
 export default function MyPage() {
   //user 정보 가져오기
-  const Navigate = useNavigate('');
+  const Navigate = useNavigate("");
   const [user, setUser] = useState({
-    userName: '',
-    userRole: '',
-    userEmail: '',
+    userName: "",
+    userRole: "",
+    userEmail: "",
   });
   useEffect(() => {
     // 아직 로그인 된 상태가 아니라면
     if (localStorage.getItem("token") === null) {
       // 로그인하라고 보내주기
-      Navigate('/login');
+      Navigate("/login");
     } else {
       // 내 정보 조회
-      getUserInfoApi((res) => {
-        setUser(res.data);
-
-      }, (err) => {
-        console.log(err);
-      })
+      getUserInfoApi(
+        (res) => {
+          setUser(res.data);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
       // 구매내역 조회
       // getPurchaseApi((res) => {
 
@@ -120,15 +121,15 @@ export default function MyPage() {
     // eslint-disable-next-line
   }, []);
   const CheckRole = () => {
-    if (user.userRole === 'ROLE_USER') {
-      return '구매자';
-    } else if (user.userRole === 'ROLE_ARTIST') {
-      return '작가님';
-    } else if (user.userRole === 'ROLE_ADMIN') {
-      return '관리자';
+    if (user.userRole === "ROLE_USER") {
+      return "구매자";
+    } else if (user.userRole === "ROLE_ARTIST") {
+      return "작가님";
+    } else if (user.userRole === "ROLE_ADMIN") {
+      return "관리자";
     }
     return "정보없음";
-  }
+  };
   return (
     <div>
       <Grid
@@ -160,7 +161,11 @@ export default function MyPage() {
             <Box margin="5px">
               <Box direction="row" align="end" style={{ marginBottom: "10px" }}>
                 <StyledText text={user.userName} weight="bold" size="18px" />
-                <StyledText style={{ marginLeft: "10px", }} text={CheckRole} size="12px" />
+                <StyledText
+                  style={{ marginLeft: "10px" }}
+                  text={CheckRole()}
+                  size="12px"
+                />
               </Box>
               <StyledText text={user.userEmail} size="14px" />
             </Box>
@@ -181,50 +186,158 @@ export default function MyPage() {
         {/* 구매내역 & 판매내역 box */}
         <Box gridArea="buysold">
           <Sector title="구매내역" link="PurchaseList" />
-          {user.userRole === 'ROLE_ARTIST' ? <Sector title="판매내역" link="SaleList" /> : <div></div>}
+          {user.userRole === "ROLE_ARTIST" ? (
+            <Sector title="판매내역" link="SaleList" />
+          ) : (
+            <div></div>
+          )}
         </Box>
-        <StyledHr gridArea="secHr" width="99vw" height="2px" color="lightgray" />
+        <StyledHr
+          gridArea="secHr"
+          width="99vw"
+          height="2px"
+          color="lightgray"
+        />
 
         <Box gridArea="like">
           <Sector title="관심작품" link="LikeProduct" />
           <Sector title="관심작가" link="LikeArtist" />
         </Box>
         {/* <StyledHr gridArea="secHr" width="99vw" height="2px" color="lightgray" /> */}
-
       </Grid>
 
       {/* 구매자 & 판매자가 볼수있는 button */}
-      {user.userRole === ('ROLE_USER' || 'ROLE_ARTIST') ?
+      {user.userRole === ("ROLE_USER" || "ROLE_ARTIST") ? (
         <FlexBox Row_SA style={{ margin: "0px" }}>
-          <div style={{ width: "33vw", border: "2px solid #D9D9D9", textAlign: "center", padding: "8px", borderRight: "0px" }}>
-            <Link to="/adminUserManage" style={{ textDecorationLine: "none", fontSize: "14px", color: "#1F1D1D" }}>공지사항</Link>
+          <div
+            style={{
+              width: "33vw",
+              border: "2px solid #D9D9D9",
+              textAlign: "center",
+              padding: "8px",
+              borderRight: "0px",
+            }}
+          >
+            <Link
+              to="/adminUserManage"
+              style={{
+                textDecorationLine: "none",
+                fontSize: "14px",
+                color: "#1F1D1D",
+              }}
+            >
+              공지사항
+            </Link>
           </div>
-          <div style={{ width: "33vw", border: "2px solid #D9D9D9", textAlign: "center", padding: "8px", borderRight: "0px" }}>
-            <Link to="/adminUserManage" style={{ textDecorationLine: "none", fontSize: "14px", color: "#1F1D1D" }}>QnA</Link>
+          <div
+            style={{
+              width: "33vw",
+              border: "2px solid #D9D9D9",
+              textAlign: "center",
+              padding: "8px",
+              borderRight: "0px",
+            }}
+          >
+            <Link
+              to="/adminUserManage"
+              style={{
+                textDecorationLine: "none",
+                fontSize: "14px",
+                color: "#1F1D1D",
+              }}
+            >
+              QnA
+            </Link>
           </div>
-          <div style={{ width: "33vw", border: "2px solid #D9D9D9", textAlign: "center", padding: "8px" }}>
-            <Link to="/adminUserManage" style={{ textDecorationLine: "none", fontSize: "14px", color: "#1F1D1D" }}>이용가이드</Link>
+          <div
+            style={{
+              width: "33vw",
+              border: "2px solid #D9D9D9",
+              textAlign: "center",
+              padding: "8px",
+            }}
+          >
+            <Link
+              to="/adminUserManage"
+              style={{
+                textDecorationLine: "none",
+                fontSize: "14px",
+                color: "#1F1D1D",
+              }}
+            >
+              이용가이드
+            </Link>
           </div>
         </FlexBox>
+      ) : (
+        <div></div>
+      )}
 
-        : <div></div>
-      }
-
-      {user.userRole === ('ROLE_ADMIN') ?
+      {user.userRole === "ROLE_ADMIN" ? (
         <FlexBox Row_SA style={{ margin: "0px" }}>
-          <div style={{ width: "33vw", border: "2px solid #D9D9D9", textAlign: "center", padding: "8px", borderRight: "0px" }}>
-            <Link to="/adminUserManage" style={{ textDecorationLine: "none", fontSize: "14px", color: "#1F1D1D" }}>공지사항 등록</Link>
+          <div
+            style={{
+              width: "33vw",
+              border: "2px solid #D9D9D9",
+              textAlign: "center",
+              padding: "8px",
+              borderRight: "0px",
+            }}
+          >
+            <Link
+              to="/adminUserManage"
+              style={{
+                textDecorationLine: "none",
+                fontSize: "14px",
+                color: "#1F1D1D",
+              }}
+            >
+              공지사항 등록
+            </Link>
           </div>
-          <div style={{ width: "33vw", border: "2px solid #D9D9D9", textAlign: "center", padding: "8px", borderRight: "0px" }}>
-            <Link to="/adminUserManage" style={{ textDecorationLine: "none", fontSize: "14px", color: "#1F1D1D" }}>유저관리</Link>
+          <div
+            style={{
+              width: "33vw",
+              border: "2px solid #D9D9D9",
+              textAlign: "center",
+              padding: "8px",
+              borderRight: "0px",
+            }}
+          >
+            <Link
+              to="/adminUserManage"
+              style={{
+                textDecorationLine: "none",
+                fontSize: "14px",
+                color: "#1F1D1D",
+              }}
+            >
+              유저관리
+            </Link>
           </div>
-          <div style={{ width: "33vw", border: "2px solid #D9D9D9", textAlign: "center", padding: "8px" }}>
-            <Link to="/adminUserManage" style={{ textDecorationLine: "none", fontSize: "14px", color: "#1F1D1D" }}>물품조회</Link>
+          <div
+            style={{
+              width: "33vw",
+              border: "2px solid #D9D9D9",
+              textAlign: "center",
+              padding: "8px",
+            }}
+          >
+            <Link
+              to="/adminUserManage"
+              style={{
+                textDecorationLine: "none",
+                fontSize: "14px",
+                color: "#1F1D1D",
+              }}
+            >
+              물품조회
+            </Link>
           </div>
         </FlexBox>
-
-        : <div></div>
-      }
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 }

@@ -22,7 +22,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import CloseButton from "../assets/images/close.png";
-import { Input2, Input3 } from "../components/UserStyled";
+import { FlexBox, Input2, Input3 } from "../components/UserStyled";
 import styled from "styled-components";
 import {
   deletePersonalProduct,
@@ -121,6 +121,7 @@ export const ProductDeatail = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteCount, setFavoriteCount] = useState();
   const [favoriteId, setFavoriteId] = useState();
+  const [tags, setTags] = useState();
   const navigate = useNavigate();
   const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
   // console.log("user : ", User);
@@ -178,6 +179,7 @@ export const ProductDeatail = () => {
     setFavoriteId(data.favoriteId);
     setIsFavorite(data.isFavorite);
     setIsOnAir(data.isOnAir);
+    setTags(data.tagNames);
     setAbsenteeBidPrice(
       data.absenteeBidPrice === null ? "" : data.absenteeBidPrice
     );
@@ -222,16 +224,19 @@ export const ProductDeatail = () => {
       } else if (diff / day >= 1) {
         return `${parseInt(diff / day)}일 남음`;
       } else {
-        return `${diff / hour >= 1 ? `${parseInt(diff / hour)}:` : ``}${diff / minute >= 1
-          ? `${parseInt((diff % hour) / minute) < 10
-            ? `0${parseInt((diff % hour) / minute)}`
-            : parseInt((diff % hour) / minute)
-          }:`
-          : ``
-          }${parseInt((diff % minute) / sec) < 10
+        return `${diff / hour >= 1 ? `${parseInt(diff / hour)}:` : ``}${
+          diff / minute >= 1
+            ? `${
+                parseInt((diff % hour) / minute) < 10
+                  ? `0${parseInt((diff % hour) / minute)}`
+                  : parseInt((diff % hour) / minute)
+              }:`
+            : ``
+        }${
+          parseInt((diff % minute) / sec) < 10
             ? `0${parseInt((diff % minute) / sec)}`
             : parseInt((diff % minute) / sec)
-          }`;
+        }`;
       }
     }
   };
@@ -411,8 +416,9 @@ export const ProductDeatail = () => {
     const HHmm = date[1].split(":");
     return `${yyyyMMdd[0]}년 ${parseInt(yyyyMMdd[1])}월 ${parseInt(
       yyyyMMdd[2]
-    )}일  ${parseInt(HHmm[0])}시 ${parseInt(HHmm[1]) !== 0 ? `${parseInt(HHmm[1])}분` : ``
-      } 예정`;
+    )}일  ${parseInt(HHmm[0])}시 ${
+      parseInt(HHmm[1]) !== 0 ? `${parseInt(HHmm[1])}분` : ``
+    } 예정`;
     // return date.toString("yyyy년 MM월 dd일 HH시 mm분 예정");
   };
 
@@ -476,7 +482,12 @@ export const ProductDeatail = () => {
       />
       <Box>
         {/* <MainImg src={Product1} /> */}
-        <Carousel fill wrap={true} play={3000} controls="arrows">
+        <Carousel
+          fill
+          wrap={true}
+          play={productImages.length > 1 ? 3000 : 0}
+          controls="arrows"
+        >
           {productImages.map((image, idx) => {
             return <Image src={image} fit="cover" key={idx} />;
           })}
@@ -500,7 +511,17 @@ export const ProductDeatail = () => {
         </Box>
         <Box margin="small">
           <StyledText text="작품 정보" />
-          <div>태그들 태그들</div>
+          <FlexBox Row_S style={{ flexWrap: "wrap", padding: "6px 10px" }}>
+            {tags.map((item, idx) => (
+              <StyledText
+                key={idx}
+                text={`#${item}`}
+                style={{
+                  margin: "3px",
+                }}
+              />
+            ))}
+          </FlexBox>
         </Box>
       </Box>
       {/* <Box margin="small">
