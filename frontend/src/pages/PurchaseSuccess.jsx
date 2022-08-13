@@ -5,6 +5,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import { StyledHr, StyledText } from "../components/Common";
 import { Category, moneyFormat } from "../stores/modules/basicInfo";
+import { postPersonalPay } from "../utils/apis/PayAPI";
 import { getPersonalProduct } from "../utils/apis/PersonalProductAPI";
 import { getPurchaseProduct } from "../utils/apis/UserAPI";
 
@@ -76,6 +77,26 @@ export const PurchaseSuccess = () => {
     if (success) {
       //결제 성공
       alert("결제 성공");
+      postPersonalPay(
+        soldId,
+        (response) => {
+          if (response.data.statusCode === "ACCEPTED")
+            navigate(`/purchaseDetail/${soldId}`, {
+              state: {
+                error_msg: error_msg,
+                merchant_uid: merchant_uid,
+                success: success,
+                soldId: soldId,
+                auctionType: auctionType,
+              },
+            });
+        },
+        (fail) => {
+          console.log(fail);
+        }
+      );
+    } else {
+      alert(`결제 실패 : ${error_msg}`);
       navigate(`/purchaseDetail/${soldId}`, {
         state: {
           error_msg: error_msg,
@@ -85,8 +106,6 @@ export const PurchaseSuccess = () => {
           auctionType: auctionType,
         },
       });
-    } else {
-      alert(`결제 실패 : ${error_msg}`);
     }
   };
 
