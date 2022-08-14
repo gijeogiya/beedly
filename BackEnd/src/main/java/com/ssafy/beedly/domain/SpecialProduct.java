@@ -2,12 +2,16 @@ package com.ssafy.beedly.domain;
 
 import com.ssafy.beedly.domain.common.BaseEntity;
 import com.ssafy.beedly.domain.type.SoldStatus;
+import com.ssafy.beedly.domain.type.YN;
+import com.ssafy.beedly.dto.special.product.request.CreateSpecialProductRequest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,17 +31,20 @@ public class SpecialProduct extends BaseEntity {
     @Column(name = "s_product_desc")
     private String productDesc;
 
-    @Column(name = "s_start_time")
-    private int startPrice;
+    @Column(name = "s_start_price")
+    private Integer startPrice;
 
     @Column(name = "s_product_h")
-    private int height;
+    private Integer height;
 
     @Column(name = "s_product_w")
-    private int weight;
+    private Integer weight;
 
     @Column(name = "s_product_d")
-    private int depth;
+    private Integer depth;
+
+    @Column(name = "s_artist_name")
+    private String artistName;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "s_sold_status")
@@ -46,4 +53,50 @@ public class SpecialProduct extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "s_board_id")
+    private SpecialBoard specialBoard;
+
+    @OneToMany(mappedBy = "specialProduct")
+    private List<SpecialProductImg> specialProductImgs = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "is_deleted", length = 1)
+    private YN isDeleted = YN.N;
+
+    public static SpecialProduct createSpecialProduct(CreateSpecialProductRequest request, Category findCategory, SpecialBoard findBoard) {
+        SpecialProduct specialProduct = new SpecialProduct();
+        specialProduct.productName = request.getProductName();
+        specialProduct.productDesc = request.getProductDesc();
+        specialProduct.startPrice = request.getStartPrice();
+        specialProduct.height = request.getHeight();
+        specialProduct.weight = request.getWeight();
+        specialProduct.depth = request.getDepth();
+        specialProduct.artistName = request.getArtistName();
+        specialProduct.soldStatus = SoldStatus.STANDBY;
+        specialProduct.category = findCategory;
+        specialProduct.specialBoard = findBoard;
+
+        return specialProduct;
+    }
+
+    public void updateSoldStatus(SoldStatus s) {
+        this.soldStatus = s;
+    }
+
+    public void updateSpecialProduct(CreateSpecialProductRequest request, Category category) {
+        this.productName = request.getProductName();
+        this.productDesc = request.getProductDesc();
+        this.startPrice = request.getStartPrice();
+        this.height = request.getHeight();
+        this.weight = request.getWeight();
+        this.depth = request.getDepth();
+        this.artistName = request.getArtistName();
+        this.category = category;
+    }
+
+    public void deleteSpecialProduct() {
+        this.isDeleted = YN.Y;
+    }
 }

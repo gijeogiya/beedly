@@ -21,9 +21,22 @@ public class ArtistApproval extends BaseEntity {
     private Long id;
 
     @Column(name = "artist_approval_flag", columnDefinition = "TINYINT", length = 1)
-    private boolean approvalFlag;
+    private Boolean approvalFlag;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public static ArtistApproval createArtistApproval(Boolean approvalFlag, User user) {
+        ArtistApproval artistApproval = new ArtistApproval();
+        artistApproval.user = user;
+        artistApproval.approvalFlag = approvalFlag;
+        return artistApproval;
+    }
+
+    public void updateArtistApproval(boolean approvalFlag, User user) {
+        this.user = user;
+        this.approvalFlag = approvalFlag;
+    }
+
 }

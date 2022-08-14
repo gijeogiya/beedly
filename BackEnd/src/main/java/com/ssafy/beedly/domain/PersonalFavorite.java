@@ -27,4 +27,12 @@ public class PersonalFavorite extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public static PersonalFavorite createPersonalFavorite(User findUser, PersonalProduct findProduct) {
+        PersonalFavorite personalFavorite = new PersonalFavorite();
+        personalFavorite.personalProduct = findProduct;
+        personalFavorite.user = findUser;
+
+        return personalFavorite;
+    }
 }

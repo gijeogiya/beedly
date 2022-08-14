@@ -41,7 +41,7 @@ public class KakaoLoginApi {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=").append(restApiKey); // TODO REST_API_KEY 입력
-            sb.append("&redirect_uri=http://localhost:8080/user/kakao/callback"); // TODO 인가코드 받은 redirect_uri 입력
+            sb.append("&redirect_uri=http://localhost:8080/api/user/kakao/callback"); // TODO 인가코드 받은 redirect_uri 입력
             sb.append("&code=" + code);
             bw.write(sb.toString());
             bw.flush();
@@ -110,9 +110,10 @@ public class KakaoLoginApi {
         KakaoUserResponse kaKaoUserResponse = null;
 
         try {
+            System.out.println(response.getBody());
             kaKaoUserResponse = objectMapper2.readValue(response.getBody(), KakaoUserResponse.class);
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             throw new NotFoundException("kakao 사용자 정보를 불러오지 못했습니다.");
         }
 
