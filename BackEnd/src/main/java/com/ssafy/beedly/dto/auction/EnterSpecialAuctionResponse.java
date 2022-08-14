@@ -3,6 +3,7 @@ package com.ssafy.beedly.dto.auction;
 import com.ssafy.beedly.domain.SpecialAuction;
 import com.ssafy.beedly.domain.SpecialProduct;
 import com.ssafy.beedly.domain.SpecialProductImg;
+import com.ssafy.beedly.dto.category.CategoryDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,6 +39,8 @@ public class EnterSpecialAuctionResponse implements Serializable {
     @ApiModelProperty(notes = "상품 이미지들")
     private List<String> productImages = new ArrayList<>();
 
+    private CategoryDto categoryDto;
+
     public EnterSpecialAuctionResponse(Long auctionId, SpecialProduct sp) {
         this.auctionId = auctionId;
         this.productId = sp.getId();
@@ -49,5 +52,6 @@ public class EnterSpecialAuctionResponse implements Serializable {
         for (SpecialProductImg image : images) {
             this.productImages.add(image.getImgUri());
         }
+        this.categoryDto = new CategoryDto(sp.getCategory());
     }
 }
