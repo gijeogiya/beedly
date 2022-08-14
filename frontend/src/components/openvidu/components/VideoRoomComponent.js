@@ -21,10 +21,12 @@ class VideoRoomComponent extends Component {
     this.hasBeenUpdated = false;
     this.layout = new OpenViduLayout();
     let sessionName = this.props.sessionName
-      ? "Session" + this.props.sessionName
+      ? "Session" + this.props.sessionName + this.props.auctionType
       : "SessionA";
     let userName = this.props.user
       ? this.props.user
+      : this.props.auctionType === "S"
+      ? "[관리자]"
       : this.props.grade
       ? this.props.grade === "seller"
         ? "[작가님] " + this.props.userName

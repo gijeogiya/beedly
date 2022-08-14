@@ -13,6 +13,13 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 
 import CloseButton from "../assets/images/close.png";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { getSearchTag } from "../utils/apis/TagAPI";
+import {
+  registerSpecialProduct,
+  updateSpecialProduct,
+} from "../utils/apis/SpecialBoardAPI";
+import { Category } from "../stores/modules/basicInfo";
 
 const titleSize = "16px";
 
@@ -183,6 +190,10 @@ export const ImageInput = ({ ImageInputPic, titleSize, handleImageUpload }) => {
 };
 
 export const SpecialProductRegister = () => {
+  const { boardId } = useParams();
+  const location = useLocation();
+  const productId = location.state !== null ? location.state.productId : null;
+  const navigate = useNavigate();
   const [productName, setProductName] = useState("");
   const [productArtist, setProductArtist] = useState("");
   const [category, setCategory] = useState("카테고리");
@@ -194,25 +205,63 @@ export const SpecialProductRegister = () => {
   const [height, setHeight] = useState("");
   const [width, setWidth] = useState("");
   const [depth, setDepth] = useState("");
-  const [tags, setTags] = useState([
-    "수채화",
-    "유화",
-    "정물화",
-    "인물화",
-    "팝아트",
-    "풍경화",
-  ]);
   const [select, setSelect] = useState([]);
   const [open, setOpen] = useState(false);
-  // useEffect(() => {
-  //   const t = ["수채화", "유화", "정물화", "인물화", "팝아트", "풍경화"];
-  //   setTags(t);
-  // }, []);
-  const DateInputButton = forwardRef(({ value, onClick }, ref) => (
-    <button onClick={onClick} ref={ref} style={style3}>
-      {value === "" ? "날짜를 선택하세요" : value}
-    </button>
-  ));
+  const [request, setRequest] = useState();
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    if (loading) {
+      if (productId)
+        // getPersonalProduct(productId, (response) => {
+        //   console.log(response);
+        //   let data = response.data.personalProductDto;
+
+        //   setProductName(data.productName);
+        //   setProductDesc(data.productDesc);
+        //   setStartPrice(data.startPrice);
+        //   setHeight(data.height);
+        //   setWidth(data.width || 0);
+        //   setDepth(data.depth);
+        //   setStartTime(new Date(data.startTime));
+        //   setCategory(data.categoryId);
+        //   setBrightness(data.brightness);
+        //   setSaturation(data.saturation);
+        //   setTemperature(data.temperature);
+        //   setPrevs([...data.productImgs]);
+        //   urlToFile(data.productImgs);
+        //   setSelect(data.searchTagDtos);
+        //   // handleTags(data.searchTagDtos);
+        //   // setRequest(req);
+        // });
+
+        setLoading(false);
+    }
+
+    // request: {
+    // "productName": "기획전 상품",
+    // "productDesc": "기획전 상품이에요오오오",
+    // "startPrice": 50000,
+    // "height": 5,
+    // "weight": 5,
+    // "depth": 5,
+    // "artistName": "moonsk",
+    // "categoryId": 1
+    // }
+
+    const req = {
+      productName: productName,
+      productDesc: productDesc,
+      startPrice: startPrice,
+      height: height,
+      width: width,
+      depth: depth,
+      artistName: productArtist,
+      categoryId: category,
+    };
+    setRequest(req);
+
+    return () => setLoading(false);
+  }, []);
 
   const handlePrev = (event, { files }) => {
     console.log("first files:", files);
@@ -230,6 +279,10 @@ export const SpecialProductRegister = () => {
     setProductImages([...files]);
     setPrevs([...arr]);
     console.log(productImages);
+  };
+
+  const goBack = () => {
+    navigate(-1);
   };
 
   const handleChangeFile = (event, { files }) => {
@@ -258,6 +311,24 @@ export const SpecialProductRegister = () => {
         };
       }
     }
+  };
+
+  const urlToFile = (urls) => {
+    let arr = [];
+    urls.map(async (url) => {
+      // const response = await fetch(url);
+      // const data = await response.blob();
+      // const metadata = { type: `image/png`, crossOrigin: "anonymous" };
+      var image = new Image();
+      image.onload = function () {};
+      image.crossOrigin = "Anonymous";
+      image.src = url + "?not-from-cache-please";
+      // let img = new File([data], metadata);
+      // img.toBlob(() => {}, "image/png");
+      arr.push(image);
+    });
+    console.log("arr : ", arr);
+    setProductImages([...arr]);
   };
 
   const handleImageUpload = (e) => {
@@ -290,10 +361,77 @@ export const SpecialProductRegister = () => {
     setOpen(false);
   };
 
+  const isValied = () => {
+    if (
+      productName === "" ||
+      productDesc === "" ||
+      startPrice === "" ||
+      height === "" ||
+      width === "" ||
+      depth === "" ||
+      productArtist === "" ||
+      category === "" ||
+      prevs === ""
+    )
+      return false;
+    else return true;
+  };
+
+  const registerProduct = () => {
+    if (isValied()) {
+      //유효한 값이다.
+      const request = {
+        productName: productName,
+        productDesc: productDesc,
+        startPrice: startPrice,
+        height: height,
+        width: width,
+        depth: depth,
+        artistName: productArtist,
+        categoryId: category,
+      };
+
+      const formData = new FormData();
+      console.log(productImages);
+      for (let i = 0; i < productImages.length; i++) {
+        formData.append("images", productImages[i]);
+      }
+      // formData.append("images", productImages);
+      // console.log(productImages);
+      const blob = new Blob([JSON.stringify(request)], {
+        type: "application/json",
+      });
+      formData.append("request", blob);
+
+      if (productId !== null) {
+        //수정
+        updateSpecialProduct(productId, formData, (response) => {
+          console.log(response);
+          navigate(`/specialAuctionDetail/${boardId}`);
+        });
+      } else {
+        //등록
+        registerSpecialProduct(
+          boardId,
+          formData,
+          (response) => {
+            console.log(response);
+            navigate(`/specialAuctionDetail/${boardId}`);
+          },
+          (fail) => {
+            console.log(fail);
+          }
+        );
+      }
+    } else {
+      alert("모든 값을 입력하세요.");
+    }
+  };
+
   return (
     <Grommet theme={GrTheme}>
       <Box>
-        <HeaderBox />
+        <HeaderBox goBack={goBack} />
         <Box width="90vw" alignSelf="center">
           <Box margin="small" direction="row">
             <Box width="small" justify="center">
@@ -332,11 +470,13 @@ export const SpecialProductRegister = () => {
             <Box width="medium" direction="row" justify="end">
               <Select
                 size="10px"
-                options={["회화", "판화", "에디션", "사진", "입체"]}
+                labelKey="label"
+                valueKey={{ key: "value", reduce: true }}
+                options={Category}
                 placeholder="선택하세요"
                 value={category}
-                onChange={({ option }) => {
-                  setCategory(option);
+                onChange={({ value: nextValue }) => {
+                  setCategory(nextValue);
                 }}
               />
             </Box>
@@ -365,25 +505,6 @@ export const SpecialProductRegister = () => {
               size="10px"
               color="red"
             />
-          </Box>
-          <Box margin="small" justify="end" direction="row">
-            <Box width="small" justify="center">
-              <StyledText
-                size={titleSize}
-                weight="bold"
-                text="경매 시작 일시"
-              />
-            </Box>
-            <Box width="medium" direction="row" justify="end">
-              <DatePicker
-                selected={startTime}
-                onChange={(date) => setStartTime(date)}
-                showTimeSelect
-                dateFormat="yyyy년 MM월 dd일 HH:mm"
-                locale={ko}
-                customInput={<DateInputButton />}
-              />
-            </Box>
           </Box>
           <Box margin="small">
             <Box>
@@ -536,7 +657,7 @@ export const SpecialProductRegister = () => {
               </DialogContent>
               <DialogActions>
                 <Box direction="row" width="100%" justify="center">
-                  <Button MediumBlack onClick={() => {}} autoFocus>
+                  <Button MediumBlack onClick={registerProduct} autoFocus>
                     작품 등록
                   </Button>
                 </Box>

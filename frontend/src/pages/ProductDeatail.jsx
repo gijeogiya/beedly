@@ -40,7 +40,7 @@ import {
   deletePersonalFavorite,
   postPersonalFavorite,
 } from "../utils/apis/PersonalFavoriteAPI";
-const HeaderBox = ({
+export const HeaderBox = ({
   isSeller,
   goBack,
   sharePage,
@@ -179,7 +179,7 @@ export const ProductDeatail = () => {
     setFavoriteId(data.favoriteId);
     setIsFavorite(data.isFavorite);
     setIsOnAir(data.isOnAir);
-    setTags(data.tagNames);
+    setTags(data.personalProductDto.searchTagDtos);
     setAbsenteeBidPrice(
       data.absenteeBidPrice === null ? "" : data.absenteeBidPrice
     );
@@ -192,7 +192,7 @@ export const ProductDeatail = () => {
   };
 
   const sharePage = () => {
-    window.navigator.share({
+    window.navigator.canShare({
       title: `Beedly - ${productArtist} 작가님의 ${productName}`,
       text: `${productDesc}`,
       url: window.location.href,
@@ -384,6 +384,7 @@ export const ProductDeatail = () => {
                 state: {
                   grade: artistId === User.userId ? "seller" : "buyer",
                   auctionId: response.data.auctionId,
+                  auctionType: "P",
                 },
               });
             },
@@ -514,8 +515,8 @@ export const ProductDeatail = () => {
           <FlexBox Row_S style={{ flexWrap: "wrap", padding: "6px 10px" }}>
             {tags.map((item, idx) => (
               <StyledText
-                key={idx}
-                text={`#${item}`}
+                key={item.id}
+                text={`#${item.searchTagName}`}
                 style={{
                   margin: "3px",
                 }}

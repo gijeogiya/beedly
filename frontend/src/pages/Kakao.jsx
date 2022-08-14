@@ -27,6 +27,7 @@ export default function Kakao() {
             userEmail: res.data.userEmail,
             userId: res.data.userId,
             token: token,
+            role: res.data.userRole,
           })
         );
 
