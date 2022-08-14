@@ -23,6 +23,14 @@ const authInstance = axios.create({
   },
 });
 
+const fileInstance = axios.create({
+  baseURL: "https://i7a601.p.ssafy.io/api/",
+  headers: {
+    Authorization: `Bearer ` + localStorage.getItem("token"),
+    "Content-type": "multipart/form-data",
+  },
+});
+
 // login
 const loginApi = async (code, success, fail) => {
   await instance.post(`user/login?code=${code}`).then(success).catch(fail);
@@ -151,6 +159,93 @@ const getProductListBySizeApi = async (
     .then(success)
     .catch(fail);
 };
+
+//작가식별자으로 상품 리스트 검색
+const getProductByArtistId = async (
+  artistId,
+  page,
+  size,
+  sort,
+  success,
+  fail
+) => {
+  await authInstance
+    .get(
+      `/search/artist?artistId=${artistId}&page=${page}&size=${size}&sort=${sort}`
+    )
+    .then(success)
+    .catch(fail);
+};
+//작가 닉네임으로 상품 리스트 검색
+const getProductByArtistNickNameApi = async (
+  artistNickname,
+  page,
+  size,
+  sort,
+  success,
+  fail
+) => {
+  await authInstance
+    .get(
+      `/search?userNickname=${artistNickname}&page=${page}&size=${size}&sort=${sort}`
+    )
+    .then(success)
+    .catch(fail);
+};
+
+//작가찜하기
+const addFavoriteArtistApi = async (artistId, success, fail) => {
+  await authInstance
+    .post(`artist/favorite/artist/${artistId}`)
+    .then(success)
+    .catch(fail);
+};
+
+//작가찜취소하기
+const deleteFavoriteArtistApi = async (favoriteId, success, fail) => {
+  await authInstance
+    .delete(`artist/favorite/${favoriteId}`)
+    .then(success)
+    .catch(fail);
+};
+
+//
+const getProductByProductNameApi = async (
+  page,
+  productName,
+  size,
+  sort,
+  success,
+  fail
+) => {
+  await authInstance
+    .get(
+      `/search/product?page=${page}&productName=${productName}&size=${size}&sort=${sort}`
+    )
+    .then(success)
+    .catch(fail);
+};
+
+// 프로필 이미지 수정하기
+const UpdateProfileImgApi = async (image, success, fail) => {
+  await fileInstance
+    .patch(`artist/info/profile`, image)
+    .then(success)
+    .catch(fail);
+};
+
+// 배경 이미지 수정하기
+const UpdateBgImgApi = async (image, success, fail) => {
+  await fileInstance
+    .patch(`artist/info/background`, image)
+    .then(success)
+    .catch(fail);
+};
+
+// 작가 설명 수정하기
+const UpdateDescApi = async (Desc, success, fail) => {
+  await authInstance.patch(`artist/info/desc`, Desc).then(success).catch(fail);
+};
 export {
   axios,
   loginApi,
@@ -171,4 +266,12 @@ export {
   getPersonalProductListApi,
   getProductListBySizeApi,
   artistDetailApi,
+  getProductByArtistId,
+  addFavoriteArtistApi,
+  getProductByArtistNickNameApi,
+  getProductByProductNameApi,
+  deleteFavoriteArtistApi,
+  UpdateProfileImgApi,
+  UpdateDescApi,
+  UpdateBgImgApi,
 };
