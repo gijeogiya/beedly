@@ -2,6 +2,9 @@ package com.ssafy.beedly.repository;
 
 import java.util.List;
 
+import com.ssafy.beedly.dto.PersonalProductDto;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -12,4 +15,7 @@ public interface PersonalFavoriteRepository  extends JpaRepository<PersonalFavor
 
 	// @Query("select p from ")
 	// List<PersonalProduct> findPersonalFavoriteByUser();
+
+    @Query("select pf from PersonalFavorite pf join fetch pf.personalProduct where pf.user.id = :userId")
+    Slice<PersonalFavorite> findMyFavoriteProductWithProduct(Long userId, Pageable pageable);
 }

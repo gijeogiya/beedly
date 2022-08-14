@@ -3,6 +3,8 @@ package com.ssafy.beedly.controller;
 import com.ssafy.beedly.config.web.LoginUser;
 import com.ssafy.beedly.domain.User;
 import com.ssafy.beedly.domain.type.AuctionType;
+import com.ssafy.beedly.dto.PersonalProductDto;
+import com.ssafy.beedly.dto.artist.ArtistSimpleDto;
 import com.ssafy.beedly.dto.bid.response.AbsenteeBidResponse;
 import com.ssafy.beedly.dto.user.common.UserCreateFlag;
 import com.ssafy.beedly.dto.user.kakao.KakaoUserResponse;
@@ -11,12 +13,16 @@ import com.ssafy.beedly.dto.user.request.UserLoginRequest;
 import com.ssafy.beedly.dto.user.request.UserUpdateRequest;
 import com.ssafy.beedly.dto.user.response.*;
 import com.ssafy.beedly.service.AbsenteeBidService;
+import com.ssafy.beedly.service.ArtistFavoriteService;
+import com.ssafy.beedly.service.PersonalFavoriteService;
 import com.ssafy.beedly.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +40,8 @@ public class UserController {
 
     private final UserService userService;
     private final AbsenteeBidService absenteeBidService;
+    private final PersonalFavoriteService personalFavoriteService;
+    private final ArtistFavoriteService artistFavoriteService;
 
     // 카카오 로그인
     @ApiOperation(value = "카카오 로그인", notes = "인가 코드를 받아서 서버에 넘겨주세요")
@@ -117,6 +125,20 @@ public class UserController {
     @GetMapping("/absenteebid")
     public ResponseEntity<List<AbsenteeBidResponse>> findMyAbsenteeBidList(@ApiIgnore @LoginUser User user) {
         return ResponseEntity.ok(absenteeBidService.findMyAbsenteeBidList(user));
+    }
+
+    // 내가 찜한 상품 목록
+    @ApiOperation(notes = "내가 찜한 상품 리스트", value = "내가 찜한 상품 리스트(무한 스크롤)")
+    @GetMapping("/myfavorite")
+    public ResponseEntity<Slice<PersonalProductDto>> findMyFavoriteProductList(@ApiIgnore @LoginUser User user, Pageable pageable) {
+        return ResponseEntity.ok(personalFavoriteService.findMyFavoriteProductList(user, pageable));
+    }
+
+    // 내가 찜한 작가 목록
+    @ApiOperation(notes = "내가 찜한 작가 리스트", value = "내가 찜한 작가 리스트(무한 스크롤)")
+    @GetMapping("/myartist")
+    public ResponseEntity<Slice<ArtistSimpleDto>> findMyArtistList(@ApiIgnore @LoginUser User user, Pageable pageable) {
+        return ResponseEntity.ok(artistFavoriteService.findMyArtistList(user, pageable));
     }
 
     // 카카오 리다이렉트 url 인가 코드 받아오기 + 로그인 처리(백엔드 테스트용)
