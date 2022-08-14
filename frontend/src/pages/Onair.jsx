@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { OnairPageCategoryBar } from "../components/OnairPageCategoryBar";
-import { OnairPageTable } from "../components/OnairPageTable"
+import { OnairPageTable } from "../components/OnairPageTable";
 import React, { useEffect, useState } from "react";
 import { getOnairApi } from "../utils/api";
 import Button from "../components/Button";
