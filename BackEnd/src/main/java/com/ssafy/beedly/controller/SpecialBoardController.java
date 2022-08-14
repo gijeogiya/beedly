@@ -34,10 +34,8 @@ public class SpecialBoardController {
             "  \"startTime\": \"2013-09-29T18:46:19Z\"\n" +
             "}\n")
     @PostMapping("/admin/special/board")
-    public ResponseEntity createSpecialBoard(@ApiIgnore @LoginUser User user, @RequestPart CreateSpecialBoardRequest request, @RequestPart(required = false)MultipartFile image) {
-        specialBoardService.createPost(user, request, image);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Long> createSpecialBoard(@ApiIgnore @LoginUser User user, @RequestPart CreateSpecialBoardRequest request, @RequestPart(required = false)MultipartFile image) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(specialBoardService.createPost(user, request, image));
     }
 
     // 기획전 게시글 상세 조회( + 상품정보 + 경매 진행중이면 경매방 정보)

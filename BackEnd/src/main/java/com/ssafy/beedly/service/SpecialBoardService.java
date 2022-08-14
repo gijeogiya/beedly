@@ -49,9 +49,9 @@ public class SpecialBoardService {
 
     // 게시글 생성
     @Transactional
-    public void createPost(User user, CreateSpecialBoardRequest request, MultipartFile image) {
+    public Long createPost(User user, CreateSpecialBoardRequest request, MultipartFile image) {
         String imageUrl = uploadImageS3(image);
-        specialBoardRepository.save(SpecialBoard.createSpecialBoard(user, request, imageUrl));
+        return specialBoardRepository.save(SpecialBoard.createSpecialBoard(user, request, imageUrl)).getId();
     }
 
     // 게시글 상세조회
