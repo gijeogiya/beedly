@@ -789,18 +789,36 @@ export const Auction = () => {
           ref.current.handleUnmount(null);
         } else if (auctionType === "S") {
           console.log("작품 낙찰 후 다음 제품 넘어가기");
-          client.publish({
-            destination: "/pub/auction/special/product/bidding",
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-            body: JSON.stringify({
-              type: "NB",
-              auctionId: auctionId,
-              productId: productId,
-            }),
-          });
-          setIsSold(false);
+          // 마지막 상품
+          if (currentProductIndex === products.length - 1) {
+            client.publish({
+              destination: "/pub/auction/special/product/bidding",
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+              body: JSON.stringify({
+                type: "F",
+                auctionId: auctionId,
+                productId: productId,
+              }),
+            });
+            handleClose();
+            client.deactivate();
+            ref.current.handleUnmount(null);
+          } else {
+            client.publish({
+              destination: "/pub/auction/special/product/bidding",
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+              body: JSON.stringify({
+                type: "NB",
+                auctionId: auctionId,
+                productId: productId,
+              }),
+            });
+            setIsSold(false);
+          }
         }
       }
     } else {

@@ -25,7 +25,7 @@ class VideoRoomComponent extends Component {
       : "SessionA";
     let userName = this.props.user
       ? this.props.user
-      : this.props.auctionType === "S"
+      : this.props.auctionType === "S" && this.props.grade === "seller"
       ? "[관리자]"
       : this.props.grade
       ? this.props.grade === "seller"
@@ -92,13 +92,13 @@ class VideoRoomComponent extends Component {
     window.removeEventListener("beforeunload", this.onbeforeunload);
     window.removeEventListener("resize", this.updateLayout);
     window.removeEventListener("resize", this.checkSize);
-    // this.leaveSession();
+    this.leaveSession();
   }
 
   handleUnmount(success) {
-    this.componentWillUnmount();
     if (success !== null) this.leaveSession2(success);
     else this.leaveSession();
+    this.componentWillUnmount();
   }
   onbeforeunload(event) {
     this.leaveSession();

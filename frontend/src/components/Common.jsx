@@ -31,7 +31,7 @@ const FooterContainer = styled.div`
   align-items: center;
 `;
 
-const FooterContent = ({ title, desc, setOpen, openGuid }) => {
+const FooterContent = ({ setFAQ, title, desc, setOpen, openGuid }) => {
   return (
     <div style={{ padding: "10px", fontSize: "10px" }}>
       <h3>{title || ""}</h3>
@@ -47,6 +47,10 @@ const FooterContent = ({ title, desc, setOpen, openGuid }) => {
               ? () => {
                   openGuid(true);
                 }
+              : d === "FAQ"
+              ? () => {
+                  setFAQ(true);
+                }
               : () => {}
           }
         >
@@ -59,9 +63,11 @@ const FooterContent = ({ title, desc, setOpen, openGuid }) => {
 
 export function Footer() {
   const [open, setOpen] = useState(false);
+  const [FAQ, setFAQ] = useState(false);
   const [guide, openGuid] = useState(false);
   function onDismiss() {
     setOpen(false);
+    setFAQ(false);
     openGuid(false);
   }
   return (
@@ -84,15 +90,17 @@ export function Footer() {
         <Box direction="row" align="center">
           <FooterContent
             openGuid={openGuid}
+            setFAQ={setFAQ}
             title="이용안내"
-            desc={["이용가이드", "페널티 정책", "커뮤니티 가이드라인"]}
+            desc={["이용가이드", "페널티 정책", "FAQ"]}
           />
           <FooterContent
             setOpen={setOpen}
             title="고객지원"
             desc={["공지사항", "서비스 소개", "소장품 정기경매 접수"]}
           />
-          <Notice open={open} onDismiss={onDismiss} />
+          <Notice boardType="NOTICE" open={open} onDismiss={onDismiss} />
+          <Notice boardType="FAQ" open={FAQ} onDismiss={onDismiss} />
           <UserGuide open={guide} onDismiss={onDismiss} />
         </Box>
         <Box>
