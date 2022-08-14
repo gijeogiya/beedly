@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { getUserInfoApi } from "../utils/api";
 import { Link, useNavigate } from "react-router-dom";
 import { FlexBox } from "../components/UserStyled";
+import { useSelector } from "react-redux";
 
 const ContainerBox = ({ title2 }) => {
   return (
@@ -59,6 +60,13 @@ const ContainerBox = ({ title2 }) => {
   );
 };
 
+const BackButton = styled.button`
+    background: none;
+    font-size: 12px;
+    font-family: Noto Sans KR, sans-serif;
+    border: 0px;
+    width: 10vw;
+  `;
 const Sector = ({ title, link }) => {
   return (
 
@@ -73,13 +81,6 @@ const Sector = ({ title, link }) => {
     </Box>
   );
 };
-const BackButton = styled.button`
-  background: none;
-  font-size: 12px;
-  font-family: Noto Sans KR, sans-serif;
-  border: 0px;
-  width: 10vw;
-`;
 
 export default function MyPage() {
   //user 정보 가져오기
@@ -89,9 +90,11 @@ export default function MyPage() {
     userRole: '',
     userEmail: '',
   });
+  const User = useSelector((state) => (state.user.user.user));
   useEffect(() => {
     // 아직 로그인 된 상태가 아니라면
-    if (localStorage.getItem("token") === null) {
+    console.log(User);
+    if (User === undefined) {
       // 로그인하라고 보내주기
       Navigate('/login');
     } else {
