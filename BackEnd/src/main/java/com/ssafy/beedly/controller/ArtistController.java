@@ -66,7 +66,7 @@ public class ArtistController {
 
     @ApiOperation(notes = "작가 프로필 이미지 수정하기", value = "로그인 유저가 작가일 때 프로필 이미지 수정하기")
     @PatchMapping("/info/profile")
-    public ResponseEntity updateProfileImg(@ApiIgnore @LoginUser User user, @RequestParam MultipartFile image) {
+    public ResponseEntity updateProfileImg(@ApiIgnore @LoginUser User user, @RequestPart MultipartFile image) {
         artistService.updateProfileImg(user, image);
 
         return ResponseEntity.ok().build();
@@ -74,7 +74,7 @@ public class ArtistController {
 
     @ApiOperation(notes = "작가 배경 이미지 수정하기", value = "로그인 유저가 작가일 때 배경 이미지 수정하기")
     @PatchMapping("/info/background")
-    public ResponseEntity updateBackGroundImg(@ApiIgnore @LoginUser User user, @RequestParam MultipartFile image) {
+    public ResponseEntity updateBackGroundImg(@ApiIgnore @LoginUser User user, @RequestPart MultipartFile image) {
         artistService.updateBackGroundImg(user, image);
 
         return ResponseEntity.ok().build();
