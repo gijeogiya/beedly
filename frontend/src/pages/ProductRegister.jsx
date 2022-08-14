@@ -142,7 +142,7 @@ export const BackButton = styled.button`
   font-family: Noto Sans KR, sans-serif;
   border: 0px;
   width: 10vw;
-  margin-top: 15px;
+  margin-top: 10px;
 `;
 
 const Preview = ({ src }) => {
@@ -250,8 +250,8 @@ export const ProductRegister = () => {
           setTemperature(data.temperature);
           setPrevs([...data.productImgs]);
           urlToFile(data.productImgs);
-          setSelect([...response.data.tagNames]);
-          // handleTags(response.data.tagNames);
+          setSelect(data.searchTagDtos);
+          // handleTags(data.searchTagDtos);
           // setRequest(req);
         });
 
@@ -277,19 +277,19 @@ export const ProductRegister = () => {
     return () => setLoading(false);
   }, [saturation, temperature, brightness, prevs]);
 
-  // const handleTags = (tagNames) => {
-  //   console.log(tagNames);
-  //   console.log(tags);
-  //   for (let i = 0; i < tagNames.length; i++) {
-  //     for (let j = 0; j < tags.length; j++) {
-  //       if (tags[j].searchTagName === tagNames[i]) {
-  //         console.log(tags[j]);
-  //         setSelect([...select, tags[j].id]);
-  //       }
-  //     }
-  //   }
-  //   console.log(select);
-  // };
+  const handleTags = (tagNames) => {
+    console.log(tagNames);
+    console.log(tags);
+    for (let i = 0; i < tagNames.length; i++) {
+      for (let j = 0; j < tags.length; j++) {
+        if (tags[j].id === tagNames[i].id) {
+          console.log(tags[j]);
+          setSelect([...select, tags[j].id]);
+        }
+      }
+    }
+    console.log(select);
+  };
 
   const urlToFile = (urls) => {
     let arr = [];
@@ -556,7 +556,7 @@ export const ProductRegister = () => {
   const navigate = useNavigate();
 
   const goBack = () => {
-    navigate("/productList");
+    navigate(-1);
   };
 
   const registerProduct = async () => {
@@ -564,6 +564,10 @@ export const ProductRegister = () => {
     if (isValied()) {
       // console.log("작품 등록 호출!!");
 
+      let tagsList = [];
+      for (let i = 0; i < select.length; i++) {
+        tagsList.push(select[i].id);
+      }
       const request = {
         productName: productName,
         productDesc: productDesc,
@@ -576,7 +580,7 @@ export const ProductRegister = () => {
         brightness: brightness,
         saturation: saturation,
         temperature: temperature,
-        searchTags: select,
+        searchTags: tagsList,
       };
 
       // console.log(request);
@@ -817,60 +821,39 @@ export const ProductRegister = () => {
 
           <Box margin={{ top: "20px" }}>
             <StyledText text="Tag" size={titleSize} weight="bold" />
-
-            <FlexBox Row_SB style={{ flexWrap: "wrap", padding: "6px 10px" }}>
-              {!productId &&
-                tags.map((tag, idx) => (
+            <FlexBox Column_C>
+              <FlexBox
+                Row_S
+                style={{ flexWrap: "wrap", padding: "6px 10px", width: "88vw" }}
+              >
+                {tags.map((tag, idx) => (
                   <Button
                     key={idx}
                     onClick={() => {
-                      !select.includes(idx)
-                        ? setSelect((select) => [...select, idx])
-                        : setSelect(select.filter((Button) => Button !== idx));
-                    }}
-                    TagGray={!select.includes(idx) ? true : false}
-                    TagYellow={select.includes(idx) ? true : false}
-                    style={{
-                      margin: "6px 3px ",
-                      flex: "1 1 20%",
-                      wordWrap: "break-word",
-                      maxWidth: "25%",
-                      padding: "5px 3px",
-                    }}
-                  >
-                    # {tag.searchTagName}
-                  </Button>
-                ))}
-              {productId &&
-                tags.map((tag, idx) => (
-                  <Button
-                    key={idx}
-                    onClick={() => {
-                      !select.includes(tag.searchTagName)
-                        ? setSelect((select) => [...select, tag.searchTagName])
+                      !select.some((v) => v.id === tag.id)
+                        ? setSelect((select) => [...select, tag])
                         : setSelect(
-                            select.filter(
-                              (Button) => Button !== tag.searchTagName
-                            )
+                            select.filter((Button) => Button.id !== tag.id)
                           );
                     }}
-                    TagGray={!select.includes(tag.searchTagName) ? true : false}
+                    TagGray={
+                      !select.some((v) => v.id === tag.id) ? true : false
+                    }
                     TagYellow={
-                      select.includes(tag.searchTagName) ? true : false
+                      select.some((v) => v.id === tag.id) ? true : false
                     }
                     style={{
                       margin: "6px 3px ",
-                      flex: "1 1 20%",
                       wordWrap: "break-word",
-                      maxWidth: "25%",
+                      minWidth: "22%",
                       padding: "5px 3px",
                     }}
                   >
                     # {tag.searchTagName}
                   </Button>
                 ))}
+              </FlexBox>
             </FlexBox>
-
             {/* <Grid columns={{ count: 4, size: "auto" }} gap="xsmall">
               {tags.map((tag, idx) => {
                 return (

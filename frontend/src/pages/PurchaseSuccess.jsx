@@ -259,11 +259,11 @@ export const PurchaseSuccess = () => {
               onClick={onClickPayMent}
             />
           )}
-          <Button
+          {/* <Button
             BigYellow
             children="카카오페이로 결제하기"
             onClick={onClickPayMent}
-          />
+          /> */}
         </Box>
       </Box>
     );

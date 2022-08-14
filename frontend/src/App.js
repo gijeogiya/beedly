@@ -11,7 +11,7 @@ import Signup from "./pages/Signup";
 import Kakao from "./pages/Kakao";
 import Login from "./pages/Login";
 import { Auction } from "./pages/Auction";
-import { SpecialAuction } from "./pages/SpecialAuction";
+import { SpecialAuctionRegister } from "./pages/SpecialAuctionRegister";
 import MyPage from "./pages/MyPage";
 import MainPage from "./pages/Main";
 import { ProductRegister } from "./pages/ProductRegister";
@@ -33,6 +33,7 @@ import UpdateTag from "./pages/UpdateTag";
 import ArtistDetail from "./pages/ArtistDetail";
 import SignupAritst from "./pages/SignupArtist";
 import AdminUserManage from "./pages/AdminUserManage";
+import { SpecialAuctionDetail } from "./pages/SpecialAuctionDetail";
 
 const Layout = () => {
   // const navigate = useNavigate();
@@ -72,13 +73,24 @@ function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/productRegister" element={<ProductRegister />} />
           <Route path="/productModify" element={<ProductRegister />} />
+
           <Route path="/onair" element={<Onair />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup1" element={<SignupChoice />} />
           <Route path="/signup2" element={<Signup />} />
-          <Route path="/specialAuction" element={<SpecialAuction />} />
-          <Route path="/specialProduct" element={<SpecialProductRegister />} />
+          <Route
+            path="/specialAuctionRegister"
+            element={<SpecialAuctionRegister />}
+          />
+          <Route
+            path="/specialBoardModify"
+            element={<SpecialAuctionRegister />}
+          />
+          <Route
+            path="/specialProduct/:boardId"
+            element={<SpecialProductRegister />}
+          />
           <Route path="/productlist" element={<ProductList />} />
           <Route
             path="/productDetail/:productId"
@@ -90,19 +102,19 @@ function App() {
           <Route path="/mypageDetail" element={<MypageDetail />} />
           <Route path="/updateMypage" element={<UpdateMyPage />} />
           <Route path="/signupTag" element={<SignupTag />} />
-
+          <Route
+            path="/specialAuctionDetail/:boardId"
+            element={<SpecialAuctionDetail />}
+          />
           <Route path="/searchResult" element={<SearchResult />} />
-
           <Route path="/updateTag" element={<UpdateTag />} />
           <Route path="/signupArtist" element={<SignupAritst />} />
           <Route path="/adminUserManage" element={<AdminUserManage />} />
-
           <Route path="/purchase/:soldId" element={<PurchaseSuccess />} />
           <Route path="/purchaseDetail/:soldId" element={<PurchaseDetail />} />
         </Route>
         <Route path="/personalAuction" element={<Auction />} />
-        <Route path="/auctionSeller" element={<Auction grade="seller" />} />
-        <Route path="/auctionBuyer" element={<Auction grade="buyer" />} />
+        <Route path="/specialAuction" element={<Auction />} />
         <Route path="/user/kakao/callback" element={<Kakao />}></Route>
       </Routes>
     </div>

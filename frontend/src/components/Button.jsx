@@ -131,6 +131,7 @@ const StyledButton = styled.button`
     ${(props) =>
     props.SmallThinYellow &&
     css`
+      align: center;
       color: #1f1d1d;
       background: #ffd100;
       height: 30px;
@@ -140,6 +141,7 @@ const StyledButton = styled.button`
     ${(props) =>
     props.SmallThinWhite &&
     css`
+      align: center;
       color: black;
       background: #e0e0e0;
       height: 30px;
