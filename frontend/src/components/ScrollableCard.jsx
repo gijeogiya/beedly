@@ -52,8 +52,8 @@ const StyledCardInfBox = styled.div`
 
 const StyledCardArtistImgFrame = styled.div`
     display:flex;
-    width: 30px;
-    height: 30px;
+    max-width: 34px;
+    max-height: 34px;
     flex-direction:column;
     padding-left:3px;
     padding-top:5px;
@@ -167,7 +167,7 @@ export function ArtistCard({ artist }) {
                 <StyledRectangleColImg src={artist.artistBgImg} />
                 <StyledProfileCardInfBox>
                     <StyledCardArtistImgFrame style={{ "padding": "12px" }}>
-                        <StyledCardArtistImg style={{ "border": "2px solid white" }} src={artist.artistProfileImg} />
+                        <StyledCardArtistImg style={{ "border": "2px solid white", width: "30px", height: "30px" }} src={artist.artistProfileImg} />
                     </StyledCardArtistImgFrame>
                     <div style={{ "padding": "12px", "color": "white", "fontSize": "14px" }}>
                         {artist.userNickname}

@@ -6,7 +6,7 @@ import { HorizonScrollColTable } from '../components/HorizonScrollTable';
 import { ProductCard } from '../components/ScrollableCard';
 import { SearchBar } from '../components/SearchBar';
 import { FlexBox } from '../components/UserStyled';
-import { getProductByArtistId, getProductByArtistNickNameApi, getProductByProductNameApi } from '../utils/api';
+import { getProductByArtistId, getProductByArtistNickNameApi, getProductByProductNameApi, getProductListBySizeApi } from '../utils/api';
 
 const StyledTableTitle = styled.div`
   font-size: 16px;
@@ -34,6 +34,14 @@ export default function SearchResult() {
         if (loading) {
 
             if (searchCategory === "keyword") {
+
+                if (localStorage.getItem("SearchList") === null || JSON.parse(localStorage.getItem("SearchList")) === []) {
+                    console.log([keyword]);
+                    localStorage.setItem("SearchList", JSON.stringify([keyword]));
+                } else {
+                    localStorage.setItem("SearchList", JSON.stringify(JSON.parse(localStorage.getItem("SearchList")).concat([keyword])));
+
+                };
                 //keyword로 상품작가가 keyword인 상품 검색
                 getProductByArtistNickNameApi(keyword, "0", "20", "", (res) => {
                     console.log(res);
@@ -56,7 +64,13 @@ export default function SearchResult() {
                     console.log(err);
                 }))
             } else if (searchCategory === "size") {
-
+                console.log(keyword);
+                getProductListBySizeApi(keyword, "0", "100", "", (res) => {
+                    console.log(res);
+                    setSearchProductList((prev) => prev.concat(res.data.content));
+                }, (err) => {
+                    console.log(err);
+                });
             }
             setloading(false);
         }
@@ -69,7 +83,6 @@ export default function SearchResult() {
             <StyledTableTitle>Artist</StyledTableTitle>
             {/* <HorizonScrollColTable /> */}
             <StyledTableTitle>Product</StyledTableTitle>
-            {console.log(searchProductList)}
             {!loading && searchProductList.length !== 0 ? <div style={{ "display": "flex", "justifyContent": "center" }}>
 
                 <ProductTable>

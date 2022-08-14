@@ -246,6 +246,7 @@ const UpdateBgImgApi = async (image, success, fail) => {
 const UpdateDescApi = async (Desc, success, fail) => {
   await authInstance.patch(`artist/info/desc`, Desc).then(success).catch(fail);
 };
+
 export {
   axios,
   loginApi,
