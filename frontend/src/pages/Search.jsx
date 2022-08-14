@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import styled from "styled-components";
 import { SearchBar } from "../components/SearchBar";
 import { SizePickCard } from "../components/SizePickCard";
@@ -50,7 +50,7 @@ export default function SearchPage() {
     }, [loading])
 
     return (
-        <div style={{ "padding-bottom": "20px" }}>
+        <div style={{ "paddingBottom": "20px" }}>
             <SearchBar />
             <StyledTableTitle >최근 검색어</StyledTableTitle>
             <RecentlyKeywordTable list={RecentSearchList} />
