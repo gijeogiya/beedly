@@ -130,6 +130,8 @@ public class AuctionController {
         } else if (request.getType().equals("SB")) { // 낙찰 정보 뿌리기
             SpecialSuccessfulBidResponse successfulBidResponse = specialAuctionService.successfulBid(request);
             messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), successfulBidResponse);
+        } else if (request.getType().equals("NB")) {
+            messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), new SpecialNextBidResponse(true));
         } else if (request.getType().equals("F")) { // 경매 종료
             specialAuctionService.closeSpecialAuction(userId, request);
             messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), new FinishSpecialAuctionResponse(true, "경매가 종료되었습니다."));
