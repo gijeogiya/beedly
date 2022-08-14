@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import SampleProfile from '../assets/img/SampleProfile.png';
 import SampleBackground from '../assets/img/SampleBackground.png';
+import { useEffect, useState } from "react";
+import { FlexBox } from "./UserStyled";
+import Button from "./Button";
 
 const ArtistDetailBackgroundImg = styled.img`
     object-fit: cover;
@@ -37,7 +40,11 @@ const ArtistDetailSubInf = styled.div`
 `;
 
 export function ArtistDetailCard({ artist }) {
-    console.log(artist);
+    const [artistInfo, setArtistInfo] = useState({});
+    useEffect(() => {
+        setArtistInfo(artist);
+        console.log(artist);
+    }, [artist]);
 
     return (
         <div
@@ -46,15 +53,19 @@ export function ArtistDetailCard({ artist }) {
                 paddingBottom: "20px",
             }}
         >
+
             <ArtistDetailMainInf>
                 <StyledCardArtistImgFrame>
-                    <StyledCardArtistImg src={artist.artistProfileImg === null ? SampleProfile : artist.artistProfileImg} />
+                    <StyledCardArtistImg src={artist.artistProfileImg} />
                 </StyledCardArtistImgFrame>
-                <div style={{ "fontSize": "16px", "fontWeight": "700", "padding": "46px 0 0 14px" }}>{artist.userNickname}</div>
+                <FlexBox Row_SB style={{ minWidth: "65vw" }}>
+                    <div style={{ "fontSize": "16px", "fontWeight": "700", "padding": "46px 0 0 14px" }}>{artistInfo.userNickname}</div>
+                    <Button XsmallBlack style={{ alignSelf: "flex-end" }}>프로필 편집</Button>
+                </FlexBox>
             </ArtistDetailMainInf>
-            <ArtistDetailBackgroundImg src={artist.artistBgImg === null ? SampleBackground : artist.artistBgImg} />
+            <ArtistDetailBackgroundImg src={artistInfo.artistBgImg} />
             <ArtistDetailSubInf>
-                <div style={{ "width": "300px", "fontSize": "14px" }}>{artist.artistDesc}</div>
+                <div style={{ "width": "300px", "fontSize": "14px" }}>{artistInfo.artistDesc}</div>
             </ArtistDetailSubInf>
 
         </div>
