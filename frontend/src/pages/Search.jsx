@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import styled from "styled-components";
 import { SearchBar } from "../components/SearchBar";
 import { SizePickCard } from "../components/SizePickCard";
@@ -117,6 +117,7 @@ export default function SearchPage() {
 
     // }, [searchList])
     return (
+
         <div style={{ "padding-bottom": "20px" }}>
             <SearchWarp>
                 <SearchArea>
