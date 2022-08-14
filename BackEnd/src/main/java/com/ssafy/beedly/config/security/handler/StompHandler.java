@@ -1,7 +1,11 @@
 package com.ssafy.beedly.config.security.handler;
 
 import com.ssafy.beedly.config.security.util.JwtUtil;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.HttpHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -12,9 +16,13 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class StompHandler implements ChannelInterceptor {
+
+    @Value("${token.secret}")
+    private String secretKey;
 
     private final JwtUtil jwtUtil;
 
@@ -24,10 +32,11 @@ public class StompHandler implements ChannelInterceptor {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
 
         if (StompCommand.CONNECT == accessor.getCommand()) {
-            if (!jwtUtil.isValidToken(extractToken(accessor))) {
+            if (!isValidToken(extractToken(accessor))) {
                 throw new AccessDeniedException("연결 거부");
             }
         }
+
         return message;
     }
 
@@ -38,5 +47,29 @@ public class StompHandler implements ChannelInterceptor {
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    public boolean isValidToken(String jwtToken) {
+        try {
+            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken) != null;
+        } catch (SignatureException ex) {
+            log.error("Invalid JWT signature");
+            throw ex;
+        } catch (MalformedJwtException ex) {
+            log.error("Invalid JWT token");
+            throw ex;
+        } catch (ExpiredJwtException ex) {
+            log.error("Expired JWT token");
+            throw ex;
+        } catch (UnsupportedJwtException ex) {
+            log.error("Unsupported JWT token");
+            throw ex;
+        } catch (IllegalArgumentException ex) {
+            log.error("JWT claims string is empty.");
+            throw ex;
+        }catch (Exception e) {
+            System.out.println("폴스 리턴");
+            throw e;
+        }
     }
 }

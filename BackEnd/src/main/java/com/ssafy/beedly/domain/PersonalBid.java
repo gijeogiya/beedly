@@ -1,6 +1,7 @@
 package com.ssafy.beedly.domain;
 
 import com.ssafy.beedly.domain.common.BaseEntity;
+import com.ssafy.beedly.dto.bid.request.BidMessageRequest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class PersonalBid extends BaseEntity {
     private Long id;
 
     @Column(name = "p_bid_price")
-    private int bidPrice;
+    private Integer bidPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_product_id")
@@ -32,4 +33,11 @@ public class PersonalBid extends BaseEntity {
     private User user;
 
 
+    public static PersonalBid createPersonalBid(User u, PersonalProduct p, BidMessageRequest request) {
+        PersonalBid personalBid = new PersonalBid();
+        personalBid.bidPrice = request.getBidPrice();
+        personalBid.personalProduct = p;
+        personalBid.user = u;
+        return personalBid;
+    }
 }
