@@ -27,7 +27,7 @@ public class PersonalFavoriteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(personalFavoriteService.createFavoriteProduct(user, productId));
     }
 
-    @ApiOperation(value = "상시 상품에 찜하기", notes = "상시 상품 찜 취소")
+    @ApiOperation(value = "상시 상품에 찜취소", notes = "상시 상품 찜 취소")
     @ApiImplicitParam(name = "favoriteId", value = "찜 식별자")
     @DeleteMapping("/favorite/{favoriteId}")
     public ResponseEntity deleteFavoriteProduct(@ApiIgnore @LoginUser User user, @PathVariable Long favoriteId) {

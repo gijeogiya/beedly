@@ -6,10 +6,13 @@ import com.ssafy.beedly.common.exception.NotMatchException;
 import com.ssafy.beedly.domain.Artist;
 import com.ssafy.beedly.domain.ArtistFavorite;
 import com.ssafy.beedly.domain.User;
+import com.ssafy.beedly.dto.artist.ArtistSimpleDto;
 import com.ssafy.beedly.repository.ArtistFavoriteRepository;
 import com.ssafy.beedly.repository.ArtistRepository;
 import com.ssafy.beedly.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +24,7 @@ import static com.ssafy.beedly.common.exception.NotMatchException.FAVORITE_NOT_M
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ArtistFavoriteService {
 
     private final ArtistFavoriteRepository artistFavoriteRepository;
@@ -55,5 +59,12 @@ public class ArtistFavoriteService {
         findFavorite.getArtist().minusFavoriteCount();
 
         artistFavoriteRepository.delete(findFavorite);
+    }
+
+    // 내가 찜한 작가 리스트
+    public Slice<ArtistSimpleDto> findMyArtistList(User user, Pageable pageable) {
+        Slice<ArtistFavorite> findMyFavorite = artistFavoriteRepository.findMyFavoriteArtist(user.getId(), pageable);
+
+        return findMyFavorite.map(artistFavorite -> new ArtistSimpleDto(artistFavorite.getArtist()));
     }
 }
