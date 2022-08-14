@@ -10,6 +10,7 @@ import com.ssafy.beedly.domain.Artist;
 import com.ssafy.beedly.domain.ArtistFavorite;
 import com.ssafy.beedly.domain.User;
 import com.ssafy.beedly.dto.ArtistDto;
+import com.ssafy.beedly.dto.PersonalProductDto;
 import com.ssafy.beedly.dto.artist.ArtistDescRequest;
 import com.ssafy.beedly.repository.ArtistFavoriteRepository;
 import com.ssafy.beedly.repository.ArtistRepository;
@@ -60,6 +61,15 @@ public class ArtistService {
         findArtist.updateDesc(request.getDesc());
     }
 
+    @Transactional
+    public Slice<PersonalProductDto> getStandByProductByArtistId(Long userId){
+        return artistRepository.findStandByProductByArtistId(userId).map(PersonalProductDto::new);
+    }
+
+    @Transactional
+    public Slice<PersonalProductDto> getSuccessProductByArtistId(Long userId){
+        return artistRepository.findEndProductByArtistId(userId).map(PersonalProductDto::new);
+    }
     @Transactional
     public void updateProfileImg(User user, MultipartFile image) {
         Artist findArtist = artistRepository.findArtistByUserId(user.getId())
