@@ -4,6 +4,8 @@ import styled from "styled-components";
 import XIcon from '../assets/img/XIcon.svg';
 
 const RecentlyKeywordFrame = styled.div`
+display: flex;
+flex-wrap: wrap;
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
@@ -55,7 +57,7 @@ const RecommendKeywordButton = styled.button`
 
 
 export function RecentlyKeywordTable({ list }) {
-    console.log(list)
+
     const Navigate = useNavigate();
     const [RecentKeywordList, setRecentKeywordList] = useState([]);
     useEffect(() => {
@@ -78,7 +80,7 @@ export function RecentlyKeywordTable({ list }) {
                 nextlist.push(RecentKeywordList[index]);
             }
         }
-        localStorage.setItem("RecentSearchList", JSON.stringify(nextlist));
+        localStorage.setItem("SearchList", JSON.stringify(nextlist));
         setRecentKeywordList(nextlist);
     }
 
