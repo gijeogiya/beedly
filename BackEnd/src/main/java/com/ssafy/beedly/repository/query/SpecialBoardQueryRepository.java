@@ -28,7 +28,7 @@ public class SpecialBoardQueryRepository {
                 .leftJoin(specialProduct.category, category).fetchJoin()
                 .leftJoin(specialBoard.specialAuction, specialAuction).fetchJoin()
                 .leftJoin(specialProduct.specialProductImgs, specialProductImg)
-                .where(specialProduct.isDeleted.eq(YN.N))
+                .where(specialBoard.isDeleted.eq(YN.N))
                 .fetchOne();
     }
 }
