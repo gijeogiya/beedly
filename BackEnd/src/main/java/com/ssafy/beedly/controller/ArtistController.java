@@ -3,7 +3,6 @@ package com.ssafy.beedly.controller;
 import com.ssafy.beedly.config.web.LoginUser;
 import com.ssafy.beedly.domain.User;
 import com.ssafy.beedly.dto.ArtistDto;
-import com.ssafy.beedly.dto.PersonalProductDto;
 import com.ssafy.beedly.dto.artist.ArtistDescRequest;
 import com.ssafy.beedly.service.ArtistFavoriteService;
 import com.ssafy.beedly.service.ArtistService;
@@ -57,18 +56,6 @@ public class ArtistController {
         return ResponseEntity.ok().build();
     }
 
-    @ApiOperation(notes = "", value = "")
-    @GetMapping("product/standBy/{artistId}")
-    public  ResponseEntity<?> getStandByProduct(@PathVariable Long artistId){
-        return ResponseEntity.ok(artistService.getStandByProductByArtistId(artistId));
-    }
-
-    @ApiOperation(notes = "", value = "")
-    @GetMapping("product/success/{artistId}")
-    public  ResponseEntity<?> getSuccessProduct(@PathVariable Long artistId){
-        return ResponseEntity.ok(artistService.getSuccessProductByArtistId(artistId));
-    }
-
     @ApiOperation(notes = "작가 설명 수정하기", value = "로그인 유저가 작가일 때 작가 설명 수정하기")
     @PatchMapping("/info/desc")
     public ResponseEntity updateArtistDesc(@ApiIgnore @LoginUser User user, @RequestBody ArtistDescRequest artistDescRequest) {
@@ -92,5 +79,4 @@ public class ArtistController {
 
         return ResponseEntity.ok().build();
     }
-
 }

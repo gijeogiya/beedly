@@ -6,6 +6,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 public class BeedlyApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(BeedlyApplication.class, args);
     }
