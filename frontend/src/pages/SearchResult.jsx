@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from "styled-components";
-import { HorizonScrollColTable } from '../components/HorizonScrollTable'
-import { ProductCard } from '../components/ScrollableCard'
-import { SearchBar } from '../components/SearchBar'
+import { HorizonScrollColTable } from '../components/HorizonScrollTable';
+import { ProductCard } from '../components/ScrollableCard';
+import { SearchBar } from '../components/SearchBar';
 import { FlexBox } from '../components/UserStyled';
 import { getProductByArtistId, getProductByArtistNickNameApi, getProductByProductNameApi } from '../utils/api';
 
