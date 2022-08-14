@@ -49,7 +49,7 @@ public class SpecialAuctionService {
 
         SpecialAuction saveSpecialAuction = SpecialAuction.createSpecialAuction(findSpecialBoard, user);
 
-        return saveSpecialAuction.getId();
+        return specialAuctionRepository.save(saveSpecialAuction).getId();
     }
 
     // 기획전 경매방 입장(상품 정보 리스트)
