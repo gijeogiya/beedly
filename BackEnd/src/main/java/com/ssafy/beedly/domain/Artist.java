@@ -39,7 +39,7 @@ public class Artist extends BaseEntity {
         Artist artist = new Artist();
         artist.user = user;
         artist.artistProfileImg = "https://beedly-img.s3.ap-northeast-2.amazonaws.com/default.jpg";
-        artist.artistBgImg = "https://beedly-img.s3.ap-northeast-2.amazonaws.com/default_back.jpg";
+        artist.artistBgImg = "https://beedly-img.s3.ap-northeast-2.amazonaws.com/defaultbg.jpg";
         artist.favoriteCount = 0;
         return artist;
     }
