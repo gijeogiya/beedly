@@ -117,10 +117,7 @@ export default function SearchPage() {
 
     // }, [searchList])
     return (
-<<<<<<< HEAD
-        <div style={{ "paddingBottom": "20px" }}>
-            <SearchBar />
-=======
+
         <div style={{ "padding-bottom": "20px" }}>
             <SearchWarp>
                 <SearchArea>
@@ -138,7 +135,6 @@ export default function SearchPage() {
                     <img src={XIcon} style={{ "width": "18px" }} />
                 </button>
             </SearchWarp>
->>>>>>> origin/feature/f_AddApi
             <StyledTableTitle >최근 검색어</StyledTableTitle>
             <RecentlyKeywordTable list={searchList} />
             <StyledTableTitle>추천 검색어</StyledTableTitle>
