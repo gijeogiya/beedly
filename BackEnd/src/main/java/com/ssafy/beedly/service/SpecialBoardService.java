@@ -56,12 +56,12 @@ public class SpecialBoardService {
 
     // 게시글 상세조회
     public SpecialBoardResponse searchSpecialBoard(Long boardId) {
-         return new SpecialBoardResponse(specialBoardQueryRepository.findByIdWithProducts(boardId));
+        return new SpecialBoardResponse(specialBoardQueryRepository.findByIdWithProducts(boardId));
     }
 
     // 진행 예정인 게시글 리스트 조회
     public List<SpecialBoardSimpleResponse> searchWaitingSpecialBoards() {
-        return specialBoardRepository.findWaitingSpecialBoardOrderByStartTimeAsc(LocalDateTime.now())
+        return specialBoardRepository.findWaitingSpecialBoardOrderByStartTimeAsc(LocalDateTime.now().minusHours(9))
                 .stream().map(specialBoard -> new SpecialBoardSimpleResponse(specialBoard))
                 .collect(Collectors.toList());
     }
