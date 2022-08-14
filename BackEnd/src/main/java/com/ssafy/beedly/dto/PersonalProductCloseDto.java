@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -17,8 +18,8 @@ public class PersonalProductCloseDto {
     @ApiModelProperty(notes = "상시 상품 정보")
     private PersonalProductDto personalProductDto;
 
-    @ApiModelProperty(notes = "태그 이름들")
-    private List<String> tagNames = new ArrayList<>();
+//    @ApiModelProperty(notes = "태그 이름들")
+//    private List<SearchTagDto> tagNames = new ArrayList<>();
 
 
     @ApiModelProperty(notes = "서면 응찰 여부")
@@ -46,7 +47,7 @@ public class PersonalProductCloseDto {
 
     public PersonalProductCloseDto(Long productId, List<String> tagNames, Integer absenteeBidPrice,Boolean isAbsenteeBid ,Boolean isFavorite) {
 //        this.productId = productId;
-        this.tagNames = tagNames;
+//        this.tagNames = tagNames;
         this.absenteeBidPrice = absenteeBidPrice;
         this.isAbsenteeBid = isAbsenteeBid;
         this.isFavorite = isFavorite;
@@ -54,9 +55,8 @@ public class PersonalProductCloseDto {
 
     public PersonalProductCloseDto(PersonalProduct findProduct, List<SearchTag> searchTag, Optional<PersonalFavorite> personalFavorite, Optional<AbsenteeBid> absenteeBid, Optional<PersonalAuction> auctionInfo) {
         this.personalProductDto = new PersonalProductDto(findProduct);
-        for (SearchTag tag : searchTag) {
-            this.tagNames.add(tag.getSearchTagName());
-        }
+//        this.tagNames = searchTag.stream().map(searchTag1 -> new SearchTagDto(searchTag1))
+//                .collect(Collectors.toList());
 
         if (absenteeBid.isPresent()) {
             AbsenteeBid absenteeBidInfo = absenteeBid.get();
