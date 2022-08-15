@@ -57,7 +57,8 @@ export default function ProductListPage() {
   const [nowCategory, setNowCategory] = useState([]);
 
   useEffect(() => {
-    const gottenCategory = location.state.gottenCategory;
+    const gottenCategory =
+      location.state === null ? null : location.state.gottenCategory;
     if (loading) {
       // if(gottenCategory !== undefined) setNowCategory(prev => prev = gottenCategory);
       // 진행중인 경매

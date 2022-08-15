@@ -2,23 +2,29 @@ import styled from "styled-components";
 import { HalfProductCard } from "../components/HalfProductCard";
 
 const ProductTable = styled.div`
-    display: flex;
-    // justify-content: space-around;
-    flex-wrap: wrap;
-    width: 348px;
+  display: flex;
+  // justify-content: space-around;
+  flex-wrap: wrap;
+  width: 348px;
 `;
 
 export function ArtistDetailProductClosedTable() {
-
-    return (
-        <div style={{"display":"flex", "justifyContent":"center", borderBottom: "1px solid #ebebeb", paddingBottom: "20px",}}>
-                         <ProductTable>
-                             {/* <ProductCard/>
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        borderBottom: "1px solid #ebebeb",
+        paddingBottom: "20px",
+      }}
+    >
+      <ProductTable>
+        {/* <ProductCard/>
                              <ProductCard/>
                              <ProductCard/>
                              <ProductCard/>
                              <ProductCard/> */}
-                         </ProductTable>
-                     </div>
-    );
+      </ProductTable>
+    </div>
+  );
 }

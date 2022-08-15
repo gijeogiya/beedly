@@ -172,6 +172,7 @@ export const ProductDeatail = () => {
     setProductLike(data.personalProductDto.favoriteCount);
     setSoldStatus(data.personalProductDto.soldStatus);
     setArtistNickname(data.personalProductDto.userNickname);
+    //UserId 설정
     setArtistId(data.personalProductDto.userId);
     setAuctionId(data.auctionId);
     setIsAbsenteeBid(data.isAbsenteeBid);
@@ -401,6 +402,7 @@ export const ProductDeatail = () => {
           state: {
             grade: artistId === User.userId ? "seller" : "buyer",
             auctionId: auctionId,
+            auctionType: "P",
             userName: User.userName,
           },
         });

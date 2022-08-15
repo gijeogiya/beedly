@@ -14,6 +14,7 @@ const initialState = {
     userNickname: "",
     userId: "",
     token: "",
+    userEmail: "",
     role: "",
   },
 };
