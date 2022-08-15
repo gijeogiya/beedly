@@ -4,7 +4,12 @@ import { StyledHr, StyledText } from "../components/Common";
 import ArtistPng from "../assets/images/artist.png";
 import MoreImage from "../assets/images/more.png";
 import styled from "styled-components";
-import { getUserInfoApi } from "../utils/api";
+import {
+  getFavoriteProduct,
+  getPurchaseApi,
+  getSaleApi,
+  getUserInfoApi,
+} from "../utils/api";
 import { Link, useNavigate } from "react-router-dom";
 import { FlexBox } from "../components/UserStyled";
 import { useSelector } from "react-redux";
@@ -97,49 +102,69 @@ export default function MyPage() {
     userEmail: "",
   });
   const User = useSelector((state) => (state.user.user.user));
+  const [loading, setLoading] = useState(true);
+
+  const [TotalSale, setTotalSale] = useState();
+  const [IngSale, setIngSale] = useState();
+  const [EndSale, setEndSale] = useState();
+
+  const [TotalPurchase, setTotalPurchase] = useState();
+  const [IngPurchase, setIngPurchase] = useState();
+  const [EndPurchase, setEndPurchase] = useState();
+
+
   useEffect(() => {
-    // 아직 로그인 된 상태가 아니라면
-    console.log(User);
-    if (User === undefined) {
-      // 로그인하라고 보내주기
-      Navigate("/login");
-    } else {
-      // 내 정보 조회
-      getUserInfoApi(
-        (res) => {
+    if (loading) {
+
+      // 아직 로그인 된 상태가 아니라면
+      console.log(User);
+      if (User === undefined) {
+        // 로그인하라고 보내주기
+        Navigate('/login');
+      } else {
+        // 내 정보 조회
+        getUserInfoApi((res) => {
           setUser(res.data);
-        },
-        (err) => {
+
+        }, (err) => {
           console.log(err);
+        })
+        // 구매내역 조회
+        getPurchaseApi((res) => {
+          console.log(res);
+        }, (err) => {
+          console.log(err);
+        })
+        // 판매내역 조회
+        if (user.userRole == 'ROLE_ARTIST') {
+          getSaleApi((res) => {
+            console.log(res);
+          }, (err) => {
+            console.log(err);
+          })
         }
-      );
-      // 구매내역 조회
-      // getPurchaseApi((res) => {
 
-      // }, (err) => {
-
-      // })
-      // 판매내역 조회
-      // if (user.userRole == 'ROLE_ARTIST') {
-      //   getSalelApi((res) => {
-
-      //   }, (err) => {
-
-      //   })
-      // }
+        // 찜한 상품 조회
+        getFavoriteProduct("0", "20", "", (res) => {
+          console.log(res);
+        }, (err) => {
+          console.log(err);
+        })
+      }
+      setLoading(false);
+      //
     }
-    // eslint-disable-next-line
-  }, []);
+  }, [loading]);
   const CheckRole = () => {
-    if (user.userRole === "ROLE_USER") {
-      return "구매자";
-    } else if (user.userRole === "ROLE_ARTIST") {
-      return "작가님";
-    } else if (user.userRole === "ROLE_ADMIN") {
-      return "관리자";
+    if (user.userRole === 'ROLE_USER') {
+      return '구매자';
+    } else if (user.userRole === 'ROLE_ARTIST') {
+      return '작가님';
+    } else if (user.userRole === 'ROLE_ADMIN') {
+      return '관리자';
     }
     return "정보없음";
-  };
+  }
   return (
     <div>
       <Grid
@@ -186,6 +211,7 @@ export default function MyPage() {
             </BackButton>
           </Link>
         </Box>
+
         <StyledHr
           gridArea="firstHr"
           width="99vw"
@@ -211,9 +237,8 @@ export default function MyPage() {
 
         <Box gridArea="like">
           <Sector title="관심작품" link="LikeProduct" />
-          <Sector title="관심작가" link="LikeArtist" />
+          <Sector2 title="관심작가" link="LikeArtist" />
         </Box>
-        {/* <StyledHr gridArea="secHr" width="99vw" height="2px" color="lightgray" /> */}
       </Grid>
 
       {/* 구매자 & 판매자가 볼수있는 button */}
@@ -279,9 +304,9 @@ export default function MyPage() {
             </Link>
           </div>
         </FlexBox>
-      ) : (
-        <div></div>
-      )}
+
+        : <div></div>
+      }
 
       {user.userRole === "ROLE_ADMIN" ? (
         <FlexBox Row_SA style={{ margin: "0px" }}>
@@ -351,3 +376,131 @@ export default function MyPage() {
     </div>
   );
 }
+
+const BackButton = styled.button`
+              background: none;
+              font-size: 12px;
+              font-family: Noto Sans KR, sans-serif;
+              border: 0px;
+              width: 10vw;
+            `;
+
+const ContainerBox = ({ title2 }) => {
+  return (
+    <Box
+      direction="row"
+      background="light-3"
+      align="center"
+      justify={title2 === "관심 작가" ? "center" : "evenly"}
+      pad={{
+        top: "10px",
+        bottom: "10px",
+      }}
+      round="small"
+      width="70vw"
+      alignSelf="center"
+      margin={{
+        top: "10px",
+        bottom: "20px",
+      }}
+    >
+
+      <Box
+        align="center"
+        border={title2 === "관심 작가" ? false : "right"}
+        pad={title2 === "관심 작가" ? {} : { right: "30px" }}
+        alignSelf={title2 === "관심 작가" ? "center" : "stretch"}
+        style={{ display: "flex" }}
+      >
+        <StyledText size="12px" text="전체"></StyledText>
+        <StyledText
+          weight="bold"
+          color="#FFD100"
+          size="12px"
+          text="10"
+        ></StyledText>
+      </Box>
+      {title2 !== "관심 작가" && (
+        <Box align="center">
+          <StyledText size="12px" text="진행중"></StyledText>
+          <StyledText weight="bold" size="12px" text="10"></StyledText>
+        </Box>
+      )}
+      {title2 !== "관심 작가" && (
+        <Box align="center" pad={{ left: "30px" }}>
+          <StyledText size="12px" text="종료"></StyledText>
+          <StyledText weight="bold" size="12px" text="10"></StyledText>
+        </Box>
+      )}
+    </Box>
+  );
+};
+
+const ContainerBox2 = ({ title2 }) => {
+  return (
+    <Box
+      direction="row"
+      background="light-3"
+      align="center"
+      justify={title2 === "관심 작가" ? "center" : "evenly"}
+      pad={{
+        top: "10px",
+        bottom: "10px",
+      }}
+      round="small"
+      width="70vw"
+      alignSelf="center"
+      margin={{
+        top: "10px",
+        bottom: "20px",
+      }}
+    >
+
+      <Box
+        align="center"
+        alignSelf={title2 === "관심 작가" ? "center" : "stretch"}
+        style={{ display: "flex" }}
+      >
+        <StyledText size="12px" text="전체"></StyledText>
+        <StyledText
+          weight="bold"
+          color="#FFD100"
+          size="12px"
+          text="10"
+        ></StyledText>
+      </Box>
+    </Box>
+  );
+};
+
+
+
+const Sector = ({ title, link }) => {
+  return (
+
+    <Box alignContent="center">
+      <Box direction="row" justify="between" width="80vw">
+        <StyledText weight="bold" text={title}></StyledText>
+        <Link to={`/${link}`} style={{ textDecorationLine: "none" }}>
+          <StyledText text="더보기"></StyledText>
+        </Link>
+      </Box>
+      <ContainerBox />
+    </Box>
+  );
+};
+
+const Sector2 = ({ title, link }) => {
+  return (
+
+    <Box alignContent="center">
+      <Box direction="row" justify="between" width="80vw">
+        <StyledText weight="bold" text={title}></StyledText>
+        <Link to={`/${link}`} style={{ textDecorationLine: "none" }}>
+          <StyledText text="더보기"></StyledText>
+        </Link>
+      </Box>
+      <ContainerBox2 />
+    </Box>
+  );
+};
