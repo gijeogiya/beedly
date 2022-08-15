@@ -73,15 +73,10 @@ const StyledCardInfTextFrame = styled.div`
   padding-left: 5px;
 `;
 
-export function ProductCard({ product, startTime }) {
-  const [now, setNow] = useState();
-  const start = new Date(
-    startTime !== undefined ? startTime : product.startTime
-  );
-  const date =
-    startTime !== undefined
-      ? startTime.split("T")
-      : product.startTime.split("T");
+export function ProductCard({ product }) {
+  const now = new Date();
+  const start = new Date(product.startTime);
+  const date = product.startTime.split("T");
   const yyyyMMdd = date[0].split("-");
   const HHmm = date[1].split(":");
   const CheckTime = () => {
@@ -92,15 +87,6 @@ export function ProductCard({ product, startTime }) {
       return true;
     }
   };
-
-  useEffect(() => {
-    const ee = setInterval(() => {
-      setNow(new Date());
-    }, 1000);
-    return () => {
-      clearInterval(ee);
-    };
-  });
 
   const getTime = () => {
     let diff = start - now;
@@ -123,13 +109,7 @@ export function ProductCard({ product, startTime }) {
   return (
     <StyledProductCard>
       <StyledProductCardImgFrame>
-        <StyledRectangleRowImg
-          src={
-            product.specialProductImgs !== undefined
-              ? product.specialProductImgs[0]
-              : product.productImgs[0]
-          }
-        />
+        <StyledRectangleRowImg src={product.productImgs[0]} />
         <AuctionStateBox
           style={{ backgroundColor: CheckTime() ? "red" : "gray" }}
         >

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -55,8 +56,9 @@ const SearchTextInput = styled.input`
 export function SearchBar() {
     const Navigate = useNavigate();
     const [keyword, setKeyword] = useState("");
+    const [searchList, setsearchList] = useState(JSON.parse(localStorage.getItem("SearchList")));
     const handleChange = (e) => {
-        console.log(e.target.value)
+        console.log(keyword);
         setKeyword(e.target.value);
     };
     const HandleSubmit = (e) => {
@@ -65,18 +67,30 @@ export function SearchBar() {
             searchCategory: "keyword",
             keyword: keyword,
         };
+        if (localStorage.getItem("SearchList") === null || JSON.parse(localStorage.getItem("SearchList")) === []) {
+            console.log([keyword]);
+            setsearchList([keyword]);
+        } else {
+            setsearchList(JSON.parse(localStorage.getItem("SearchList")).concat([keyword]));
+        };
+
         Navigate("/searchResult", { state: data });
     }
+    useEffect(() => {
+        console.log(searchList);
+        // localStorage.setItem("SearchList", JSON.stringify(RecentSearchList));
+
+    }, [searchList])
     return (
         <SearchWarp>
             <SearchArea>
-                <SearchForm onSubmit={(e) => HandleSubmit(e)}>
+                <SearchForm onSubmit={HandleSubmit}>
                     <img src={SearchingIcon} alt='Searching Icon' style={{ "height": "20px", "padding": "10px 0 10px 10px" }} />
                     <SearchTextInput
                         type="text"
                         placeholder="작품명, 작가명 등"
                         value={keyword}
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(e)}
                     />
                 </SearchForm>
             </SearchArea>

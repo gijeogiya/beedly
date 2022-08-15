@@ -26,9 +26,9 @@ const SizePickText = styled.div`
 `;
 
 
-export function SizePickCard({ title, size, background_color }) {
+export function SizePickCard({ title, size, background_color, onClick, ...props }) {
     return (
-        <SizePickFrame>
+        <SizePickFrame onClick={onClick} {...props} >
             <SizePickButton style={background_color}>
                 <SizePickText>
                     <div style={{ "fontSize": "18px", "fontWeight": "900", "color": "#1f1d1d", "padding": "10px" }}>{title}</div>

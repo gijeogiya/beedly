@@ -71,14 +71,15 @@ export default function MainPage() {
       //Art for you 목록 가져오기
       getRecommendationProductApi((res) => {
         setArtForYouList(res.data);
+        console.log(res.data);
       }, (err) => {
         console.log(err);
       })
 
       //신규 작품 목록 가져오기
       getPersonalProductListApi("0", "20", "createdDate,DESC", (res) => {
-        console.log(res.data.content);
         setNewProductList(res.data.content);
+        console.log(res.data);
       }, (err) => {
         console.log(err);
       })
