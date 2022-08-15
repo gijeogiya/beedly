@@ -92,15 +92,6 @@ export default function SearchPage() {
     };
     const HandleSubmit = (e) => {
         e.preventDefault();
-        if (localStorage.getItem("SearchList") === null || JSON.parse(localStorage.getItem("SearchList")) === []) {
-            console.log([keyword]);
-            setsearchList([keyword]);
-            localStorage.setItem("SearchList", JSON.stringify(searchList));
-        } else {
-            setsearchList(JSON.parse(localStorage.getItem("SearchList")).concat([keyword]));
-            localStorage.setItem("SearchList", JSON.stringify(searchList));
-
-        };
         GoSearchResult();
     }
     const GoSearchResult = () => {
@@ -111,11 +102,6 @@ export default function SearchPage() {
         Navigate("/searchResult", { state: data });
 
     }
-    // useEffect(() => {
-    //     console.log(searchList);
-    //     localStorage.setItem("SearchList", JSON.stringify(searchList));
-
-    // }, [searchList])
     return (
 
         <div style={{ "padding-bottom": "20px" }}>

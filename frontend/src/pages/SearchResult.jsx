@@ -39,7 +39,7 @@ export default function SearchResult() {
                     console.log([keyword]);
                     localStorage.setItem("SearchList", JSON.stringify([keyword]));
                 } else {
-                    localStorage.setItem("SearchList", JSON.stringify(JSON.parse(localStorage.getItem("SearchList")).concat([keyword])));
+                    localStorage.setItem("SearchList", JSON.stringify(([keyword]).concat(JSON.parse(localStorage.getItem("SearchList")))));
 
                 };
                 //keyword로 상품작가가 keyword인 상품 검색

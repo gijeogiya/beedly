@@ -85,19 +85,24 @@ export function RecentlyKeywordTable({ list }) {
     }
 
     return (
-        <RecentlyKeywordFrame>
-            {RecentKeywordList.map((keyword, idx) =>
-                <RecentlyKeywordButton key={idx}>
-                    <div onClick={(e) => SearchByKeyword(keyword)}>{keyword}</div>
+        <div>
 
-                    <RecentlyKeywordRemoveButton>
-                        <RecentlyKeywordRemoveImg src={XIcon} onClick={(e) => DeleteKeyword(keyword)} />
-                    </RecentlyKeywordRemoveButton>
-                </RecentlyKeywordButton>
-            )}
+            {list !== null ?
+                <RecentlyKeywordFrame>
+                    {RecentKeywordList.map((keyword, idx) =>
+                        <RecentlyKeywordButton key={idx}>
+                            <div onClick={(e) => SearchByKeyword(keyword)}>{keyword}</div>
 
+                            <RecentlyKeywordRemoveButton>
+                                <RecentlyKeywordRemoveImg src={XIcon} onClick={(e) => DeleteKeyword(keyword)} />
+                            </RecentlyKeywordRemoveButton>
+                        </RecentlyKeywordButton>
+                    )}
+                </RecentlyKeywordFrame>
+                : <div></div>}
 
-        </RecentlyKeywordFrame>
+        </div>
+
 
     );
 }
