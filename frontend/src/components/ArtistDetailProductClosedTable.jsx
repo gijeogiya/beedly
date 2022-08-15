@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ProductCard } from "../components/ProductCard";
+import { HalfProductCard } from "../components/HalfProductCard";
 
 const ProductTable = styled.div`
     display: flex;
@@ -13,11 +13,11 @@ export function ArtistDetailProductClosedTable() {
     return (
         <div style={{"display":"flex", "justifyContent":"center", borderBottom: "1px solid #ebebeb", paddingBottom: "20px",}}>
                          <ProductTable>
+                             {/* <ProductCard/>
                              <ProductCard/>
                              <ProductCard/>
                              <ProductCard/>
-                             <ProductCard/>
-                             <ProductCard/>
+                             <ProductCard/> */}
                          </ProductTable>
                      </div>
     );

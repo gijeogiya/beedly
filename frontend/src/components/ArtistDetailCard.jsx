@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import SampleProfile from '../assets/img/SampleProfile.png';
-import SampleBackground from '../assets/img/SampleBackground.png';
 import { useEffect, useState } from "react";
 import { FlexBox } from "./UserStyled";
 import Button from "./Button";
@@ -38,6 +36,7 @@ const StyledCardArtistImg = styled.img`
 const ArtistDetailSubInf = styled.div`
     padding: 64px 0 0 26px;
 `;
+
 
 export function ArtistDetailCard({ artist }) {
     const [artistInfo, setArtistInfo] = useState({});
