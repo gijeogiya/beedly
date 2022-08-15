@@ -7,6 +7,7 @@ import {
   HorizonScrollColTable,
 } from "../components/HorizonScrollTable";
 import { getArtistApi, getOnairApi, getPersonalProductListApi, getProductListBySizeApi, getRecommendationProductApi } from "../utils/api";
+import { useNavigate } from "react-router-dom";
 
 const StyledTableTitle = styled.div`
   font-size: 16px;
@@ -14,12 +15,29 @@ const StyledTableTitle = styled.div`
   padding-left: 20px;
   font-weight: 900;
 `;
+
 const StyledTableSubtitle = styled.div`
   font-size: 14px;
   padding-left: 20px;
   font-weight: 500;
   color: rgba(31, 29, 29, 0.4);
   `;
+
+const StyledCategoryTable = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  border-bottom:2px solid #ebebeb;
+`;
+
+const StyledCategoryButton = styled.button`
+  display: inline;
+  padding: 0 10px;
+  justify-content: center;
+  font-size: 16px;
+  border: 0;
+  background-color: white;
+`;
 
 export default function MainPage() {
   const [loading, setloading] = useState(true);
@@ -28,6 +46,7 @@ export default function MainPage() {
   const [ArtForYouList, setArtForYouList] = useState([]);
   const [NewProductList, setNewProductList] = useState([]);
   const [SizeProductList, setSizeProductList] = useState([]);
+  const Navigate = useNavigate();
   const ProductSizeList = [
     {
       size: "small",
@@ -106,9 +125,25 @@ export default function MainPage() {
       })
     }
   }, [Size])
+
+  const goProductList = (category) => {
+      const data = {
+        gottenCategory: category,
+    }
+    Navigate('/productlist', {state: {gottenCategory: category}})
+  }
+
   return (
     <div>
-      <CategoryBar />
+      <nav>
+          <StyledCategoryTable>
+            <StyledCategoryButton onClick={ () => goProductList('회화') }>회화</StyledCategoryButton>
+            <StyledCategoryButton onClick={ () => goProductList('판화') }>판화</StyledCategoryButton>
+            <StyledCategoryButton onClick={ () => goProductList('에디션') }>에디션</StyledCategoryButton>
+            <StyledCategoryButton onClick={ () => goProductList('사진') }>사진</StyledCategoryButton>
+            <StyledCategoryButton onClick={ () => goProductList('입체') }>입체</StyledCategoryButton>
+          </StyledCategoryTable>
+      </nav>
       <BannerTable />
       <div
         style={{

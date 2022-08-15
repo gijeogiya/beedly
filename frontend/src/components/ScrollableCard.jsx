@@ -8,14 +8,14 @@ const StyledProductCard = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 180px;
+  width: 40vw;
   padding-right: 14px;
   padding-top: 14px;
 `;
 
 const StyledProductCardImgFrame = styled.div`
   position: relative;
-  width: 180px;
+  width: 40vw;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -24,8 +24,8 @@ const StyledProductCardImgFrame = styled.div`
 
 const StyledRectangleRowImg = styled.img`
   border-radius: 8px;
-  width: 180px;
-  height: 180px;
+  width: 40vw;
+  height: 40vw;
   object-fit: cover;
 `;
 
