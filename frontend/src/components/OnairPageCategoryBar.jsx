@@ -14,10 +14,11 @@ const StyledCategory = styled.div`
   font-size: 16px;
 `;
 
-export function CategoryBar() {
+export function OnairPageCategoryBar() {
     return (
         <nav>
           <StyledCategoryTable>
+            <StyledCategory>ALL</StyledCategory>
             <StyledCategory>회화</StyledCategory>
             <StyledCategory>판화</StyledCategory>
             <StyledCategory>에디션</StyledCategory>
