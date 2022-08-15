@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "../components/Button";
 import { FlexBox } from "../components/UserStyled";
-import Logo from "../assets/img/logoClear.png"
+import Logo from "../assets/img/logoClear.png";
 const flexbox = {
   display: "flex",
   margin: "10vw 3vw",
@@ -30,7 +30,6 @@ export default function login() {
           alignItems: "center",
         }}
       >
-
         <img
           style={{ maxWidth: "60vw", maxHeight: "20vh" }}
           alt="logo"

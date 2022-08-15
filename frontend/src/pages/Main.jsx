@@ -6,8 +6,18 @@ import {
   HorizonScrollRowTable,
   HorizonScrollColTable,
 } from "../components/HorizonScrollTable";
-import { getArtistApi, getOnairApi, getPersonalProductListApi, getProductListBySizeApi, getRecommendationProductApi } from "../utils/api";
-import { useNavigate } from "react-router-dom";
+import {
+  getArtistApi,
+  getOnairApi,
+  getPersonalProductListApi,
+  getProductListBySizeApi,
+  getRecommendationProductApi,
+  getUserInfoApi,
+} from "../utils/api";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { StyledText } from "../components/Common";
+import user from "../stores/modules/user";
 
 const StyledTableTitle = styled.div`
   font-size: 16px;
@@ -21,13 +31,13 @@ const StyledTableSubtitle = styled.div`
   padding-left: 20px;
   font-weight: 500;
   color: rgba(31, 29, 29, 0.4);
-  `;
+`;
 
 const StyledCategoryTable = styled.div`
   display: flex;
   justify-content: center;
   padding: 10px 0;
-  border-bottom:2px solid #ebebeb;
+  border-bottom: 2px solid #ebebeb;
 `;
 
 const StyledCategoryButton = styled.button`
@@ -46,6 +56,13 @@ export default function MainPage() {
   const [ArtForYouList, setArtForYouList] = useState([]);
   const [NewProductList, setNewProductList] = useState([]);
   const [SizeProductList, setSizeProductList] = useState([]);
+  const [user, setUser] = useState({
+    userName: "",
+    userRole: "",
+    userEmail: "",
+  });
+  const User = useSelector((state) => state.user.user.user);
+  // console.log("User :: ", User);
   const Navigate = useNavigate();
   const ProductSizeList = [
     {
@@ -67,41 +84,77 @@ export default function MainPage() {
       size: "xlarge",
       description: "당신의 집을 커다란 작품으로!",
       sizeName: "Big",
-    }]
+    },
+  ];
   const [Size, setSize] = useState({});
   useEffect(() => {
     if (loading) {
+      if (User === undefined) {
+        //로그인 안함
+        // setUser(undefined);
+      } else {
+        getUserInfoApi(
+          (res) => {
+            setUser(res.data);
+            console.log(res);
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      }
 
       // 진행중인 경매
-      getOnairApi("0", "20", "", (res) => {
-        console.log(res);
-        setOnairList(res.data.content);
-      }, (err) => {
-        console.log(err);
-      })
+      getOnairApi(
+        "0",
+        "20",
+        "",
+        (res) => {
+          console.log(res);
+          setOnairList(res.data.content);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
 
       // 작가 목록 가져오기
-      getArtistApi("0", "20", "", (res) => {
-        setArtistList(res.data.content);
-      }, (err) => {
-        console.log(err);
-      })
+      getArtistApi(
+        "0",
+        "20",
+        "",
+        (res) => {
+          setArtistList(res.data.content);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
 
       //Art for you 목록 가져오기
-      getRecommendationProductApi((res) => {
-        setArtForYouList(res.data);
-        console.log(res.data);
-      }, (err) => {
-        console.log(err);
-      })
+      getRecommendationProductApi(
+        (res) => {
+          setArtForYouList(res.data);
+          console.log(res.data);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
 
       //신규 작품 목록 가져오기
-      getPersonalProductListApi("0", "20", "createdDate,DESC", (res) => {
-        setNewProductList(res.data.content);
-        console.log(res.data);
-      }, (err) => {
-        console.log(err);
-      })
+      getPersonalProductListApi(
+        "0",
+        "20",
+        "createdDate,DESC",
+        (res) => {
+          setNewProductList(res.data.content);
+          console.log(res.data);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
 
       //사이즈 목록으로 작품 가져오기
       setSize(ProductSizeList[Math.floor(Math.random() * 4)]);
@@ -114,35 +167,57 @@ export default function MainPage() {
     console.log(Size);
     console.log(Size.size);
     if (Size !== null) {
-      getProductListBySizeApi(Size.size, "0", "20", "", (res) => {
-        console.log(res);
-        if (res.data.content.length <= 3) {
-          setSize(ProductSizeList[Math.floor(Math.random() * 4)]);
+      getProductListBySizeApi(
+        Size.size,
+        "0",
+        "20",
+        "",
+        (res) => {
+          console.log(res);
+          if (res.data.content.length <= 3) {
+            setSize(ProductSizeList[Math.floor(Math.random() * 4)]);
+          }
+          setSizeProductList(res.data.content);
+        },
+        (err) => {
+          console.log(err);
         }
-        setSizeProductList(res.data.content);
-      }, (err) => {
-        console.log(err);
-      })
+      );
     }
-  }, [Size])
+  }, [Size]);
 
   const goProductList = (category) => {
-      const data = {
-        gottenCategory: category,
-    }
-    Navigate('/productlist', {state: {gottenCategory: category}})
-  }
+    const data = {
+      gottenCategory: category,
+    };
+    Navigate("/productlist", { state: { gottenCategory: category } });
+  };
 
   return (
     <div>
       <nav>
-          <StyledCategoryTable>
-            <StyledCategoryButton onClick={ () => goProductList('회화') }>회화</StyledCategoryButton>
-            <StyledCategoryButton onClick={ () => goProductList('판화') }>판화</StyledCategoryButton>
-            <StyledCategoryButton onClick={ () => goProductList('에디션') }>에디션</StyledCategoryButton>
-            <StyledCategoryButton onClick={ () => goProductList('사진') }>사진</StyledCategoryButton>
-            <StyledCategoryButton onClick={ () => goProductList('입체') }>입체</StyledCategoryButton>
-          </StyledCategoryTable>
+        <StyledCategoryTable>
+          <StyledCategoryButton onClick={() => goProductList("회화")}>
+            회화
+          </StyledCategoryButton>
+          <StyledCategoryButton onClick={() => goProductList("판화")}>
+            판화
+          </StyledCategoryButton>
+          <StyledCategoryButton onClick={() => goProductList("에디션")}>
+            에디션
+          </StyledCategoryButton>
+          <StyledCategoryButton onClick={() => goProductList("사진")}>
+            사진
+          </StyledCategoryButton>
+          <StyledCategoryButton onClick={() => goProductList("입체")}>
+            입체
+          </StyledCategoryButton>
+          {User !== undefined && (
+            <Link to="/productRegister">
+              <StyledText color="red" text="작품등록" />
+            </Link>
+          )}
+        </StyledCategoryTable>
       </nav>
       <BannerTable />
       <div

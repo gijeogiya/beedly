@@ -1,10 +1,10 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const StyledCategoryTable = styled.div`
   display: flex;
   justify-content: center;
   padding: 10px 0;
-  border-bottom:2px solid #ebebeb;
+  border-bottom: 2px solid #ebebeb;
 `;
 
 const StyledCategory = styled.div`
@@ -15,15 +15,15 @@ const StyledCategory = styled.div`
 `;
 
 export function CategoryBar() {
-    return (
-        <nav>
-          <StyledCategoryTable>
-            <StyledCategory>회화</StyledCategory>
-            <StyledCategory>판화</StyledCategory>
-            <StyledCategory>에디션</StyledCategory>
-            <StyledCategory>사진</StyledCategory>
-            <StyledCategory>입체</StyledCategory>
-          </StyledCategoryTable>
-        </nav>
-    );
-  }
+  return (
+    <nav>
+      <StyledCategoryTable>
+        <StyledCategory>회화</StyledCategory>
+        <StyledCategory>판화</StyledCategory>
+        <StyledCategory>에디션</StyledCategory>
+        <StyledCategory>사진</StyledCategory>
+        <StyledCategory>입체</StyledCategory>
+      </StyledCategoryTable>
+    </nav>
+  );
+}

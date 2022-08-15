@@ -301,4 +301,5 @@ export {
   UpdateDescApi,
   UpdateBgImgApi,
   getOnairByCategoryApi,
+  getFavoriteProduct,
 };

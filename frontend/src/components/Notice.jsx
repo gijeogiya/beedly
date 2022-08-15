@@ -122,7 +122,7 @@ export const Notice = ({ boardType, open, onDismiss }) => {
         setClicked(false);
       }}
     >
-      <HeaderBox석희바보
+      <HeaderBox
         goBack={() => {
           onDismiss();
           setClicked(false);

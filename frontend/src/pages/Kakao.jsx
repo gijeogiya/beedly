@@ -5,7 +5,6 @@ import { setUser } from "../stores/modules/user";
 import Loading from "./Loading";
 import { loginApi } from "../utils/api";
 
-
 export default function Kakao() {
   const dispatch = useDispatch();
 
@@ -36,7 +35,6 @@ export default function Kakao() {
         if (res.status === 200) {
           console.log("로그인 성공");
           window.location.href = "/";
-
         } else if (res.status === 201) {
           //사용자 정보가 없을 때(회원가입 안함) -> 회원가입 페이지로 이동
           window.location.href = "/signup1";
