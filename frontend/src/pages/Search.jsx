@@ -24,6 +24,7 @@ const SizePickCardTable = styled.div`
     display: flex;
     justify-content:center;
 `;
+
 const SearchWarp = styled.div`
     padding: 12px 24px;
     border-bottom: 1px solid #ebebeb;

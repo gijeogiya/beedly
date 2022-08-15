@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { ProductCard } from "../components/ProductCard";
+import { HalfProductCard } from "../components/HalfProductCard";
 import { getProductByArtistId } from "../utils/api";
 
 const ProductTable = styled.div`
@@ -26,11 +26,11 @@ export function ArtistDetailProductOngoingTable({ artist }) {
     return (
         <div style={{ "display": "flex", "justifyContent": "center", borderBottom: "1px solid #ebebeb", paddingBottom: "20px", }}>
             <ProductTable>
+                {/* <ProductCard />
                 <ProductCard />
                 <ProductCard />
                 <ProductCard />
-                <ProductCard />
-                <ProductCard />
+                <ProductCard /> */}
             </ProductTable>
         </div>
     );

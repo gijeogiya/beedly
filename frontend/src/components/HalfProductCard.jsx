@@ -1,19 +1,20 @@
 import styled from "styled-components";
+import SampleProduct from '../assets/img/SampleProduct.png';
+import SampleProfile from '../assets/img/SampleProfile.png';
 import OnairStateIcon from '../assets/img/OnairStateIcon.svg';
 import BeforeStateIcon from '../assets/img/BeforeStateIcon.svg';
 
 const StyledProductCard = styled.div`
     display:flex;
     flex-direction:column;
-    justify-content:space-between;
-    width:40vw;
-    padding-right:14px;
-    padding-top:14px;
+    justify-content:space-around;
+    width:42vw;
+    padding-top:5vw;
 `;
 
 const StyledProductCardImgFrame = styled.div`
     position:relative;
-    width:40vw;
+    width:42vw;
     display:flex;
     flex-direction:column;
     justify-content: flex-end;
@@ -22,14 +23,14 @@ const StyledProductCardImgFrame = styled.div`
 
 const StyledRectangleRowImg = styled.img`
     border-radius:8px;
-    width:40vw;
-    height:40vw;
+    width:42vw;
+    height:42vw;
     object-fit: cover;
 `;
 
 const AuctionStateBox = styled.div`
     color: white;
-    background-color: ${(true) ? "red" : "gray" || "gray"};
+    background-color: ${true ? "red" : "gray" || "gray"};
     display: inline-block;
     position: absolute;
     font-size: 12px;
@@ -38,9 +39,10 @@ const AuctionStateBox = styled.div`
     border-radius:3px;
     margin:12px;
 `;
+
 const AuctionStateBoxProps = (backcolor) =>
     <AuctionStateBox props={backcolor}></AuctionStateBox>
-    
+
 const StyledAuctionStateIcon = styled.img`
     height: 9px;
 `;
@@ -72,7 +74,7 @@ const StyledCardInfTextFrame = styled.div`
     padding-left: 5px;
 `;
 
-export function ProductCard({ product }) {
+export function HalfProductCard({ product }) {
     const now = new Date();
     const start = new Date(product.startTime);
     const date = product.startTime.split("T");
@@ -123,58 +125,5 @@ export function ProductCard({ product }) {
                 </StyledCardInfTextFrame>
             </StyledCardInfBox>
         </StyledProductCard>
-    )
-}
-
-
-const StyledProfileCard = styled.div`
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    width:144px;
-    padding-right:10px;
-    padding-top:14px;
-`;
-
-const StyledProfileCardImgFrame = styled.div`
-    position: relative;
-    width:144px;
-    display:flex;
-    flex-direction:column;
-`;
-
-const StyledRectangleColImg = styled.img`
-    border-radius:8px;
-    width:144px;
-    height:208px;
-    object-fit: cover;
-`;
-
-const StyledProfileCardInfBox = styled.div`
-    position: absolute;
-    height:208px;
-    width:144px;
-    display:flex;
-    flex-direction:column;
-    justify-content: space-between;
-    border-radius:8px;
-    background-image:linear-gradient(0deg,rgba(0,0,0,.5),rgba(0,0,0,0) 30%);
-`;
-
-export function ArtistCard({ artist }) {
-    return (
-        <StyledProfileCard>
-            <StyledProfileCardImgFrame>
-                <StyledRectangleColImg src={artist.artistBgImg} />
-                <StyledProfileCardInfBox>
-                    <StyledCardArtistImgFrame style={{ "padding": "12px" }}>
-                        <StyledCardArtistImg style={{ "border": "2px solid white" }} src={artist.artistProfileImg} />
-                    </StyledCardArtistImgFrame>
-                    <div style={{ "padding": "12px", "color": "white", "fontSize": "14px" }}>
-                        {artist.userNickname}
-                    </div>
-                </StyledProfileCardInfBox>
-            </StyledProfileCardImgFrame>
-        </StyledProfileCard>
     )
 }

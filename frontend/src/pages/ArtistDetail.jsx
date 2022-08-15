@@ -4,7 +4,7 @@ import { ArtistDetailBar } from "../components/ArtistDetailBar";
 import { ArtistDetailCard } from "../components/ArtistDetailCard";
 import { ArtistDetailProductOngoingTable } from "../components/ArtistDetailProductOngoingTable";
 import { ArtistDetailProductClosedTable } from "../components/ArtistDetailProductClosedTable";
-import { ProductCard } from "../components/ProductCard";
+import { HalfProductCard } from "../components/HalfProductCard";
 import { artistDetailApi, deleteFavoriteArtistApi, getUserInfoApi, UpdateBgImgApi, UPdateBgImgApi, UpdateDescApi, UpdateProfileImgApi } from "../utils/api";
 import { useParams } from "react-router-dom";
 import LikeIcon from '../assets/images/like.png';
