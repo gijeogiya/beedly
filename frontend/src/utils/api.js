@@ -59,6 +59,14 @@ const getPurchaseApi = async (success, fail) => {
   await authInstance.get(`/user/purchase`).then(success).catch(fail);
 };
 
+//관심 작품 조회
+const getFavoriteProduct = async (page, size, sort, success, fail) => {
+  await authInstance
+    .get(`/user/myfavorite?page=${page}&size=${size}&sort=${sort}`)
+    .then(success)
+    .catch(fail);
+};
+
 // 구매내역 상세 조회
 const getPurchaseDetailApi = async (
   productSoldId,
@@ -73,7 +81,7 @@ const getPurchaseDetailApi = async (
 };
 
 //판매내역 상세조회
-const getSalelApi = async (success, fail) => {
+const getSaleApi = async (success, fail) => {
   await authInstance.get(`/user/sale`).then(success).catch(fail);
 };
 
@@ -255,7 +263,7 @@ export {
   updateUserInfoApi,
   getPurchaseApi,
   getPurchaseDetailApi,
-  getSalelApi,
+  getSaleApi,
   getTagListApi,
   registerTagApi,
   artistApplicationApi,
@@ -275,4 +283,5 @@ export {
   UpdateProfileImgApi,
   UpdateDescApi,
   UpdateBgImgApi,
+  getFavoriteProduct,
 };
