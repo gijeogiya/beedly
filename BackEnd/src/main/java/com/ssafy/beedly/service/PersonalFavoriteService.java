@@ -15,6 +15,9 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.ssafy.beedly.common.exception.NotFoundException.*;
 import static com.ssafy.beedly.common.exception.NotMatchException.FAVORITE_NOT_MATCH;
 
@@ -54,8 +57,9 @@ public class PersonalFavoriteService {
     }
 
     // 내가 찜한 상품 리스트들
-    public Slice<PersonalProductDto> findMyFavoriteProductList(User user, Pageable pageable) {
-        Slice<PersonalFavorite> findMyFavorite = personalFavoriteRepository.findMyFavoriteProductWithProduct(user.getId(), pageable);
-        return findMyFavorite.map(personalFavorite -> new PersonalProductDto(personalFavorite.getPersonalProduct()));
+    public List<PersonalProductDto> findMyFavoriteProductList(User user) {
+        List<PersonalFavorite> findMyFavorite = personalFavoriteRepository.findMyFavoriteProductWithProduct(user.getId());
+        return findMyFavorite.stream().map(personalFavorite -> new PersonalProductDto(personalFavorite.getPersonalProduct()))
+                .collect(Collectors.toList());
     }
 }

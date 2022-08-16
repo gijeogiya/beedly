@@ -16,7 +16,9 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.ssafy.beedly.common.exception.DuplicateException.ARTIST_FAVORITE_DUPLICATED;
 import static com.ssafy.beedly.common.exception.NotFoundException.*;
@@ -62,9 +64,9 @@ public class ArtistFavoriteService {
     }
 
     // 내가 찜한 작가 리스트
-    public Slice<ArtistSimpleDto> findMyArtistList(User user, Pageable pageable) {
-        Slice<ArtistFavorite> findMyFavorite = artistFavoriteRepository.findMyFavoriteArtist(user.getId(), pageable);
+    public List<ArtistSimpleDto> findMyArtistList(User user) {
+        List<ArtistFavorite> findMyFavorite = artistFavoriteRepository.findMyFavoriteArtist(user.getId());
 
-        return findMyFavorite.map(artistFavorite -> new ArtistSimpleDto(artistFavorite.getArtist()));
+        return findMyFavorite.stream().map(artistFavorite -> new ArtistSimpleDto(artistFavorite.getArtist())).collect(Collectors.toList());
     }
 }

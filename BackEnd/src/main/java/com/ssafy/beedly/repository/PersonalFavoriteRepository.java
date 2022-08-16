@@ -17,5 +17,5 @@ public interface PersonalFavoriteRepository  extends JpaRepository<PersonalFavor
 	// List<PersonalProduct> findPersonalFavoriteByUser();
 
     @Query("select pf from PersonalFavorite pf join fetch pf.personalProduct where pf.user.id = :userId")
-    Slice<PersonalFavorite> findMyFavoriteProductWithProduct(Long userId, Pageable pageable);
+    List<PersonalFavorite> findMyFavoriteProductWithProduct(Long userId);
 }
