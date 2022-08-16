@@ -50,7 +50,7 @@ export const PurchaseSuccess = () => {
     IMP.init("imp10157701");
     const data = {
       pg: "kakaopay",
-      merchant_uid: auctionType + "_order_no_" + 3, // 상점에서 관리하는 주문 번호
+      merchant_uid: auctionType + "_order_no_" + soldId, // 상점에서 관리하는 주문 번호
       name: "주문명: " + product.name,
       amount: finalPrice,
       buyer_email: userEmail,
@@ -80,16 +80,16 @@ export const PurchaseSuccess = () => {
       postPersonalPay(
         soldId,
         (response) => {
-          if (response.data.statusCode === "ACCEPTED")
-            navigate(`/purchaseDetail/${soldId}`, {
-              state: {
-                error_msg: error_msg,
-                merchant_uid: merchant_uid,
-                success: success,
-                soldId: soldId,
-                auctionType: auctionType,
-              },
-            });
+          console.log("결제 완료 API 호출 !!!", response);
+          navigate(`/purchaseDetail/${soldId}`, {
+            state: {
+              error_msg: error_msg,
+              merchant_uid: merchant_uid,
+              success: success,
+              soldId: soldId,
+              auctionType: auctionType,
+            },
+          });
         },
         (fail) => {
           console.log(fail);

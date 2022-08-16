@@ -1,40 +1,31 @@
 import React from "react";
-import { FlexBox } from "./UserStyled";
-// import product from "../assets/img/SampleProduct.png";
+import { deletePersonalFavorite } from "../utils/apis/PersonalFavoriteAPI";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import { StyledImg } from "./Common";
+import { Box, Spinner } from "grommet";
+import { FlexBox } from "./UserStyled";
+import { stringToDate } from "../stores/modules/basicInfo";
 import Button from "./Button";
-import { Spinner } from "grommet";
-import { useNavigate } from "react-router-dom";
-
-// 판매내역 / 구매내역 등에 사용되는 상품 상태 컴포넌트
-export default function ProductState({ product }) {
-  const navigate = useNavigate();
-
-  const handlePurchase = () => {
-    if (!product.paidFlag)
-      navigate(`/purchase/${product.soldId}`, {
-        state: {
-          auctionType: product.auctionType,
-          productId: product.productId,
-        },
-      });
-    else
-      navigate(`/purchaseDetail/${product.soldId}`, {
-        state: {
-          success: true,
-          soldId: product.soldId,
-          auctionType: product.auctionType,
-        },
-      });
+export const LikeProduct = ({ product }) => {
+  const handleFavorite = () => {
+    //좋아요를 눌렀다면
+    deletePersonalFavorite(
+      product.favoriteId,
+      (response) => {
+        console.log(response);
+      },
+      (fail) => {
+        console.log(fail);
+      }
+    );
   };
-
   if (!product) return <Spinner />;
   else
     return (
       <div style={{ padding: "20px" }}>
         <FlexBox Row_SB>
           <StyledImg
-            src={product.productImgDtos[0]}
+            src={product.productImgs[0]}
             alt="상품이미지"
             width="40%"
           ></StyledImg>
@@ -51,13 +42,25 @@ export default function ProductState({ product }) {
             <p style={{ margin: "0px 0px", fontWeight: "bold" }}>
               {product.productName}
             </p>
-            <p style={{ margin: "0px 0px", fontSize: "12px" }}>
-              {product.auctionType === "P" ? "상시 경매" : "기획전 경매"}
+            <p style={{ margin: "0px 0px", fontWeight: "bold" }}>
+              {product.userName}
             </p>
             <p style={{ margin: "0px 0px", fontSize: "12px" }}>
-              {product.finalPrice}
+              {stringToDate(product.startTime)}
             </p>
-            {!product.paidFlag ? (
+            <Button
+              Blank
+              onClick={handleFavorite}
+              children={<Box align="center">{<FavoriteIcon />}</Box>}
+            ></Button>
+            {/* <p style={{ margin: "0px 0px", fontSize: "12px" }}>
+              {product.soldStatus === "STANDBY"
+                ? "판매중"
+                : product.soldStatus === "FAIL"
+                ? "판매실패"
+                : `판매완료 : ${moneyFormat(product.finalPrice)}원`}
+            </p> */}
+            {/* {!product.paidFlag ? (
               <Button
                 SmallYellow
                 style={{ alignSelf: "flex-end", margin: "5px 5px" }}
@@ -73,9 +76,9 @@ export default function ProductState({ product }) {
               >
                 결제완료
               </Button>
-            )}
+            )} */}
           </div>
         </FlexBox>
       </div>
     );
-}
+};

@@ -1,4 +1,4 @@
-import { Avatar, Box, Grid } from "grommet";
+import { Avatar, Box, Grid, Spinner } from "grommet";
 import React, { useEffect, useState } from "react";
 import { StyledHr, StyledText } from "../components/Common";
 import ArtistPng from "../assets/images/artist.png";
@@ -13,6 +13,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { FlexBox } from "../components/UserStyled";
 import { useSelector } from "react-redux";
+import { getMyArtistList } from "../utils/apis/UserAPI";
 
 const BackButton = styled.button`
   background: none;
@@ -22,7 +23,7 @@ const BackButton = styled.button`
   width: 10vw;
 `;
 
-const ContainerBox = ({ title2 }) => {
+const ContainerBox = ({ title2, Total, Ing, End }) => {
   return (
     <Box
       direction="row"
@@ -53,26 +54,32 @@ const ContainerBox = ({ title2 }) => {
           weight="bold"
           color="#FFD100"
           size="12px"
-          text="10"
+          text={Total}
         ></StyledText>
       </Box>
       {title2 !== "관심 작가" && (
         <Box align="center">
-          <StyledText size="12px" text="진행중"></StyledText>
-          <StyledText weight="bold" size="12px" text="10"></StyledText>
+          <StyledText
+            size="12px"
+            text={title2 === "구매내역" ? "미결제" : "진행중"}
+          ></StyledText>
+          <StyledText weight="bold" size="12px" text={Ing}></StyledText>
         </Box>
       )}
       {title2 !== "관심 작가" && (
         <Box align="center" pad={{ left: "30px" }}>
-          <StyledText size="12px" text="종료"></StyledText>
-          <StyledText weight="bold" size="12px" text="10"></StyledText>
+          <StyledText
+            size="12px"
+            text={title2 === "구매내역" ? "결제" : "종료"}
+          ></StyledText>
+          <StyledText weight="bold" size="12px" text={End}></StyledText>
         </Box>
       )}
     </Box>
   );
 };
 
-const Sector = ({ title, link }) => {
+const Sector = ({ title, link, Total, Ing, End }) => {
   return (
     <Box alignContent="center">
       <Box direction="row" justify="between" width="80vw">
@@ -81,7 +88,7 @@ const Sector = ({ title, link }) => {
           <StyledText text="더보기"></StyledText>
         </Link>
       </Box>
-      <ContainerBox />
+      <ContainerBox title2={title} Total={Total} Ing={Ing} End={End} />
     </Box>
   );
 };
@@ -89,26 +96,51 @@ const Sector = ({ title, link }) => {
 export default function MyPage() {
   //user 정보 가져오기
   const Navigate = useNavigate("");
-  const [user, setUser] = useState({
-    userName: "",
-    userRole: "",
-    userEmail: "",
-  });
+  const [user, setUser] = useState({});
   const User = useSelector((state) => state.user.user.user);
   const [loading, setLoading] = useState(true);
 
-  const [TotalSale, setTotalSale] = useState();
-  const [IngSale, setIngSale] = useState();
-  const [EndSale, setEndSale] = useState();
+  const [TotalSale, setTotalSale] = useState(0);
+  const [IngSale, setIngSale] = useState(0);
+  const [EndSale, setEndSale] = useState(0);
 
-  const [TotalPurchase, setTotalPurchase] = useState();
-  const [IngPurchase, setIngPurchase] = useState();
-  const [EndPurchase, setEndPurchase] = useState();
+  const [TotalPurchase, setTotalPurchase] = useState(0);
+  const [IngPurchase, setIngPurchase] = useState(0);
+  const [EndPurchase, setEndPurchase] = useState(0);
+
+  const [TotalFav, setTotalFav] = useState(0);
+  const [IngFav, setIngFav] = useState(0);
+  const [EndFav, setEndFav] = useState(0);
+  const [favArtist, setFavArtist] = useState(0);
+  // 배열 크기를 개수로 변환
+  const handleSale = (array) => {
+    array.map((item) => {
+      setTotalSale((prev) => prev + 1);
+      if (item.soldStatus === "SUCCESS") setEndSale((prev) => prev + 1);
+      else setIngSale((prev) => prev + 1);
+    });
+  };
+
+  const handlePurchase = (array) => {
+    array.map((item) => {
+      setTotalPurchase((prev) => prev + 1);
+      if (item.paidFlag) setEndPurchase((prev) => prev + 1);
+      else setIngPurchase((prev) => prev + 1);
+    });
+  };
+
+  const handleFavortie = (array) => {
+    array.map((item) => {
+      setTotalFav((prev) => prev + 1);
+      if (item.soldStatus === "SUCCESS") setEndFav((prev) => prev + 1);
+      else setIngFav((prev) => prev + 1);
+    });
+  };
 
   useEffect(() => {
     if (loading) {
       // 아직 로그인 된 상태가 아니라면
-      console.log(User);
+      // console.log(User);
       if (User === undefined) {
         // 로그인하라고 보내주기
         Navigate("/login");
@@ -116,7 +148,18 @@ export default function MyPage() {
         // 내 정보 조회
         getUserInfoApi(
           (res) => {
-            setUser(res.data);
+            console.log(res);
+            setUser((prev) => (prev = res.data));
+            if (res.data.userRole == "ROLE_ARTIST")
+              getSaleApi(
+                (res) => {
+                  console.log("판매내역 ", res);
+                  handleSale(res.data);
+                },
+                (err) => {
+                  console.log(err);
+                }
+              );
           },
           (err) => {
             console.log(err);
@@ -125,7 +168,8 @@ export default function MyPage() {
         // 구매내역 조회
         getPurchaseApi(
           (res) => {
-            console.log(res);
+            console.log("구매내역 ", res);
+            handlePurchase(res.data);
           },
           (err) => {
             console.log(err);
@@ -135,7 +179,7 @@ export default function MyPage() {
         if (user.userRole == "ROLE_ARTIST") {
           getSaleApi(
             (res) => {
-              console.log(res);
+              console.log("판매내역 ", res);
             },
             (err) => {
               console.log(err);
@@ -149,7 +193,18 @@ export default function MyPage() {
           "20",
           "",
           (res) => {
-            console.log(res);
+            console.log("관심작품 ", res);
+            handleFavortie(res.data);
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+        //관심 작가 조회
+        getMyArtistList(
+          (response) => {
+            console.log("관심작가 : ", response);
+            setFavArtist(response.data.length);
           },
           (err) => {
             console.log(err);
@@ -170,6 +225,7 @@ export default function MyPage() {
     }
     return "정보없음";
   };
+  if (loading) return <Spinner />;
   return (
     <div>
       <Grid
@@ -226,9 +282,21 @@ export default function MyPage() {
 
         {/* 구매내역 & 판매내역 box */}
         <Box gridArea="buysold">
-          <Sector title="구매내역" link="PurchaseList" />
+          <Sector
+            title="구매내역"
+            link="PurchaseList"
+            Total={TotalPurchase}
+            Ing={IngPurchase}
+            End={EndPurchase}
+          />
           {user.userRole === "ROLE_ARTIST" ? (
-            <Sector title="판매내역" link="SaleList" />
+            <Sector
+              title="판매내역"
+              link="SaleList"
+              Total={TotalSale}
+              Ing={IngSale}
+              End={EndSale}
+            />
           ) : (
             <div></div>
           )}
@@ -241,8 +309,14 @@ export default function MyPage() {
         />
 
         <Box gridArea="like">
-          <Sector title="관심작품" link="LikeProduct" />
-          <Sector2 title="관심작가" link="LikeArtist" />
+          <Sector
+            title="관심작품"
+            link="LikeList"
+            Total={TotalFav}
+            Ing={IngFav}
+            End={EndFav}
+          />
+          <Sector2 title="관심작가" link="LikeArtist" favArtist={favArtist} />
         </Box>
       </Grid>
 
@@ -432,7 +506,7 @@ export default function MyPage() {
 //   );
 // };
 
-const ContainerBox2 = ({ title2 }) => {
+const ContainerBox2 = ({ title2, favArtist }) => {
   return (
     <Box
       direction="row"
@@ -461,14 +535,14 @@ const ContainerBox2 = ({ title2 }) => {
           weight="bold"
           color="#FFD100"
           size="12px"
-          text="10"
+          text={favArtist}
         ></StyledText>
       </Box>
     </Box>
   );
 };
 
-const Sector2 = ({ title, link }) => {
+const Sector2 = ({ title, link, favArtist }) => {
   return (
     <Box alignContent="center">
       <Box direction="row" justify="between" width="80vw">
@@ -477,7 +551,7 @@ const Sector2 = ({ title, link }) => {
           <StyledText text="더보기"></StyledText>
         </Link>
       </Box>
-      <ContainerBox2 />
+      <ContainerBox2 favArtist={favArtist} />
     </Box>
   );
 };
