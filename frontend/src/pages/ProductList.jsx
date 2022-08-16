@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { HorizonScrollRowTable } from "../components/HorizonScrollTable";
 import { SortButtonArea } from "../components/SortButtonArea";
 import { HalfProductCard } from "../components/HalfProductCard";
-import { getOnairByCategoryApi, getPersonalProductListApi } from "../utils/api";
+import { getOnairByCategoryApi, getProductByCategoryApi, getPersonalProductListApi } from "../utils/api";
 import { Bold } from "grommet-icons";
 
 const StyledTableTitle = styled.div`
@@ -54,14 +54,12 @@ export default function ProductListPage() {
   const [loading, setloading] = useState(true);
 
   const [size, setSize] = useState({});
-  const [nowCategory, setNowCategory] = useState([]);
+  const gottenCategory = location.state ? location.state.gottenCategory : '회화'
+  const [nowCategory, setNowCategory] = useState(gottenCategory);
 
   useEffect(() => {
-    const gottenCategory =
-      location.state === null ? null : location.state.gottenCategory;
     if (loading) {
-      // if(gottenCategory !== undefined) setNowCategory(prev => prev = gottenCategory);
-      // 진행중인 경매
+      //카테고리별 온에어 가져오기
       getOnairByCategoryApi(
         nowCategory,
         "0",
@@ -76,14 +74,15 @@ export default function ProductListPage() {
         }
       );
 
-      //신규 작품 목록 가져오기
-      getPersonalProductListApi(
+      //카테고리별 신규 작품 목록 가져오기
+      getProductByCategoryApi(
+        nowCategory,
         "0",
         "20",
         "createdDate,DESC",
         (res) => {
+          console.log(res);
           setNewProductList(res.data.content);
-          console.log(res.data);
         },
         (err) => {
           console.log(err);
