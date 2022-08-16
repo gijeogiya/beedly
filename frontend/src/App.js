@@ -22,7 +22,7 @@ import SaleList from "./pages/SaleList";
 import MypageDetail from "./pages/MypageDetail";
 import UpdateMyPage from "./pages/UpdateMypage.jsx";
 import SignupTag from "./pages/SignupTag";
-
+import { PurchaseList } from "./pages/PurchaseList";
 import { PurchaseSuccess } from "./pages/PurchaseSuccess";
 import SearchResult from "./pages/SearchResult";
 import { useSelector } from "react-redux";
@@ -34,6 +34,8 @@ import ArtistDetail from "./pages/ArtistDetail";
 import SignupAritst from "./pages/SignupArtist";
 import AdminUserManage from "./pages/AdminUserManage";
 import { SpecialAuctionDetail } from "./pages/SpecialAuctionDetail";
+import { LikeList } from "./pages/LikeList";
+import { LikeArtistList } from "./pages/LikeArtistList";
 
 const Layout = () => {
   // const navigate = useNavigate();
@@ -73,7 +75,6 @@ function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/productRegister" element={<ProductRegister />} />
           <Route path="/productModify" element={<ProductRegister />} />
-
           <Route path="/onair" element={<Onair />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/login" element={<Login />} />
@@ -98,7 +99,10 @@ function App() {
           />
           <Route path="/artistDetail/:artistId" element={<ArtistDetail />} />
           <Route path="/PurchaseDetail" element={<PurchaseDetail />} />
+          <Route path="/PurchaseList" element={<PurchaseList />} />
           <Route path="/saleList" element={<SaleList />} />
+          <Route path="/LikeList" element={<LikeList />} />
+          <Route path="/LikeArtist" element={<LikeArtistList />} />
           <Route path="/mypageDetail" element={<MypageDetail />} />
           <Route path="/updateMypage" element={<UpdateMyPage />} />
           <Route path="/signupTag" element={<SignupTag />} />

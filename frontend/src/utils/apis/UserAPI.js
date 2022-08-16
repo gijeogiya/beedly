@@ -19,4 +19,16 @@ const getPurchaseProduct = async (params, success, fail) => {
     .catch(fail);
 };
 
-export { getPurchaseProduct };
+const getPurchaseList = async (success, fail) => {
+  await authInstance.get(`/purchase`).then(success).catch(fail);
+};
+
+const getSaleList = async (success, fail) => {
+  await authInstance.get(`/sale`).then(success).catch(fail);
+};
+
+const getMyArtistList = async (success, fail) => {
+  await authInstance.get(`/myartist`).then(success).catch(fail);
+};
+
+export { getPurchaseProduct, getPurchaseList, getSaleList, getMyArtistList };

@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { StyledHr } from "../components/Common";
-import ProductState from "../components/ProductState";
-import { FlexBox, Hr } from "../components/UserStyled";
-import beforeIcon from "../assets/img/arrow-left.svg";
 import { useNavigate } from "react-router-dom";
-import { getPurchaseList } from "../utils/apis/UserAPI";
-import { Box, Spinner } from "grommet";
-
-// 구매내역 페이지
-export function PurchaseList() {
+import { LikeProduct } from "../components/LikeProduct";
+import { getFavoriteProduct } from "../utils/api";
+import beforeIcon from "../assets/img/arrow-left.svg";
+import { StyledHr } from "../components/Common";
+export const LikeList = () => {
   const [loading, setLoading] = useState(true);
   const Navigate = useNavigate("");
   const [products, setProducts] = useState([]);
@@ -18,14 +14,16 @@ export function PurchaseList() {
 
   useEffect(() => {
     if (loading)
-      getPurchaseList(
-        (response) => {
-          console.log(response);
-          setProducts([...response.data]);
-          setLoading(false);
+      getFavoriteProduct(
+        "0",
+        "20",
+        "",
+        (res) => {
+          console.log("관심작품 ", res);
+          setProducts(res.data);
         },
-        (fail) => {
-          console.log(fail);
+        (err) => {
+          console.log(err);
         }
       );
     return () => {
@@ -33,10 +31,9 @@ export function PurchaseList() {
     };
   });
 
-  if (loading) return <Spinner />;
   return (
     <div>
-      {/* 구매내역 header */}
+      {/* 판매내역 header */}
       <div>
         <div
           style={{
@@ -48,16 +45,16 @@ export function PurchaseList() {
           }}
         >
           <img alt="이전" src={beforeIcon} onClick={GoBack} />
-          <h4>구매내역</h4>
+          <h4>관심목록</h4>
           <h4 style={{ visibility: "hidden" }}>dd</h4>
         </div>
         <StyledHr width="99vw" height="0.5px" color="lightgray" />
       </div>
       {/* <ProductState src={imgurl} title={title} time={time} state={state} price={price} ></ProductState>
        */}
-      {products.map((product) => (
-        <div key={product.productId}>
-          <ProductState product={product} />
+      {products.map((product, idx) => (
+        <div key={idx}>
+          <LikeProduct product={product} />
           <hr
             style={{
               border: "none",
@@ -69,4 +66,4 @@ export function PurchaseList() {
       ))}
     </div>
   );
-}
+};

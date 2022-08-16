@@ -5,28 +5,29 @@ import { StyledImg } from "./Common";
 import Button from "./Button";
 import { Spinner } from "grommet";
 import { useNavigate } from "react-router-dom";
+import { moneyFormat, stringToDate } from "../stores/modules/basicInfo";
 
 // 판매내역 / 구매내역 등에 사용되는 상품 상태 컴포넌트
-export default function ProductState({ product }) {
+export default function SaleProduct({ product }) {
   const navigate = useNavigate();
 
-  const handlePurchase = () => {
-    if (!product.paidFlag)
-      navigate(`/purchase/${product.soldId}`, {
-        state: {
-          auctionType: product.auctionType,
-          productId: product.productId,
-        },
-      });
-    else
-      navigate(`/purchaseDetail/${product.soldId}`, {
-        state: {
-          success: true,
-          soldId: product.soldId,
-          auctionType: product.auctionType,
-        },
-      });
-  };
+  // const handlePurchase = () => {
+  //   if (!product.paidFlag)
+  //     navigate(`/purchase/${product.soldId}`, {
+  //       state: {
+  //         auctionType: product.auctionType,
+  //         productId: product.productId,
+  //       },
+  //     });
+  //   else
+  //     navigate(`/purchaseDetail/${product.soldId}`, {
+  //       state: {
+  //         success: true,
+  //         soldId: product.soldId,
+  //         auctionType: product.auctionType,
+  //       },
+  //     });
+  // };
 
   if (!product) return <Spinner />;
   else
@@ -52,12 +53,20 @@ export default function ProductState({ product }) {
               {product.productName}
             </p>
             <p style={{ margin: "0px 0px", fontSize: "12px" }}>
-              {product.auctionType === "P" ? "상시 경매" : "기획전 경매"}
+              {product.soldStatus === "STANDBY"
+                ? `시작 시간 : ${stringToDate(product.startTime)}`
+                : product.soldStatus === "FAIL"
+                ? `시작 시간 : ${stringToDate(product.startTime)}`
+                : `판매완료 : ${stringToDate(product.endTime)}`}
             </p>
             <p style={{ margin: "0px 0px", fontSize: "12px" }}>
-              {product.finalPrice}
+              {product.soldStatus === "STANDBY"
+                ? "판매중"
+                : product.soldStatus === "FAIL"
+                ? "판매실패"
+                : `판매완료 : ${moneyFormat(product.finalPrice)}원`}
             </p>
-            {!product.paidFlag ? (
+            {/* {!product.paidFlag ? (
               <Button
                 SmallYellow
                 style={{ alignSelf: "flex-end", margin: "5px 5px" }}
@@ -73,7 +82,7 @@ export default function ProductState({ product }) {
               >
                 결제완료
               </Button>
-            )}
+            )} */}
           </div>
         </FlexBox>
       </div>
