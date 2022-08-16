@@ -130,15 +130,15 @@ public class UserController {
     // 내가 찜한 상품 목록
     @ApiOperation(notes = "내가 찜한 상품 리스트", value = "내가 찜한 상품 리스트(무한 스크롤)")
     @GetMapping("/myfavorite")
-    public ResponseEntity<Slice<PersonalProductDto>> findMyFavoriteProductList(@ApiIgnore @LoginUser User user, Pageable pageable) {
-        return ResponseEntity.ok(personalFavoriteService.findMyFavoriteProductList(user, pageable));
+    public ResponseEntity<List<PersonalProductDto>> findMyFavoriteProductList(@ApiIgnore @LoginUser User user) {
+        return ResponseEntity.ok(personalFavoriteService.findMyFavoriteProductList(user));
     }
 
     // 내가 찜한 작가 목록
     @ApiOperation(notes = "내가 찜한 작가 리스트", value = "내가 찜한 작가 리스트(무한 스크롤)")
     @GetMapping("/myartist")
-    public ResponseEntity<Slice<ArtistSimpleDto>> findMyArtistList(@ApiIgnore @LoginUser User user, Pageable pageable) {
-        return ResponseEntity.ok(artistFavoriteService.findMyArtistList(user, pageable));
+    public ResponseEntity<List<ArtistSimpleDto>> findMyArtistList(@ApiIgnore @LoginUser User user) {
+        return ResponseEntity.ok(artistFavoriteService.findMyArtistList(user));
     }
 
     // 카카오 리다이렉트 url 인가 코드 받아오기 + 로그인 처리(백엔드 테스트용)
