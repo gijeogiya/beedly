@@ -19,9 +19,9 @@ spring:
     type: redis
   redis:
     # 로컬 환경
-#    host: localhost
+    host: localhost
     # 도커 환경
-    host: 172.17.0.3
+#    host: 172.17.0.3
 
     port: 6379
   devtools:
