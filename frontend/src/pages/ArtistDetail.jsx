@@ -225,111 +225,70 @@ export default function ArtistDetailPage() {
         (err) => {
           console.log(err);
         }
-      ).then(
-
-        getStandByProductByArtist(artistId, (res) => {
-          setStandByProductList(res.data.content);
-          console.log(res);
-        }, (err) => {
-          console.log(err);
-        })
-      ).then(
-
-        getSuccessProductByArtist(artistId, (res) => {
-          setSuccessProductList(res.data.content);
-          console.log(res);
-          setloading(false);
-        }, (err) => {
-          console.log(err);
-        })
       )
+
+      getStandByProductByArtist(artistId, (res) => {
+        setStandByProductList(res.data.content);
+        console.log(res);
+      }, (err) => {
+        console.log(err);
+      })
+
+
+      getSuccessProductByArtist(artistId, (res) => {
+        setSuccessProductList(res.data.content);
+        console.log(res);
+      }, (err) => {
+        console.log(err);
+      })
+      setloading(false);
+
     }
   }, [loading]);
   return (
     <div>
-      {loading ? (
-        <div></div>
-      ) : (
-        <div>
-          {/* Bar부분 */}
-          <BarWarp>
-            <BackButton onClick={goBack}>
-              <img src={BackButtonImage} />
-            </BackButton>
-            <button
-              onClick={(e) => addFavoriteArtist(e)}
-              style={{ border: "0", backgroundColor: "white" }}
-            >
-              {isMyFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-              <div>{favoriteCount}</div>
-            </button>
-          </BarWarp>
-          <div
-            style={{
-              borderBottom: "1px solid #ebebeb",
-              paddingBottom: "20px",
-            }}
+
+      <div>
+        {/* Bar부분 */}
+        <BarWarp>
+          <BackButton onClick={goBack}>
+            <img src={BackButtonImage} />
+          </BackButton>
+          <button
+            onClick={(e) => addFavoriteArtist(e)}
+            style={{ border: "0", backgroundColor: "white" }}
           >
-            <ArtistDetailMainInf>
-              <StyledCardArtistImgFrame>
-                <StyledCardArtistImg src={artistProfileImg} />
-                {userId === User.userId ? (
-                  <div
-                    style={{
-                      position: "absolute",
-                      width: "30px",
-                      height: "30px",
-                      paddingLeft: "65px",
-                      paddingTop: "60px",
-                    }}
-                  >
-                    <label htmlFor="image">
-                      <img src={CameraIcon} alt="프로필 편집" />
-                    </label>
-                    <input
-                      id="image"
-                      type="file"
-                      accept="image/jpg,image/png,image/jpeg,image/gif"
-                      onChange={(e) => WantUpdateProfile(e)}
-                      style={{
-                        display: "none",
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <div style={{ display: "none" }}></div>
-                )}
-              </StyledCardArtistImgFrame>
-              <FlexBox Row_SB style={{ minWidth: "65vw" }}>
-                <div
-                  style={{
-                    fontSize: "16px",
-                    fontWeight: "700",
-                    padding: "46px 0 0 14px",
-                  }}
-                >
-                  {userNickname}
-                </div>
-              </FlexBox>
-            </ArtistDetailMainInf>
-            <div>
+            {isMyFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+            <div>{favoriteCount}</div>
+          </button>
+        </BarWarp>
+        <div
+          style={{
+            borderBottom: "1px solid #ebebeb",
+            paddingBottom: "20px",
+          }}
+        >
+          <ArtistDetailMainInf>
+            <StyledCardArtistImgFrame>
+              <StyledCardArtistImg src={artistProfileImg} />
               {userId === User.userId ? (
                 <div
                   style={{
                     position: "absolute",
-                    paddingLeft: "90%",
-                    paddingTop: "35%",
+                    width: "30px",
+                    height: "30px",
+                    paddingLeft: "65px",
+                    paddingTop: "60px",
                   }}
                 >
-                  <label htmlFor="bgimage">
-                    <img src={CameraIcon} alt="배경이미지 편집" /> :{" "}
-                    <div style={{ display: "none" }}></div>
+                  <label htmlFor="image">
+                    <img src={CameraIcon} alt="프로필 편집" />
                   </label>
                   <input
-                    id="bgimage"
+                    id="image"
                     type="file"
                     accept="image/jpg,image/png,image/jpeg,image/gif"
-                    onChange={(e) => WantUpdateBgImg(e)}
+                    onChange={(e) => WantUpdateProfile(e)}
                     style={{
                       display: "none",
                     }}
@@ -338,82 +297,120 @@ export default function ArtistDetailPage() {
               ) : (
                 <div style={{ display: "none" }}></div>
               )}
-              <ArtistDetailBackgroundImg src={artistBgImg} />
-            </div>
-            <ArtistDetailSubInf>
-              {WantUpdateDesc ? (
-                <textarea
-                  onChange={(e) => {
-                    setUpdateDesc(e.target.value);
-                  }}
-                  value={UpdateDesc}
+            </StyledCardArtistImgFrame>
+            <FlexBox Row_SB style={{ minWidth: "65vw" }}>
+              <div
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "700",
+                  padding: "46px 0 0 14px",
+                }}
+              >
+                {userNickname}
+              </div>
+            </FlexBox>
+          </ArtistDetailMainInf>
+          <div>
+            {userId === User.userId ? (
+              <div
+                style={{
+                  position: "absolute",
+                  paddingLeft: "90%",
+                  paddingTop: "35%",
+                }}
+              >
+                <label htmlFor="bgimage">
+                  <img src={CameraIcon} alt="배경이미지 편집" /> :{" "}
+                  <div style={{ display: "none" }}></div>
+                </label>
+                <input
+                  id="bgimage"
+                  type="file"
+                  accept="image/jpg,image/png,image/jpeg,image/gif"
+                  onChange={(e) => WantUpdateBgImg(e)}
                   style={{
-                    marginRight: "10px",
-                    minHeight: "6vh",
-                    minWidth: "65vw",
-                    border: "2px solid black",
-                    padding: "10px",
+                    display: "none",
                   }}
                 />
+              </div>
+            ) : (
+              <div style={{ display: "none" }}></div>
+            )}
+            <ArtistDetailBackgroundImg src={artistBgImg} />
+          </div>
+          <ArtistDetailSubInf>
+            {WantUpdateDesc ? (
+              <textarea
+                onChange={(e) => {
+                  setUpdateDesc(e.target.value);
+                }}
+                value={UpdateDesc}
+                style={{
+                  marginRight: "10px",
+                  minHeight: "6vh",
+                  minWidth: "65vw",
+                  border: "2px solid black",
+                  padding: "10px",
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  maxWidth: "300px",
+                  fontSize: "14px",
+                  padding: "10px",
+                }}
+              >
+                {artistDesc}
+              </div>
+            )}
+
+            <FlexBox MainContent2>
+              {userId === User.userId && !WantUpdateDesc ? (
+                <img
+                  src={EditIcon}
+                  alt="자기소개 편집"
+                  style={{ width: "18px", height: "18px" }}
+                  onClick={(e) => setWantUpdateDesc(true)}
+                />
               ) : (
-                <div
+                <div style={{ display: "none" }}></div>
+              )}
+              {WantUpdateDesc ? (
+                <FlexBox
                   style={{
-                    maxWidth: "300px",
-                    fontSize: "14px",
-                    padding: "10px",
+                    flexDirection: "column",
+                    fontSize: "12px",
+                    fontWeight: "bold",
+                    minWidth: "55px",
                   }}
                 >
-                  {artistDesc}
-                </div>
-              )}
-
-              <FlexBox MainContent2>
-                {userId === User.userId && !WantUpdateDesc ? (
-                  <img
-                    src={EditIcon}
-                    alt="자기소개 편집"
-                    style={{ width: "18px", height: "18px" }}
-                    onClick={(e) => setWantUpdateDesc(true)}
-                  />
-                ) : (
-                  <div style={{ display: "none" }}></div>
-                )}
-                {WantUpdateDesc ? (
-                  <FlexBox
-                    style={{
-                      flexDirection: "column",
-                      fontSize: "12px",
-                      fontWeight: "bold",
-                      minWidth: "55px",
+                  <Button XsmallBlack onClick={(e) => SendUpdateDesc()}>
+                    저장
+                  </Button>
+                  <Button
+                    XsmallBlack
+                    onClick={(e) => {
+                      setWantUpdateDesc(false);
+                      setUpdateDesc(artistDesc);
                     }}
                   >
-                    <Button XsmallBlack onClick={(e) => SendUpdateDesc()}>
-                      저장
-                    </Button>
-                    <Button
-                      XsmallBlack
-                      onClick={(e) => {
-                        setWantUpdateDesc(false);
-                        setUpdateDesc(artistDesc);
-                      }}
-                    >
-                      취소
-                    </Button>
-                  </FlexBox>
-                ) : (
-                  <div></div>
-                )}
-              </FlexBox>
-            </ArtistDetailSubInf>
-          </div>
-          <StyledTableTitle>진행 중인 작품</StyledTableTitle>
-          {!loading && <ArtistDetailProductOngoingTable list={standByProductList} />}
-
-          <StyledTableTitle>경매가 종료된 작품</StyledTableTitle>
-          {!loading && <ArtistDetailProductClosedTable list={successProductList} />}
-
+                    취소
+                  </Button>
+                </FlexBox>
+              ) : (
+                <div></div>
+              )}
+            </FlexBox>
+          </ArtistDetailSubInf>
         </div>
-      )}
+        <StyledTableTitle>진행 중인 작품</StyledTableTitle>
+        {!loading && <ArtistDetailProductOngoingTable list={standByProductList} />}
+
+        <StyledTableTitle>경매가 종료된 작품</StyledTableTitle>
+        {!loading && <ArtistDetailProductClosedTable list={successProductList} />}
+
+      </div>
     </div>
   );
 }
