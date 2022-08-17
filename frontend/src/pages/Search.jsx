@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { Spinner } from "grommet";
 import SearchingIcon from "../assets/img/SearchingIcon.svg";
 import XIcon from "../assets/img/XIcon.svg";
+import { getSearchTagListAPI } from "../utils/apis/SearchTagAPI";
 
 const StyledTableTitle = styled.div`
   font-size: 16px;
@@ -81,6 +82,12 @@ export default function SearchPage() {
       }
       //추천 검색어 리스트 가져오기
       //인기많은 작가, 인기많은 작품, 모르겠다~
+      getSearchTagListAPI((res) => {
+        console.log(res);
+        setRecommendSearchList(res.data);
+      }, (err) => {
+        console.log(err);
+      })
       setloading(false);
     }
   }, [loading]);
@@ -130,7 +137,7 @@ export default function SearchPage() {
       <StyledTableTitle>최근 검색어</StyledTableTitle>
       <RecentlyKeywordTable list={searchList} />
       <StyledTableTitle>추천 검색어</StyledTableTitle>
-      <RecommendKeywordTable />
+      <RecommendKeywordTable list={RecommendSearchList} />
       <StyledTableTitle>Size Pick!</StyledTableTitle>
       <SizePickCardTable>
         <SizePickCard

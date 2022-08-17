@@ -8,7 +8,7 @@ import { SearchBar } from "../components/SearchBar";
 import { FlexBox } from "../components/UserStyled";
 
 import { getProductListBySizeApi } from "../utils/apis/PersonalProductAPI";
-import { getProductByArtistNickNameApi, getProductByProductNameApi } from "../utils/apis/ProductSearchAPI";
+import { getProductByArtistNickNameApi, getProductByProductNameApi, getProductByTagApi } from "../utils/apis/ProductSearchAPI";
 
 const StyledTableTitle = styled.div`
   font-size: 16px;
@@ -89,6 +89,14 @@ export default function SearchResult() {
       } else if (searchCategory === "size") {
         getProductListBySizeApi(keyword, "0", "20", "", (res) => {
           console.log(res);
+          setSearchProductList(res.data.content);
+        }, (err) => {
+          console.log(err);
+        })
+      } else if (searchCategory === "tag") {
+        getProductByTagApi("0", "20", "", keyword, (res) => {
+          console.log(res);
+          setSearchProductList(res.data.content);
         }, (err) => {
           console.log(err);
         })
@@ -116,11 +124,11 @@ export default function SearchResult() {
       <StyledTableTitle>Product</StyledTableTitle>
       {console.log(searchProductList)}
       {!loading && searchProductList.length !== 0 ? (
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <div style={{ display: "flex", justifyContent: "center", padding: "20px 0px", }}>
           <ProductTable>
             {searchProductList.map((product, idx) => (
-              <div key={idx} onClick={(e) => GoProductDetail(product.id)}>
-                <HalfProductCard value={product.id} />
+              <div key={idx} onClick={(e) => GoProductDetail(product.id)} style={{ padding: "10px 0px" }}>
+                <HalfProductCard product={product} />
               </div>
             ))}
           </ProductTable>
