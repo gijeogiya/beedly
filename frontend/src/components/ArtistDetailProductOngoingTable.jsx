@@ -22,12 +22,12 @@ export function ArtistDetailProductOngoingTable({ list }) {
       }}
     >
       <ProductTable>
-        {list.map((product, idx) =>
+        {list !== undefined ? list.map((product, idx) =>
           <div key={idx}>
 
             <HalfProductCard product={product} />
           </div>
-        )}
+        ) : <div></div>}
       </ProductTable>
     </div>
   );
