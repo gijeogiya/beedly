@@ -14,12 +14,20 @@ import ChatComponent from "../components/openvidu/components/chat/ChatComponent"
 import Button from "../components/Button";
 import { useRef } from "react";
 import { createRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import {
+  getAuctionProduct,
+  getSpecialAuctionProduct,
+  postAuctionFinished,
+} from "../utils/apis/AuctionAPI";
+import { moneyFormat } from "../stores/modules/basicInfo";
+import SockJS from "sockjs-client";
+import * as StompJs from "@stomp/stompjs";
 
 const MainContent = styled.img`
   src: ${(props) => props.src || ""};
@@ -101,10 +109,6 @@ const ProductBox = styled.div`
   margin: 0 auto;
 `;
 
-const moneyFormat = (number) => {
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-
 const AuctionInfoDiv = styled.div`
   display: flex;
   justify-content: space-between;
@@ -160,11 +164,12 @@ function ProductFrame({
   callPrice,
   visible,
   grade,
-  f,
+  bidProduct,
   open,
   handleClose,
   handleAuctionExit,
   handleClickOpen,
+  isSold,
 }) {
   return (
     <ProductContainer>
@@ -222,13 +227,23 @@ function ProductFrame({
       </ProductBox>
       <ButtonContainer>
         {grade !== undefined && grade === "buyer" ? (
-          <BidButton disabled={visible} visible={visible} onClick={f}>
-            {visible ? "입찰완료" : "입찰하기"}
-          </BidButton>
+          isSold ? (
+            <BidButton disabled visible={visible}>
+              {`낙찰완료`}
+            </BidButton>
+          ) : (
+            <BidButton
+              disabled={visible}
+              visible={visible}
+              onClick={bidProduct}
+            >
+              {visible ? "입찰완료" : "입찰하기"}
+            </BidButton>
+          )
         ) : (
           <Box justify="center" alignContent="center" align="center">
             <Button MideumRed onClick={handleClickOpen}>
-              종료하기
+              {isSold ? "종료하기" : "낙찰하기"}
             </Button>
             <Dialog
               open={open}
@@ -237,11 +252,13 @@ function ProductFrame({
               aria-describedby="alert-dialog-description"
             >
               <DialogTitle id="alert-dialog-title">
-                {"경매 종료하기"}
+                {isSold ? "경매 종료하기" : "경매 낙찰하기"}
               </DialogTitle>
               <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                  정말 경매를 종료하시겠습니까?
+                  {isSold
+                    ? "정말 경매를 종료하시겠습니까?"
+                    : "정말 낙찰하시겠습니까?"}
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
@@ -249,7 +266,7 @@ function ProductFrame({
                   취소
                 </Button>
                 <Button SmallBlack onClick={handleAuctionExit} autoFocus>
-                  경매 종료
+                  {isSold ? "경매 종료" : "경매 낙찰"}
                 </Button>
               </DialogActions>
             </Dialog>
@@ -303,8 +320,6 @@ const ChatFrame = styled.div`
   height: 100%;
 `;
 
-const ChattingDiv = styled.div``;
-
 const ChatBox = ({ localUser, grade }) => {
   return (
     <ChatFrame>
@@ -329,13 +344,17 @@ const Conatainer = styled(Carousel)`
 function BottomUi({
   bidInfo,
   visible,
-  f,
+  bidProduct,
   localUser,
   grade,
   handleClose,
   handleAuctionExit,
   open,
   handleClickOpen,
+  currentPrice,
+  callPrice,
+  currentBidder,
+  isSold,
 }) {
   return (
     <Conatainer controls="arrows">
@@ -347,16 +366,17 @@ function BottomUi({
         category={bidInfo.category}
         artist={bidInfo.artist}
         productSrc={bidInfo.productSrc}
-        currentBidder={bidInfo.currentBidder}
-        currentPrice={bidInfo.currentPrice}
-        callPrice={bidInfo.callPrice}
+        currentBidder={currentBidder}
+        currentPrice={currentPrice}
+        callPrice={callPrice}
         visible={visible}
         grade={grade}
-        f={f}
+        bidProduct={bidProduct}
         open={open}
         handleClose={handleClose}
         handleAuctionExit={handleAuctionExit}
         handleClickOpen={handleClickOpen}
+        isSold={isSold}
       ></ProductFrame>
     </Conatainer>
   );
@@ -401,35 +421,279 @@ function ExitButton({ handleClickOpen, handleClose, handleAuctionExit, open }) {
   );
 }
 
-export const Auction = ({ grade }) => {
+var client = null;
+
+export const Auction = () => {
+  const ref = useRef();
+
+  const location = useLocation();
+  const { grade } = location.state;
+  const { auctionId } = location.state;
+  const { userName } = location.state;
+  const { auctionType } = location.state;
+  const [loading, setLoading] = useState(true);
+  // console.log(location.state);
   const [visible, setVisible] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
   const [isCalled, setIsCalled] = useState(false);
+  const [isSold, setIsSold] = useState(false);
   const [initPrice, setInitPrice] = useState(0);
   const [open, setOpen] = useState(false);
+  const [currentBidder, setCurrentBidder] = useState("없음");
+  const [currentPrice, setCurrentPrice] = useState("");
+  const [callPrice, setCallPrice] = useState("");
+  const [productId, setProductId] = useState("");
+  const [products, setProducts] = useState([]);
+  const [currentProductIndex, setCurrentProductIndex] = useState();
+  const navigate = useNavigate();
   const [bidInfo, setBidInfo] = useState({
     title: "",
     category: "",
     artist: "",
     productSrc: "",
-    currentBidder: "",
-    currentPrice: 0,
-    callPrice: 0,
   });
   const [localUser, setLocalUser] = useState(undefined);
 
-  useEffect(() => {
-    setBidInfo({
-      title: "Ice Age",
-      category: "회화",
-      artist: "무느스크 스키오스키",
-      productSrc: product1,
-      currentBidder: "이아현",
-      currentPrice: 310000,
-      callPrice: 10000,
+  const handleBid = () => {};
+
+  const subscribe = () => {
+    if (client != null) {
+      console.log("subs!!!!!!!!!");
+      //상시경매의 경우
+      if (auctionType === "P") {
+        client.subscribe("/sub/auction/personal/" + auctionId, (response) => {
+          console.log("sub log : ", response);
+          const data = JSON.parse(response.body);
+          if (data.finished === undefined) {
+            if (data.isSold === null) {
+              console.log("subs log !!! undefined!!!");
+              setCurrentPrice((prev) =>
+                data.bidPrice !== null ? (prev = data.bidPrice) : prev
+              );
+              setCurrentBidder((prev) =>
+                data.userName !== null ? (prev = data.userName) : prev
+              );
+
+              if (data.userName === userName)
+                setIsSuccess((prev) => (prev = true));
+              else setIsSuccess((prev) => (prev = false));
+            } else if (data.isSold === true) {
+              //낙찰
+              console.log("낙찰 데이터 : ", data);
+              setIsSold((prev) => (prev = true));
+            } else if (data.isSold === false) {
+              //처음 입장
+              setCurrentPrice((prev) =>
+                data.bidPrice !== null ? (prev = data.bidPrice) : prev
+              );
+              setCurrentBidder((prev) =>
+                data.userName !== null ? (prev = data.userName) : prev
+              );
+            }
+          } else if (data.finished) {
+            console.log("경매 종료!!! ", userName, data.userName);
+            //경매 종료
+            if (userName === data.userName) {
+              //낙찰된 사람
+              alert("낙찰을 축하합니다!");
+              client.deactivate();
+              ref.current.handleUnmount(data.soldId);
+              // navigate("/purchase", {
+              //   state: {
+              //     auctionType: "P",
+              //     soldId: data.soldId,
+              //   },
+              // });
+            } else {
+              alert("경매가 종료되었습니다.");
+              client.deactivate();
+              ref.current.handleUnmount(null);
+            }
+          }
+        });
+      }
+      // 기획전 경매의 경우
+      else if (auctionType === "S") {
+        client.subscribe("/sub/auction/special/" + auctionId, (response) => {
+          console.log("sub log : ", response);
+          const data = JSON.parse(response.body);
+          if (data.isNextBid) {
+            console.log("다음 경매 시작!!!");
+            setBidInfo({
+              title: products[currentProductIndex].productName,
+              category: "회화",
+              artist: products[currentProductIndex].artistName,
+              productSrc: products[currentProductIndex].productImages[0],
+            });
+            setCurrentPrice(products[currentProductIndex].startPrice);
+            setInitPrice(products[currentProductIndex].startPrice);
+            setProductId(products[currentProductIndex].productId);
+            setCallPrice(
+              parseInt(products[currentProductIndex].startPrice / 20)
+            );
+          }
+          if (data.finished === undefined) {
+            if (data.isSold === null) {
+              console.log("subs log !!! undefined!!!");
+              setCurrentPrice((prev) =>
+                data.bidPrice !== null ? (prev = data.bidPrice) : prev
+              );
+              setCurrentBidder((prev) =>
+                data.userName !== null ? (prev = data.userName) : prev
+              );
+
+              if (data.userName === userName)
+                setIsSuccess((prev) => (prev = true));
+              else setIsSuccess((prev) => (prev = false));
+            } else if (data.isSold === true) {
+              //낙찰
+              console.log("낙찰 데이터 : ", data);
+              setIsSold((prev) => (prev = true));
+              setCurrentProductIndex((prev) => (prev = data.curSProdIdx));
+            } else if (data.isSold === false) {
+              //처음 입장
+              setCurrentPrice((prev) =>
+                data.bidPrice !== null ? (prev = data.bidPrice) : prev
+              );
+              setCurrentBidder((prev) =>
+                data.userName !== null ? (prev = data.userName) : prev
+              );
+            }
+          } else if (data.finished) {
+            console.log("경매 종료!!! ", userName, data.userName);
+            //경매 종료
+            // if (userName === data.userName) {
+            //   //낙찰된 사람
+            //   alert("낙찰을 축하합니다!");
+            //   client.deactivate();
+            //   ref.current.handleUnmount(data.soldId);
+            //   // navigate("/purchase", {
+            //   //   state: {
+            //   //     auctionType: "P",
+            //   //     soldId: data.soldId,
+            //   //   },
+            //   // });
+            // } else {
+            alert("경매가 종료되었습니다.");
+            client.deactivate();
+            ref.current.handleUnmount(null);
+            // }
+          }
+        });
+      }
+    }
+  };
+
+  const initSocketClient = () => {
+    client = new StompJs.Client({
+      brokerURL: "wss://i7a601.p.ssafy.io/api/ws-stomp",
+      connectHeaders: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      webSocketFactory: () => {
+        return SockJS("https://i7a601.p.ssafy.io/api/ws-stomp");
+      },
+      debug: (str) => {
+        console.log("stomp debug!!!", str);
+      },
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+
+      onStompError: (frame) => {
+        // Will be invoked in case of error encountered at Broker
+        // Bad login/passcode typically will cause an error
+        // Complaint brokers will set `message` header with a brief message. Body may contain details.
+        // Compliant brokers will terminate the connection after any error
+        console.log("Broker reported error: " + frame.headers["message"]);
+        console.log("Additional details: " + frame.body);
+        // client.deactivate();
+      },
     });
-    setInitPrice(310000);
-  }, []);
+
+    client.onConnect = (frame) => {
+      console.log("client init !!! ", frame);
+      if (client != null)
+        client.publish({
+          destination:
+            auctionType === "P"
+              ? "/pub/auction/personal/product/bidding"
+              : "/pub/auction/special/product/bidding",
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+          body: JSON.stringify({
+            type: "E",
+            auctionId: auctionId,
+            productId: productId,
+          }),
+        });
+      subscribe();
+    };
+
+    client.activate();
+  };
+
+  const disConnect = () => {
+    if (client != null) {
+      if (client.connected) client.deactivate();
+    }
+  };
+
+  useEffect(() => {
+    if (loading) {
+      if (auctionType === "P") {
+        //  상시 경매일 경우
+        getAuctionProduct(
+          auctionId,
+          (response) => {
+            console.log(response);
+            setBidInfo({
+              title: response.data.productName,
+              category: "회화",
+              artist: response.data.userName,
+              productSrc: response.data.productImages[0],
+            });
+            setCurrentPrice(response.data.startPrice);
+            setInitPrice(response.data.startPrice);
+            setProductId(response.data.productId);
+            setCallPrice(parseInt(response.data.startPrice / 20));
+            setLoading(false);
+          },
+          (fail) => {
+            console.log(fail);
+          }
+        ).then(initSocketClient());
+      } else if (auctionType === "S") {
+        // 기획전 경매의 경우
+        getSpecialAuctionProduct(
+          auctionId,
+          (response) => {
+            console.log(response);
+            let data = response.data.specialAuctionResponses;
+            setProducts([...data]);
+            setCurrentProductIndex(response.data.curSProdIdx);
+            setBidInfo({
+              title: data[response.data.curSProdIdx].productName,
+              category: "회화",
+              artist: data[response.data.curSProdIdx].artistName,
+              productSrc: data[response.data.curSProdIdx].productImages[0],
+            });
+            setCurrentPrice(data[response.data.curSProdIdx].startPrice);
+            setInitPrice(data[response.data.curSProdIdx].startPrice);
+            setProductId(data[response.data.curSProdIdx].productId);
+            setCallPrice(
+              parseInt(data[response.data.curSProdIdx].startPrice / 20)
+            );
+            setLoading(false);
+          },
+          (fail) => {
+            console.log(fail);
+          }
+        ).then(initSocketClient());
+      }
+    }
+    return () => disConnect();
+  }, [loading, productId]);
+
   // const bidInfo = {
   //   title: "Ice Age",
   //   category: "회화",
@@ -446,28 +710,138 @@ export const Auction = ({ grade }) => {
       return temp;
     });
   };
-  function handleVisible() {
-    changeValue("currentPrice", 0 + bidInfo.currentPrice + bidInfo.callPrice);
-    console.log(bidInfo.currentPrice, initPrice);
-    if (!isCalled && initPrice + 30000 < bidInfo.currentPrice) {
+
+  //응찰, 응찰 성공, 응찰 실패
+  const handleVisible = () => {
+    if (client == null) return;
+    client.publish({
+      destination:
+        auctionType === "P"
+          ? "/pub/auction/personal/product/bidding"
+          : "/pub/auction/special/product/bidding",
+      headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+      body: JSON.stringify({
+        type: "B",
+        auctionId: auctionId,
+        productId: productId,
+        bidPrice: currentPrice + callPrice,
+      }),
+    });
+
+    console.log(currentPrice, initPrice);
+    if (!isCalled && parseInt(initPrice * 1.2) < currentPrice) {
       console.log("call!@@");
       setIsCalled(true);
-      changeValue(
-        "callPrice",
-        0 + bidInfo.callPrice + Math.floor(bidInfo.callPrice * 0.5)
-      );
+      setCallPrice((prev) => prev + Math.floor(prev * 0.5));
     }
     setVisible(!visible);
-  }
+  };
 
-  const ref = createRef();
-  const navigate = useNavigate();
-  function handleAuctionExit() {
-    ref.current.componentWillUnmount();
-  }
-
+  // 낙찰하기, 종료하기
+  const handleAuctionExit = () => {
+    if (grade === "seller") {
+      // 판매자일 경우에만 실행
+      // if (!client.current.connected) return;
+      if (!isSold) {
+        //낙찰 정보 퍼블리시
+        if (currentBidder === "없음") {
+          alert("입찰자가 없습니다!");
+          handleClose();
+          return;
+        }
+        client.publish({
+          destination:
+            auctionType === "P"
+              ? "/pub/auction/personal/product/bidding"
+              : "/pub/auction/special/product/bidding",
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+          body: JSON.stringify({
+            type: "SB",
+            auctionId: auctionId,
+            productId: productId,
+          }),
+        });
+        // 상시경매의 경우
+        if (auctionType === "P") {
+        }
+        //기획전 경매의 경우
+        if (auctionType === "S") {
+          setIsSold(true);
+        }
+        handleClose();
+      } else if (isSold) {
+        if (auctionType === "P") {
+          console.log("경매 종료");
+          //경매 종료하기
+          client.publish({
+            destination: "/pub/auction/personal/product/bidding",
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+            body: JSON.stringify({
+              type: "F",
+              auctionId: auctionId,
+              productId: productId,
+            }),
+          });
+          handleClose();
+          client.deactivate();
+          ref.current.handleUnmount(null);
+        } else if (auctionType === "S") {
+          console.log("작품 낙찰 후 다음 제품 넘어가기");
+          // 마지막 상품
+          if (currentProductIndex === products.length - 1) {
+            client.publish({
+              destination: "/pub/auction/special/product/bidding",
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+              body: JSON.stringify({
+                type: "F",
+                auctionId: auctionId,
+                productId: productId,
+              }),
+            });
+            handleClose();
+            client.deactivate();
+            ref.current.handleUnmount(null);
+          } else {
+            client.publish({
+              destination: "/pub/auction/special/product/bidding",
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+              body: JSON.stringify({
+                type: "NB",
+                auctionId: auctionId,
+                productId: productId,
+              }),
+            });
+            setIsSold(false);
+          }
+        }
+      }
+    } else {
+      client.deactivate();
+      ref.current.handleUnmount(null);
+    }
+  };
   const handleGoBack = () => {
     navigate(-1);
+  };
+
+  const handleGoBack2 = (success) => {
+    //낙찰페이지로 이동
+    if (success !== null)
+      navigate(`/purchase/${success}`, {
+        state: {
+          auctionType: auctionType,
+          // soldId: success,
+          productId: productId,
+        },
+      });
+    //그냥 뒤로가기
+    else navigate(-1);
   };
 
   const handleClickOpen = () => {
@@ -478,7 +852,9 @@ export const Auction = ({ grade }) => {
     setOpen(false);
   };
 
-  return (
+  return loading ? (
+    <div></div>
+  ) : (
     <div>
       {/* <MainContent src={image} /> */}
       <ErrorBoundary>
@@ -487,7 +863,11 @@ export const Auction = ({ grade }) => {
           handleGoBack={handleGoBack}
           grade={grade}
           ref={ref}
+          auctionType={auctionType}
           openviduServerUrl="https://i7a601.p.ssafy.io:8443"
+          sessionName={auctionId}
+          userName={userName}
+          handleGoBack2={handleGoBack2}
           // openviduServerUrl="https://localhost:4443"
         />
       </ErrorBoundary>
@@ -506,7 +886,7 @@ export const Auction = ({ grade }) => {
         artistSrc={artist}
       />
 
-      <PriceBox price={bidInfo.currentPrice} callPrice={bidInfo.callPrice} />
+      <PriceBox price={currentPrice} callPrice={callPrice} />
       <Grommet theme={GrommetTheme}>
         {visible && (
           <Notification
@@ -519,13 +899,17 @@ export const Auction = ({ grade }) => {
         <BottomUi
           bidInfo={bidInfo}
           visible={visible}
-          f={handleVisible}
+          bidProduct={handleVisible}
           localUser={localUser}
           grade={grade}
           handleClickOpen={handleClickOpen}
           handleClose={handleClose}
           handleAuctionExit={handleAuctionExit}
           open={open}
+          currentBidder={currentBidder}
+          currentPrice={currentPrice}
+          callPrice={callPrice}
+          isSold={isSold}
         />
       </Grommet>
     </div>

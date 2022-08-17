@@ -2,31 +2,37 @@ import axios from "axios";
 import { createAction, handleActions } from "redux-actions";
 import { useNavigate } from "react-router-dom";
 import produce from "immer";
-import { loginApi, updateUserInfoApi } from "../../utils/api";
+import { loginApi } from "../../utils/apis/UserAPI";
 
 const SET_USER = "SET_USER";
 
-const setUser = createAction(SET_USER, (user) => ({ user }));
+export const setUser = createAction(SET_USER, (user) => ({ user }));
 
 const initialState = {
   user: {
-    userEmail: "hi",
+    userName: "",
+    userNickname: "",
+    userId: "",
+    token: "",
+    userEmail: "",
+    role: "",
   },
 };
 
 // 카카오 로그인
 export const login = (code) => {
-  return function (dispatch, getState) {
+  return (dispatch, getState) => {
     loginApi(
       code,
       (res) => {
         let token = res.headers["authorization"];
-
+        console.log(res);
         dispatch(
           setUser({
-            userEmail: res.data.userEmail,
-            userEender: res.data.userGender,
-            userId: token,
+            userName: res.data.userName,
+            userNickname: res.data.userNickname,
+            userId: res.data.userId,
+            token: token,
           })
         );
 
@@ -35,53 +41,23 @@ export const login = (code) => {
           console.log("로그인 성공");
           let token = res.headers["authorization"];
           // sessionStorage("token", token);
-          dispatch(setUser);
-          window.location.href = "/";
+          // dispatch(setUser);
+          // window.location.href = "/";
+          return "/";
         } else if (res.status === 201) {
           //사용자 정보가 없을 때(회원가입 안함) -> 회원가입 페이지로 이동
           // localStorage.setItem("token", token);
-          window.location.href = "/signup1";
+          // window.location.href = "/signup1";
+          return "/signup1";
         }
       },
       (err) => {
         console.log(err);
+        return "";
       }
     );
   };
 };
-
-// export const join = (user) => {
-//   return function (dispatch, getState) {
-//     updateUserInfoApi(
-//       user,
-//       (res) => {
-//         let token = res.headers["authorization"];
-//         console.log(res);
-//         dispatch(
-//           setUser({
-//             userEmail: res.data.userEmail,
-//             userGender: res.data.userGender,
-//             userId: token,
-//           })
-//         );
-//         console.log(res.data.userEmail);
-//         console.log(res.data.userGender);
-//         if (res.status === 200) {
-//           console.log("로그인 성공");
-//           let token = res.headers["authorization"];
-//           localStorage.setItem("token", token);
-//           // window.location.href = "/";
-//         } else if (res.status === 201) {
-//           //사용자 정보가 없을 때(회원가입 안함) -> 회원가입 페이지로 이동
-//           // window.location.href = "/signup1";
-//         }
-//       },
-//       (err) => {
-//         console.log(err);
-//       }
-//     );
-//   };
-// };
 
 export default handleActions(
   {
@@ -89,7 +65,7 @@ export default handleActions(
     [SET_USER]: (state, { payload: user }) =>
       produce(state, (draft) => {
         draft.user = user;
-        console.log(draft.user);
+        // console.log(draft.user);
       }),
   },
   initialState
