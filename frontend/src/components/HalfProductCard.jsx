@@ -100,11 +100,9 @@ export function HalfProductCard({ product }) {
     const diffMin = Math.floor(diff / (1000 * 60));
     diff -= diffMin * (1000 * 60);
     const diffSec = Math.floor(diff / 1000);
-    return `${diffDays < 10 ? ` 0${diffDays}` : diffDays}일 ${
-      diffHours < 10 ? `0${diffHours}` : diffHours
-    }: ${diffMin < 10 ? `0${diffMin}` : diffMin}: ${
-      diffSec < 10 ? `0${diffSec}` : diffSec
-    }`;
+    return `${diffDays < 10 ? ` 0${diffDays}` : diffDays}일 ${diffHours < 10 ? `0${diffHours}` : diffHours
+      }: ${diffMin < 10 ? `0${diffMin}` : diffMin}: ${diffSec < 10 ? `0${diffSec}` : diffSec
+      }`;
   };
 
   return (
@@ -145,10 +143,9 @@ export function HalfProductCard({ product }) {
           <div style={{ fontSize: "12px", whiteSpace: "pre-line" }}>
             {CheckTime()
               ? `시청중`
-              : `${
-                  start.getMonth() + 1
-                }월 ${start.getDate()}일 ${start.getHours()}시 ` +
-                `${start.getMinutes()}분 예정`}
+              : `${start.getMonth() + 1
+              }월 ${start.getDate()}일 ${start.getHours()}시 ` +
+              `${start.getMinutes()}분 예정`}
           </div>
         </StyledCardInfTextFrame>
       </StyledCardInfBox>

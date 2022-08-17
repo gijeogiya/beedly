@@ -49,7 +49,7 @@ const SearchTextInput = styled.input`
 //     border-radius 8px;
 //     `;
 
-export function SearchBar() {
+export function SearchBar({ handlefunction }) {
   const Navigate = useNavigate();
   const [keyword, setKeyword] = useState("");
   const [searchList, setsearchList] = useState(
@@ -76,7 +76,7 @@ export function SearchBar() {
         JSON.parse(localStorage.getItem("SearchList")).concat([keyword])
       );
     }
-
+    handlefunction();
     Navigate("/searchResult", { state: data });
   };
   useEffect(() => {

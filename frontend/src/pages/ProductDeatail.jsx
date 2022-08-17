@@ -225,19 +225,16 @@ export const ProductDeatail = () => {
       } else if (diff / day >= 1) {
         return `${parseInt(diff / day)}일 남음`;
       } else {
-        return `${diff / hour >= 1 ? `${parseInt(diff / hour)}:` : ``}${
-          diff / minute >= 1
-            ? `${
-                parseInt((diff % hour) / minute) < 10
-                  ? `0${parseInt((diff % hour) / minute)}`
-                  : parseInt((diff % hour) / minute)
-              }:`
+        return `${diff / hour >= 1 ? `${parseInt(diff / hour)}:` : ``}${diff / minute >= 1
+            ? `${parseInt((diff % hour) / minute) < 10
+              ? `0${parseInt((diff % hour) / minute)}`
+              : parseInt((diff % hour) / minute)
+            }:`
             : ``
-        }${
-          parseInt((diff % minute) / sec) < 10
+          }${parseInt((diff % minute) / sec) < 10
             ? `0${parseInt((diff % minute) / sec)}`
             : parseInt((diff % minute) / sec)
-        }`;
+          }`;
       }
     }
   };
@@ -419,9 +416,8 @@ export const ProductDeatail = () => {
     const HHmm = date[1].split(":");
     return `${yyyyMMdd[0]}년 ${parseInt(yyyyMMdd[1])}월 ${parseInt(
       yyyyMMdd[2]
-    )}일  ${parseInt(HHmm[0])}시 ${
-      parseInt(HHmm[1]) !== 0 ? `${parseInt(HHmm[1])}분` : ``
-    } 예정`;
+    )}일  ${parseInt(HHmm[0])}시 ${parseInt(HHmm[1]) !== 0 ? `${parseInt(HHmm[1])}분` : ``
+      } 예정`;
     // return date.toString("yyyy년 MM월 dd일 HH시 mm분 예정");
   };
 
@@ -593,27 +589,27 @@ export const ProductDeatail = () => {
           )}
           {soldStatus !== "STANDBY" && (
             <Button
-              onClick={() => {}}
+              onClick={() => { }}
               BigGray={
                 User.userId !== artistId
                   ? true
                   : soldStatus === "SUCCESS"
-                  ? true
-                  : false
+                    ? true
+                    : false
               }
               BigBlack={
                 User.userId !== artistId
                   ? false
                   : soldStatus === "SUCCESS"
-                  ? false
-                  : true
+                    ? false
+                    : true
               }
               disabled={
                 User.userId !== artistId
                   ? true
                   : soldStatus === "SUCCESS"
-                  ? true
-                  : false
+                    ? true
+                    : false
               }
               children={
                 <Box direction="row" margin="xsmall" justify="center">
@@ -623,8 +619,8 @@ export const ProductDeatail = () => {
                       User.userId !== artistId
                         ? "종료된 경매 입니다."
                         : soldStatus === "SUCCESS"
-                        ? "경매 종료"
-                        : "재등록"
+                          ? "경매 종료"
+                          : "재등록"
                     }
                     color="white"
                     size="10px"

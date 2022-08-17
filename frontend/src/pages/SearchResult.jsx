@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { HorizonScrollColTable } from "../components/HorizonScrollTable";
 import { HalfProductCard } from "../components/HalfProductCard";
@@ -33,6 +33,7 @@ export default function SearchResult() {
   const [searchProductList, setSearchProductList] = useState([]);
   const [loading, setloading] = useState(true);
   const [list, setlist] = useState();
+  const Navigate = useNavigate("");
   useEffect(() => {
     if (loading) {
       if (searchCategory === "keyword") {
@@ -88,11 +89,20 @@ export default function SearchResult() {
       }
       setloading(false);
     }
-  }, [loading]);
+  }, [loading, keyword]);
+
+  const goDetail = (id) => {
+    console.log("t");
+    Navigate(`/productDetail/${id}`);
+  }
+
+  const handleSubmit = () => {
+    setloading(true);
+  }
   return (
     // 검색 후 화면
     <div style={{ paddingBottom: "40px" }}>
-      <SearchBar />
+      <SearchBar handlefunction={handleSubmit} />
       <StyledTableTitle>검색 결과</StyledTableTitle>
       <StyledTableTitle>Artist</StyledTableTitle>
       {/* <HorizonScrollColTable /> */}
@@ -102,7 +112,10 @@ export default function SearchResult() {
         <div style={{ display: "flex", justifyContent: "center" }}>
           <ProductTable>
             {searchProductList.map((product, idx) => (
-              <HalfProductCard key={idx} product={product} />
+              <div onClick={() => goDetail(product.id)}>
+
+                <HalfProductCard key={idx} product={product} />
+              </div>
             ))}
           </ProductTable>
         </div>
