@@ -34,6 +34,8 @@ import ArtistDetail from "./pages/ArtistDetail";
 import SignupAritst from "./pages/SignupArtist";
 import AdminUserManage from "./pages/AdminUserManage";
 import { SpecialAuctionDetail } from "./pages/SpecialAuctionDetail";
+import LikeArtist from "./pages/LikeArtist";
+import LikeProduct from "./pages/LikeProduct";
 
 const Layout = () => {
   // const navigate = useNavigate();
@@ -112,6 +114,8 @@ function App() {
           <Route path="/adminUserManage" element={<AdminUserManage />} />
           <Route path="/purchase/:soldId" element={<PurchaseSuccess />} />
           <Route path="/purchaseDetail/:soldId" element={<PurchaseDetail />} />
+          <Route path="/likeArtist" element={<LikeArtist />} />
+          <Route path="/likeProduct" element={<LikeProduct />} />
         </Route>
         <Route path="/personalAuction" element={<Auction />} />
         <Route path="/specialAuction" element={<Auction />} />

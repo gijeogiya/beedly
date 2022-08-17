@@ -5,7 +5,8 @@ import ArtistPng from "../assets/images/artist.png";
 import MoreImage from "../assets/images/more.png";
 import styled from "styled-components";
 import {
-  getFavoriteProduct,
+  getLikeArtist,
+  getLikeProduct,
   getPurchaseApi,
   getSaleApi,
   getUserInfoApi,
@@ -105,6 +106,8 @@ export default function MyPage() {
   const [IngPurchase, setIngPurchase] = useState();
   const [EndPurchase, setEndPurchase] = useState();
 
+  const [likeArtistCount, setlikeArtistCount] = useState();
+
   useEffect(() => {
     if (loading) {
       // 아직 로그인 된 상태가 아니라면
@@ -144,10 +147,7 @@ export default function MyPage() {
         }
 
         // 찜한 상품 조회
-        getFavoriteProduct(
-          "0",
-          "20",
-          "",
+        getLikeProduct(
           (res) => {
             console.log(res);
           },
@@ -157,7 +157,12 @@ export default function MyPage() {
         );
       }
       setLoading(false);
-      //
+      //찜한 작가 조회
+      getLikeArtist((res) => {
+        setlikeArtistCount(res.data.length);
+      }, (err) => {
+        console.log(err);
+      })
     }
   }, [loading]);
   const CheckRole = () => {
@@ -242,7 +247,7 @@ export default function MyPage() {
 
         <Box gridArea="like">
           <Sector title="관심작품" link="LikeProduct" />
-          <Sector2 title="관심작가" link="LikeArtist" />
+          <Sector2 title="관심작가" link="LikeArtist" count={likeArtistCount} />
         </Box>
       </Grid>
 
@@ -382,57 +387,7 @@ export default function MyPage() {
   );
 }
 
-// const ContainerBox = ({ title2 }) => {
-//   return (
-//     <Box
-//       direction="row"
-//       background="light-3"
-//       align="center"
-//       justify={title2 === "관심 작가" ? "center" : "evenly"}
-//       pad={{
-//         top: "10px",
-//         bottom: "10px",
-//       }}
-//       round="small"
-//       width="70vw"
-//       alignSelf="center"
-//       margin={{
-//         top: "10px",
-//         bottom: "20px",
-//       }}
-//     >
-//       <Box
-//         align="center"
-//         border={title2 === "관심 작가" ? false : "right"}
-//         pad={title2 === "관심 작가" ? {} : { right: "30px" }}
-//         alignSelf={title2 === "관심 작가" ? "center" : "stretch"}
-//         style={{ display: "flex" }}
-//       >
-//         <StyledText size="12px" text="전체"></StyledText>
-//         <StyledText
-//           weight="bold"
-//           color="#FFD100"
-//           size="12px"
-//           text="10"
-//         ></StyledText>
-//       </Box>
-//       {title2 !== "관심 작가" && (
-//         <Box align="center">
-//           <StyledText size="12px" text="진행중"></StyledText>
-//           <StyledText weight="bold" size="12px" text="10"></StyledText>
-//         </Box>
-//       )}
-//       {title2 !== "관심 작가" && (
-//         <Box align="center" pad={{ left: "30px" }}>
-//           <StyledText size="12px" text="종료"></StyledText>
-//           <StyledText weight="bold" size="12px" text="10"></StyledText>
-//         </Box>
-//       )}
-//     </Box>
-//   );
-// };
-
-const ContainerBox2 = ({ title2 }) => {
+const ContainerBox2 = ({ title2, count }) => {
   return (
     <Box
       direction="row"
@@ -461,14 +416,14 @@ const ContainerBox2 = ({ title2 }) => {
           weight="bold"
           color="#FFD100"
           size="12px"
-          text="10"
+          text={count}
         ></StyledText>
       </Box>
     </Box>
   );
 };
 
-const Sector2 = ({ title, link }) => {
+const Sector2 = ({ title, link, count }) => {
   return (
     <Box alignContent="center">
       <Box direction="row" justify="between" width="80vw">
@@ -477,7 +432,7 @@ const Sector2 = ({ title, link }) => {
           <StyledText text="더보기"></StyledText>
         </Link>
       </Box>
-      <ContainerBox2 />
+      <ContainerBox2 count={count} />
     </Box>
   );
 };
