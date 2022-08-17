@@ -14,25 +14,24 @@ export const LikeList = () => {
   };
 
   const handleData = () => {
-    if (loading)
-      getLikeProduct(
-        (res) => {
-          console.log("관심작품 ", res);
-          setProducts(res.data);
-          setLoading(false);
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
+    getLikeProduct(
+      (res) => {
+        console.log("관심작품 ", res);
+        setProducts(res.data);
+        setLoading(false);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   };
 
   useEffect(() => {
-    handleData();
+    if (loading) handleData();
     return () => {
       setLoading(false);
     };
-  });
+  }, [products]);
 
   if (loading) return <Spinner />;
   return (
