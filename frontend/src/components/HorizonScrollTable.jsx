@@ -7,7 +7,7 @@ const StyledHorizonTable = styled.div`
   overflow-y: hidden;
   white-space: nowrap;
   padding-left: 20px;
-  padding-right: 120px;
+  padding-right: 50px;
   &::-webkit-scrollbar {
     display: none;
   }

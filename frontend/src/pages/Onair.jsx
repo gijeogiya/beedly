@@ -139,13 +139,6 @@ export default function OnairPage() {
         </StyledCategoryTable>
       </nav>
       <OnairPageTable list={OnairList} />
-
-      {/* <Link to="/auctionSeller">
-        <Button SmallGray>셀러</Button>
-      </Link>
-      <Link to="/auctionBuyer">
-        <Button SmallGray>버이어</Button>
-      </Link> */}
     </div>
   );
 }
