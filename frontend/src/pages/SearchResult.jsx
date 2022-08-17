@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { HorizonScrollColTable } from "../components/HorizonScrollTable";
 import { HalfProductCard } from "../components/HalfProductCard";
 import { SearchBar } from "../components/SearchBar";
