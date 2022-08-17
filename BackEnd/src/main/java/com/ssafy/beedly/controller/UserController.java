@@ -6,6 +6,7 @@ import com.ssafy.beedly.domain.type.AuctionType;
 import com.ssafy.beedly.dto.PersonalProductDto;
 import com.ssafy.beedly.dto.artist.ArtistSimpleDto;
 import com.ssafy.beedly.dto.bid.response.AbsenteeBidResponse;
+import com.ssafy.beedly.dto.personal.product.FavoriteProductDto;
 import com.ssafy.beedly.dto.user.common.UserCreateFlag;
 import com.ssafy.beedly.dto.user.kakao.KakaoUserResponse;
 import com.ssafy.beedly.dto.user.request.UserCreateRequest;
@@ -130,7 +131,7 @@ public class UserController {
     // 내가 찜한 상품 목록
     @ApiOperation(notes = "내가 찜한 상품 리스트", value = "내가 찜한 상품 리스트(무한 스크롤)")
     @GetMapping("/myfavorite")
-    public ResponseEntity<List<PersonalProductDto>> findMyFavoriteProductList(@ApiIgnore @LoginUser User user) {
+    public ResponseEntity<List<FavoriteProductDto>> findMyFavoriteProductList(@ApiIgnore @LoginUser User user) {
         return ResponseEntity.ok(personalFavoriteService.findMyFavoriteProductList(user));
     }
 
