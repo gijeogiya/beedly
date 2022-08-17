@@ -7,7 +7,13 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { FlexBox } from "../components/UserStyled";
 import { useSelector } from "react-redux";
-import { getMyArtistList, getPurchaseApi, getUserInfoApi, getLikeProduct, getSaleApi } from "../utils/apis/UserAPI";
+import {
+  getMyArtistList,
+  getPurchaseApi,
+  getUserInfoApi,
+  getLikeProduct,
+  getSaleApi,
+} from "../utils/apis/UserAPI";
 import ArtistMan from "../assets/img/artist_man.png";
 import ArtistWoman from "../assets/img/artist_woman.png";
 import UserMan from "../assets/img/user_man.png";
@@ -25,7 +31,7 @@ const StyledCardArtistImg = styled.img`
   height: 17vw;
   object-fit: cover;
   border-radius: 50%;
-  border: 2px solid white;
+  border: 2px solid #ebebeb;
 `;
 const ContainerBox = ({ title2, Total, Ing, End }) => {
   return (
@@ -89,7 +95,12 @@ const Sector = ({ title, link, Total, Ing, End }) => {
       <Box direction="row" justify="between" width="80vw" align="end">
         <StyledText weight="bold" text={title} size="15px"></StyledText>
         <Link to={`/${link}`} style={{ textDecorationLine: "none" }}>
-          <StyledText text="더보기" size="12px" color="gray" weight="bold"></StyledText>
+          <StyledText
+            text="더보기"
+            size="12px"
+            color="gray"
+            weight="bold"
+          ></StyledText>
         </Link>
       </Box>
       <ContainerBox title2={title} Total={Total} Ing={Ing} End={End} />
@@ -229,7 +240,7 @@ export default function MyPage() {
       }
     }
     return UserMan;
-  }
+  };
   const CheckRole = () => {
     if (user.userRole === "ROLE_USER") {
       return "구매자";
@@ -243,47 +254,41 @@ export default function MyPage() {
   if (loading) return <Spinner />;
   return (
     <div>
-      <Grid
-        width="100vw"
-        justify="center"
-        margin="0 auto"
-        gap="small"
-        rows={["auto", "block"]}
-        columns={["auto", "block"]}
-        areas={[
-          ["profile"],
-          ["firstHr"],
-          ["buysold"],
-          ["secHr"],
-          ["like"],
-          ["info"],
-        ]}
-      >
+      <Box width="100vw" justify="center" margin="0 auto" gap="small">
         <Box
-          gridArea="profile"
-          direction="row"
-          pad="5px"
-          width="90vw"
-          margin={{ top: "20px" }}
+          direction="column"
+          align="center"
           justify="between"
+          style={{
+            borderBottom: "4px solid #ebebeb",
+            paddingTop: "20px",
+            paddingBottom: "20px",
+          }}
         >
           <Box direction="row" align="center">
-            <StyledCardArtistImg src={checkProfile()} margin="5px"></StyledCardArtistImg>
+            <StyledCardArtistImg
+              src={checkProfile()}
+              margin="5px"
+            ></StyledCardArtistImg>
             <Box margin="5px" width="60vw">
-              <Box direction="row" align="end" style={{ marginBottom: "5px" }} justify="center">
+              <Box
+                direction="row"
+                align="end"
+                style={{ marginBottom: "5px" }}
+                justify="center"
+              >
                 <StyledText text={user.userName} weight="bold" size="18px" />
                 <StyledText
                   style={{ marginLeft: "5px" }}
                   text={CheckRole()}
                   size="12px"
                 />
-              </Box >
-              <Box direction="row" style={{ width: "60vw" }} justify="center" >
+              </Box>
+              <Box direction="row" style={{ width: "60vw" }} justify="center">
                 <StyledText text={user.userEmail} size="14px" />
               </Box>
             </Box>
             <Box alignSelf="center">
-
               <Link to="/mypageDetail">
                 <BackButton>
                   <img src={MoreImage} alt="더보기" />
@@ -293,15 +298,14 @@ export default function MyPage() {
           </Box>
         </Box>
 
-        <StyledHr
-          gridArea="firstHr"
-          width="99vw"
-          height="2px"
-          color="lightgray"
-        />
-
         {/* 구매내역 & 판매내역 box */}
-        <Box gridArea="buysold">
+        <Box
+          direction="column"
+          align="center"
+          style={{
+            borderBottom: "4px solid #ebebeb",
+          }}
+        >
           <Sector
             title="구매내역"
             link="PurchaseList"
@@ -309,7 +313,7 @@ export default function MyPage() {
             Ing={IngPurchase}
             End={EndPurchase}
           />
-          {user.userRole === "ROLE_ARTIST" ? (
+          {user.userRole === "ROLE_USER" || "ROLE_ARTIST" ? (
             <Sector
               title="판매내역"
               link="SaleList"
@@ -321,14 +325,8 @@ export default function MyPage() {
             <div></div>
           )}
         </Box>
-        <StyledHr
-          gridArea="secHr"
-          width="99vw"
-          height="2px"
-          color="lightgray"
-        />
 
-        <Box gridArea="like" direction="column" align="center">
+        <Box direction="column" align="center">
           <Sector
             title="관심작품"
             link="LikeList"
@@ -338,7 +336,7 @@ export default function MyPage() {
           />
           <Sector2 title="관심작가" link="LikeArtist" count={favArtist} />
         </Box>
-      </Grid>
+      </Box>
 
       {/* 구매자 & 판매자가 볼수있는 button */}
       {user.userRole === ("ROLE_USER" || "ROLE_ARTIST") ? (
@@ -346,7 +344,7 @@ export default function MyPage() {
           <div
             style={{
               width: "33vw",
-              border: "2px solid #D9D9D9",
+              border: "4px solid #D9D9D9",
               textAlign: "center",
               padding: "8px",
               borderRight: "0px",
@@ -458,14 +456,14 @@ export default function MyPage() {
             }}
           >
             <Link
-              to="/adminUserManage"
+              to="/specialAuctionRegister"
               style={{
                 textDecorationLine: "none",
                 fontSize: "14px",
                 color: "#1F1D1D",
               }}
             >
-              물품조회
+              기획전 등록
             </Link>
           </div>
         </FlexBox>
@@ -518,7 +516,12 @@ const Sector2 = ({ title, link, count }) => {
       <Box direction="row" justify="between" width="80vw" align="end">
         <StyledText weight="bold" text={title} size="15px"></StyledText>
         <Link to={`/${link}`} style={{ textDecorationLine: "none" }}>
-          <StyledText text="더보기" size="12px" color="gray" weight="bold"></StyledText>
+          <StyledText
+            text="더보기"
+            size="12px"
+            color="gray"
+            weight="bold"
+          ></StyledText>
         </Link>
       </Box>
       <ContainerBox2 count={count} />

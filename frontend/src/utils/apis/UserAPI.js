@@ -43,6 +43,11 @@ const loginApi = async (code, success, fail) => {
   await instance.post(`/login?code=${code}`).then(success).catch(fail);
 };
 
+// login
+const loginDevApi = async (code, success, fail) => {
+  await instance.post(`/login/develop?code=${code}`).then(success).catch(fail);
+};
+
 // 닉네임 중복검사
 const checkNicknameApi = async (nickname, success, fail) => {
   await instance.get(`/check?nickname=${nickname}`).then(success).catch(fail);
@@ -90,4 +95,5 @@ export {
   getLikeProduct,
   getLikeArtist,
   getSaleApi,
+  loginDevApi,
 };

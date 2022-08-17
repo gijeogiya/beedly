@@ -16,12 +16,15 @@ import { getRecommendationProductApi } from "../utils/apis/UserRecommendationAPI
 import { Fab } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
-import { getOnairApi, getPersonalProductListApi, getProductListBySizeApi } from "../utils/apis/PersonalProductAPI";
+import {
+  getOnairApi,
+  getPersonalProductListApi,
+  getProductListBySizeApi,
+} from "../utils/apis/PersonalProductAPI";
 import SubBanner1 from "../assets/img/SubBanner1.png";
 import SubBanner2 from "../assets/img/SubBanner2.png";
 import { Tag } from "grommet";
-
-
+import { StyledText } from "../components/Common";
 
 const StyledTableTitle = styled.div`
   font-size: 16px;
@@ -41,7 +44,6 @@ const StyledCategoryTable = styled.div`
   display: flex;
   justify-content: center;
   padding: 10px 0;
-  border-bottom: 2px solid #ebebeb;
 `;
 
 const StyledCategoryButton = styled.button`
@@ -101,10 +103,10 @@ export default function MainPage() {
   const goSearchTag = (keyword) => {
     const data = {
       searchCategory: "tag",
-      keyword: keyword
-    }
-    Navigate('/searchResult', { state: data })
-  }
+      keyword: keyword,
+    };
+    Navigate("/searchResult", { state: data });
+  };
 
   useEffect(() => {
     if (loading) {
@@ -214,19 +216,19 @@ export default function MainPage() {
       <nav>
         <StyledCategoryTable>
           <StyledCategoryButton onClick={() => goProductList("회화")}>
-            회화
+            <StyledText text="회화" />
           </StyledCategoryButton>
           <StyledCategoryButton onClick={() => goProductList("판화")}>
-            판화
+            <StyledText text="판화" />
           </StyledCategoryButton>
           <StyledCategoryButton onClick={() => goProductList("에디션")}>
-            에디션
+            <StyledText text="에디션" />
           </StyledCategoryButton>
           <StyledCategoryButton onClick={() => goProductList("사진")}>
-            사진
+            <StyledText text="사진" />
           </StyledCategoryButton>
           <StyledCategoryButton onClick={() => goProductList("입체")}>
-            입체
+            <StyledText text="입체" />
           </StyledCategoryButton>
         </StyledCategoryTable>
       </nav>
@@ -261,10 +263,12 @@ export default function MainPage() {
           paddingTop: "20px",
         }}
       >
-        <SubBanner onClick={() => goSearchTag('수채화')}>
+        <SubBanner onClick={() => goSearchTag("수채화")}>
           <img src={SubBanner2} />
         </SubBanner>
-        <StyledTableTitle style={{ paddingTop: "20px" }}>Art For You</StyledTableTitle>
+        <StyledTableTitle style={{ paddingTop: "20px" }}>
+          Art For You
+        </StyledTableTitle>
         <StyledTableSubtitle>이런 작품은 어때요?</StyledTableSubtitle>
         <HorizonScrollRowTable list={ArtForYouList} />
       </div>
@@ -279,7 +283,7 @@ export default function MainPage() {
         <StyledTableSubtitle>신규 등록 작품</StyledTableSubtitle>
         <HorizonScrollRowTable list={NewProductList} />
       </div>
-      <SubBanner onClick={() => goSearchTag('동양화')}>
+      <SubBanner onClick={() => goSearchTag("동양화")}>
         <img src={SubBanner1} />
       </SubBanner>
       <div style={{ paddingBottom: "20px", paddingTop: "20px" }}>
