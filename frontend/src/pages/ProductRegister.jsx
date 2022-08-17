@@ -1,4 +1,4 @@
-import { Box, FileInput, Grid, Grommet, Select } from "grommet";
+import { Box, FileInput, Grid, Grommet } from "grommet";
 import React, { forwardRef, useState } from "react";
 import { useEffect } from "react";
 import { StyledText } from "../components/Common";
@@ -16,9 +16,12 @@ import Button from "../components/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import CloseButton from "../assets/images/close.png";
-
+import ImInput from "../assets/icons/imageInput.svg";
 import "codemirror-colorpicker/dist/codemirror-colorpicker.css";
 import { Color, ColorPicker } from "codemirror-colorpicker";
 import {
@@ -155,17 +158,46 @@ const Preview = ({ src }) => {
 
 const ImageBtn = styled.img`
   background: #fff;
-  font-weight: 500;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin-right: 10px;
   &:hover {
-    background: rgb(77, 77, 77);
     color: #fff;
   }
 `;
+const ImageInput = ({ handleImageUpload }) => {
+  return (
+    <Box width="100%">
+      <label
+        htmlFor="image"
+        style={{
+          display: "flex",
+          alignContent: "space-between",
+        }}
+      >
+        <ImageBtn src={ImInput} />
+        <Box direction="row" justify="between" width="90%">
+          <StyledText size={titleSize} weight="bold" text="사진 등록" />
+          <StyledText
+            size="10px"
+            color="lightgray"
+            text="최대 3장"
+            alignSelf="end"
+          />
+        </Box>
+      </label>
+      <input
+        id="image"
+        type="file"
+        multiple
+        accept="image/jpg,image/png,image/jpeg,image/gif"
+        onChange={handleImageUpload}
+        style={{
+          display: "none",
+        }}
+      />
+    </Box>
+  );
+};
 
 export const ProductRegister = () => {
   const location = useLocation();
@@ -184,6 +216,7 @@ export const ProductRegister = () => {
   const [tags, setTags] = useState([]);
   const [select, setSelect] = useState([]);
   const [open, setOpen] = useState(false);
+  const [openFail, setOpenFail] = useState(false);
   const [paletteColors, setPaletteColors] = useState([]);
   const [saturation, setSaturation] = useState();
   const [brightness, setBrightness] = useState();
@@ -277,19 +310,19 @@ export const ProductRegister = () => {
     return () => setLoading(false);
   }, [saturation, temperature, brightness, prevs]);
 
-  const handleTags = (tagNames) => {
-    console.log(tagNames);
-    console.log(tags);
-    for (let i = 0; i < tagNames.length; i++) {
-      for (let j = 0; j < tags.length; j++) {
-        if (tags[j].id === tagNames[i].id) {
-          console.log(tags[j]);
-          setSelect([...select, tags[j].id]);
-        }
-      }
-    }
-    console.log(select);
-  };
+  // const handleTags = (tagNames) => {
+  //   console.log(tagNames);
+  //   console.log(tags);
+  //   for (let i = 0; i < tagNames.length; i++) {
+  //     for (let j = 0; j < tags.length; j++) {
+  //       if (tags[j].id === tagNames[i].id) {
+  //         console.log(tags[j]);
+  //         setSelect([...select, tags[j].id]);
+  //       }
+  //     }
+  //   }
+  //   console.log(select);
+  // };
 
   const urlToFile = (urls) => {
     let arr = [];
@@ -361,41 +394,6 @@ export const ProductRegister = () => {
   //   }
   // };
 
-  const ImageInput = ({ handleImageUpload }) => {
-    return (
-      <Box width="100%">
-        <label
-          htmlFor="image"
-          style={{
-            display: "flex",
-            alignContent: "space-between",
-          }}
-        >
-          <ImageBtn src={ImageInputPic} />
-          <Box direction="row" justify="between" width="90%">
-            <StyledText size={titleSize} weight="bold" text="사진 등록" />
-            <StyledText
-              size="10px"
-              color="lightgray"
-              text="최대 3장"
-              alignSelf="end"
-            />
-          </Box>
-        </label>
-        <input
-          id="image"
-          type="file"
-          multiple
-          accept="image/jpg,image/png,image/jpeg,image/gif"
-          onChange={handleImageUpload}
-          style={{
-            display: "none",
-          }}
-        />
-      </Box>
-    );
-  };
-
   const handleImageUpload = (e) => {
     const fileArr = e.target.files;
 
@@ -418,44 +416,49 @@ export const ProductRegister = () => {
     }
   };
 
-  const fileToUrlFile = (arr) => {
-    let fileURLs = [];
-    let files = [];
-    let file;
-    console.log("convert : ", arr);
-    for (let i = 0; i < arr.length; i++) {
-      file = arr[i];
-      files[i] = file;
-      let reader = new FileReader();
-      reader.onload = () => {
-        // console.log(reader.result);
-        fileURLs[i] = reader.result;
-        setPrevs([...fileURLs]);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  // const fileToUrlFile = (arr) => {
+  //   let fileURLs = [];
+  //   let files = [];
+  //   let file;
+  //   console.log("convert : ", arr);
+  //   for (let i = 0; i < arr.length; i++) {
+  //     file = arr[i];
+  //     files[i] = file;
+  //     let reader = new FileReader();
+  //     reader.onload = () => {
+  //       // console.log(reader.result);
+  //       fileURLs[i] = reader.result;
+  //       setPrevs([...fileURLs]);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
   const handleClickRegister = () => {
-    if (productId) {
-      console.log("수정");
-      let prev = productImages[0];
-      let reader = new FileReader();
-      reader.onload = () => {
-        // console.log(reader.result);
-        prev = reader.result;
-        reader.readAsDataURL(prev);
-      };
-      setColor(prev);
-      setOpen(true);
-    } else {
-      setColor(prevs[0]);
-      setOpen(true);
+    if (isValied())
+      if (productId) {
+        console.log("수정");
+        let prev = productImages[0];
+        let reader = new FileReader();
+        reader.onload = () => {
+          // console.log(reader.result);
+          prev = reader.result;
+          reader.readAsDataURL(prev);
+        };
+        setColor(prev);
+        setOpen(true);
+      } else {
+        setColor(prevs[0]);
+        setOpen(true);
+      }
+    else {
+      setOpenFail(true);
     }
   };
 
   const handleClose = () => {
     setOpen(false);
+    setOpenFail(false);
   };
 
   const setColor = (url) => {
@@ -559,6 +562,24 @@ export const ProductRegister = () => {
     navigate(-1);
   };
 
+  const handleTitle = (text) => {
+    //  console.log(text);
+    const MAX_LENGTH = 50;
+    if (text.length <= MAX_LENGTH) setProductName(text);
+  };
+
+  // const handleSubTitle = (text) => {
+  //   //  console.log(text);
+  //   const MAX_LENGTH = 50;
+  //   if (text.length <= MAX_LENGTH) setSubTitle(text);
+  // };
+
+  const handleText = (text) => {
+    //  console.log(text);
+    const MAX_LENGTH = 300;
+    if (text.length <= MAX_LENGTH) setProductDesc(text);
+  };
+
   const registerProduct = async () => {
     // setColor(prevs[0]);
     if (isValied()) {
@@ -637,7 +658,6 @@ export const ProductRegister = () => {
         saturation,
         temperature
       );
-      alert("모든 정보를 입력하세요.");
     }
   };
 
@@ -656,7 +676,7 @@ export const ProductRegister = () => {
                 placeholder="작품명을 입력하세요."
                 value={productName}
                 onChange={(e) => {
-                  setProductName(e.target.value);
+                  handleTitle(e.target.value);
                 }}
               />
             </Box>
@@ -666,7 +686,7 @@ export const ProductRegister = () => {
               <StyledText size={titleSize} weight="bold" text="카테고리" />
             </Box>
             <Box width="medium" direction="row" justify="end">
-              <Select
+              {/* <Select
                 size="10px"
                 labelKey="label"
                 valueKey={{ key: "value", reduce: true }}
@@ -676,7 +696,25 @@ export const ProductRegister = () => {
                 onChange={({ value: nextValue }) => {
                   setCategory(nextValue);
                 }}
-              />
+              /> */}
+              <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel id="category">카테고리</InputLabel>
+                <Select
+                  labelId="category"
+                  id="category-select"
+                  value={category}
+                  label="카테고리"
+                  onChange={(e) => {
+                    setCategory(e.target.value);
+                  }}
+                >
+                  {Category.map((cat, idx) => (
+                    <MenuItem key={idx} value={cat.value}>
+                      {cat.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Box>
           </Box>
           <Box margin="small" direction="row">
@@ -690,7 +728,8 @@ export const ProductRegister = () => {
                 placeholder="경매 시작가를 입력하세요."
                 value={startPrice}
                 onChange={(e) => {
-                  setStartPrice(e.target.value);
+                  const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
+                  setStartPrice(onlyNumber);
                 }}
               />
             </Box>
@@ -705,7 +744,14 @@ export const ProductRegister = () => {
               color="red"
             />
           </Box>
-          <Box margin="small" justify="end" direction="row">
+          <Box
+            margin={{
+              vertical: "large",
+              horizontal: "small",
+            }}
+            justify="end"
+            direction="row"
+          >
             <Box width="small" justify="center">
               <StyledText
                 size={titleSize}
@@ -737,7 +783,8 @@ export const ProductRegister = () => {
                   Thin
                   value={width}
                   onChange={(e) => {
-                    setWidth(e.target.value);
+                    const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
+                    setWidth(onlyNumber);
                   }}
                 />
               </Box>
@@ -754,7 +801,8 @@ export const ProductRegister = () => {
                   Thin
                   value={height}
                   onChange={(e) => {
-                    setHeight(e.target.value);
+                    const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
+                    setHeight(onlyNumber);
                   }}
                 />
               </Box>
@@ -771,7 +819,8 @@ export const ProductRegister = () => {
                   Thin
                   value={depth}
                   onChange={(e) => {
-                    setDepth(e.target.value);
+                    const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
+                    setDepth(onlyNumber);
                   }}
                 />
               </Box>
@@ -783,9 +832,8 @@ export const ProductRegister = () => {
           <Box margin="small">
             <StyledText text="작품 설명" size={titleSize} weight="bold" />
             <STextArea
-              placeholder="작가님이 작품에 대해 하고싶은 
-            이야기들을 작성해주세요"
-              onChange={(e) => setProductDesc(e.target.value)}
+              placeholder="작가님이 작품에 대해 하고싶은 이야기들을 작성해주세요"
+              onChange={(e) => handleText(e.target.value)}
               value={productDesc}
             />
             <Box justify="end" direction="row">
@@ -913,6 +961,40 @@ export const ProductRegister = () => {
                     MediumBlack
                     onClick={registerProduct}
                     children="작품 등록"
+                    autoFocus
+                  ></Button>
+                </Box>
+              </DialogActions>
+            </Dialog>
+            <Dialog
+              open={openFail}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <Box direction="row" width="100%" justify="end">
+                <BackButton onClick={handleClose}>
+                  <img src={CloseButton} />
+                </BackButton>
+              </Box>
+
+              <DialogContent>
+                <Box align="center">
+                  <StyledText text={`모든 정보를 입력하세요.`} weight="bold" />
+                  <p />
+                  <StyledText
+                    text="입력하지 않은 정보가 있습니다. 모든 정보를 입력하세요."
+                    color="red"
+                    size="10px"
+                  />
+                </Box>
+              </DialogContent>
+              <DialogActions>
+                <Box direction="row" width="100%" justify="center">
+                  <Button
+                    MediumBlack
+                    onClick={handleClose}
+                    children="닫기"
                     autoFocus
                   ></Button>
                 </Box>

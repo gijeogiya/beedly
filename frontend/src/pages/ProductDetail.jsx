@@ -1,7 +1,8 @@
-import { Box, Carousel, Image, Menu, Spinner } from "grommet";
+import { Box, Image, Menu, Spinner } from "grommet";
 import React, { useState } from "react";
 import Button from "../components/Button";
 import BackBtn from "../assets/images/backButton.png";
+import More from "../assets/images/more.png";
 import MoreBtn from "../assets/images/more2.png";
 import LikeBtn from "../assets/images/like.png";
 import ShareBtn from "../assets/images/share.svg";
@@ -40,6 +41,7 @@ import {
   deletePersonalFavorite,
   postPersonalFavorite,
 } from "../utils/apis/PersonalFavoriteAPI";
+import Carousel from "nuka-carousel";
 export const HeaderBox = ({
   isSeller,
   goBack,
@@ -93,7 +95,7 @@ export const DialogCloseButton = styled.button`
   width: 10vw;
 `;
 
-export const ProductDeatail = () => {
+export const ProductDetail = () => {
   const { productId } = useParams();
 
   const [loading, setLoading] = useState(true);
@@ -193,7 +195,7 @@ export const ProductDeatail = () => {
   };
 
   const sharePage = () => {
-    window.navigator.canShare({
+    window.navigator.share({
       title: `Beedly - ${productArtist} 작가님의 ${productName}`,
       text: `${productDesc}`,
       url: window.location.href,
@@ -225,16 +227,19 @@ export const ProductDeatail = () => {
       } else if (diff / day >= 1) {
         return `${parseInt(diff / day)}일 남음`;
       } else {
-        return `${diff / hour >= 1 ? `${parseInt(diff / hour)}:` : ``}${diff / minute >= 1
-          ? `${parseInt((diff % hour) / minute) < 10
-            ? `0${parseInt((diff % hour) / minute)}`
-            : parseInt((diff % hour) / minute)
-          }:`
-          : ``
-          }${parseInt((diff % minute) / sec) < 10
+        return `${diff / hour >= 1 ? `${parseInt(diff / hour)}:` : ``}${
+          diff / minute >= 1
+            ? `${
+                parseInt((diff % hour) / minute) < 10
+                  ? `0${parseInt((diff % hour) / minute)}`
+                  : parseInt((diff % hour) / minute)
+              }:`
+            : ``
+        }${
+          parseInt((diff % minute) / sec) < 10
             ? `0${parseInt((diff % minute) / sec)}`
             : parseInt((diff % minute) / sec)
-          }`;
+        }`;
       }
     }
   };
@@ -416,8 +421,9 @@ export const ProductDeatail = () => {
     const HHmm = date[1].split(":");
     return `${yyyyMMdd[0]}년 ${parseInt(yyyyMMdd[1])}월 ${parseInt(
       yyyyMMdd[2]
-    )}일  ${parseInt(HHmm[0])}시 ${parseInt(HHmm[1]) !== 0 ? `${parseInt(HHmm[1])}분` : ``
-      } 예정`;
+    )}일  ${parseInt(HHmm[0])}시 ${
+      parseInt(HHmm[1]) !== 0 ? `${parseInt(HHmm[1])}분` : ``
+    } 예정`;
     // return date.toString("yyyy년 MM월 dd일 HH시 mm분 예정");
   };
 
@@ -482,17 +488,48 @@ export const ProductDeatail = () => {
       <Box>
         {/* <MainImg src={Product1} /> */}
         <Carousel
-          fill
-          wrap={true}
-          play={productImages.length > 1 ? 3000 : 0}
-          controls="arrows"
+          autoplay={productImages.length > 1 ? true : false}
+          autoplayInterval={productImages.length > 1 ? 3000 : 0}
+          wrapAround={true}
+          speed={500}
+          renderCenterLeftControls={
+            productImages.length > 1
+              ? ({ previousSlide }) => (
+                  <Button
+                    Blank
+                    onClick={previousSlide}
+                    children={<img src={BackBtn} />}
+                  />
+                )
+              : null
+          }
+          renderCenterRightControls={
+            productImages.length > 1
+              ? ({ nextSlide }) => (
+                  <Button
+                    Blank
+                    onClick={nextSlide}
+                    children={<img src={More} />}
+                  />
+                )
+              : null
+          }
         >
           {productImages.map((image, idx) => {
-            return <Image src={image} fit="cover" key={idx} />;
+            return (
+              <Box style={{ margin: "0 auto" }} key={idx}>
+                <Image
+                  src={image}
+                  fit="cover"
+                  fill="horizontal"
+                  style={{ display: "inline-block" }}
+                />
+              </Box>
+            );
           })}
         </Carousel>
 
-        <Box margin="medium">
+        <Box margin="large">
           <StyledText
             text={Category[category].label}
             weight="bold"
@@ -504,11 +541,11 @@ export const ProductDeatail = () => {
           <StyledText text={`${moneyFormat(startPrice)}원 ~`} />
           <StyledText text={stringToDate(startTime)} />
         </Box>
-        <Box margin="small">
+        <Box margin="large">
           <StyledText text="작품 설명" />
           <StyledText text={productDesc} size="10px" color="#7B7B7B" />
         </Box>
-        <Box margin="small">
+        <Box margin="large">
           <StyledText text="작품 정보" />
           <FlexBox Row_S style={{ flexWrap: "wrap", padding: "6px 10px" }}>
             {tags.map((item, idx) => (
@@ -534,7 +571,11 @@ export const ProductDeatail = () => {
             onClick={handleFavorite}
             children={
               <Box align="center">
-                {isFavorite ? <FavoriteIcon style={{ color: "red" }} /> : <FavoriteBorderIcon />}
+                {isFavorite ? (
+                  <FavoriteIcon style={{ color: "red" }} />
+                ) : (
+                  <FavoriteBorderIcon />
+                )}
                 <StyledText text={favoriteCount} />
               </Box>
             }
@@ -558,7 +599,7 @@ export const ProductDeatail = () => {
                   <StyledText
                     text={isAbsenteeBid ? "서면응찰 수정" : "서면응찰"}
                     color="white"
-                    size="10px"
+                    size="14px"
                     style={{ marginLeft: "10px" }}
                   />
                 </Box>
@@ -580,7 +621,7 @@ export const ProductDeatail = () => {
                   <StyledText
                     text={handleDate(startTime)}
                     color="white"
-                    size="10px"
+                    size="14px"
                     style={{ marginLeft: "10px" }}
                   />
                 </Box>
@@ -589,27 +630,27 @@ export const ProductDeatail = () => {
           )}
           {soldStatus !== "STANDBY" && (
             <Button
-              onClick={() => { }}
+              onClick={() => {}}
               BigGray={
                 User.userId !== artistId
                   ? true
                   : soldStatus === "SUCCESS"
-                    ? true
-                    : false
+                  ? true
+                  : false
               }
               BigBlack={
                 User.userId !== artistId
                   ? false
                   : soldStatus === "SUCCESS"
-                    ? false
-                    : true
+                  ? false
+                  : true
               }
               disabled={
                 User.userId !== artistId
                   ? true
                   : soldStatus === "SUCCESS"
-                    ? true
-                    : false
+                  ? true
+                  : false
               }
               children={
                 <Box direction="row" margin="xsmall" justify="center">
@@ -619,11 +660,11 @@ export const ProductDeatail = () => {
                       User.userId !== artistId
                         ? "종료된 경매 입니다."
                         : soldStatus === "SUCCESS"
-                          ? "경매 종료"
-                          : "재등록"
+                        ? "경매 종료"
+                        : "재등록"
                     }
                     color="white"
-                    size="10px"
+                    size="14px"
                     style={{ marginLeft: "10px" }}
                   />
                 </Box>

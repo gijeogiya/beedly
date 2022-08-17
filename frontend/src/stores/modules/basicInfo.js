@@ -1,4 +1,5 @@
 export const Category = [
+  { label: "선택하세요", value: 0 },
   { label: "회화", value: 1 },
   { label: "판화", value: 2 },
   { label: "에디션", value: 3 },
