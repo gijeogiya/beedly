@@ -78,8 +78,16 @@ const getProductByProductNameApi = async (
     .catch(fail);
 };
 
+//태그명으로 상품 검색
+const getProductByTagApi = async (page, size, sort, tag, success, fail) => {
+  await authInstance
+    .get(`/search/tag?page=${page}&size=${size}&sort=${sort}&tag=${tag}`)
+    .then(success)
+    .catch(fail);
+};
 export {
   getProductByArtistId,
   getProductByArtistNickNameApi,
   getProductByProductNameApi,
+  getProductByTagApi,
 };
