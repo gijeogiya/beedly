@@ -6,13 +6,14 @@ import { Box, Spinner } from "grommet";
 import { FlexBox } from "./UserStyled";
 import { stringToDate } from "../stores/modules/basicInfo";
 import Button from "./Button";
-export const LikeProduct = ({ product }) => {
+export const LikeProduct = ({ product, handleData }) => {
   const handleFavorite = () => {
     //좋아요를 눌렀다면
     deletePersonalFavorite(
-      product.favoriteId,
+      product.id,
       (response) => {
         console.log(response);
+        handleData();
       },
       (fail) => {
         console.log(fail);
