@@ -10,6 +10,8 @@ import MypageIcon from "../assets/img/MypageIcon.svg";
 import SampleProfile from "../assets/img/SampleProfile.png";
 import { Notice } from "./Notice";
 import { UserGuide } from "./UserGuide";
+import { PrivateTerms } from "./PrivateTerms";
+import { ServiceTerms } from "./ServiceTerms";
 // 고정스타일링
 
 // Header
@@ -31,7 +33,15 @@ const FooterContainer = styled.div`
   align-items: center;
 `;
 
-const FooterContent = ({ setFAQ, title, desc, setOpen, openGuid }) => {
+const FooterContent = ({
+  setFAQ,
+  title,
+  desc,
+  setOpen,
+  openGuid,
+  openUserTerm,
+  openServiceTerm,
+}) => {
   return (
     <div style={{ padding: "10px", fontSize: "10px" }}>
       <h3>{title || ""}</h3>
@@ -51,6 +61,14 @@ const FooterContent = ({ setFAQ, title, desc, setOpen, openGuid }) => {
               ? () => {
                   setFAQ(true);
                 }
+              : d === "이용약관"
+              ? () => {
+                  openServiceTerm(true);
+                }
+              : d === "개인정보처리방침"
+              ? () => {
+                  openUserTerm(true);
+                }
               : () => {}
           }
         >
@@ -65,10 +83,14 @@ export function Footer() {
   const [open, setOpen] = useState(false);
   const [FAQ, setFAQ] = useState(false);
   const [guide, openGuid] = useState(false);
+  const [userTerm, openUserTerm] = useState(false);
+  const [serviceTerm, openServiceTerm] = useState(false);
   function onDismiss() {
     setOpen(false);
     setFAQ(false);
     openGuid(false);
+    openServiceTerm(false);
+    openUserTerm(false);
   }
   return (
     <Box
@@ -102,9 +124,13 @@ export function Footer() {
           <Notice boardType="NOTICE" open={open} onDismiss={onDismiss} />
           <Notice boardType="FAQ" open={FAQ} onDismiss={onDismiss} />
           <UserGuide open={guide} onDismiss={onDismiss} />
+          <PrivateTerms open={userTerm} onDismiss={onDismiss} />
+          <ServiceTerms open={serviceTerm} onDismiss={onDismiss} />
         </Box>
         <Box>
           <FooterContent
+            openUserTerm={openUserTerm}
+            openServiceTerm={openServiceTerm}
             desc={[
               "이용약관",
               "개인정보처리방침",

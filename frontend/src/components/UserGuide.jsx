@@ -60,13 +60,13 @@ export const UserGuide = ({ open, onDismiss }) => {
           setClicked(false);
         }}
       />
-      <Box>
+      {/* <Box>
         <Tabs textColor="black" indicatorColor="red" aria-label="">
           <Tab value="one" label="Item One" />
           <Tab value="two" label="Item Two" />
           <Tab value="three" label="Item Three" />
         </Tabs>
-      </Box>
+      </Box> */}
     </BottomSheet>
   );
 };
