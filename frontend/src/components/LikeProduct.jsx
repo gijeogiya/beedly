@@ -10,7 +10,7 @@ export const LikeProduct = ({ product, handleData }) => {
   const handleFavorite = () => {
     //좋아요를 눌렀다면
     deletePersonalFavorite(
-      product.id,
+      product.favoriteId,
       (response) => {
         console.log(response);
         handleData();
