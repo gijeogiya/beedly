@@ -101,7 +101,7 @@ export function SearchBar({ handlefunction }) {
         </SearchForm>
       </SearchArea>
       <button
-        style={{ border: "0", backgroundColor: "white", paddingLeft: "15px" }}
+        style={{ border: "0", backgroundColor: "white", paddingLeft: "15px" }} onClick={() => setKeyword("")}
       >
         <img src={XIcon} style={{ width: "18px" }} />
       </button>
