@@ -335,4 +335,6 @@ export {
   getOnairByCategoryApi,
   getLikeProduct,
   getLikeArtist,
+  getProductByCategoryApi,
+  getFavoriteProduct,
 };
