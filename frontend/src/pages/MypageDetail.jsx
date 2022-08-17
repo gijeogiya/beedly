@@ -2,13 +2,14 @@ import React, { useEffect } from "react";
 import beforeIcon from "../assets/img/arrow-left.svg";
 import { StyledHr, StyledProfile } from "../components/Common";
 import { FlexBox } from "../components/UserStyled";
-import SampleProfile from "../assets/img/SampleProfile.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Button from "../components/Button";
 import Plus from "../assets/img/PlusIcon.svg";
 import { getUserInfoApi } from "../utils/apis/UserAPI";
-
+import { useDispatch } from "react-redux";
+import { setUser as setReduxUser } from "../stores/modules/user";
+import { AlertDialog } from "../components/AlertDialog";
 const styledp = {
   fontSize: "14px",
 };
@@ -22,7 +23,8 @@ export default function MypageDetail() {
   });
   const [loading, setloading] = useState(true);
   const [taglist, setTagList] = useState([]);
-
+  const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
   useEffect(() => {
     // 아직 로그인 된 상태가 아니라면
     if (localStorage.getItem("token") === null) {
@@ -54,7 +56,8 @@ export default function MypageDetail() {
   // 로그아웃
   const Logout = () => {
     localStorage.removeItem("token");
-    Navigate("/");
+    dispatch(setReduxUser(undefined));
+    window.location.href = "/";
   };
 
   //로그아웃 confirm 함수
@@ -84,16 +87,33 @@ export default function MypageDetail() {
     deleteConfirm,
     cancelConfirm
   );
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <div>
-      <img
-        alt="이전"
-        src={beforeIcon}
-        style={{ padding: "15px" }}
-        onClick={Goback}
-      />
-      <FlexBox MainContent>
-        <h3>마이페이지</h3>
+      <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            height: "5vh",
+            alignItems: "center",
+            padding: "0px 10px",
+          }}
+        >
+          <img
+            alt="이전"
+            src={beforeIcon}
+            style={{ padding: "15px" }}
+            onClick={Goback}
+          />
+          <h4>마이페이지</h4>
+          <h4 style={{ visibility: "hidden" }}>dd</h4>
+        </div>
+        <StyledHr width="99vw" height="0.5px" color="lightgray" />
+      </div>
+      <FlexBox MainContent style={{ marginTop: "0" }}>
         <div style={{ width: "80vw" }}>
           {user.userRole === "ROLE_ARTIST" ? (
             <Link
@@ -115,12 +135,12 @@ export default function MypageDetail() {
             </Link>
           </FlexBox>
           <div>
-            <h5>이름</h5>
+            <h5 style={{ margin: "0" }}>이름</h5>
             <div style={styledp}>{user.userName}</div>
             <StyledHr width="80vw" height="0.5px" color="lightgray" />
           </div>
-          <div>
-            <h5>Role</h5>
+          <div style={{ marginBottom: "3px" }}>
+            <h5 style={{ margin: "0" }}>Role</h5>
             <FlexBox Row_SB>
               <div style={styledp}>
                 {user.userRole === "ROLE_ARTIST" ? "작가님" : "구매자"}
@@ -133,25 +153,25 @@ export default function MypageDetail() {
             </FlexBox>
             <StyledHr width="80vw" height="0.5px" color="lightgray" />
           </div>
-          <div>
-            <h5>닉네임</h5>
+          <div style={{ marginBottom: "3px" }}>
+            <h5 style={{ margin: "0" }}>닉네임</h5>
             <div style={styledp}>{user.userNickname}</div>
             <StyledHr width="80vw" height="0.5px" color="lightgray" />
           </div>
-          <div>
-            <h5>전화번호</h5>
+          <div style={{ marginBottom: "3px" }}>
+            <h5 style={{ margin: "0" }}>전화번호</h5>
             <div style={styledp}>{user.userTel}</div>
             <StyledHr width="80vw" height="0.5px" color="lightgray" />
           </div>
-          <div>
-            <h5>생년월일 / 성별</h5>
+          <div style={{ marginBottom: "3px" }}>
+            <h5 style={{ margin: "0" }}>생년월일 / 성별</h5>
             <div style={styledp}>
               {user.userBirthday} / {user.userGender === "M" ? "남" : "여"}
             </div>
             <StyledHr width="80vw" height="0.5px" color="lightgray" />
           </div>
-          <div>
-            <h5>주소</h5>
+          <div style={{ marginBottom: "3px" }}>
+            <h5 style={{ margin: "0" }}>주소</h5>
             <div style={styledp}>{user.userAddr}</div>
             <StyledHr width="80vw" height="0.5px" color="lightgray" />
           </div>
@@ -177,12 +197,30 @@ export default function MypageDetail() {
                 <img src={Plus} alt="태그 수정" />
               </Link>
             </FlexBox>
+            <FlexBox Row_E>
+              <FlexBox Row_SA style={{ width: "80px" }}>
+                <p
+                  style={{ fontSize: "13px", color: "gray", textAlign: "end" }}
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                >
+                  로그아웃
+                </p>
+              </FlexBox>
+              <AlertDialog
+                open={open}
+                handleClose={handleClose}
+                handleAction={deleteConfirm}
+                title="로그아웃"
+                desc="로그아웃 하시겠습니까?"
+                cancel="취소"
+                accept="로그아웃"
+              />
+            </FlexBox>
           </div>
         </div>
         <br />
-        <Button SmallBlack onClick={confirmLogout}>
-          로그아웃
-        </Button>
         <br />
       </FlexBox>
     </div>

@@ -1,8 +1,11 @@
-import { Box, Carousel, Image, Grommet } from "grommet";
+import { Box, Image, Grommet } from "grommet";
 import Banner1 from "../assets/img/Banner1.png";
 import Banner2 from "../assets/img/Banner2.png";
 import Banner3 from "../assets/img/Banner3.png";
-
+import Carousel from "nuka-carousel";
+import Button from "./Button";
+import BackBtn from "../assets/images/backButton.png";
+import More from "../assets/images/more.png";
 const GrommetTheme = {
   carousel: {
     icons: {
@@ -25,7 +28,22 @@ export function BannerTable() {
         fill={true}
         controls={false}
       >
-        <Carousel fill={true} wrap={true} play={6000}>
+        <Carousel
+          autoplay={true}
+          autoplayInterval={3000}
+          wrapAround={true}
+          speed={500}
+          renderCenterLeftControls={({ previousSlide }) => (
+            <Button
+              Blank
+              onClick={previousSlide}
+              children={<img src={BackBtn} />}
+            />
+          )}
+          renderCenterRightControls={({ nextSlide }) => (
+            <Button Blank onClick={nextSlide} children={<img src={More} />} />
+          )}
+        >
           <Image fill={true} fit="cover" src={Banner1} />
           <Image fill={true} fit="cover" src={Banner2} />
           <Image fill={true} fit="cover" src={Banner3} />

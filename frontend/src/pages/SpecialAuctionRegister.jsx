@@ -13,14 +13,14 @@ import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/esm/locale";
-// import TextField from "@mui/material/TextField";
+import CloseButton from "../assets/images/close.png";
 import Button from "../components/Button";
 import { StyledText } from "../components/Common";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import product1 from "../assets/images/product1.png";
 import { STextArea, Input, Input2 } from "../components/UserStyled";
 import BackButtonImage from "../assets/images/backButton.png";
-
+import ImInput from "../assets/icons/imageInput.svg";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import {
@@ -30,7 +30,9 @@ import {
 } from "../utils/apis/SpecialBoardAPI";
 import { ImageBtn, ImageInput, Preview } from "./SpecialProductRegister";
 import ImageInputPic from "../assets/images/imageInput.png";
-
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
 const HeaderDiv = styled.div`
   margin: 5px;
   display: flex;
@@ -54,7 +56,7 @@ const HeaderBox = ({ goBack, boardId }) => {
       <StyledText
         size="20px"
         weight="bold"
-        text={boardId !== null ? "기획전 수정" : "기획전 등록"}
+        text={boardId ? "기획전 수정" : "기획전 등록"}
       />
       <div style={{ width: "10vw" }}></div>
     </HeaderDiv>
@@ -229,7 +231,7 @@ const MainContent = ({
             alignContent: "space-between",
           }}
         >
-          <ImageBtn src={ImageInputPic} />
+          <ImageBtn src={ImInput} />
           <Box direction="row" justify="between" width="90%">
             <StyledText size={titleSize} weight="bold" text="배경 사진 등록" />
             <StyledText
@@ -318,6 +320,8 @@ export const SpecialAuctionRegister = () => {
   const [productImages, setProductImages] = useState([]);
   const [prevs, setPrevs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [openFail, setOpenFail] = useState(false);
   let pr = [];
   useEffect(() => {
     if (boardId !== null) {
@@ -325,7 +329,10 @@ export const SpecialAuctionRegister = () => {
     }
     return () => setLoading(false);
   }, []);
-
+  const handleClose = () => {
+    setOpen(false);
+    setOpenFail(false);
+  };
   const handleBoardData = () => {
     getSpecialBoard(
       boardId,
@@ -404,6 +411,14 @@ export const SpecialAuctionRegister = () => {
     else return true;
   }
 
+  const handleRegister = () => {
+    if (isValid()) {
+      setOpen(true);
+    } else {
+      setOpenFail(true);
+    }
+  };
+
   function registerSpecialAuction() {
     console.log(title, subTitle, file, startDate);
     if (isValid()) {
@@ -448,7 +463,6 @@ export const SpecialAuctionRegister = () => {
           }
         );
     } else {
-      alert("모든 정보를 입력하세요!");
     }
   }
 
@@ -532,10 +546,78 @@ export const SpecialAuctionRegister = () => {
         <Box justify="center" direction="row">
           <Button
             BigBlack
-            onClick={registerSpecialAuction}
+            onClick={handleRegister}
             children={boardId !== null ? "기획전 수정" : "기획전 등록"}
           ></Button>
         </Box>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <Box direction="row" width="100%" justify="end">
+            <BackButton onClick={handleClose}>
+              <img src={CloseButton} />
+            </BackButton>
+          </Box>
+
+          <DialogContent>
+            <Box align="center">
+              <StyledText
+                text={`기획전을 ${
+                  boardId !== null ? "수정" : "등록"
+                }하시겠습니까?`}
+                weight="bold"
+              />
+              <p />
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Box direction="row" width="100%" justify="center">
+              <Button
+                MediumBlack
+                onClick={registerSpecialAuction}
+                children={boardId !== null ? "수정" : "등록"}
+                autoFocus
+              ></Button>
+            </Box>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={openFail}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <Box direction="row" width="100%" justify="end">
+            <BackButton onClick={handleClose}>
+              <img src={CloseButton} />
+            </BackButton>
+          </Box>
+
+          <DialogContent>
+            <Box align="center">
+              <StyledText text={`모든 정보를 입력하세요.`} weight="bold" />
+              <p />
+              <StyledText
+                text="입력하지 않은 정보가 있습니다. 모든 정보를 입력하세요."
+                color="red"
+                size="10px"
+              />
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Box direction="row" width="100%" justify="center">
+              <Button
+                MediumBlack
+                onClick={handleClose}
+                children="닫기"
+                autoFocus
+              ></Button>
+            </Box>
+          </DialogActions>
+        </Dialog>
       </Box>
     </Grommet>
   );
