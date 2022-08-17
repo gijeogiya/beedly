@@ -73,6 +73,7 @@ const StyledCardArtistImg = styled.img`
 
 const StyledCardInfTextFrame = styled.div`
   padding-left: 5px;
+  width: 28vw;
 `;
 
 export function ProductCard({ product }) {
@@ -143,7 +144,9 @@ export function ProductCard({ product }) {
             style={{
               fontSize: "14px",
               fontWeight: "700",
-              whiteSpace: "pre-line",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
             }}
           >
             {product.userNickname}
@@ -151,12 +154,18 @@ export function ProductCard({ product }) {
           <div
             style={{
               fontSize: "14px",
-              whiteSpace: "pre-line",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
             }}
           >
             {product.productName}
           </div>
-          <div style={{ fontSize: "12px", whiteSpace: "pre-line" }}>
+          <div style={{
+            fontSize: "12px", whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}>
             {CheckTime()
               ? `시청중`
               : `${start.getMonth() + 1
