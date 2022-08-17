@@ -8,6 +8,8 @@ import { HalfProductCard } from "../components/HalfProductCard";
 import {
   artistDetailApi,
   deleteFavoriteArtistApi,
+  getStandByProductByArtist,
+  getSuccessProductByArtist,
   getUserInfoApi,
   UpdateBgImgApi,
   UPdateBgImgApi,
@@ -97,6 +99,9 @@ export default function ArtistDetailPage() {
   const User = useSelector((state) => state.user.user.user);
   const [WantUpdateDesc, setWantUpdateDesc] = useState(false);
   const [UpdateDesc, setUpdateDesc] = useState();
+
+  const [standByProductList, setStandByProductList] = useState();
+  const [successProductList, setSuccessProductList] = useState();
   const goBack = () => {
     navigate(-1);
   };
@@ -199,6 +204,9 @@ export default function ArtistDetailPage() {
     );
   };
   useEffect(() => {
+    if (User === undefined) {
+      navigate(`/login`);
+    }
     if (loading) {
       artistDetailApi(
         artistId,
@@ -213,12 +221,28 @@ export default function ArtistDetailPage() {
           setArtistDesc(res.data.artistDesc);
           setArtistBgImg(res.data.artistBgImg);
           setUpdateDesc(res.data.artistDesc);
-          setloading(false);
         },
         (err) => {
           console.log(err);
         }
-      );
+      ).then(
+
+        getStandByProductByArtist(artistId, (res) => {
+          setStandByProductList(res.data.content);
+          console.log(res);
+        }, (err) => {
+          console.log(err);
+        })
+      ).then(
+
+        getSuccessProductByArtist(artistId, (res) => {
+          setSuccessProductList(res.data.content);
+          console.log(res);
+          setloading(false);
+        }, (err) => {
+          console.log(err);
+        })
+      )
     }
   }, [loading]);
   return (
@@ -382,10 +406,12 @@ export default function ArtistDetailPage() {
               </FlexBox>
             </ArtistDetailSubInf>
           </div>
-          {/* <StyledTableTitle>진행 중인 작품</StyledTableTitle>
-                <ArtistDetailProductOngoingTable artist={artistInfo} />
-                <StyledTableTitle>경매가 종료된 작품</StyledTableTitle>
-                <ArtistDetailProductClosedTable artist={artistInfo} /> */}
+          <StyledTableTitle>진행 중인 작품</StyledTableTitle>
+          {!loading && <ArtistDetailProductOngoingTable list={standByProductList} />}
+
+          <StyledTableTitle>경매가 종료된 작품</StyledTableTitle>
+          {!loading && <ArtistDetailProductClosedTable list={successProductList} />}
+
         </div>
       )}
     </div>

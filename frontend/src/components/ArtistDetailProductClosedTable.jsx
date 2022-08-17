@@ -3,12 +3,12 @@ import { HalfProductCard } from "../components/HalfProductCard";
 
 const ProductTable = styled.div`
   display: flex;
-  // justify-content: space-around;
+  justify-content: space-between;
   flex-wrap: wrap;
-  width: 348px;
+  width: 88vw;
 `;
 
-export function ArtistDetailProductClosedTable() {
+export function ArtistDetailProductClosedTable({ list }) {
   return (
     <div
       style={{
@@ -19,11 +19,12 @@ export function ArtistDetailProductClosedTable() {
       }}
     >
       <ProductTable>
-        {/* <ProductCard/>
-                             <ProductCard/>
-                             <ProductCard/>
-                             <ProductCard/>
-                             <ProductCard/> */}
+        {list.map((product, idx) =>
+          <div key={idx}>
+
+            <HalfProductCard product={product} />
+          </div>
+        )}
       </ProductTable>
     </div>
   );
