@@ -70,9 +70,11 @@ const StyledCardArtistImgFrame = styled.div`
 const StyledCardArtistImg = styled.img`
   object-fit: cover;
   border-radius: 50%;
+  border:2px solid rgb(235,235,235);
 `;
 
 const StyledCardInfTextFrame = styled.div`
+width:30vw;
   padding-left: 5px;
 `;
 
@@ -98,7 +100,7 @@ export function HalfProductCard({ product }) {
     }, 1000);
     return () => clearInterval(countdown);
 
-    
+
   }, [timer]);
 
   const getTime = () => {
@@ -139,7 +141,9 @@ export function HalfProductCard({ product }) {
             style={{
               fontSize: "14px",
               fontWeight: "700",
-              whiteSpace: "pre-line",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
             }}
           >
             {product.userNickname}
@@ -147,12 +151,18 @@ export function HalfProductCard({ product }) {
           <div
             style={{
               fontSize: "14px",
-              whiteSpace: "pre-line",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
             }}
           >
             {product.productName}
           </div>
-          <div style={{ fontSize: "12px", whiteSpace: "pre-line" }}>
+          <div style={{
+            fontSize: "12px", whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}>
             {CheckTime()
               ? `시청중`
               : `${start.getMonth() + 1
