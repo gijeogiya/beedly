@@ -97,6 +97,7 @@ export default function SearchResult() {
   }
 
   const handleSubmit = () => {
+    setSearchProductList([]);
     setloading(true);
   }
   return (
