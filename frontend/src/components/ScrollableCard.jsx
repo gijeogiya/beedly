@@ -94,12 +94,7 @@ export function ProductCard({ product }) {
       setNow(new Date());
     }, 1000);
     return () => clearInterval(countdown);
-
-    
   }, [timer]);
-
-
-
 
   const getTime = () => {
     let diff = start - now;
@@ -118,8 +113,6 @@ export function ProductCard({ product }) {
       diffSec < 10 ? `0${diffSec}` : diffSec
     }`;
   };
-
-  
 
   return (
     <StyledProductCard>

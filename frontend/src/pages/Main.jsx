@@ -13,8 +13,13 @@ import user from "../stores/modules/user";
 import { getUserInfoApi } from "../utils/apis/UserAPI";
 import { getArtistApi } from "../utils/apis/ArtistAPI";
 import { getRecommendationProductApi } from "../utils/apis/UserRecommendationAPI";
-import { getOnairApi, getPersonalProductListApi, getProductListBySizeApi } from "../utils/apis/PersonalProductAPI";
-
+import {
+  getOnairApi,
+  getPersonalProductListApi,
+  getProductListBySizeApi,
+} from "../utils/apis/PersonalProductAPI";
+import { Fab } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 const StyledTableTitle = styled.div`
   font-size: 16px;
   color: #1f1d1d;
@@ -59,7 +64,7 @@ export default function MainPage() {
   });
   const User = useSelector((state) => state.user.user.user);
   // console.log("User :: ", User);
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
   const ProductSizeList = [
     {
       size: "small",
@@ -183,7 +188,7 @@ export default function MainPage() {
   }, [Size]);
 
   const goProductList = (category) => {
-    Navigate("/productlist", { state: { gottenCategory: category } });
+    navigate("/productlist", { state: { gottenCategory: category } });
   };
 
   return (
@@ -204,13 +209,6 @@ export default function MainPage() {
           </StyledCategoryButton>
           <StyledCategoryButton onClick={() => goProductList("입체")}>
             입체
-          </StyledCategoryButton>
-          <StyledCategoryButton>
-            {User !== undefined && (
-              <Link to="/productRegister" style={{ textDecoration: "none", color: "red", justifyContent: "center", fontSize: "16px" }}>
-                작품등록
-              </Link>
-            )}
           </StyledCategoryButton>
         </StyledCategoryTable>
       </nav>
@@ -265,6 +263,21 @@ export default function MainPage() {
         <StyledTableSubtitle>{Size.description}</StyledTableSubtitle>
         <HorizonScrollRowTable list={SizeProductList} />
       </div>
+      {User !== undefined && user.userRole !== "ROLE_USER" && (
+        <Fab
+          color="primary"
+          aria-label="edit"
+          style={{
+            position: "fixed",
+            bottom: "60px",
+            right: "10px",
+            display: "flex",
+          }}
+          onClick={() => navigate("/productRegister")}
+        >
+          <EditIcon />
+        </Fab>
+      )}
     </div>
   );
 }

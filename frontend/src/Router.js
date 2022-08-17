@@ -102,8 +102,7 @@ export const Router = () => {
         <Route path="/likeArtist" element={<LikeArtist />} />
         <Route path="/likeProduct" element={<LikeProduct />} />
         <Route path="/LikeArtist" element={<LikeArtistList />} />
-        <Route path="/mypageDetail" element={<MypageDetail />} />
-        <Route path="/updateMypage" element={<UpdateMyPage />} />
+        <Route path="/mypageDetail" element={<MypageDetail />} />s
         <Route path="/signupTag" element={<SignupTag />} />
         <Route
           path="/specialAuctionDetail/:boardId"
