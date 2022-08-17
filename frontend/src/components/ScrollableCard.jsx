@@ -37,6 +37,7 @@ const AuctionStateBox = styled.div`
   font-size: 12px;
   padding-left: 5px;
   padding-right: 5px;
+  padding-top: 2px;
   border-radius: 3px;
   margin: 12px;
 `;
@@ -44,7 +45,7 @@ const AuctionStateBoxProps = (backcolor) => (
   <AuctionStateBox props={backcolor}></AuctionStateBox>
 );
 const StyledAuctionStateIcon = styled.img`
-  height: 9px;
+  height: 12px;
 `;
 
 const StyledCardInfBox = styled.div`
@@ -67,6 +68,7 @@ const StyledCardArtistImgFrame = styled.div`
 const StyledCardArtistImg = styled.img`
   object-fit: cover;
   border-radius: 50%;
+  border:2px solid rgb(235,235,235); 
 `;
 
 const StyledCardInfTextFrame = styled.div`
@@ -95,7 +97,7 @@ export function ProductCard({ product }) {
     }, 1000);
     return () => clearInterval(countdown);
 
-    
+
   }, [timer]);
 
 
@@ -112,14 +114,12 @@ export function ProductCard({ product }) {
     const diffMin = Math.floor(diff / (1000 * 60));
     diff -= diffMin * (1000 * 60);
     const diffSec = Math.floor(diff / 1000);
-    return `${diffDays < 10 ? ` 0${diffDays}` : diffDays}일 ${
-      diffHours < 10 ? `0${diffHours}` : diffHours
-    }: ${diffMin < 10 ? `0${diffMin}` : diffMin}: ${
-      diffSec < 10 ? `0${diffSec}` : diffSec
-    }`;
+    return `${diffDays < 10 ? ` 0${diffDays}` : diffDays}일 ${diffHours < 10 ? `0${diffHours}` : diffHours
+      }: ${diffMin < 10 ? `0${diffMin}` : diffMin}: ${diffSec < 10 ? `0${diffSec}` : diffSec
+      }`;
   };
 
-  
+
 
   return (
     <StyledProductCard>
@@ -129,7 +129,7 @@ export function ProductCard({ product }) {
           style={{ backgroundColor: CheckTime() ? "red" : "gray" }}
         >
           <StyledAuctionStateIcon
-            src={CheckTime() ? OnairStateIcon : BeforeStateIcon}
+            src={CheckTime() ? OnairStateIcon : BeforeStateIcon} style={{ paddingRight: "5px" }}
           />
           {CheckTime() ? "실시간" : getTime()}
         </AuctionStateBox>
@@ -159,10 +159,9 @@ export function ProductCard({ product }) {
           <div style={{ fontSize: "12px", whiteSpace: "pre-line" }}>
             {CheckTime()
               ? `시청중`
-              : `${
-                  start.getMonth() + 1
-                }월 ${start.getDate()}일 ${start.getHours()}시 ` +
-                `${start.getMinutes()}분 예정`}
+              : `${start.getMonth() + 1
+              }월 ${start.getDate()}일 ${start.getHours()}시 ` +
+              `${start.getMinutes()}분 예정`}
           </div>
         </StyledCardInfTextFrame>
       </StyledCardInfBox>
