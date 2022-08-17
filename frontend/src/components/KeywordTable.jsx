@@ -9,7 +9,7 @@ const RecentlyKeywordFrame = styled.div`
   overflow-x: scroll;
   overflow-y: hidden;
   white-space: nowrap;
-  padding: 20px;
+  padding: 15px;
   &::-webkit-scrollbar {
     display: none;
   }

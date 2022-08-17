@@ -247,7 +247,7 @@ export default function ArtistDetailPage() {
             onClick={(e) => addFavoriteArtist(e)}
             style={{ border: "0", backgroundColor: "white" }}
           >
-            {isMyFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+            {isMyFavorite ? <FavoriteIcon style={{ color: "red" }} /> : <FavoriteBorderIcon />}
             <div>{favoriteCount}</div>
           </button>
         </BarWarp>

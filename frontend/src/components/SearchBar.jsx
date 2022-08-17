@@ -16,13 +16,15 @@ const SearchArea = styled.div`
   background-color: #f4f4f4;
   border-radius: 8px;
   display: flex;
-  width: 90%;
+  width: 90vw;
 `;
 
 const SearchForm = styled.form`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+    width:75vw;
+
 `;
 
 const SearchTextInput = styled.input`
@@ -99,12 +101,12 @@ export function SearchBar({ handlefunction }) {
             onChange={(e) => handleChange(e)}
           />
         </SearchForm>
+        <button
+          style={{ border: "0", backgroundColor: "#f4f4f4", paddingLeft: "15px" }} onClick={() => { setKeyword(""); console.log(2) }}
+        >
+          <img src={XIcon} style={{ width: "18px" }} />
+        </button>
       </SearchArea>
-      <button
-        style={{ border: "0", backgroundColor: "white", paddingLeft: "15px" }} onClick={() => setKeyword("")}
-      >
-        <img src={XIcon} style={{ width: "18px" }} />
-      </button>
     </SearchWarp>
   );
 }
