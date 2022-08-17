@@ -5,12 +5,12 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import { StyledHr, StyledText } from "../components/Common";
 import { Category, moneyFormat } from "../stores/modules/basicInfo";
-import { postPersonalPay } from "../utils/apis/PayAPI";
+import { postPersonalPay, postSpecialPay } from "../utils/apis/PayAPI";
 import { getPersonalProduct } from "../utils/apis/PersonalProductAPI";
 import { getPurchaseProduct } from "../utils/apis/UserAPI";
 
 const REDIRECT_URL = "http://localhost:3000/";
-
+// const REDIRECT_URL = "https://i7a601.p.ssafy.io/";
 export const PurchaseSuccess = () => {
   const location = useLocation();
   // const { soldId } = location.state;
@@ -77,24 +77,45 @@ export const PurchaseSuccess = () => {
     if (success) {
       //결제 성공
       alert("결제 성공");
-      postPersonalPay(
-        soldId,
-        (response) => {
-          console.log("결제 완료 API 호출 !!!", response);
-          navigate(`/purchaseDetail/${soldId}`, {
-            state: {
-              error_msg: error_msg,
-              merchant_uid: merchant_uid,
-              success: success,
-              soldId: soldId,
-              auctionType: auctionType,
-            },
-          });
-        },
-        (fail) => {
-          console.log(fail);
-        }
-      );
+      //상시 경매일 경우
+      if (auctionType === "P")
+        postPersonalPay(
+          soldId,
+          (response) => {
+            console.log("결제 완료 API 호출 !!!", response);
+            navigate(`/purchaseDetail/${soldId}`, {
+              state: {
+                error_msg: error_msg,
+                merchant_uid: merchant_uid,
+                success: success,
+                soldId: soldId,
+                auctionType: auctionType,
+              },
+            });
+          },
+          (fail) => {
+            console.log(fail);
+          }
+        );
+      else if (auctionType === "S")
+        postSpecialPay(
+          soldId,
+          (response) => {
+            console.log("결제 완료 API 호출 !!!", response);
+            navigate(`/purchaseDetail/${soldId}`, {
+              state: {
+                error_msg: error_msg,
+                merchant_uid: merchant_uid,
+                success: success,
+                soldId: soldId,
+                auctionType: auctionType,
+              },
+            });
+          },
+          (fail) => {
+            console.log(fail);
+          }
+        );
     } else {
       alert(`결제 실패 : ${error_msg}`);
       navigate(`/purchaseDetail/${soldId}`, {
