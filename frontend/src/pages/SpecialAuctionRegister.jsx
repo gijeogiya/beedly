@@ -16,14 +16,18 @@ import { ko } from "date-fns/esm/locale";
 // import TextField from "@mui/material/TextField";
 import Button from "../components/Button";
 import { StyledText } from "../components/Common";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import product1 from "../assets/images/product1.png";
 import { STextArea, Input, Input2 } from "../components/UserStyled";
 import BackButtonImage from "../assets/images/backButton.png";
 
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import { registerSpecialBoard } from "../utils/api";
+import {
+  getSpecialBoard,
+  registerSpecialBoard,
+  updateSpecialBoard,
+} from "../utils/apis/SpecialBoardAPI";
 import { ImageBtn, ImageInput, Preview } from "./SpecialProductRegister";
 import ImageInputPic from "../assets/images/imageInput.png";
 
@@ -41,13 +45,17 @@ const BackButton = styled.button`
   width: 10vw;
 `;
 
-const HeaderBox = ({ goBack }) => {
+const HeaderBox = ({ goBack, boardId }) => {
   return (
     <HeaderDiv>
       <BackButton onClick={goBack}>
         <img src={BackButtonImage} />
       </BackButton>
-      <StyledText size="20px" weight="bold" text="기획전 등록" />
+      <StyledText
+        size="20px"
+        weight="bold"
+        text={boardId !== null ? "기획전 수정" : "기획전 등록"}
+      />
       <div style={{ width: "10vw" }}></div>
     </HeaderDiv>
   );
@@ -134,6 +142,7 @@ const MainContent = ({
   titleSize,
   handleImageUpload,
   prevs,
+  boardId,
 }) => {
   const DateInputButton = forwardRef(({ value, onClick }, ref) => (
     <button onClick={onClick} ref={ref} style={style3}>
@@ -242,6 +251,7 @@ const MainContent = ({
         />
       </Box>
       <Box direction="row" justify="around">
+        {/* <Preview src={prevs[0]} /> */}
         {prevs.map((image, idx) => {
           return <Preview src={image} key={idx} />;
         })}
@@ -294,30 +304,62 @@ const ProductGrid = ({ products }) => {
 
 const ProductDiv = styled.div``;
 
-export const SpecialAuction = () => {
+export const SpecialAuctionRegister = () => {
+  const location = useLocation();
+  const boardId = location.state !== null ? location.state.boardId : null;
   const [startDate, setStartDate] = useState(undefined);
   // const [products, setProducts] = useState([]);
   const [textValue, setTextValue] = useState("");
   const [title, setTitle] = useState("");
   const [subTitle, setSubTitle] = useState("");
-  const [file, setFile] = useState("");
+  const [file, setFile] = useState([]);
   const [board, setBoard] = useState({});
   const [showDate, toggleShowDate] = useState(false);
   const [productImages, setProductImages] = useState([]);
   const [prevs, setPrevs] = useState([]);
+  const [loading, setLoading] = useState(true);
   let pr = [];
-  // useEffect(() => {
-  //   for (let i = 0; i < 3; i++) {
-  //     let product = {
-  //       name: "product" + i + "",
-  //       start: [i, 1],
-  //       end: [i, 1],
-  //       src: product1,
-  //     };
-  //     pr.push(product);
-  //   }
-  //   setProducts(pr);
-  // }, []);
+  useEffect(() => {
+    if (boardId !== null) {
+      if (loading) handleBoardData();
+    }
+    return () => setLoading(false);
+  }, []);
+
+  const handleBoardData = () => {
+    getSpecialBoard(
+      boardId,
+      (response) => {
+        console.log(response);
+        let data = response.data;
+        setStartDate(new Date(data.startTime));
+        setTextValue(data.boardDesc);
+        setTitle(data.boardTitle);
+        setPrevs((prev) => [...prev, data.mainImgUri]);
+        setSubTitle(data.boardSubtitle);
+        urlToFile(data.mainImgUri);
+        setLoading(false);
+      },
+      (fail) => {
+        console.log(fail);
+        setLoading(false);
+      }
+    );
+  };
+
+  const urlToFile = (url) => {
+    // const response = await fetch(url);
+    // const data = await response.blob();
+    // const metadata = { type: `image/png`, crossOrigin: "anonymous" };
+    var image = new Image();
+    image.onload = function () {};
+    image.crossOrigin = "Anonymous";
+    image.src = url + "?not-from-cache-please";
+    // let img = new File([data], metadata);
+    // img.toBlob(() => {}, "image/png");
+    setProductImages((prev) => [...prev, image]);
+  };
+
   const navigate = useNavigate();
   const goBack = () => {
     navigate(-1);
@@ -373,7 +415,7 @@ export const SpecialAuction = () => {
       };
 
       const formData = new FormData();
-      formData.append("image", file);
+      formData.append("image", productImages[0]);
 
       const blob = new Blob([JSON.stringify(board)], {
         type: "application/json",
@@ -382,20 +424,62 @@ export const SpecialAuction = () => {
       formData.append("request", blob);
 
       console.log(board);
-      registerSpecialBoard(
-        formData,
-        (response) => {
-          console.log(response.data);
-          navigate("/");
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+      if (boardId !== null)
+        updateSpecialBoard(
+          boardId,
+          formData,
+          (success) => {
+            console.log(success);
+            navigate(`/specialAuctionDetail/${boardId}`);
+          },
+          (fail) => {
+            console.log(fail);
+          }
+        );
+      else
+        registerSpecialBoard(
+          formData,
+          (response) => {
+            console.log(response);
+            navigate(`/specialAuctionDetail/${response.data}`);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
     } else {
       alert("모든 정보를 입력하세요!");
     }
   }
+
+  // const handleImageUpload = (e) => {
+  //   const fileArr = e.target.files;
+  //   setFile(fileArr[0]);
+  //   let reader = new FileReader();
+  //   reader.onload = () => {
+  //     // console.log(reader.result);
+  //     let fileURLs = reader.result;
+  //     setPrevs(fileURLs);
+  //   };
+  //   reader.readAsDataURL(fileArr[0]);
+  //   // let fileURLs = [];
+  //   // let files = [];
+  //   // let file;
+  //   // let filesLength = fileArr.length > 3 ? 3 : fileArr.length;
+
+  //   // for (let i = 0; i < filesLength; i++) {
+  //   //   file = fileArr[i];
+  //   //   files[i] = file;
+  //   //   setFile([...files]);
+  //   //   let reader = new FileReader();
+  //   //   reader.onload = () => {
+  //   //     // console.log(reader.result);
+  //   //     fileURLs[i] = reader.result;
+  //   //     setPrevs([...fileURLs]);
+  //   //   };
+  //   //   reader.readAsDataURL(file);
+  //   // }
+  // };
 
   const handleImageUpload = (e) => {
     const fileArr = e.target.files;
@@ -441,13 +525,16 @@ export const SpecialAuction = () => {
           titleSize="16px"
           handleImageUpload={handleImageUpload}
           prevs={prevs}
+          boardId={boardId}
         />
         {/* <StyledText weight="bold" size="18px" text="작품 목록"></StyledText>
       {products.length > 1 && <ProductGrid products={products}></ProductGrid>} */}
         <Box justify="center" direction="row">
-          <Button BigBlack onClick={registerSpecialAuction}>
-            기획전 등록
-          </Button>
+          <Button
+            BigBlack
+            onClick={registerSpecialAuction}
+            children={boardId !== null ? "기획전 수정" : "기획전 등록"}
+          ></Button>
         </Box>
       </Box>
     </Grommet>
