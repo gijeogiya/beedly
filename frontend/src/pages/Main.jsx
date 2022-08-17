@@ -14,6 +14,10 @@ import { getUserInfoApi } from "../utils/apis/UserAPI";
 import { getArtistApi } from "../utils/apis/ArtistAPI";
 import { getRecommendationProductApi } from "../utils/apis/UserRecommendationAPI";
 import { getOnairApi, getPersonalProductListApi, getProductListBySizeApi } from "../utils/apis/PersonalProductAPI";
+import SubBanner1 from "../assets/img/SubBanner1.png";
+import SubBanner2 from "../assets/img/SubBanner2.png";
+import { Tag } from "grommet";
+
 
 const StyledTableTitle = styled.div`
   font-size: 16px;
@@ -43,6 +47,12 @@ const StyledCategoryButton = styled.button`
   font-size: 16px;
   border: 0;
   background-color: white;
+`;
+
+const SubBanner = styled.div`
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
 `;
 
 export default function MainPage() {
@@ -83,6 +93,15 @@ export default function MainPage() {
     },
   ];
   const [Size, setSize] = useState({});
+
+  const goSearchTag = (keyword) => {
+    const data = {
+      searchCategory: "tag",
+      keyword: keyword
+    }
+    Navigate('/searchResult', {state: data})
+  }
+
   useEffect(() => {
     if (loading) {
       if (User === undefined) {
@@ -229,7 +248,7 @@ export default function MainPage() {
       </div>
       <div
         style={{
-          borderBottom: "1px solid #ebebeb",
+          // borderBottom: "1px solid #ebebeb",
           paddingBottom: "20px",
           paddingTop: "20px",
         }}
@@ -245,7 +264,10 @@ export default function MainPage() {
           paddingTop: "20px",
         }}
       >
-        <StyledTableTitle>Art For You</StyledTableTitle>
+        <SubBanner onClick={()=>goSearchTag('수채화')}>
+          <img src={SubBanner2} />
+        </SubBanner>
+        <StyledTableTitle style={{paddingTop:"20px"}}>Art For You</StyledTableTitle>
         <StyledTableSubtitle>이런 작품은 어때요?</StyledTableSubtitle>
         <HorizonScrollRowTable list={ArtForYouList} />
       </div>
@@ -260,6 +282,9 @@ export default function MainPage() {
         <StyledTableSubtitle>신규 등록 작품</StyledTableSubtitle>
         <HorizonScrollRowTable list={NewProductList} />
       </div>
+      <SubBanner onClick={()=>goSearchTag('동양화')}>
+          <img src={SubBanner1} />
+      </SubBanner>
       <div style={{ paddingBottom: "20px", paddingTop: "20px" }}>
         <StyledTableTitle>{Size.sizeName} Size</StyledTableTitle>
         <StyledTableSubtitle>{Size.description}</StyledTableSubtitle>

@@ -10,6 +10,11 @@ import { HalfProductCard } from "../components/HalfProductCard";
 import { Bold } from "grommet-icons";
 import SortIcon from "../assets/img/SortIcon.svg";
 import { getOnairByCategoryApi, getProductByCategoryApi } from "../utils/apis/PersonalProductAPI";
+import PaintingBanner from "../assets/img/PaintingBanner.png";
+import PrintBanner from "../assets/img/PrintBanner.png";
+import EditionBanner from "../assets/img/EditionBanner.png";
+import PhotoBanner from "../assets/img/PhotoBanner.png";
+import FigureBanner from "../assets/img/FigureBanner.png";
 
 const SortButton = styled.button`
   border: 0;
@@ -62,6 +67,12 @@ const ProductTable = styled.div`
   display: flex;
 `;
 
+const SubBanner = styled.div`
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+`;
+
 export default function ProductListPage() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -70,6 +81,7 @@ export default function ProductListPage() {
   const [popularProductList, setPopularProductList] = useState([]);
   const [loading, setloading] = useState(true);
   const [sortMethod, setSortMethod] = useState(["인기순"]);
+  const [bannerImg, setBannerImg] = useState(EditionBanner);
 
   const [size, setSize] = useState({});
   const gottenCategory = location.state
@@ -87,9 +99,16 @@ export default function ProductListPage() {
       : setSortMethod((prev) => (prev = "인기순"))
   };
 
+
   useEffect(() => {
     if (loading) {
       //카테고리별 인기 상품 가져오기
+      // if (nowCategory === '회화') {setBannerImg(PaintingBanner); console.log(1)}
+      // else if (nowCategory === '판화') {setBannerImg(PrintBanner); console.log(2)}
+      // else if (nowCategory === '에디션') {setBannerImg(EditionBanner); console.log(3)}
+      // else if (nowCategory === '사진') {setBannerImg(PhotoBanner); console.log(4)}
+      // else if (nowCategory === '입체') {setBannerImg(FigureBanner); console.log(5)}
+
       getProductByCategoryApi(
         nowCategory,
         "0",
@@ -179,6 +198,7 @@ export default function ProductListPage() {
             onClick={() => {
               setloading(true);
               setNowCategory((prev) => (prev = "회화"));
+              setBannerImg(PaintingBanner);
             }}
             isActive={nowCategory === "회화"}
           >
@@ -188,6 +208,7 @@ export default function ProductListPage() {
             onClick={() => {
               setloading(true);
               setNowCategory((prev) => (prev = "판화"));
+              setBannerImg(PrintBanner);
             }}
             isActive={nowCategory === "판화"}
           >
@@ -197,6 +218,7 @@ export default function ProductListPage() {
             onClick={() => {
               setloading(true);
               setNowCategory((prev) => (prev = "에디션"));
+              setBannerImg(EditionBanner);
             }}
             isActive={nowCategory === "에디션"}
           >
@@ -206,6 +228,7 @@ export default function ProductListPage() {
             onClick={() => {
               setloading(true);
               setNowCategory((prev) => (prev = "사진"));
+              setBannerImg(PhotoBanner);
             }}
             isActive={nowCategory === "사진"}
           >
@@ -215,6 +238,7 @@ export default function ProductListPage() {
             onClick={() => {
               setloading(true);
               setNowCategory((prev) => (prev = "입체"));
+              setBannerImg(FigureBanner);
             }}
             isActive={nowCategory === "입체"}
           >
@@ -222,6 +246,9 @@ export default function ProductListPage() {
           </StyledCategoryButton>
         </StyledCategoryTable>
       </nav>
+      <SubBanner>
+          <img src={bannerImg} alt='카테고리 배너'/>
+      </SubBanner>
       <div
         style={{
           borderBottom: "1px solid #ebebeb",
