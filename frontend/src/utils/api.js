@@ -200,7 +200,7 @@ const getProductByArtistNickNameApi = async (
     .catch(fail);
 };
 
-//카테고리로 상품 리스트 검색
+//카테고리로 Onair 상품 리스트 검색
 const getOnairByCategoryApi = async (
   categoryName,
   page,
@@ -212,6 +212,23 @@ const getOnairByCategoryApi = async (
   await instance
     .get(
       `personalProduct/list/onAirByCategory?categoryName=${categoryName}&page=${page}&size=${size}&sort=${sort}`
+    )
+    .then(success)
+    .catch(fail);
+};
+
+//카테고리로 일반 상품 리스트 검색
+const getProductByCategoryApi = async (
+  categoryName,
+  page,
+  size,
+  sort,
+  success,
+  fail
+) => {
+  await instance
+    .get(
+      `personalProduct/list?categoryName=${categoryName}&page=${page}&size=${size}&sort=${sort}`
     )
     .then(success)
     .catch(fail);

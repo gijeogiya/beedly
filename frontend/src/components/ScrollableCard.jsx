@@ -74,11 +74,12 @@ const StyledCardInfTextFrame = styled.div`
 `;
 
 export function ProductCard({ product }) {
-  const now = new Date();
+  const [now, setNow] = useState(new Date());
   const start = new Date(product.startTime);
   const date = product.startTime.split("T");
   const yyyyMMdd = date[0].split("-");
   const HHmm = date[1].split(":");
+  const [timer, setTimer] = useState(0);
   const CheckTime = () => {
     if (start > now) {
       // 아직 진행 예정
@@ -87,6 +88,18 @@ export function ProductCard({ product }) {
       return true;
     }
   };
+
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      setNow(new Date());
+    }, 1000);
+    return () => clearInterval(countdown);
+
+    
+  }, [timer]);
+
+
+
 
   const getTime = () => {
     let diff = start - now;
@@ -105,6 +118,8 @@ export function ProductCard({ product }) {
       diffSec < 10 ? `0${diffSec}` : diffSec
     }`;
   };
+
+  
 
   return (
     <StyledProductCard>
