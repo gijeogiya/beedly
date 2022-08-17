@@ -16,7 +16,7 @@ import {
 } from "../utils/api";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { StyledText } from "../components/Common";
+// import { StyledText } from "../components/Common";
 import user from "../stores/modules/user";
 
 const StyledTableTitle = styled.div`
@@ -187,10 +187,7 @@ export default function MainPage() {
   }, [Size]);
 
   const goProductList = (category) => {
-    const data = {
-      gottenCategory: category,
-    };
-    Navigate("/productlist", { state: { gottenCategory: category } });
+    Navigate("/productlist", { state: {gottenCategory: category} });
   };
 
   return (
@@ -212,11 +209,13 @@ export default function MainPage() {
           <StyledCategoryButton onClick={() => goProductList("입체")}>
             입체
           </StyledCategoryButton>
-          {User !== undefined && (
-            <Link to="/productRegister">
-              <StyledText color="red" text="작품등록" />
-            </Link>
-          )}
+          <StyledCategoryButton>
+            {User !== undefined && (
+              <Link to="/productRegister" style={{textDecoration: "none", color:"red", justifyContent: "center", fontSize:"16px"}}>
+                작품등록
+              </Link>
+            )}
+          </StyledCategoryButton>
         </StyledCategoryTable>
       </nav>
       <BannerTable />
