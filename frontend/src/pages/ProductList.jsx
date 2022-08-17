@@ -7,8 +7,29 @@ import styled from "styled-components";
 import { HorizonScrollRowTable } from "../components/HorizonScrollTable";
 import { SortButtonArea } from "../components/SortButtonArea";
 import { HalfProductCard } from "../components/HalfProductCard";
-import { getOnairByCategoryApi, getProductByCategoryApi, getPersonalProductListApi } from "../utils/api";
+import {
+  getOnairByCategoryApi,
+  getProductByCategoryApi,
+  getPersonalProductListApi,
+} from "../utils/api";
 import { Bold } from "grommet-icons";
+import SortIcon from "../assets/img/SortIcon.svg";
+
+const SortButton = styled.button`
+  border: 0;
+  background-color: white;
+  font-size: 12px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  font-weight: 700;
+`;
+
+const SortImg = styled.img`
+  width: 13px;
+  padding-left: 3px;
+  padding-top: 2px;
+`;
 
 const StyledTableTitle = styled.div`
   font-size: 16px;
@@ -41,9 +62,8 @@ const StyledCategoryButton = styled.button`
   font-weight: ${(props) => (props.isActive ? "bold" : "0" || "0")};
 `;
 const ProductTable = styled.div`
-  justify-content: space-between;
+  justify-content: center;
   display: flex;
-  flex-wrap: wrap;
 `;
 
 export default function ProductListPage() {
@@ -51,11 +71,25 @@ export default function ProductListPage() {
   const navigate = useNavigate();
   const [onairList, setOnairList] = useState([]);
   const [newProductList, setNewProductList] = useState([]);
+  const [popularProductList, setPopularProductList] = useState([]);
   const [loading, setloading] = useState(true);
+  const [sortMethod, setSortMethod] = useState(["인기순"]);
 
   const [size, setSize] = useState({});
-  const gottenCategory = location.state ? location.state.gottenCategory : '회화'
+  const gottenCategory = location.state
+    ? location.state.gottenCategory
+    : "회화";
   const [nowCategory, setNowCategory] = useState(gottenCategory);
+  const GoProductDetail = (id) => {
+    navigate(`/productDetail/${id}`);
+  };
+
+  const HandleSortButton = () => {
+    setloading(true);
+    sortMethod === "인기순"
+      ? setSortMethod((prev) => (prev = "최신순"))
+      : setSortMethod((prev) => (prev = "인기순"))
+  };
 
   useEffect(() => {
     if (loading) {
@@ -74,7 +108,7 @@ export default function ProductListPage() {
         }
       );
 
-      //카테고리별 신규 작품 목록 가져오기
+      //카테고리별 신규 작품 목록 가져오기(최신순)
       getProductByCategoryApi(
         nowCategory,
         "0",
@@ -88,11 +122,27 @@ export default function ProductListPage() {
           console.log(err);
         }
       );
+
+      //카테고리별 신규 작품 목록 가져오기(인기순/최신순)
+      getProductByCategoryApi(
+        nowCategory,
+        "0",
+        "20",
+        sortMethod === "인기순" ? "favoriteCount,DESC" : "createdDate,DESC",
+        (res) => {
+          console.log(res);
+          setPopularProductList(res.data.content);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+
       setloading(false);
     }
     return () => setloading(false);
     // eslint-disable-next-line
-  }, [nowCategory, onairList]);
+  }, [nowCategory, onairList, sortMethod]);
 
   // useEffect(() => {
   //   setNowCategory(gottenCategory);
@@ -203,8 +253,25 @@ export default function ProductListPage() {
         }}
       >
         <StyledTableTitle>Products</StyledTableTitle>
-        <StyledTableSubtitle>개인 경매 예정 작품</StyledTableSubtitle>
-        <SortButtonArea />
+        <StyledTableSubtitle>낙찰 전 개인 작품</StyledTableSubtitle>
+        <div
+          style={{
+            width: "95vw",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            paddingTop: "10px",
+          }}
+        >
+          <SortButton
+            onClick={(e) =>
+              HandleSortButton()
+            }
+          >
+            <div>{sortMethod}</div>
+            <SortImg src={SortIcon} />
+          </SortButton>
+        </div>
         <div
           style={{
             display: "flex",
@@ -213,11 +280,29 @@ export default function ProductListPage() {
           }}
         >
           <ProductTable>
-            {/* <ProductCard/>
-              <ProductCard/>
-              <ProductCard/>
-              <ProductCard/>
-              <ProductCard/> */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                width: "95vw",
+              }}
+            >
+              {popularProductList.map((product, idx) => (
+                <div
+                  key={idx}
+                  onClick={(e) => GoProductDetail(product.id)}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                    padding: "2.5vw",
+                  }}
+                >
+                  <HalfProductCard product={product} />
+                </div>
+              ))}
+            </div>
           </ProductTable>
         </div>
       </div>

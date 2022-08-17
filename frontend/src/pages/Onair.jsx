@@ -34,7 +34,7 @@ const StyledCategoryButton = styled.button`
 export default function OnairPage() {
   const [loading, setloading] = useState(true);
   const [OnairList, setOnairList] = useState([]);
-  const [nowCategory, setNowCategory] = useState('회화');
+  const [nowCategory, setNowCategory] = useState('ALL');
 
   useEffect(() => {
     if (loading) {
