@@ -26,26 +26,26 @@ export function HorizonScrollRowTable({ list, startTime }) {
     <StyledHorizonTable>
       {!startTime
         ? list.map((product, idx) => (
-            <div
-              className="card"
-              key={idx}
-              onClick={(e) => GoProductDetail(product.id)}
-              value={product.id}
-            >
+          <div
+            className="card"
+            key={idx}
+            onClick={(e) => GoProductDetail(product.id)}
+            value={product.id}
+          >
+            <ProductCard product={product} startTime={startTime} />
+          </div>
+        ))
+        : list.map((product, idx) => (
+          <a
+            key={idx}
+            href={`#${product.productId}`}
+            style={{ color: "black" }}
+          >
+            <div className="card" key={idx} value={product.productId}>
               <ProductCard product={product} startTime={startTime} />
             </div>
-          ))
-        : list.map((product, idx) => (
-            <a
-              key={idx}
-              href={`#${product.productId}`}
-              style={{ color: "black" }}
-            >
-              <div className="card" key={idx} value={product.productId}>
-                <ProductCard product={product} startTime={startTime} />
-              </div>
-            </a>
-          ))}
+          </a>
+        ))}
     </StyledHorizonTable>
   );
 }
@@ -53,7 +53,7 @@ export function HorizonScrollRowTable({ list, startTime }) {
 export function HorizonScrollColTable({ list }) {
   const Navigate = useNavigate("");
   const GoArtistDetail = (id) => {
-    // Navigate(`/productDetail/${id}`)
+    Navigate(`/artistDetail/${id}`)
   };
   return (
     <StyledHorizonTable>
@@ -61,7 +61,7 @@ export function HorizonScrollColTable({ list }) {
         <div
           className="card"
           key={idx}
-          onClick={(e) => GoArtistDetail(artist.id)}
+          onClick={(e) => GoArtistDetail(artist.artistId)}
         >
           <ArtistCard artist={artist} />
         </div>
