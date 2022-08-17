@@ -105,19 +105,32 @@ export function RecentlyKeywordTable({ list }) {
   );
 }
 
-export function RecommendKeywordTable() {
+export function RecommendKeywordTable({ list }) {
+  console.log(typeof (list));
+  const Navigate = useNavigate();
+  const [RecommendKeywordList, setRecommendKeywordList] = useState([]);
+  useEffect(() => {
+    setRecommendKeywordList(list);
+  }, [list]);
+
+  const SearchByKeyword = (keyword) => {
+    const data = {
+      searchCategory: "tag",
+      keyword: keyword,
+    };
+    Navigate("/searchResult", { state: data });
+  };
+
   return (
-    <RecommendKeywordFrame>
-      <RecommendKeywordButton>장마</RecommendKeywordButton>
-      <RecommendKeywordButton>고양이</RecommendKeywordButton>
-      <RecommendKeywordButton>해리아현</RecommendKeywordButton>
-      <RecommendKeywordButton>차가운</RecommendKeywordButton>
-      <RecommendKeywordButton>판화</RecommendKeywordButton>
-      <RecommendKeywordButton>광교빵순이</RecommendKeywordButton>
-      <RecommendKeywordButton>무느스크스키오스키</RecommendKeywordButton>
-      <RecommendKeywordButton>여름</RecommendKeywordButton>
-      <RecommendKeywordButton>꽃</RecommendKeywordButton>
-      <RecommendKeywordButton>시골</RecommendKeywordButton>
-    </RecommendKeywordFrame>
+    <div>
+      {list !== null ? (
+        <RecommendKeywordFrame>
+          {RecommendKeywordList.map((keyword, idx) =>
+            <RecommendKeywordButton key={idx}>
+              <div onClick={(e) => SearchByKeyword(keyword.searchTagName)}>{keyword.searchTagName}</div>
+            </RecommendKeywordButton>
+          )}
+        </RecommendKeywordFrame>) : <div></div>}
+    </div>
   );
 }
