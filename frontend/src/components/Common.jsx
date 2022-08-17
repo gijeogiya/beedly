@@ -7,8 +7,11 @@ import SearchIcon from "../assets/img/SearchIcon.svg";
 import ListIcon from "../assets/img/ListIcon.svg";
 import OnairIcon from "../assets/img/OnairIcon.svg";
 import MypageIcon from "../assets/img/MypageIcon.svg";
+import SampleProfile from "../assets/img/SampleProfile.png";
 import { Notice } from "./Notice";
 import { UserGuide } from "./UserGuide";
+import { PrivateTerms } from "./PrivateTerms";
+import { ServiceTerms } from "./ServiceTerms";
 // 고정스타일링
 
 // Header
@@ -30,7 +33,15 @@ const FooterContainer = styled.div`
   align-items: center;
 `;
 
-const FooterContent = ({ title, desc, setOpen, openGuid }) => {
+const FooterContent = ({
+  setFAQ,
+  title,
+  desc,
+  setOpen,
+  openGuid,
+  openUserTerm,
+  openServiceTerm,
+}) => {
   return (
     <div style={{ padding: "10px", fontSize: "10px" }}>
       <h3>{title || ""}</h3>
@@ -46,6 +57,18 @@ const FooterContent = ({ title, desc, setOpen, openGuid }) => {
               ? () => {
                   openGuid(true);
                 }
+              : d === "FAQ"
+              ? () => {
+                  setFAQ(true);
+                }
+              : d === "이용약관"
+              ? () => {
+                  openServiceTerm(true);
+                }
+              : d === "개인정보처리방침"
+              ? () => {
+                  openUserTerm(true);
+                }
               : () => {}
           }
         >
@@ -58,10 +81,16 @@ const FooterContent = ({ title, desc, setOpen, openGuid }) => {
 
 export function Footer() {
   const [open, setOpen] = useState(false);
+  const [FAQ, setFAQ] = useState(false);
   const [guide, openGuid] = useState(false);
+  const [userTerm, openUserTerm] = useState(false);
+  const [serviceTerm, openServiceTerm] = useState(false);
   function onDismiss() {
     setOpen(false);
+    setFAQ(false);
     openGuid(false);
+    openServiceTerm(false);
+    openUserTerm(false);
   }
   return (
     <Box
@@ -83,19 +112,25 @@ export function Footer() {
         <Box direction="row" align="center">
           <FooterContent
             openGuid={openGuid}
+            setFAQ={setFAQ}
             title="이용안내"
-            desc={["이용가이드", "페널티 정책", "커뮤니티 가이드라인"]}
+            desc={["이용가이드", "페널티 정책", "FAQ"]}
           />
           <FooterContent
             setOpen={setOpen}
             title="고객지원"
             desc={["공지사항", "서비스 소개", "소장품 정기경매 접수"]}
           />
-          <Notice open={open} onDismiss={onDismiss} />
+          <Notice boardType="NOTICE" open={open} onDismiss={onDismiss} />
+          <Notice boardType="FAQ" open={FAQ} onDismiss={onDismiss} />
           <UserGuide open={guide} onDismiss={onDismiss} />
+          <PrivateTerms open={userTerm} onDismiss={onDismiss} />
+          <ServiceTerms open={serviceTerm} onDismiss={onDismiss} />
         </Box>
         <Box>
           <FooterContent
+            openUserTerm={openUserTerm}
+            openServiceTerm={openServiceTerm}
             desc={[
               "이용약관",
               "개인정보처리방침",
@@ -138,24 +173,30 @@ export function NavBar() {
   const [show, handleShow] = useState("visible");
   const [opacity, setOpacity] = useState("1");
   useEffect(() => {
+    let mounted = true;
     window.addEventListener("scroll", () => {
-      nowScrollTop = window.scrollY;
-      let fixBoxHeight = "50";
-      if (nowScrollTop > lastScrollTop && nowScrollTop > fixBoxHeight) {
-        handleShow("hidden");
-        setOpacity("0");
-      } else {
-        if (nowScrollTop + window.innerHeight < document.body.offsetHeight) {
-          //Scroll up (하단 고정메뉴 보임)
-          handleShow("visible");
-          setOpacity("1");
+      if (mounted) {
+        nowScrollTop = window.scrollY;
+        let fixBoxHeight = "50";
+        if (nowScrollTop > lastScrollTop && nowScrollTop > fixBoxHeight) {
+          handleShow("hidden");
+          setOpacity("0");
+          // console.log("down ", show);
+        } else {
+          if (nowScrollTop + window.innerHeight < document.body.offsetHeight) {
+            //Scroll up (하단 고정메뉴 보임)
+            handleShow("visible");
+            setOpacity("1");
+            // console.log("up ", show);
+          }
         }
+        lastScrollTop = nowScrollTop;
       }
-      lastScrollTop = nowScrollTop;
     });
 
     return () => {
-      window.removeEventListener("scroll", () => {});
+      // window.removeEventListener("scroll", () => { });
+      mounted = false;
     };
   }, []);
   return (
@@ -193,6 +234,17 @@ const ProductImg = styled.img`
   src: ${(props) => props.src || ""};
 `;
 
+const Image = styled.img`
+  src: ${(props) => props.src || ""};
+  width: ${(props) => props.width || "28vw"};
+  height: ${(props) => props.height || "28vw"};
+  border-radius: 10%;
+  object-fit: cover;
+`;
+export function StyledImg({ src, width, height, alt }) {
+  return <Image src={src} width={width} height={height} alt={alt}></Image>;
+}
+
 const ProductFrame = styled.div`
   border-radius: 14px;
   width: 175px;
@@ -214,6 +266,17 @@ const ArtistImg = styled.img`
   src: ${(props) => props.src || ""};
   border-radius: 50%;
 `;
+
+const ProfileImg = styled.img`
+  width: 25vw;
+  height: 25vw;
+  object-fit: cover;
+  src: ${(props) => props.src || SampleProfile};
+  border-radius: 50%;
+`;
+export const StyledProfile = (props) => (
+  <ProfileImg src={props.src} {...props}></ProfileImg>
+);
 
 //상품 프레임
 export function Product({
@@ -286,9 +349,9 @@ const TextForm = styled.div`
 `;
 
 //텍스트 사이즈, 컬러, 웨이트, 글자를 설정할 수 있는 컴포넌트
-export function StyledText({ size, color, weight, text }) {
+export function StyledText({ size, color, weight, text, style }) {
   return (
-    <TextForm size={size} color={color} weight={weight}>
+    <TextForm size={size} color={color} weight={weight} style={style}>
       {text}
     </TextForm>
   );
