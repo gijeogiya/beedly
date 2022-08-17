@@ -3,15 +3,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FlexBox } from "../components/UserStyled";
-import {
-  artistDetailApi,
-  deleteFavoriteArtistApi,
-  getLikeArtist,
-} from "../utils/api";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { StyledHr, StyledText } from "../components/Common";
 import beforeIcon from "../assets/img/arrow-left.svg";
 import { useInView } from "react-intersection-observer";
+import { getLikeArtist } from "../utils/apis/UserAPI";
+import { artistDetailApi, deleteFavoriteArtistApi } from "../utils/apis/ArtistAPI";
 
 const StyledProfileCard = styled.div`
   display: flex;

@@ -6,18 +6,14 @@ import {
   HorizonScrollRowTable,
   HorizonScrollColTable,
 } from "../components/HorizonScrollTable";
-import {
-  getArtistApi,
-  getOnairApi,
-  getPersonalProductListApi,
-  getProductListBySizeApi,
-  getRecommendationProductApi,
-  getUserInfoApi,
-} from "../utils/api";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 // import { StyledText } from "../components/Common";
 import user from "../stores/modules/user";
+import { getUserInfoApi } from "../utils/apis/UserAPI";
+import { getArtistApi } from "../utils/apis/ArtistAPI";
+import { getRecommendationProductApi } from "../utils/apis/UserRecommendationAPI";
+import { getOnairApi, getPersonalProductListApi, getProductListBySizeApi } from "../utils/apis/PersonalProductAPI";
 
 const StyledTableTitle = styled.div`
   font-size: 16px;
@@ -187,7 +183,7 @@ export default function MainPage() {
   }, [Size]);
 
   const goProductList = (category) => {
-    Navigate("/productlist", { state: {gottenCategory: category} });
+    Navigate("/productlist", { state: { gottenCategory: category } });
   };
 
   return (
@@ -211,7 +207,7 @@ export default function MainPage() {
           </StyledCategoryButton>
           <StyledCategoryButton>
             {User !== undefined && (
-              <Link to="/productRegister" style={{textDecoration: "none", color:"red", justifyContent: "center", fontSize:"16px"}}>
+              <Link to="/productRegister" style={{ textDecoration: "none", color: "red", justifyContent: "center", fontSize: "16px" }}>
                 작품등록
               </Link>
             )}

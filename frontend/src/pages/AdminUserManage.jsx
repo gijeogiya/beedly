@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import beforeIcon from "../assets/img/arrow-left.svg";
 import { StyledHr } from "../components/Common";
 import { FlexBox } from "../components/UserStyled";
-import { applicationListApi, artistApproveApi } from "../utils/api";
+import { applicationListApi, artistApproveApi } from "../utils/apis/AdminAPI";
 
 export default function AdminUserManage() {
   // 이전으로 돌아가기

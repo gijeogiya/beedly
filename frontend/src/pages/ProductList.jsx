@@ -7,13 +7,9 @@ import styled from "styled-components";
 import { HorizonScrollRowTable } from "../components/HorizonScrollTable";
 import { SortButtonArea } from "../components/SortButtonArea";
 import { HalfProductCard } from "../components/HalfProductCard";
-import {
-  getOnairByCategoryApi,
-  getProductByCategoryApi,
-  getPersonalProductListApi,
-} from "../utils/api";
 import { Bold } from "grommet-icons";
 import SortIcon from "../assets/img/SortIcon.svg";
+import { getOnairByCategoryApi, getProductByCategoryApi } from "../utils/apis/PersonalProductAPI";
 
 const SortButton = styled.button`
   border: 0;

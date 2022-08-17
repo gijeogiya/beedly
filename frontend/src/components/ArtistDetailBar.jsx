@@ -5,7 +5,7 @@ import BackButtonImage from "../assets/images/backButton.png";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { event } from "jquery";
-import { addFavoriteArtistApi } from "../utils/api";
+import { addFavoriteArtistApi } from "../utils/apis/ArtistAPI";
 
 const BarWarp = styled.div`
   padding: 8px 24px 8px 10px;

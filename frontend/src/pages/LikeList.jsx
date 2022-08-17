@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LikeProduct } from "../components/LikeProduct";
-import { getFavoriteProduct, getLikeProduct } from "../utils/api";
+import { getFavoriteProduct } from "../utils/api";
 import beforeIcon from "../assets/img/arrow-left.svg";
 import { StyledHr } from "../components/Common";
 import { Spinner } from "grommet";
+import { getLikeProduct } from "../utils/apis/UserAPI";
 export const LikeList = () => {
   const [loading, setLoading] = useState(true);
   const Navigate = useNavigate("");

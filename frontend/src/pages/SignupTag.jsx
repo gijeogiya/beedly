@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import logo from "../assets/img/logoClear.png";
 import Button from "../components/Button";
 import { FlexBox } from "../components/UserStyled";
-import { getTagListApi, registerTagApi } from "../utils/api";
+import { getTagListApi } from "../utils/apis/RecmmendationTagAPI";
+import { registerTagApi } from "../utils/apis/UserRecommendationAPI";
 export default function SignupTag() {
   const [loading, setloading] = useState(true);
   const Navigate = useNavigate("");
@@ -78,8 +79,8 @@ export default function SignupTag() {
                 !selectedTag.includes(idx)
                   ? setSeletedTag((selectedTag) => [...selectedTag, idx])
                   : setSeletedTag(
-                      selectedTag.filter((Button) => Button !== idx)
-                    );
+                    selectedTag.filter((Button) => Button !== idx)
+                  );
               }}
               TagGray={!selectedTag.includes(idx) ? true : false}
               TagYellow={selectedTag.includes(idx) ? true : false}

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import { FlexBox } from "../components/UserStyled";
-import { artistApplicationApi } from "../utils/api";
+import { artistApplicationApi } from "../utils/apis/AdminAPI";
 
 // artist 신청서 내라는 안내문
 export default function SignupAritst() {

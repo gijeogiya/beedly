@@ -2,8 +2,8 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { LogoHeader } from "../components/Common";
 import { setUser } from "../stores/modules/user";
+import { loginApi } from "../utils/apis/UserAPI";
 import Loading from "./Loading";
-import { loginApi } from "../utils/api";
 
 export default function Kakao() {
   const dispatch = useDispatch();
