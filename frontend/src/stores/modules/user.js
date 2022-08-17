@@ -2,7 +2,7 @@ import axios from "axios";
 import { createAction, handleActions } from "redux-actions";
 import { useNavigate } from "react-router-dom";
 import produce from "immer";
-import { loginApi, updateUserInfoApi } from "../../utils/api";
+import { loginApi } from "../../utils/apis/UserAPI";
 
 const SET_USER = "SET_USER";
 
@@ -58,39 +58,6 @@ export const login = (code) => {
     );
   };
 };
-
-// export const join = (user) => {
-//   return function (dispatch, getState) {
-//     updateUserInfoApi(
-//       user,
-//       (res) => {
-//         let token = res.headers["authorization"];
-//         console.log(res);
-//         dispatch(
-//           setUser({
-//             userEmail: res.data.userEmail,
-//             userGender: res.data.userGender,
-//             userId: token,
-//           })
-//         );
-//         console.log(res.data.userEmail);
-//         console.log(res.data.userGender);
-//         if (res.status === 200) {
-//           console.log("로그인 성공");
-//           let token = res.headers["authorization"];
-//           localStorage.setItem("token", token);
-//           // window.location.href = "/";
-//         } else if (res.status === 201) {
-//           //사용자 정보가 없을 때(회원가입 안함) -> 회원가입 페이지로 이동
-//           // window.location.href = "/signup1";
-//         }
-//       },
-//       (err) => {
-//         console.log(err);
-//       }
-//     );
-//   };
-// };
 
 export default handleActions(
   {

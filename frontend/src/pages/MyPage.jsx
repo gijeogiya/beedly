@@ -4,17 +4,10 @@ import { StyledHr, StyledText } from "../components/Common";
 import ArtistPng from "../assets/images/artist.png";
 import MoreImage from "../assets/images/more.png";
 import styled from "styled-components";
-import {
-  getLikeArtist,
-  getLikeProduct,
-  getPurchaseApi,
-  getSaleApi,
-  getUserInfoApi,
-} from "../utils/api";
 import { Link, useNavigate } from "react-router-dom";
 import { FlexBox } from "../components/UserStyled";
 import { useSelector } from "react-redux";
-import { getMyArtistList } from "../utils/apis/UserAPI";
+import { getMyArtistList, getPurchaseApi, getUserInfoApi, getLikeProduct, getSaleApi } from "../utils/apis/UserAPI";
 
 const BackButton = styled.button`
   background: none;
@@ -208,15 +201,6 @@ export default function MyPage() {
         );
       }
       setLoading(false);
-      //찜한 작가 조회
-      // getLikeArtist(
-      //   (res) => {
-      //     setlikeArtistCount(res.data.length);
-      //   },
-      //   (err) => {
-      //     console.log(err);
-      //   }
-      // );
     }
   }, [loading]);
   const CheckRole = () => {

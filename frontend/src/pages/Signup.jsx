@@ -9,7 +9,7 @@ import { Calendar } from "react-date-range";
 import * as locales from "react-date-range/dist/locale";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import { checkNicknameApi, updateUserInfoApi } from "../utils/api";
+import { checkNicknameApi, updateUserInfoApi } from "../utils/apis/UserAPI";
 
 const SignupInput = {
   display: "flex",

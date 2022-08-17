@@ -5,9 +5,9 @@ import { FlexBox } from "../components/UserStyled";
 import SampleProfile from "../assets/img/SampleProfile.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { getUserInfoApi } from "../utils/api";
 import Button from "../components/Button";
 import Plus from "../assets/img/PlusIcon.svg";
+import { getUserInfoApi } from "../utils/apis/UserAPI";
 
 const styledp = {
   fontSize: "14px",

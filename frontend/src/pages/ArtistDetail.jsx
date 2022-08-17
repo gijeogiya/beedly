@@ -5,29 +5,18 @@ import { ArtistDetailCard } from "../components/ArtistDetailCard";
 import { ArtistDetailProductOngoingTable } from "../components/ArtistDetailProductOngoingTable";
 import { ArtistDetailProductClosedTable } from "../components/ArtistDetailProductClosedTable";
 import { HalfProductCard } from "../components/HalfProductCard";
-import {
-  artistDetailApi,
-  deleteFavoriteArtistApi,
-  getStandByProductByArtist,
-  getSuccessProductByArtist,
-  getUserInfoApi,
-  UpdateBgImgApi,
-  UPdateBgImgApi,
-  UpdateDescApi,
-  UpdateProfileImgApi,
-} from "../utils/api";
 import { useParams } from "react-router-dom";
 import LikeIcon from "../assets/images/like.png";
 import { useNavigate } from "react-router-dom";
 import BackButtonImage from "../assets/images/backButton.png";
 import { useSelector } from "react-redux";
-import { addFavoriteArtistApi } from "../utils/api";
 import { FlexBox, Input } from "../components/UserStyled";
 import Button from "../components/Button";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import EditIcon from "../assets/img/EditIcon.svg";
 import CameraIcon from "../assets/img/CameraIcon.svg";
+import { addFavoriteArtistApi, artistDetailApi, deleteFavoriteArtistApi, getStandByProductByArtist, getSuccessProductByArtist, UpdateBgImgApi, UpdateDescApi, UpdateProfileImgApi } from "../utils/apis/ArtistAPI";
 const BarWarp = styled.div`
   padding: 8px 24px 8px 10px;
   border-bottom: 1px solid #ebebeb;

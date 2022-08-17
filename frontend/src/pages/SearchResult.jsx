@@ -6,11 +6,9 @@ import { HorizonScrollColTable } from "../components/HorizonScrollTable";
 import { HalfProductCard } from "../components/HalfProductCard";
 import { SearchBar } from "../components/SearchBar";
 import { FlexBox } from "../components/UserStyled";
-import {
-  getProductByArtistId,
-  getProductByArtistNickNameApi,
-  getProductByProductNameApi,
-} from "../utils/api";
+
+import { getProductListBySizeApi } from "../utils/apis/PersonalProductAPI";
+import { getProductByArtistNickNameApi, getProductByProductNameApi } from "../utils/apis/ProductSearchAPI";
 
 const StyledTableTitle = styled.div`
   font-size: 16px;
@@ -89,6 +87,11 @@ export default function SearchResult() {
           )
         );
       } else if (searchCategory === "size") {
+        getProductListBySizeApi(keyword, "0", "20", "", (res) => {
+          console.log(res);
+        }, (err) => {
+          console.log(err);
+        })
       }
       setloading(false);
     }

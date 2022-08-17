@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { OnairPageCategoryBar } from "../components/OnairPageCategoryBar";
 import { OnairPageTable } from "../components/OnairPageTable";
 import React, { useEffect, useState } from "react";
-import { getOnairApi, getOnairByCategoryApi } from "../utils/api";
 import Button from "../components/Button";
+import { getOnairApi, getOnairByCategoryApi } from "../utils/apis/PersonalProductAPI";
 
 const OnairPageTitle = styled.div`
   display: flex;
@@ -39,19 +39,19 @@ export default function OnairPage() {
   useEffect(() => {
     if (loading) {
       //카테고리별 온에어 가져오기
-      if (nowCategory === 'ALL'){
+      if (nowCategory === 'ALL') {
         getOnairApi(
-        "0",
-        "20",
-        "",
-        (res) => {
-          console.log(res);
-          setOnairList(res.data.content);
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
+          "0",
+          "20",
+          "",
+          (res) => {
+            console.log(res);
+            setOnairList(res.data.content);
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
       }
       else {
         getOnairByCategoryApi(

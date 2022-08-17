@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { HalfProductCard } from "../components/HalfProductCard";
-import { getProductByArtistId } from "../utils/api";
 
 const ProductTable = styled.div`
   display: flex;
