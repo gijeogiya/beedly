@@ -6,6 +6,7 @@ import com.ssafy.beedly.domain.PersonalFavorite;
 import com.ssafy.beedly.domain.PersonalProduct;
 import com.ssafy.beedly.domain.User;
 import com.ssafy.beedly.dto.PersonalProductDto;
+import com.ssafy.beedly.dto.personal.product.FavoriteProductDto;
 import com.ssafy.beedly.repository.PersonalFavoriteRepository;
 import com.ssafy.beedly.repository.PersonalProductRepository;
 import com.ssafy.beedly.repository.UserRepository;
@@ -57,9 +58,9 @@ public class PersonalFavoriteService {
     }
 
     // 내가 찜한 상품 리스트들
-    public List<PersonalProductDto> findMyFavoriteProductList(User user) {
+    public List<FavoriteProductDto> findMyFavoriteProductList(User user) {
         List<PersonalFavorite> findMyFavorite = personalFavoriteRepository.findMyFavoriteProductWithProduct(user.getId());
-        return findMyFavorite.stream().map(personalFavorite -> new PersonalProductDto(personalFavorite.getPersonalProduct()))
+        return findMyFavorite.stream().map(personalFavorite -> new FavoriteProductDto(personalFavorite))
                 .collect(Collectors.toList());
     }
 }

@@ -67,6 +67,6 @@ public class ArtistFavoriteService {
     public List<ArtistSimpleDto> findMyArtistList(User user) {
         List<ArtistFavorite> findMyFavorite = artistFavoriteRepository.findMyFavoriteArtist(user.getId());
 
-        return findMyFavorite.stream().map(artistFavorite -> new ArtistSimpleDto(artistFavorite.getArtist())).collect(Collectors.toList());
+        return findMyFavorite.stream().map(artistFavorite -> new ArtistSimpleDto(artistFavorite)).collect(Collectors.toList());
     }
 }
