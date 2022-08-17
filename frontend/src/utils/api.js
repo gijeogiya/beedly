@@ -336,5 +336,4 @@ export {
   getLikeProduct,
   getLikeArtist,
   getProductByCategoryApi,
-  getFavoriteProduct,
 };
