@@ -16,7 +16,7 @@ import MyPage from "./pages/MyPage";
 import MainPage from "./pages/Main";
 import { ProductRegister } from "./pages/ProductRegister";
 import { SpecialProductRegister } from "./pages/SpecialProductRegister";
-import { ProductDeatail } from "./pages/ProductDeatail";
+import { ProductDetail } from "./pages/ProductDetail";
 import { Temp } from "./pages/Temp";
 import SaleList from "./pages/SaleList";
 import MypageDetail from "./pages/MypageDetail";
@@ -39,14 +39,6 @@ import { LikeArtistList } from "./pages/LikeArtistList";
 import { LikeProduct } from "./components/LikeProduct";
 
 const Layout = () => {
-  // const navigate = useNavigate();
-  // const User = useSelector((state) => state.user.user.user);
-  // useEffect(() => {
-  //   if (User === "") {
-  //     navigate("/login");
-  //   }
-  // });
-
   return (
     <div>
       <LogoHeader />
@@ -57,7 +49,16 @@ const Layout = () => {
   );
 };
 
-const Layout2 = () => {
+const LayOutNoNav = () => {
+  return (
+    <div>
+      <LogoHeader />
+      <Outlet />
+    </div>
+  );
+};
+
+const LayoutNoFooter = () => {
   return (
     <div>
       <LogoHeader />
@@ -70,30 +71,21 @@ const Layout2 = () => {
 export const Router = () => {
   return (
     <Routes>
+      {/* 로고, 푸터, 내브바 */}
       <Route path="/" element={<Layout />}>
         <Route index element={<MainPage />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/productRegister" element={<ProductRegister />} />
-        <Route path="/productModify" element={<ProductRegister />} />
-        <Route path="/onair" element={<Onair />} />
         <Route path="/mypage" element={<MyPage />} />
+      </Route>
+      {/* 로고, 내브바 */}
+      <Route path="/" element={<LayoutNoFooter />}>
+        <Route path="/search" element={<Search />} />
+        <Route path="/searchResult" element={<SearchResult />} />
+        <Route path="/onair" element={<Onair />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup1" element={<SignupChoice />} />
         <Route path="/signup2" element={<Signup />} />
-        <Route
-          path="/specialAuctionRegister"
-          element={<SpecialAuctionRegister />}
-        />
-        <Route
-          path="/specialBoardModify"
-          element={<SpecialAuctionRegister />}
-        />
-        <Route
-          path="/specialProduct/:boardId"
-          element={<SpecialProductRegister />}
-        />
         <Route path="/productlist" element={<ProductList />} />
-        <Route path="/productDetail/:productId" element={<ProductDeatail />} />
+        <Route path="/productDetail/:productId" element={<ProductDetail />} />
         <Route path="/artistDetail/:artistId" element={<ArtistDetail />} />
         <Route path="/PurchaseDetail" element={<PurchaseDetail />} />
         <Route path="/PurchaseList" element={<PurchaseList />} />
@@ -108,13 +100,30 @@ export const Router = () => {
           path="/specialAuctionDetail/:boardId"
           element={<SpecialAuctionDetail />}
         />
-        <Route path="/searchResult" element={<SearchResult />} />
         <Route path="/updateTag" element={<UpdateTag />} />
         <Route path="/signupArtist" element={<SignupAritst />} />
         <Route path="/adminUserManage" element={<AdminUserManage />} />
         <Route path="/purchase/:soldId" element={<PurchaseSuccess />} />
         <Route path="/purchaseDetail/:soldId" element={<PurchaseDetail />} />
       </Route>
+      {/* 로고,  */}
+      <Route path="/" element={<LayOutNoNav />}>
+        <Route path="/productRegister" element={<ProductRegister />} />
+        <Route path="/productModify" element={<ProductRegister />} />
+        <Route
+          path="/specialAuctionRegister"
+          element={<SpecialAuctionRegister />}
+        />
+        <Route
+          path="/specialBoardModify"
+          element={<SpecialAuctionRegister />}
+        />
+        <Route
+          path="/specialProduct/:boardId"
+          element={<SpecialProductRegister />}
+        />
+      </Route>
+      {/* 아무것도 없음 */}
       <Route path="/personalAuction" element={<Auction />} />
       <Route path="/specialAuction" element={<Auction />} />
       <Route path="/user/kakao/callback" element={<Kakao />}></Route>

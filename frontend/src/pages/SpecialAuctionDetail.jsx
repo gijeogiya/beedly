@@ -10,7 +10,7 @@ import { HorizonScrollRowTable } from "../components/HorizonScrollTable";
 import { Category, moneyFormat } from "../stores/modules/basicInfo";
 import { registerSpecialAuction } from "../utils/apis/AuctionAPI";
 import { getSpecialBoard } from "../utils/apis/SpecialBoardAPI";
-import { HeaderBox } from "./ProductDeatail";
+import { HeaderBox } from "./ProductDetail";
 import Clock from "../assets/images/clock.png";
 export const SpecialAuctionDetail = () => {
   const { boardId } = useParams();

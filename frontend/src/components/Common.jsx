@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box } from "grommet";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import HomeIcon from "../assets/img/HomeIcon.svg";
 import SearchIcon from "../assets/img/SearchIcon.svg";
 import ListIcon from "../assets/img/ListIcon.svg";
@@ -23,7 +23,14 @@ const Header = styled.img`
   max-height: 10vh;
 `;
 export function LogoHeader() {
-  return <Header alt="logo" src="/img/logo.png"></Header>;
+  const navigate = useNavigate();
+  return (
+    <Header
+      alt="logo"
+      src="/img/logo.png"
+      onClick={() => navigate("/")}
+    ></Header>
+  );
 }
 
 //Footer
@@ -155,7 +162,6 @@ const NavBarDiv = styled.div`
   justify-content: space-around;
   width: 100vw;
   background-color: white;
-  border-top: 2px solid #d6d6d6;
   padding: 5px 0px;
   opacity: ${(props) => props.opacity || "1"};
   transition: all 0.35s;

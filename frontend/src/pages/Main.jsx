@@ -13,13 +13,19 @@ import user from "../stores/modules/user";
 import { getUserInfoApi } from "../utils/apis/UserAPI";
 import { getArtistApi } from "../utils/apis/ArtistAPI";
 import { getRecommendationProductApi } from "../utils/apis/UserRecommendationAPI";
+import { Fab } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+
 import {
   getOnairApi,
   getPersonalProductListApi,
   getProductListBySizeApi,
 } from "../utils/apis/PersonalProductAPI";
-import { Fab } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
+import SubBanner1 from "../assets/img/SubBanner1.png";
+import SubBanner2 from "../assets/img/SubBanner2.png";
+import { Tag } from "grommet";
+import { StyledText } from "../components/Common";
+
 const StyledTableTitle = styled.div`
   font-size: 16px;
   color: #1f1d1d;
@@ -38,7 +44,6 @@ const StyledCategoryTable = styled.div`
   display: flex;
   justify-content: center;
   padding: 10px 0;
-  border-bottom: 2px solid #ebebeb;
 `;
 
 const StyledCategoryButton = styled.button`
@@ -48,6 +53,12 @@ const StyledCategoryButton = styled.button`
   font-size: 16px;
   border: 0;
   background-color: white;
+`;
+
+const SubBanner = styled.div`
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
 `;
 
 export default function MainPage() {
@@ -64,7 +75,7 @@ export default function MainPage() {
   });
   const User = useSelector((state) => state.user.user.user);
   // console.log("User :: ", User);
-  const navigate = useNavigate();
+  const Navigate = useNavigate();
   const ProductSizeList = [
     {
       size: "small",
@@ -88,6 +99,15 @@ export default function MainPage() {
     },
   ];
   const [Size, setSize] = useState({});
+
+  const goSearchTag = (keyword) => {
+    const data = {
+      searchCategory: "tag",
+      keyword: keyword,
+    };
+    Navigate("/searchResult", { state: data });
+  };
+
   useEffect(() => {
     if (loading) {
       if (User === undefined) {
@@ -188,7 +208,7 @@ export default function MainPage() {
   }, [Size]);
 
   const goProductList = (category) => {
-    navigate("/productlist", { state: { gottenCategory: category } });
+    Navigate("/productlist", { state: { gottenCategory: category } });
   };
 
   return (
@@ -196,19 +216,19 @@ export default function MainPage() {
       <nav>
         <StyledCategoryTable>
           <StyledCategoryButton onClick={() => goProductList("회화")}>
-            회화
+            <StyledText text="회화" />
           </StyledCategoryButton>
           <StyledCategoryButton onClick={() => goProductList("판화")}>
-            판화
+            <StyledText text="판화" />
           </StyledCategoryButton>
           <StyledCategoryButton onClick={() => goProductList("에디션")}>
-            에디션
+            <StyledText text="에디션" />
           </StyledCategoryButton>
           <StyledCategoryButton onClick={() => goProductList("사진")}>
-            사진
+            <StyledText text="사진" />
           </StyledCategoryButton>
           <StyledCategoryButton onClick={() => goProductList("입체")}>
-            입체
+            <StyledText text="입체" />
           </StyledCategoryButton>
         </StyledCategoryTable>
       </nav>
@@ -227,7 +247,7 @@ export default function MainPage() {
       </div>
       <div
         style={{
-          borderBottom: "1px solid #ebebeb",
+          // borderBottom: "1px solid #ebebeb",
           paddingBottom: "20px",
           paddingTop: "20px",
         }}
@@ -243,7 +263,12 @@ export default function MainPage() {
           paddingTop: "20px",
         }}
       >
-        <StyledTableTitle>Art For You</StyledTableTitle>
+        <SubBanner onClick={() => goSearchTag("수채화")}>
+          <img src={SubBanner2} />
+        </SubBanner>
+        <StyledTableTitle style={{ paddingTop: "20px" }}>
+          Art For You
+        </StyledTableTitle>
         <StyledTableSubtitle>이런 작품은 어때요?</StyledTableSubtitle>
         <HorizonScrollRowTable list={ArtForYouList} />
       </div>
@@ -258,6 +283,9 @@ export default function MainPage() {
         <StyledTableSubtitle>신규 등록 작품</StyledTableSubtitle>
         <HorizonScrollRowTable list={NewProductList} />
       </div>
+      <SubBanner onClick={() => goSearchTag("동양화")}>
+        <img src={SubBanner1} />
+      </SubBanner>
       <div style={{ paddingBottom: "20px", paddingTop: "20px" }}>
         <StyledTableTitle>{Size.sizeName} Size</StyledTableTitle>
         <StyledTableSubtitle>{Size.description}</StyledTableSubtitle>
@@ -273,7 +301,7 @@ export default function MainPage() {
             right: "10px",
             display: "flex",
           }}
-          onClick={() => navigate("/productRegister")}
+          onClick={() => Navigate("/productRegister")}
         >
           <EditIcon />
         </Fab>

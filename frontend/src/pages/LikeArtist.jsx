@@ -189,7 +189,7 @@ export default function LikeArtist() {
                   justifySelf: "flex-end",
                 }}
               >
-                <FavoriteIcon />
+                <FavoriteIcon style={{ color: "red" }} />
               </button>
             </FlexBox>
           </div>

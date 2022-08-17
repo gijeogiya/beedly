@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { HalfProductCard } from "../components/HalfProductCard";
+import { FlexBox } from "./UserStyled";
 
 const ProductTable = styled.div`
   display: flex;
@@ -12,10 +13,17 @@ const ProductTable = styled.div`
 
 export function ArtistDetailProductOngoingTable({ list }) {
   const Navigate = useNavigate();
+  const [productList, setProductList] = useState("");
+
   const goProductDetail = (id) => {
     Navigate(`/productDetail/${id}`)
   }
   console.log(list)
+  useEffect(() => {
+    setProductList(list);
+    console.log(typeof (list));
+    console.log(!list);
+  }, [list])
   return (
     <div
       style={{
@@ -26,12 +34,14 @@ export function ArtistDetailProductOngoingTable({ list }) {
       }}
     >
       <ProductTable>
+        {list !== undefined && list.length === 0 && <h5 style={{ width: "100vw", textAlign: "center" }}>진행중인 작품이 없습니다.</h5>}
         {list !== undefined ? list.map((product, idx) =>
-          <div key={idx} onClick={() => goProductDetail(product.id)} style={{ padding: "10px 5px" }}>
-
-            <HalfProductCard product={product} />
+          <div>
+            <div key={idx} onClick={() => goProductDetail(product.id)} style={{ padding: "10px 5px" }}>
+              <HalfProductCard product={product} />
+            </div>
           </div>
-        ) : <div></div>}
+        ) : <h4></h4>}
       </ProductTable>
     </div>
   );

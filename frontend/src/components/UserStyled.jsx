@@ -60,7 +60,7 @@ const TextAreaStyle = styled.textarea`
   font-weight: bold;
   font-family: "Noto Sans KR", sans-serif;
   width: 78vw;
-  height: 40vh;
+  height: 30vh;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.6);
   border-radius: 5px;
   border: 1px rgb(255, 255, 255);
@@ -184,12 +184,24 @@ const StyledDiv = styled.div`
       flex-direction: column;
       justify-content: flex-end;
     `}
-
+${(props) =>
+    props.Row_E &&
+    css`
+      flex-direction: row;
+      justify-content: flex-end;
+    `}
     ${(props) =>
     props.Row_SB &&
     css`
       flex-direction: row;
       justify-content: space-between;
+      align-items: center;
+    `}
+    ${(props) =>
+    props.Column_C &&
+    css`
+      flex-direction: column;
+      justify-content: center;
       align-items: center;
     `}
 
