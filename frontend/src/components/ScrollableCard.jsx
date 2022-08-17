@@ -37,6 +37,7 @@ const AuctionStateBox = styled.div`
   font-size: 12px;
   padding-left: 5px;
   padding-right: 5px;
+  padding-top: 2px;
   border-radius: 3px;
   margin: 12px;
 `;
@@ -44,7 +45,7 @@ const AuctionStateBoxProps = (backcolor) => (
   <AuctionStateBox props={backcolor}></AuctionStateBox>
 );
 const StyledAuctionStateIcon = styled.img`
-  height: 9px;
+  height: 12px;
 `;
 
 const StyledCardInfBox = styled.div`
@@ -67,10 +68,12 @@ const StyledCardArtistImgFrame = styled.div`
 const StyledCardArtistImg = styled.img`
   object-fit: cover;
   border-radius: 50%;
+  border: 2px solid rgb(235, 235, 235);
 `;
 
 const StyledCardInfTextFrame = styled.div`
   padding-left: 5px;
+  width: 28vw;
 `;
 
 export function ProductCard({ product }) {
@@ -123,6 +126,7 @@ export function ProductCard({ product }) {
         >
           <StyledAuctionStateIcon
             src={CheckTime() ? OnairStateIcon : BeforeStateIcon}
+            style={{ paddingRight: "5px" }}
           />
           {CheckTime() ? "실시간" : getTime()}
         </AuctionStateBox>
@@ -136,7 +140,9 @@ export function ProductCard({ product }) {
             style={{
               fontSize: "14px",
               fontWeight: "700",
-              whiteSpace: "pre-line",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
             }}
           >
             {product.userNickname}
@@ -144,12 +150,21 @@ export function ProductCard({ product }) {
           <div
             style={{
               fontSize: "14px",
-              whiteSpace: "pre-line",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
             }}
           >
             {product.productName}
           </div>
-          <div style={{ fontSize: "12px", whiteSpace: "pre-line" }}>
+          <div
+            style={{
+              fontSize: "12px",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
             {CheckTime()
               ? `시청중`
               : `${
