@@ -5,7 +5,8 @@ import ArtistPng from "../assets/images/artist.png";
 import MoreImage from "../assets/images/more.png";
 import styled from "styled-components";
 import {
-  getFavoriteProduct,
+  getLikeArtist,
+  getLikeProduct,
   getPurchaseApi,
   getSaleApi,
   getUserInfoApi,
@@ -104,38 +105,9 @@ export default function MyPage() {
   const [IngSale, setIngSale] = useState(0);
   const [EndSale, setEndSale] = useState(0);
 
-  const [TotalPurchase, setTotalPurchase] = useState(0);
-  const [IngPurchase, setIngPurchase] = useState(0);
-  const [EndPurchase, setEndPurchase] = useState(0);
-
-  const [TotalFav, setTotalFav] = useState(0);
-  const [IngFav, setIngFav] = useState(0);
-  const [EndFav, setEndFav] = useState(0);
-  const [favArtist, setFavArtist] = useState(0);
-  // 배열 크기를 개수로 변환
-  const handleSale = (array) => {
-    array.map((item) => {
-      setTotalSale((prev) => prev + 1);
-      if (item.soldStatus === "SUCCESS") setEndSale((prev) => prev + 1);
-      else setIngSale((prev) => prev + 1);
-    });
-  };
-
-  const handlePurchase = (array) => {
-    array.map((item) => {
-      setTotalPurchase((prev) => prev + 1);
-      if (item.paidFlag) setEndPurchase((prev) => prev + 1);
-      else setIngPurchase((prev) => prev + 1);
-    });
-  };
-
-  const handleFavortie = (array) => {
-    array.map((item) => {
-      setTotalFav((prev) => prev + 1);
-      if (item.soldStatus === "SUCCESS") setEndFav((prev) => prev + 1);
-      else setIngFav((prev) => prev + 1);
-    });
-  };
+  const [TotalPurchase, setTotalPurchase] = useState();
+  const [IngPurchase, setIngPurchase] = useState();
+  const [EndPurchase, setEndPurchase] = useState();
 
   useEffect(() => {
     if (loading) {
@@ -188,10 +160,7 @@ export default function MyPage() {
         }
 
         // 찜한 상품 조회
-        getFavoriteProduct(
-          "0",
-          "20",
-          "",
+        getLikeProduct(
           (res) => {
             console.log("관심작품 ", res);
             handleFavortie(res.data);
@@ -212,7 +181,15 @@ export default function MyPage() {
         );
       }
       setLoading(false);
-      //
+      //찜한 작가 조회
+      getLikeArtist(
+        (res) => {
+          setlikeArtistCount(res.data.length);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
     }
   }, [loading]);
   const CheckRole = () => {
@@ -309,14 +286,8 @@ export default function MyPage() {
         />
 
         <Box gridArea="like">
-          <Sector
-            title="관심작품"
-            link="LikeList"
-            Total={TotalFav}
-            Ing={IngFav}
-            End={EndFav}
-          />
-          <Sector2 title="관심작가" link="LikeArtist" favArtist={favArtist} />
+          <Sector title="관심작품" link="LikeProduct" />
+          <Sector2 title="관심작가" link="LikeArtist" count={likeArtistCount} />
         </Box>
       </Grid>
 
@@ -456,57 +427,7 @@ export default function MyPage() {
   );
 }
 
-// const ContainerBox = ({ title2 }) => {
-//   return (
-//     <Box
-//       direction="row"
-//       background="light-3"
-//       align="center"
-//       justify={title2 === "관심 작가" ? "center" : "evenly"}
-//       pad={{
-//         top: "10px",
-//         bottom: "10px",
-//       }}
-//       round="small"
-//       width="70vw"
-//       alignSelf="center"
-//       margin={{
-//         top: "10px",
-//         bottom: "20px",
-//       }}
-//     >
-//       <Box
-//         align="center"
-//         border={title2 === "관심 작가" ? false : "right"}
-//         pad={title2 === "관심 작가" ? {} : { right: "30px" }}
-//         alignSelf={title2 === "관심 작가" ? "center" : "stretch"}
-//         style={{ display: "flex" }}
-//       >
-//         <StyledText size="12px" text="전체"></StyledText>
-//         <StyledText
-//           weight="bold"
-//           color="#FFD100"
-//           size="12px"
-//           text="10"
-//         ></StyledText>
-//       </Box>
-//       {title2 !== "관심 작가" && (
-//         <Box align="center">
-//           <StyledText size="12px" text="진행중"></StyledText>
-//           <StyledText weight="bold" size="12px" text="10"></StyledText>
-//         </Box>
-//       )}
-//       {title2 !== "관심 작가" && (
-//         <Box align="center" pad={{ left: "30px" }}>
-//           <StyledText size="12px" text="종료"></StyledText>
-//           <StyledText weight="bold" size="12px" text="10"></StyledText>
-//         </Box>
-//       )}
-//     </Box>
-//   );
-// };
-
-const ContainerBox2 = ({ title2, favArtist }) => {
+const ContainerBox2 = ({ title2, count }) => {
   return (
     <Box
       direction="row"
@@ -535,14 +456,14 @@ const ContainerBox2 = ({ title2, favArtist }) => {
           weight="bold"
           color="#FFD100"
           size="12px"
-          text={favArtist}
+          text={count}
         ></StyledText>
       </Box>
     </Box>
   );
 };
 
-const Sector2 = ({ title, link, favArtist }) => {
+const Sector2 = ({ title, link, count }) => {
   return (
     <Box alignContent="center">
       <Box direction="row" justify="between" width="80vw">
@@ -551,7 +472,7 @@ const Sector2 = ({ title, link, favArtist }) => {
           <StyledText text="더보기"></StyledText>
         </Link>
       </Box>
-      <ContainerBox2 favArtist={favArtist} />
+      <ContainerBox2 count={count} />
     </Box>
   );
 };

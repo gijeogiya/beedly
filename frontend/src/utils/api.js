@@ -60,11 +60,13 @@ const getPurchaseApi = async (success, fail) => {
 };
 
 //관심 작품 조회
-const getFavoriteProduct = async (page, size, sort, success, fail) => {
-  await authInstance
-    .get(`/user/myfavorite?page=${page}&size=${size}&sort=${sort}`)
-    .then(success)
-    .catch(fail);
+const getLikeProduct = async (success, fail) => {
+  await authInstance.get(`/user/myfavorite`).then(success).catch(fail);
+};
+
+//관심 작가 조회
+const getLikeArtist = async (success, fail) => {
+  await authInstance.get(`user/myartist`).then(success).catch(fail);
 };
 
 // 구매내역 상세 조회
@@ -74,10 +76,7 @@ const getPurchaseDetailApi = async (
   success,
   fail
 ) => {
-  await authInstance
-    .get(`/user/purchase/${productSoldId}?auctionType = ${auctionType}`)
-    .then(success)
-    .catch(fail);
+  await authInstance.then(success).catch(fail);
 };
 
 //판매내역 상세조회
@@ -94,8 +93,8 @@ const getTagListApi = async (success, fail) => {
 const registerTagApi = async (selectedTag, success, fail) => {
   await authInstance
     .post(`/userRecommendation`, { tags: selectedTag })
-    .then(success)
-    .catch(fail);
+    .catch(fail)
+    .then(success);
 };
 
 // artist 신청서 받기
@@ -301,5 +300,6 @@ export {
   UpdateDescApi,
   UpdateBgImgApi,
   getOnairByCategoryApi,
-  getFavoriteProduct,
+  getLikeProduct,
+  getLikeArtist,
 };
