@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LikeProduct } from "../components/LikeProduct";
-import { getFavoriteProduct } from "../utils/api";
+import { getFavoriteProduct, getLikeProduct } from "../utils/api";
 import beforeIcon from "../assets/img/arrow-left.svg";
 import { StyledHr } from "../components/Common";
+import { Spinner } from "grommet";
 export const LikeList = () => {
   const [loading, setLoading] = useState(true);
   const Navigate = useNavigate("");
@@ -12,25 +13,28 @@ export const LikeList = () => {
     Navigate(-1);
   };
 
-  useEffect(() => {
+  const handleData = () => {
     if (loading)
-      getFavoriteProduct(
-        "0",
-        "20",
-        "",
+      getLikeProduct(
         (res) => {
           console.log("관심작품 ", res);
           setProducts(res.data);
+          setLoading(false);
         },
         (err) => {
           console.log(err);
         }
       );
+  };
+
+  useEffect(() => {
+    handleData();
     return () => {
       setLoading(false);
     };
   });
 
+  if (loading) return <Spinner />;
   return (
     <div>
       {/* 판매내역 header */}
@@ -54,7 +58,7 @@ export const LikeList = () => {
        */}
       {products.map((product, idx) => (
         <div key={idx}>
-          <LikeProduct product={product} />
+          <LikeProduct product={product} handleData={handleData} />
           <hr
             style={{
               border: "none",

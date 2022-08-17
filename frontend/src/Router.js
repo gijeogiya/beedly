@@ -28,7 +28,7 @@ import SearchResult from "./pages/SearchResult";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { PurchaseDetail } from "./pages/PurchaseDetail";
-
+import LikeArtist from "./pages/LikeArtist";
 import UpdateTag from "./pages/UpdateTag";
 import ArtistDetail from "./pages/ArtistDetail";
 import SignupAritst from "./pages/SignupArtist";
@@ -36,6 +36,7 @@ import AdminUserManage from "./pages/AdminUserManage";
 import { SpecialAuctionDetail } from "./pages/SpecialAuctionDetail";
 import { LikeList } from "./pages/LikeList";
 import { LikeArtistList } from "./pages/LikeArtistList";
+import { LikeProduct } from "./components/LikeProduct";
 
 const Layout = () => {
   // const navigate = useNavigate();
@@ -98,6 +99,8 @@ export const Router = () => {
         <Route path="/PurchaseList" element={<PurchaseList />} />
         <Route path="/saleList" element={<SaleList />} />
         <Route path="/LikeList" element={<LikeList />} />
+        <Route path="/likeArtist" element={<LikeArtist />} />
+        <Route path="/likeProduct" element={<LikeProduct />} />
         <Route path="/LikeArtist" element={<LikeArtistList />} />
         <Route path="/mypageDetail" element={<MypageDetail />} />
         <Route path="/updateMypage" element={<UpdateMyPage />} />

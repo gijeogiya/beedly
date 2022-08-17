@@ -105,9 +105,36 @@ export default function MyPage() {
   const [IngSale, setIngSale] = useState(0);
   const [EndSale, setEndSale] = useState(0);
 
-  const [TotalPurchase, setTotalPurchase] = useState();
-  const [IngPurchase, setIngPurchase] = useState();
-  const [EndPurchase, setEndPurchase] = useState();
+  const [TotalPurchase, setTotalPurchase] = useState(0);
+  const [IngPurchase, setIngPurchase] = useState(0);
+  const [EndPurchase, setEndPurchase] = useState(0);
+  const [TotalFav, setTotalFav] = useState(0);
+  const [IngFav, setIngFav] = useState(0);
+  const [EndFav, setEndFav] = useState(0);
+  const [favArtist, setFavArtist] = useState(0);
+  const handleSale = (array) => {
+    array.map((item) => {
+      setTotalSale((prev) => prev + 1);
+      if (item.soldStatus === "SUCCESS") setEndSale((prev) => prev + 1);
+      else setIngSale((prev) => prev + 1);
+    });
+  };
+
+  const handlePurchase = (array) => {
+    array.map((item) => {
+      setTotalPurchase((prev) => prev + 1);
+      if (item.paidFlag) setEndPurchase((prev) => prev + 1);
+      else setIngPurchase((prev) => prev + 1);
+    });
+  };
+
+  const handleFavortie = (array) => {
+    array.map((item) => {
+      setTotalFav((prev) => prev + 1);
+      if (item.soldStatus === "SUCCESS") setEndFav((prev) => prev + 1);
+      else setIngFav((prev) => prev + 1);
+    });
+  };
 
   useEffect(() => {
     if (loading) {
@@ -182,14 +209,14 @@ export default function MyPage() {
       }
       setLoading(false);
       //찜한 작가 조회
-      getLikeArtist(
-        (res) => {
-          setlikeArtistCount(res.data.length);
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
+      // getLikeArtist(
+      //   (res) => {
+      //     setlikeArtistCount(res.data.length);
+      //   },
+      //   (err) => {
+      //     console.log(err);
+      //   }
+      // );
     }
   }, [loading]);
   const CheckRole = () => {
@@ -286,8 +313,14 @@ export default function MyPage() {
         />
 
         <Box gridArea="like">
-          <Sector title="관심작품" link="LikeProduct" />
-          <Sector2 title="관심작가" link="LikeArtist" count={likeArtistCount} />
+          <Sector
+            title="관심작품"
+            link="LikeList"
+            Total={TotalFav}
+            Ing={IngFav}
+            End={EndFav}
+          />
+          <Sector2 title="관심작가" link="LikeArtist" count={favArtist} />
         </Box>
       </Grid>
 
