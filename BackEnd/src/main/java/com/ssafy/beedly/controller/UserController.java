@@ -176,4 +176,25 @@ public class UserController {
 //        return ResponseEntity.ok().build();
 //    }
 
+    @ApiOperation(value = "카카오 로그인 개발ver", notes = "인가 코드를 받아서 서버에 넘겨주세요")
+    @ApiImplicitParam(name = "code", value = "카카오 로그인 api로 받은 인가 코드값")
+    @PostMapping("/login/develop")
+    public ResponseEntity<UserCreateFlag> kakaoLoginDevelop(@RequestParam String code) {
+        String kakaoAccessToken = userService.getKakaoAccessTokenDevelop(code);
+        KakaoUserResponse kakaoUserInfo = userService.getKakaoUserInfo(kakaoAccessToken);
+        UserCreateFlag userCreateFlag = userService.kakaoLogin(kakaoUserInfo);
+        String accessToken = userCreateFlag.getAccessToken();
+        userCreateFlag.setAccessToken(null);
+
+        if (userCreateFlag.isCreateFlag()) {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .header(HttpHeaders.AUTHORIZATION, accessToken)
+                    .body(userCreateFlag);
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .header(HttpHeaders.AUTHORIZATION, accessToken)
+                    .body(userCreateFlag);
+        }
+    }
+
 }
