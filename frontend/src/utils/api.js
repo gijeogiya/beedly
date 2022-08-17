@@ -271,9 +271,25 @@ const UpdateDescApi = async (Desc, success, fail) => {
   await authInstance.patch(`artist/info/desc`, Desc).then(success).catch(fail);
 };
 
+// 작가의 종료된 상품 목록 보기
+const getStandByProductByArtist = async (artistId, success, fail) => {
+  await authInstance
+    .get(`artist/product/standBy/${artistId}`)
+    .then(success)
+    .catch(fail);
+};
+// 작가의 진행중인 상품 목록 보기
+const getSuccessProductByArtist = async (artistId, success, fail) => {
+  await authInstance
+    .get(`artist/product/success/${artistId}`)
+    .then(success)
+    .catch(fail);
+};
 export {
   axios,
   loginApi,
+  getStandByProductByArtist,
+  getSuccessProductByArtist,
   checkNicknameApi,
   getUserInfoApi,
   updateUserInfoApi,

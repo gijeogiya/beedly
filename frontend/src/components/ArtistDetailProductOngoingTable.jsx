@@ -10,23 +10,8 @@ const ProductTable = styled.div`
   width: 88vw;
 `;
 
-export function ArtistDetailProductOngoingTable({ artist }) {
-  const [loading, setloading] = useState(true);
-  useEffect(() => {
-    getProductByArtistId(
-      artist.artistId,
-      "0",
-      "20",
-      "",
-      (res) => {
-        console.log(res);
-        setloading(false);
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-  }, [loading]);
+export function ArtistDetailProductOngoingTable({ list }) {
+  console.log(list)
   return (
     <div
       style={{
@@ -37,11 +22,12 @@ export function ArtistDetailProductOngoingTable({ artist }) {
       }}
     >
       <ProductTable>
-        {/* <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard /> */}
+        {list.map((product, idx) =>
+          <div key={idx}>
+
+            <HalfProductCard product={product} />
+          </div>
+        )}
       </ProductTable>
     </div>
   );
