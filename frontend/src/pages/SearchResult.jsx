@@ -90,6 +90,7 @@ export default function SearchResult() {
         getProductListBySizeApi(keyword, "0", "20", "", (res) => {
           console.log(res);
           setSearchProductList(res.data.content);
+
         }, (err) => {
           console.log(err);
         })
@@ -117,8 +118,8 @@ export default function SearchResult() {
   return (
     // 검색 후 화면
     <div style={{ paddingBottom: "40px" }}>
-      <SearchBar handlefunction={handleSubmit} />
-      <StyledTableTitle>검색 결과</StyledTableTitle>
+      <SearchBar handlefunction={handleSubmit} word={keyword} />
+      <StyledTableTitle>'{keyword}' 검색 결과</StyledTableTitle>
       <StyledTableTitle>Artist</StyledTableTitle>
       {/* <HorizonScrollColTable /> */}
       <StyledTableTitle>Product</StyledTableTitle>

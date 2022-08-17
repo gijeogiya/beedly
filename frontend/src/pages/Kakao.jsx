@@ -23,6 +23,7 @@ export default function Kakao() {
           setUser({
             userName: res.data.userName,
             userNickname: res.data.userNickname,
+            userGender: res.data.userGender,
             userEmail: res.data.userEmail,
             userId: res.data.userId,
             token: token,

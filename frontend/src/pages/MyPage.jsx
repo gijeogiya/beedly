@@ -8,6 +8,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { FlexBox } from "../components/UserStyled";
 import { useSelector } from "react-redux";
 import { getMyArtistList, getPurchaseApi, getUserInfoApi, getLikeProduct, getSaleApi } from "../utils/apis/UserAPI";
+import ArtistMan from "../assets/img/artist_man.png";
+import ArtistWoman from "../assets/img/artist_woman.png";
+import UserMan from "../assets/img/user_man.png";
+import UserWoman from "../assets/img/user_woman.png";
 
 const BackButton = styled.button`
   background: none;
@@ -16,7 +20,13 @@ const BackButton = styled.button`
   border: 0px;
   width: 10vw;
 `;
-
+const StyledCardArtistImg = styled.img`
+  width: 17vw;
+  height: 17vw;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid white;
+`;
 const ContainerBox = ({ title2, Total, Ing, End }) => {
   return (
     <Box
@@ -29,11 +39,11 @@ const ContainerBox = ({ title2, Total, Ing, End }) => {
         bottom: "10px",
       }}
       round="small"
-      width="70vw"
+      width="75vw"
       alignSelf="center"
       margin={{
         top: "10px",
-        bottom: "20px",
+        bottom: "10px",
       }}
     >
       <Box
@@ -75,11 +85,11 @@ const ContainerBox = ({ title2, Total, Ing, End }) => {
 
 const Sector = ({ title, link, Total, Ing, End }) => {
   return (
-    <Box alignContent="center">
-      <Box direction="row" justify="between" width="80vw">
-        <StyledText weight="bold" text={title}></StyledText>
+    <Box alignContent="center" width="75vw" style={{ paddingTop: "10px" }}>
+      <Box direction="row" justify="between" width="80vw" align="end">
+        <StyledText weight="bold" text={title} size="15px"></StyledText>
         <Link to={`/${link}`} style={{ textDecorationLine: "none" }}>
-          <StyledText text="더보기"></StyledText>
+          <StyledText text="더보기" size="12px" color="gray" weight="bold"></StyledText>
         </Link>
       </Box>
       <ContainerBox title2={title} Total={Total} Ing={Ing} End={End} />
@@ -203,6 +213,23 @@ export default function MyPage() {
       setLoading(false);
     }
   }, [loading]);
+
+  const checkProfile = () => {
+    if (user.userGender === "M") {
+      if (user.userRole === "ROLE_USER") {
+        return UserMan;
+      } else if (user.userRole === "ROLE_ARTIST") {
+        return ArtistMan;
+      }
+    } else if (user.userGender === "F") {
+      if (user.userRole === "ROLE_USER") {
+        return UserWoman;
+      } else if (user.userRole === "ROLE_ARTIST") {
+        return ArtistWoman;
+      }
+    }
+    return UserMan;
+  }
   const CheckRole = () => {
     if (user.userRole === "ROLE_USER") {
       return "구매자";
@@ -240,25 +267,30 @@ export default function MyPage() {
           margin={{ top: "20px" }}
           justify="between"
         >
-          <Box direction="row">
-            <Avatar src={ArtistPng} margin="5px"></Avatar>
-            <Box margin="5px">
-              <Box direction="row" align="end" style={{ marginBottom: "10px" }}>
+          <Box direction="row" align="center">
+            <StyledCardArtistImg src={checkProfile()} margin="5px"></StyledCardArtistImg>
+            <Box margin="5px" width="60vw">
+              <Box direction="row" align="end" style={{ marginBottom: "5px" }} justify="center">
                 <StyledText text={user.userName} weight="bold" size="18px" />
                 <StyledText
-                  style={{ marginLeft: "10px" }}
+                  style={{ marginLeft: "5px" }}
                   text={CheckRole()}
                   size="12px"
                 />
+              </Box >
+              <Box direction="row" style={{ width: "60vw" }} justify="center" >
+                <StyledText text={user.userEmail} size="14px" />
               </Box>
-              <StyledText text={user.userEmail} size="14px" />
+            </Box>
+            <Box alignSelf="center">
+
+              <Link to="/mypageDetail">
+                <BackButton>
+                  <img src={MoreImage} alt="더보기" />
+                </BackButton>
+              </Link>
             </Box>
           </Box>
-          <Link to="/mypageDetail">
-            <BackButton>
-              <img src={MoreImage} alt="더보기" />
-            </BackButton>
-          </Link>
         </Box>
 
         <StyledHr
@@ -296,7 +328,7 @@ export default function MyPage() {
           color="lightgray"
         />
 
-        <Box gridArea="like">
+        <Box gridArea="like" direction="column" align="center">
           <Sector
             title="관심작품"
             link="LikeList"
@@ -456,7 +488,7 @@ const ContainerBox2 = ({ title2, count }) => {
         bottom: "10px",
       }}
       round="small"
-      width="70vw"
+      width="75vw"
       alignSelf="center"
       margin={{
         top: "10px",
@@ -482,11 +514,11 @@ const ContainerBox2 = ({ title2, count }) => {
 
 const Sector2 = ({ title, link, count }) => {
   return (
-    <Box alignContent="center">
-      <Box direction="row" justify="between" width="80vw">
-        <StyledText weight="bold" text={title}></StyledText>
+    <Box alignContent="center" width="75vw" style={{ paddingTop: "10px" }}>
+      <Box direction="row" justify="between" width="80vw" align="end">
+        <StyledText weight="bold" text={title} size="15px"></StyledText>
         <Link to={`/${link}`} style={{ textDecorationLine: "none" }}>
-          <StyledText text="더보기"></StyledText>
+          <StyledText text="더보기" size="12px" color="gray" weight="bold"></StyledText>
         </Link>
       </Box>
       <ContainerBox2 count={count} />

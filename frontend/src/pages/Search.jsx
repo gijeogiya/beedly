@@ -38,13 +38,14 @@ const SearchArea = styled.div`
   background-color: #f4f4f4;
   border-radius: 8px;
   display: flex;
-  width: 90%;
+  width: 90vw;
 `;
 
 const SearchForm = styled.form`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  width:75vw;
 `;
 
 const SearchTextInput = styled.input`
@@ -127,18 +128,18 @@ export default function SearchPage() {
               onChange={(e) => handleChange(e)}
             />
           </SearchForm>
+          <button
+            style={{ border: "0", backgroundColor: "#f4f4f4", paddingLeft: "15px" }} onClick={() => { setKeyword(""); console.log(2) }}
+          >
+            <img src={XIcon} style={{ width: "18px" }} />
+          </button>
         </SearchArea>
-        <button
-          style={{ border: "0", backgroundColor: "white", paddingLeft: "15px" }}
-        >
-          <img src={XIcon} style={{ width: "18px" }} />
-        </button>
       </SearchWarp>
       <StyledTableTitle>최근 검색어</StyledTableTitle>
       <RecentlyKeywordTable list={searchList} />
-      <StyledTableTitle>추천 검색어</StyledTableTitle>
+      <StyledTableTitle style={{ paddingTop: "0px" }}>추천 검색어</StyledTableTitle>
       <RecommendKeywordTable list={RecommendSearchList} />
-      <StyledTableTitle>Size Pick!</StyledTableTitle>
+      <StyledTableTitle style={{ paddingTop: "0px" }}>Size Pick!</StyledTableTitle>
       <SizePickCardTable>
         <SizePickCard
           title={"Small Size"}

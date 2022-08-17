@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import beforeIcon from "../assets/img/arrow-left.svg";
 import { StyledHr, StyledProfile } from "../components/Common";
 import { FlexBox } from "../components/UserStyled";
-import SampleProfile from "../assets/img/SampleProfile.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Button from "../components/Button";
@@ -84,6 +83,10 @@ export default function MypageDetail() {
     deleteConfirm,
     cancelConfirm
   );
+
+
+
+
   return (
     <div>
       <img
@@ -177,12 +180,18 @@ export default function MypageDetail() {
                 <img src={Plus} alt="태그 수정" />
               </Link>
             </FlexBox>
+            <FlexBox Row_E>
+
+              <FlexBox Row_SA style={{ width: "80px" }}>
+
+                <p style={{ fontSize: "13px", color: "gray", textAlign: "end" }} onClick={() => { confirmLogout(); }}>
+                  로그아웃
+                </p>
+              </FlexBox>
+            </FlexBox>
           </div>
         </div>
         <br />
-        <Button SmallBlack onClick={confirmLogout}>
-          로그아웃
-        </Button>
         <br />
       </FlexBox>
     </div>

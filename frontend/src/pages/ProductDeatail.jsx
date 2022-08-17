@@ -226,11 +226,11 @@ export const ProductDeatail = () => {
         return `${parseInt(diff / day)}일 남음`;
       } else {
         return `${diff / hour >= 1 ? `${parseInt(diff / hour)}:` : ``}${diff / minute >= 1
-            ? `${parseInt((diff % hour) / minute) < 10
-              ? `0${parseInt((diff % hour) / minute)}`
-              : parseInt((diff % hour) / minute)
-            }:`
-            : ``
+          ? `${parseInt((diff % hour) / minute) < 10
+            ? `0${parseInt((diff % hour) / minute)}`
+            : parseInt((diff % hour) / minute)
+          }:`
+          : ``
           }${parseInt((diff % minute) / sec) < 10
             ? `0${parseInt((diff % minute) / sec)}`
             : parseInt((diff % minute) / sec)
@@ -534,7 +534,7 @@ export const ProductDeatail = () => {
             onClick={handleFavorite}
             children={
               <Box align="center">
-                {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                {isFavorite ? <FavoriteIcon style={{ color: "red" }} /> : <FavoriteBorderIcon />}
                 <StyledText text={favoriteCount} />
               </Box>
             }
