@@ -65,7 +65,7 @@ const ProductTable = styled.div`
 export default function ProductListPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [onairList, setOnairList] = useState([]);
+  const [hotProductList, setHotProductList] = useState([]);
   const [newProductList, setNewProductList] = useState([]);
   const [popularProductList, setPopularProductList] = useState([]);
   const [loading, setloading] = useState(true);
@@ -89,15 +89,15 @@ export default function ProductListPage() {
 
   useEffect(() => {
     if (loading) {
-      //카테고리별 온에어 가져오기
-      getOnairByCategoryApi(
+      //카테고리별 인기 상품 가져오기
+      getProductByCategoryApi(
         nowCategory,
         "0",
         "20",
-        "",
+        "favoriteCount,DESC",
         (res) => {
           console.log(res);
-          setOnairList(res.data.content);
+          setHotProductList(res.data.content);
         },
         (err) => {
           console.log(err);
@@ -138,7 +138,7 @@ export default function ProductListPage() {
     }
     return () => setloading(false);
     // eslint-disable-next-line
-  }, [nowCategory, onairList, sortMethod]);
+  }, [nowCategory, sortMethod]);
 
   // useEffect(() => {
   //   setNowCategory(gottenCategory);
@@ -228,9 +228,9 @@ export default function ProductListPage() {
           padding: "20px 0",
         }}
       >
-        <StyledTableTitle>On Air</StyledTableTitle>
-        <StyledTableSubtitle>지금 진행중인 개인경매</StyledTableSubtitle>
-        <HorizonScrollRowTable list={onairList} />
+        <StyledTableTitle>Most Popular</StyledTableTitle>
+        <StyledTableSubtitle>인기 {nowCategory} 작품</StyledTableSubtitle>
+        <HorizonScrollRowTable list={hotProductList} />
       </div>
       <div
         style={{
@@ -239,7 +239,7 @@ export default function ProductListPage() {
         }}
       >
         <StyledTableTitle>New In</StyledTableTitle>
-        <StyledTableSubtitle>신규 등록 작품</StyledTableSubtitle>
+        <StyledTableSubtitle>신규 등록 {nowCategory} 작품</StyledTableSubtitle>
         <HorizonScrollRowTable list={newProductList} />
       </div>
       <div
@@ -249,7 +249,7 @@ export default function ProductListPage() {
         }}
       >
         <StyledTableTitle>Products</StyledTableTitle>
-        <StyledTableSubtitle>낙찰 전 개인 작품</StyledTableSubtitle>
+        <StyledTableSubtitle>낙찰 전 개인 {nowCategory} 작품</StyledTableSubtitle>
         <div
           style={{
             width: "95vw",
