@@ -3,14 +3,16 @@ import SampleProduct from "../assets/img/SampleProduct.png";
 import SampleProfile from "../assets/img/SampleProfile.png";
 import OnairStateIcon from "../assets/img/OnairStateIcon.svg";
 import BeforeStateIcon from "../assets/img/BeforeStateIcon.svg";
+import { useEffect } from "react";
+import { useState } from "react";
 
-const StyledProductCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  width: 42vw;
-  padding-top: 5vw;
-`;
+// const StyledProductCard = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-around;
+//   width: 42vw;
+//   padding-top: 5vw;
+// `;
 
 const StyledProductCardImgFrame = styled.div`
   position: relative;
@@ -75,11 +77,12 @@ const StyledCardInfTextFrame = styled.div`
 `;
 
 export function HalfProductCard({ product }) {
-  const now = new Date();
+  const [now, setNow] = useState(new Date());
   const start = new Date(product.startTime);
   const date = product.startTime.split("T");
   const yyyyMMdd = date[0].split("-");
   const HHmm = date[1].split(":");
+  const [timer, setTimer] = useState(0);
   const CheckTime = () => {
     if (start > now) {
       // 아직 진행 예정
@@ -88,6 +91,15 @@ export function HalfProductCard({ product }) {
       return true;
     }
   };
+
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      setNow(new Date());
+    }, 1000);
+    return () => clearInterval(countdown);
+
+    
+  }, [timer]);
 
   const getTime = () => {
     let diff = start - now;
@@ -108,7 +120,7 @@ export function HalfProductCard({ product }) {
   };
 
   return (
-    <StyledProductCard>
+    <div>
       <StyledProductCardImgFrame>
         <StyledRectangleRowImg src={product.productImgs[0]} />
         <AuctionStateBox
@@ -152,6 +164,6 @@ export function HalfProductCard({ product }) {
           </div>
         </StyledCardInfTextFrame>
       </StyledCardInfBox>
-    </StyledProductCard>
+    </div>
   );
 }

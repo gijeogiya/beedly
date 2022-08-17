@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import { HorizonScrollColTable } from "../components/HorizonScrollTable";
 import { HalfProductCard } from "../components/HalfProductCard";
 import { SearchBar } from "../components/SearchBar";
@@ -33,6 +34,10 @@ export default function SearchResult() {
   const [searchProductList, setSearchProductList] = useState([]);
   const [loading, setloading] = useState(true);
   const [list, setlist] = useState();
+  const Navigate = useNavigate("");
+  const GoProductDetail = (id) => {
+    Navigate(`/productDetail/${id}`);
+  };
   useEffect(() => {
     if (loading) {
       if (searchCategory === "keyword") {
@@ -102,7 +107,14 @@ export default function SearchResult() {
         <div style={{ display: "flex", justifyContent: "center" }}>
           <ProductTable>
             {searchProductList.map((product, idx) => (
-              <HalfProductCard key={idx} product={product} />
+              <div
+                key={idx}
+                onClick={(e) => GoProductDetail(product.id)}
+              >
+                <HalfProductCard
+                  value={product.id}
+                />
+              </div>
             ))}
           </ProductTable>
         </div>
