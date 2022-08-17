@@ -1,13 +1,23 @@
-import { Avatar, Box, Grid } from "grommet";
+import { Avatar, Box, Grid, Spinner } from "grommet";
 import React, { useEffect, useState } from "react";
 import { StyledHr, StyledText } from "../components/Common";
 import ArtistPng from "../assets/images/artist.png";
 import MoreImage from "../assets/images/more.png";
-import Button from "../components/Button";
 import styled from "styled-components";
+import { Link, useNavigate } from "react-router-dom";
+import { FlexBox } from "../components/UserStyled";
 import { useSelector } from "react-redux";
-import { getUserInfoApi } from "../utils/api";
-const ContainerBox = ({ title2 }) => {
+import { getMyArtistList, getPurchaseApi, getUserInfoApi, getLikeProduct, getSaleApi } from "../utils/apis/UserAPI";
+
+const BackButton = styled.button`
+  background: none;
+  font-size: 12px;
+  font-family: Noto Sans KR, sans-serif;
+  border: 0px;
+  width: 10vw;
+`;
+
+const ContainerBox = ({ title2, Total, Ing, End }) => {
   return (
     <Box
       direction="row"
@@ -38,122 +48,448 @@ const ContainerBox = ({ title2 }) => {
           weight="bold"
           color="#FFD100"
           size="12px"
-          text="10"
+          text={Total}
         ></StyledText>
       </Box>
       {title2 !== "관심 작가" && (
         <Box align="center">
-          <StyledText size="12px" text="진행중"></StyledText>
-          <StyledText weight="bold" size="12px" text="10"></StyledText>
+          <StyledText
+            size="12px"
+            text={title2 === "구매내역" ? "미결제" : "진행중"}
+          ></StyledText>
+          <StyledText weight="bold" size="12px" text={Ing}></StyledText>
         </Box>
       )}
       {title2 !== "관심 작가" && (
         <Box align="center" pad={{ left: "30px" }}>
-          <StyledText size="12px" text="종료"></StyledText>
-          <StyledText weight="bold" size="12px" text="10"></StyledText>
+          <StyledText
+            size="12px"
+            text={title2 === "구매내역" ? "결제" : "종료"}
+          ></StyledText>
+          <StyledText weight="bold" size="12px" text={End}></StyledText>
         </Box>
       )}
     </Box>
   );
 };
 
-const Sector = ({ gridArea, title1, title2 }) => {
+const Sector = ({ title, link, Total, Ing, End }) => {
   return (
-    <Box gridArea={gridArea}>
-      <Box alignContent="center">
-        <Box direction="row" justify="between" width="80vw">
-          <StyledText weight="bold" text={title1}></StyledText>
+    <Box alignContent="center">
+      <Box direction="row" justify="between" width="80vw">
+        <StyledText weight="bold" text={title}></StyledText>
+        <Link to={`/${link}`} style={{ textDecorationLine: "none" }}>
           <StyledText text="더보기"></StyledText>
-        </Box>
-        <ContainerBox />
+        </Link>
       </Box>
-      <Box>
-        <Box direction="row" justify="between">
-          <StyledText weight="bold" text={title2}></StyledText>
-          <StyledText text="더보기"></StyledText>
+      <ContainerBox title2={title} Total={Total} Ing={Ing} End={End} />
+    </Box>
+  );
+};
+
+export default function MyPage() {
+  //user 정보 가져오기
+  const Navigate = useNavigate("");
+  const [user, setUser] = useState({});
+  const User = useSelector((state) => state.user.user.user);
+  const [loading, setLoading] = useState(true);
+
+  const [TotalSale, setTotalSale] = useState(0);
+  const [IngSale, setIngSale] = useState(0);
+  const [EndSale, setEndSale] = useState(0);
+
+  const [TotalPurchase, setTotalPurchase] = useState(0);
+  const [IngPurchase, setIngPurchase] = useState(0);
+  const [EndPurchase, setEndPurchase] = useState(0);
+  const [TotalFav, setTotalFav] = useState(0);
+  const [IngFav, setIngFav] = useState(0);
+  const [EndFav, setEndFav] = useState(0);
+  const [favArtist, setFavArtist] = useState(0);
+  const handleSale = (array) => {
+    array.map((item) => {
+      setTotalSale((prev) => prev + 1);
+      if (item.soldStatus === "SUCCESS") setEndSale((prev) => prev + 1);
+      else setIngSale((prev) => prev + 1);
+    });
+  };
+
+  const handlePurchase = (array) => {
+    array.map((item) => {
+      setTotalPurchase((prev) => prev + 1);
+      if (item.paidFlag) setEndPurchase((prev) => prev + 1);
+      else setIngPurchase((prev) => prev + 1);
+    });
+  };
+
+  const handleFavortie = (array) => {
+    array.map((item) => {
+      setTotalFav((prev) => prev + 1);
+      if (item.soldStatus === "SUCCESS") setEndFav((prev) => prev + 1);
+      else setIngFav((prev) => prev + 1);
+    });
+  };
+
+  useEffect(() => {
+    if (loading) {
+      // 아직 로그인 된 상태가 아니라면
+      // console.log(User);
+      if (User === undefined) {
+        // 로그인하라고 보내주기
+        Navigate("/login");
+      } else {
+        // 내 정보 조회
+        getUserInfoApi(
+          (res) => {
+            console.log(res);
+            setUser((prev) => (prev = res.data));
+            if (res.data.userRole == "ROLE_ARTIST")
+              getSaleApi(
+                (res) => {
+                  console.log("판매내역 ", res);
+                  handleSale(res.data);
+                },
+                (err) => {
+                  console.log(err);
+                }
+              );
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+        // 구매내역 조회
+        getPurchaseApi(
+          (res) => {
+            console.log("구매내역 ", res);
+            handlePurchase(res.data);
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+        // 판매내역 조회
+        if (user.userRole == "ROLE_ARTIST") {
+          getSaleApi(
+            (res) => {
+              console.log("판매내역 ", res);
+            },
+            (err) => {
+              console.log(err);
+            }
+          );
+        }
+
+        // 찜한 상품 조회
+        getLikeProduct(
+          (res) => {
+            console.log("관심작품 ", res);
+            handleFavortie(res.data);
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+        //관심 작가 조회
+        getMyArtistList(
+          (response) => {
+            console.log("관심작가 : ", response);
+            setFavArtist(response.data.length);
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      }
+      setLoading(false);
+    }
+  }, [loading]);
+  const CheckRole = () => {
+    if (user.userRole === "ROLE_USER") {
+      return "구매자";
+    } else if (user.userRole === "ROLE_ARTIST") {
+      return "작가님";
+    } else if (user.userRole === "ROLE_ADMIN") {
+      return "관리자";
+    }
+    return "정보없음";
+  };
+  if (loading) return <Spinner />;
+  return (
+    <div>
+      <Grid
+        width="100vw"
+        justify="center"
+        margin="0 auto"
+        gap="small"
+        rows={["auto", "block"]}
+        columns={["auto", "block"]}
+        areas={[
+          ["profile"],
+          ["firstHr"],
+          ["buysold"],
+          ["secHr"],
+          ["like"],
+          ["info"],
+        ]}
+      >
+        <Box
+          gridArea="profile"
+          direction="row"
+          pad="5px"
+          width="90vw"
+          margin={{ top: "20px" }}
+          justify="between"
+        >
+          <Box direction="row">
+            <Avatar src={ArtistPng} margin="5px"></Avatar>
+            <Box margin="5px">
+              <Box direction="row" align="end" style={{ marginBottom: "10px" }}>
+                <StyledText text={user.userName} weight="bold" size="18px" />
+                <StyledText
+                  style={{ marginLeft: "10px" }}
+                  text={CheckRole()}
+                  size="12px"
+                />
+              </Box>
+              <StyledText text={user.userEmail} size="14px" />
+            </Box>
+          </Box>
+          <Link to="/mypageDetail">
+            <BackButton>
+              <img src={MoreImage} alt="더보기" />
+            </BackButton>
+          </Link>
         </Box>
-        <ContainerBox title2={title2} />
+
+        <StyledHr
+          gridArea="firstHr"
+          width="99vw"
+          height="2px"
+          color="lightgray"
+        />
+
+        {/* 구매내역 & 판매내역 box */}
+        <Box gridArea="buysold">
+          <Sector
+            title="구매내역"
+            link="PurchaseList"
+            Total={TotalPurchase}
+            Ing={IngPurchase}
+            End={EndPurchase}
+          />
+          {user.userRole === "ROLE_ARTIST" ? (
+            <Sector
+              title="판매내역"
+              link="SaleList"
+              Total={TotalSale}
+              Ing={IngSale}
+              End={EndSale}
+            />
+          ) : (
+            <div></div>
+          )}
+        </Box>
+        <StyledHr
+          gridArea="secHr"
+          width="99vw"
+          height="2px"
+          color="lightgray"
+        />
+
+        <Box gridArea="like">
+          <Sector
+            title="관심작품"
+            link="LikeList"
+            Total={TotalFav}
+            Ing={IngFav}
+            End={EndFav}
+          />
+          <Sector2 title="관심작가" link="LikeArtist" count={favArtist} />
+        </Box>
+      </Grid>
+
+      {/* 구매자 & 판매자가 볼수있는 button */}
+      {user.userRole === ("ROLE_USER" || "ROLE_ARTIST") ? (
+        <FlexBox Row_SA style={{ margin: "0px" }}>
+          <div
+            style={{
+              width: "33vw",
+              border: "2px solid #D9D9D9",
+              textAlign: "center",
+              padding: "8px",
+              borderRight: "0px",
+            }}
+          >
+            <Link
+              to="/adminUserManage"
+              style={{
+                textDecorationLine: "none",
+                fontSize: "14px",
+                color: "#1F1D1D",
+              }}
+            >
+              공지사항
+            </Link>
+          </div>
+          <div
+            style={{
+              width: "33vw",
+              border: "2px solid #D9D9D9",
+              textAlign: "center",
+              padding: "8px",
+              borderRight: "0px",
+            }}
+          >
+            <Link
+              to="/adminUserManage"
+              style={{
+                textDecorationLine: "none",
+                fontSize: "14px",
+                color: "#1F1D1D",
+              }}
+            >
+              QnA
+            </Link>
+          </div>
+          <div
+            style={{
+              width: "33vw",
+              border: "2px solid #D9D9D9",
+              textAlign: "center",
+              padding: "8px",
+            }}
+          >
+            <Link
+              to="/adminUserManage"
+              style={{
+                textDecorationLine: "none",
+                fontSize: "14px",
+                color: "#1F1D1D",
+              }}
+            >
+              이용가이드
+            </Link>
+          </div>
+        </FlexBox>
+      ) : (
+        <div></div>
+      )}
+
+      {user.userRole === "ROLE_ADMIN" ? (
+        <FlexBox Row_SA style={{ margin: "0px" }}>
+          <div
+            style={{
+              width: "33vw",
+              border: "2px solid #D9D9D9",
+              textAlign: "center",
+              padding: "8px",
+              borderRight: "0px",
+            }}
+          >
+            <Link
+              to="/adminUserManage"
+              style={{
+                textDecorationLine: "none",
+                fontSize: "14px",
+                color: "#1F1D1D",
+              }}
+            >
+              공지사항 등록
+            </Link>
+          </div>
+          <div
+            style={{
+              width: "33vw",
+              border: "2px solid #D9D9D9",
+              textAlign: "center",
+              padding: "8px",
+              borderRight: "0px",
+            }}
+          >
+            <Link
+              to="/adminUserManage"
+              style={{
+                textDecorationLine: "none",
+                fontSize: "14px",
+                color: "#1F1D1D",
+              }}
+            >
+              유저관리
+            </Link>
+          </div>
+          <div
+            style={{
+              width: "33vw",
+              border: "2px solid #D9D9D9",
+              textAlign: "center",
+              padding: "8px",
+            }}
+          >
+            <Link
+              to="/adminUserManage"
+              style={{
+                textDecorationLine: "none",
+                fontSize: "14px",
+                color: "#1F1D1D",
+              }}
+            >
+              물품조회
+            </Link>
+          </div>
+        </FlexBox>
+      ) : (
+        <div></div>
+      )}
+    </div>
+  );
+}
+
+const ContainerBox2 = ({ title2, count }) => {
+  return (
+    <Box
+      direction="row"
+      background="light-3"
+      align="center"
+      justify={title2 === "관심 작가" ? "center" : "evenly"}
+      pad={{
+        top: "10px",
+        bottom: "10px",
+      }}
+      round="small"
+      width="70vw"
+      alignSelf="center"
+      margin={{
+        top: "10px",
+        bottom: "20px",
+      }}
+    >
+      <Box
+        align="center"
+        alignSelf={title2 === "관심 작가" ? "center" : "stretch"}
+        style={{ display: "flex" }}
+      >
+        <StyledText size="12px" text="전체"></StyledText>
+        <StyledText
+          weight="bold"
+          color="#FFD100"
+          size="12px"
+          text={count}
+        ></StyledText>
       </Box>
     </Box>
   );
 };
 
-const BackButton = styled.button`
-  background: none;
-  font-size: 12px;
-  font-family: Noto Sans KR, sans-serif;
-  border: 0px;
-  width: 10vw;
-`;
-
-export default function MyPage() {
-  const Selector = useSelector((state) => state.user.user);
-  const [token, setToken] = useState("");
-  useEffect(() => {
-    if (Selector === null) {
-      window.location.href = "/login";
-    } else {
-      console.log(Selector);
-      setToken(localStorage.getItem("token"));
-      // getUserInfoApi(
-      //   (response) => {
-      //     console.log(response);
-      //   },
-      //   (fail) => {
-      //     console.log(fail);
-      //   }
-      // );
-    }
-  }, []);
+const Sector2 = ({ title, link, count }) => {
   return (
-    <Grid
-      width="100vw"
-      justify="center"
-      margin="0 auto"
-      gap="small"
-      rows={["auto", "block"]}
-      columns={["auto", "block"]}
-      areas={[
-        ["profile"],
-        ["firstHr"],
-        ["buysold"],
-        ["secHr"],
-        ["like"],
-        ["info"],
-      ]}
-    >
-      <Box
-        gridArea="profile"
-        direction="row"
-        pad="5px"
-        width="90vw"
-        margin={{ top: "20px" }}
-        justify="between"
-      >
-        <Box direction="row">
-          <Avatar src={ArtistPng} margin="5px"></Avatar>
-          <Box margin="5px">
-            <Box direction="row" align="end">
-              <StyledText text="권기정" weight="bold" size="18px" />
-              <StyledText text="관리자" size="12px" />
-            </Box>
-            <StyledText text="msg012525@gmail.com" size="14px" />
-          </Box>
-        </Box>
-
-        <BackButton>
-          <img src={MoreImage} />
-        </BackButton>
+    <Box alignContent="center">
+      <Box direction="row" justify="between" width="80vw">
+        <StyledText weight="bold" text={title}></StyledText>
+        <Link to={`/${link}`} style={{ textDecorationLine: "none" }}>
+          <StyledText text="더보기"></StyledText>
+        </Link>
       </Box>
-      <StyledHr
-        gridArea="firstHr"
-        width="99vw"
-        height="2px"
-        color="lightgray"
-      />
-      <Sector gridArea="buysold" title1="구매내역" title2="판매내역" />
-      <StyledHr gridArea="secHr" width="99vw" height="2px" color="lightgray" />
-      <Sector gridArea="like" title1="관심작품" title2="관심 작가" />
-    </Grid>
+      <ContainerBox2 count={count} />
+    </Box>
   );
-}
+};

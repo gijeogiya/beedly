@@ -9,14 +9,18 @@ import thunk from "redux-thunk";
 import { BrowserRouter } from "react-router-dom";
 import { composeWithDevTools } from "redux-devtools-extension";
 import reportWebVitals from "./reportWebVitals";
-
+import { persistStore } from "redux-persist"; // load
+import { PersistGate } from "redux-persist/integration/react"; // load
 // const composedEnhancer = compose(applyMiddleware(thunk), composeWithDevTools());
 const store = createStore(rootReducer, applyMiddleware(thunk));
+const persistor = persistStore(store); // 정의
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Provider store={store}>
-        <App />
+        <PersistGate persistor={persistor}>
+          <App />
+        </PersistGate>
       </Provider>
     </BrowserRouter>
   </React.StrictMode>,

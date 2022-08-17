@@ -6,10 +6,9 @@ import Button from "./Button";
 import CloseButton from "../assets/images/close.png";
 import { StyledHr, StyledText } from "./Common";
 import { useEffect } from "react";
-import { Box, Pagination, Tab, Tabs } from "grommet";
-import { Outlet, Route, Routes } from "react-router-dom";
-import { Search } from "grommet-icons";
-import { ProductRegister } from "../pages/ProductRegister";
+import { Box, Pagination } from "grommet";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 const HeaderDiv = styled.div`
   margin: 5px;
   display: flex;
@@ -61,25 +60,13 @@ export const UserGuide = ({ open, onDismiss }) => {
           setClicked(false);
         }}
       />
-      <Box>
-        <Tabs>
-          <Tab title="구매자">
-            <Box pad="medium" height="70vh">
-              <Box overflow="scroll">
-                <StyledText text="1. 마음에 드는 상품을 골라봐요." />
-                <Box height="300px" />
-                <StyledText text="2. 마음에 들었으면 좋아요 꾸욱~" />
-                <Box height="300px" />
-                <StyledText text="3. 실시간 경매를 통해 원하는 상품을 보다 저렴하게!" />
-                <Box height="300px" />
-              </Box>
-            </Box>
-          </Tab>
-          <Tab title="작가님">
-            <Box pad="medium">Two</Box>
-          </Tab>
+      {/* <Box>
+        <Tabs textColor="black" indicatorColor="red" aria-label="">
+          <Tab value="one" label="Item One" />
+          <Tab value="two" label="Item Two" />
+          <Tab value="three" label="Item Three" />
         </Tabs>
-      </Box>
+      </Box> */}
     </BottomSheet>
   );
 };
