@@ -60,9 +60,9 @@ export default class ChatComponent extends Component {
     if (this.props.user && this.state.message) {
       let message = this.state.message.replace(/ +(?= )/g, "");
       console.log("grade : " + this.props.grade);
-      if (this.props.grade !== undefined) {
-        if (this.props.grade === "seller") message = "[작가님] " + message;
-      }
+      // if (this.props.grade !== undefined) {
+      //   if (this.props.grade === "seller") message = "[작가님] " + message;
+      // }
       if (message !== "" && message !== " ") {
         const data = {
           message: message,
