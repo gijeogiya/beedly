@@ -236,11 +236,6 @@ export default function Signup() {
           </tbody>
         </table>
 
-        <div>
-          <h3 style={heading2}>Email</h3>
-          <Input value={userEmail} readOnly />
-        </div>
-
         <div style={flexrowbox}>
           <div style={{ display: "flex", justifyContent: "flex-start" }}>
             <h3 style={heading2}>생년월일</h3>
