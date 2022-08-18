@@ -240,7 +240,7 @@ export default function MainPage() {
         }}
       >
         <StyledTableTitle>On Air</StyledTableTitle>
-        <StyledTableSubtitle>지금 진행중인 개인경매</StyledTableSubtitle>
+        <StyledTableSubtitle>지금 방송중인 개인경매</StyledTableSubtitle>
         {/* 전달 되어야 할 것은? -> 상품객체 배열 */}
         <HorizonScrollRowTable list={OnairList} />
       </div>
