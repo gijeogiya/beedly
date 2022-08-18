@@ -5,6 +5,7 @@ import { StyledImg } from "./Common";
 import Button from "./Button";
 import { Spinner } from "grommet";
 import { useNavigate } from "react-router-dom";
+import { moneyFormat } from "../stores/modules/basicInfo";
 
 // 판매내역 / 구매내역 등에 사용되는 상품 상태 컴포넌트
 export default function ProductState({ product }) {
