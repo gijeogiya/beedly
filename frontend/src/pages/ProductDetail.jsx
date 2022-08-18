@@ -42,6 +42,7 @@ import {
   postPersonalFavorite,
 } from "../utils/apis/PersonalFavoriteAPI";
 import Carousel from "nuka-carousel";
+import { AlertDialog } from "../components/AlertDialog";
 export const HeaderBox = ({
   isSeller,
   goBack,
@@ -114,6 +115,7 @@ export const ProductDetail = () => {
   const [artistNickname, setArtistNickname] = useState("");
   // const [product, setProduct] = useState({});
   const [open, setOpen] = useState(false);
+  const [openDel, setOpenDel] = useState(false);
   const [auctionId, setAuctionId] = useState("");
   const [isOnAir, setIsOnAir] = useState("");
   const [absenteeBidPrice, setAbsenteeBidPrice] = useState();
@@ -204,6 +206,7 @@ export const ProductDetail = () => {
 
   const handleClose = () => {
     setOpen(false);
+    setOpenDel(false);
   };
 
   const handleDate = (date) => {
@@ -223,7 +226,7 @@ export const ProductDetail = () => {
       let day = 24 * hour;
       let month = day * 30;
       if (diff / month >= 1) {
-        return `${diff / month}달 남음`;
+        return `${parseInt(diff / month)}달 남음`;
       } else if (diff / day >= 1) {
         return `${parseInt(diff / day)}일 남음`;
       } else {
@@ -363,9 +366,10 @@ export const ProductDetail = () => {
     let dueDate = new Date(startTime);
     let now = new Date();
     if (isOnAir) return true;
-    if (dueDate.getTime() <= now.getTime() && isOnAir) return true;
+    if (dueDate.getTime() + KR_TIME_DIFF <= now.getTime() && isOnAir)
+      return true;
     if (
-      dueDate.getTime() <= now.getTime() &&
+      dueDate.getTime() + KR_TIME_DIFF <= now.getTime() &&
       !isOnAir &&
       User.userId === artistId
     )
@@ -416,7 +420,10 @@ export const ProductDetail = () => {
 
   const stringToDate = (string) => {
     // console.log(string);
-    const date = string.split("T");
+    const due = new Date(string).getTimezoneOffset() * 6000;
+    const dueDate = new Date(new Date(string) - due);
+    // console.log(dueDate);
+    const date = dueDate.toISOString().split("T");
     const yyyyMMdd = date[0].split("-");
     const HHmm = date[1].split(":");
     return `${yyyyMMdd[0]}년 ${parseInt(yyyyMMdd[1])}월 ${parseInt(
@@ -428,18 +435,17 @@ export const ProductDetail = () => {
   };
 
   const deleteProduct = () => {
-    if (window.confirm("삭제하시겠습니까?")) {
-      deletePersonalProduct(
-        productId,
-        (response) => {
-          console.log(response);
-          alert("삭제");
-        },
-        (fail) => {
-          console.log(fail);
-        }
-      );
-    }
+    deletePersonalProduct(
+      productId,
+      (response) => {
+        console.log(response);
+        navigate("/");
+        // window.location.href = "/";
+      },
+      (fail) => {
+        console.log(fail);
+      }
+    );
   };
   const modifyProduct = () => {
     navigate("/productModify", {
@@ -482,7 +488,7 @@ export const ProductDetail = () => {
         isSeller={artistId === User.userId}
         goBack={goBack}
         sharePage={sharePage}
-        deleteProduct={deleteProduct}
+        deleteProduct={() => setOpenDel(true)}
         modifyProduct={modifyProduct}
       />
       <Box>
@@ -673,6 +679,16 @@ export const ProductDetail = () => {
           )}
         </Box>
       </Box>
+      <AlertDialog
+        open={openDel}
+        handleClose={handleClose}
+        handleAction={deleteProduct}
+        title="작품 삭제"
+        desc="삭제하시겠습니까?"
+        cancel="취소"
+        accept="삭제"
+      />
+
       <Dialog
         open={open}
         onClose={handleClose}
