@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
 import { getOnairApi, getOnairByCategoryApi } from "../utils/apis/PersonalProductAPI";
 import SortIcon from "../assets/img/SortIcon.svg";
+import { StyledText } from "../components/Common";
 
 const OnairPageTitle = styled.div`
   display: flex;
@@ -107,7 +108,7 @@ export default function OnairPage() {
             }}
             isActive={nowCategory === "ALL"}
           >
-            ALL
+            <StyledText text="ALL" size="16px" weight={nowCategory === "ALL" ? "bold" : "0"} />
           </StyledCategoryButton>
           <StyledCategoryButton
             onClick={() => {
@@ -116,7 +117,7 @@ export default function OnairPage() {
             }}
             isActive={nowCategory === "회화"}
           >
-            회화
+            <StyledText text="회화" size="16px" weight={nowCategory === "회화" ? "bold" : "0"} />
           </StyledCategoryButton>
           <StyledCategoryButton
             onClick={() => {
@@ -125,7 +126,7 @@ export default function OnairPage() {
             }}
             isActive={nowCategory === "판화"}
           >
-            판화
+            <StyledText text="판화" size="16px" weight={nowCategory === "판화" ? "bold" : "0"} />
           </StyledCategoryButton>
           <StyledCategoryButton
             onClick={() => {
@@ -134,7 +135,7 @@ export default function OnairPage() {
             }}
             isActive={nowCategory === "에디션"}
           >
-            에디션
+            <StyledText text="에디션" size="16px" weight={nowCategory === "에디션" ? "bold" : "0"} />
           </StyledCategoryButton>
           <StyledCategoryButton
             onClick={() => {
@@ -143,7 +144,7 @@ export default function OnairPage() {
             }}
             isActive={nowCategory === "사진"}
           >
-            사진
+            <StyledText text="사진" size="16px" weight={nowCategory === "사진" ? "bold" : "0"} />
           </StyledCategoryButton>
           <StyledCategoryButton
             onClick={() => {
@@ -152,7 +153,7 @@ export default function OnairPage() {
             }}
             isActive={nowCategory === "입체"}
           >
-            입체
+            <StyledText text="입체" size="16px" weight={nowCategory === "입체" ? "bold" : "0"} />
           </StyledCategoryButton>
         </StyledCategoryTable>
       </nav>
