@@ -538,10 +538,9 @@ export const ProductDetail = () => {
 
         <Box margin="large">
           <StyledText
-            text={Category[category].label}
+            text={productName}
             weight="bold"
             size="18px"
-            style={{ textDecoration: "underline" }}
           />
           <StyledText
             text={productArtist}
@@ -549,7 +548,7 @@ export const ProductDetail = () => {
             style={{ paddingTop: "15px" }}
           />
           <StyledText
-            text={productName}
+            text={Category[category].label}
             size="16px"
             style={{ paddingTop: "10px" }}
           />
