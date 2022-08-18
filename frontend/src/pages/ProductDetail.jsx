@@ -615,6 +615,7 @@ export const ProductDetail = () => {
           justify="center"
           direction="row"
           width="100%"
+          margin={{ bottom: "60px" }}
         >
           {soldStatus === "STANDBY" && User.userId !== artistId ? (
             <Button
