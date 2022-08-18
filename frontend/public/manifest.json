@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Beedly",
+  "name": "Beedly. 실시간 화상 경매 플랫폼",
   "icons": [
     {
       "src": "favicon.ico",
