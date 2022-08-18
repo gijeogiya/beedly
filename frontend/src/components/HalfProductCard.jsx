@@ -167,7 +167,7 @@ export function HalfProductCard({ product }) {
             textOverflow: "ellipsis",
           }}>
             {CheckTime()
-              ? `시청중`
+              ? `방송 중`
               : `${start.getMonth() + 1
               }월 ${start.getDate()}일 ${start.getHours()}시 ` +
               `${start.getMinutes()}분 예정`}

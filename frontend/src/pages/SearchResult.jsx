@@ -8,7 +8,11 @@ import { SearchBar } from "../components/SearchBar";
 import { FlexBox } from "../components/UserStyled";
 
 import { getProductListBySizeApi } from "../utils/apis/PersonalProductAPI";
-import { getProductByArtistNickNameApi, getProductByProductNameApi, getProductByTagApi } from "../utils/apis/ProductSearchAPI";
+import {
+  getProductByArtistNickNameApi,
+  getProductByProductNameApi,
+  getProductByTagApi,
+} from "../utils/apis/ProductSearchAPI";
 
 const StyledTableTitle = styled.div`
   font-size: 16px;
@@ -87,20 +91,33 @@ export default function SearchResult() {
           )
         );
       } else if (searchCategory === "size") {
-        getProductListBySizeApi(keyword, "0", "20", "", (res) => {
-          console.log(res);
-          setSearchProductList(res.data.content);
-
-        }, (err) => {
-          console.log(err);
-        })
+        getProductListBySizeApi(
+          keyword,
+          "0",
+          "20",
+          "",
+          (res) => {
+            console.log(res);
+            setSearchProductList(res.data.content);
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
       } else if (searchCategory === "tag") {
-        getProductByTagApi("0", "20", "", keyword, (res) => {
-          console.log(res);
-          setSearchProductList(res.data.content);
-        }, (err) => {
-          console.log(err);
-        })
+        getProductByTagApi(
+          "0",
+          "20",
+          "",
+          keyword,
+          (res) => {
+            console.log(res);
+            setSearchProductList(res.data.content);
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
       }
       setloading(false);
     }
@@ -120,13 +137,33 @@ export default function SearchResult() {
     <div style={{ paddingBottom: "40px" }}>
       <SearchBar handlefunction={handleSubmit} word={keyword} />
       <StyledTableTitle>'{keyword}' 검색 결과</StyledTableTitle>
+      <StyledTableTitle>Artist</StyledTableTitle>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          paddingTop: "10vw",
+        }}
+      >
+        검색결과가 없습니다.
+      </div>
       <StyledTableTitle>Product</StyledTableTitle>
       {console.log(searchProductList)}
       {!loading && searchProductList.length !== 0 ? (
-        <div style={{ display: "flex", justifyContent: "center", padding: "20px 0px", }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            padding: "20px 0px",
+          }}
+        >
           <ProductTable>
             {searchProductList.map((product, idx) => (
-              <div key={idx} onClick={(e) => GoProductDetail(product.id)} style={{ padding: "10px 0px" }}>
+              <div
+                key={idx}
+                onClick={(e) => GoProductDetail(product.id)}
+                style={{ padding: "10px 0px" }}
+              >
                 <HalfProductCard product={product} />
               </div>
             ))}
