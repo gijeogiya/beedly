@@ -86,6 +86,9 @@ export function ProductCard({ product }) {
   const yyyyMMdd = date[0].split("-");
   const HHmm = date[1].split(":");
   const [timer, setTimer] = useState(0);
+  const isEnd = product.soldStatus; //STANDBY
+  const LeftMonth = start.getMonth()
+  const LeftDay = start.get()
   const CheckTime = () => {
     if (start > now) {
       // 아직 진행 예정
@@ -94,6 +97,7 @@ export function ProductCard({ product }) {
       return true;
     }
   };
+
 
   useEffect(() => {
     const countdown = setInterval(() => {
@@ -125,14 +129,14 @@ export function ProductCard({ product }) {
       <StyledProductCardImgFrame>
         <StyledRectangleRowImg src={product.productImgs[0]} />
         <AuctionStateBox
-          style={{ backgroundColor: CheckTime() ? "red" : "gray" }}
+          style={{ backgroundColor: isEnd === 'STANDBY' ? (CheckTime() ? "red" : "gray" ) : "grap"}}
         >
           <StyledAuctionStateIcon
-            src={CheckTime() ? OnairStateIcon : BeforeStateIcon}
+            src={isEnd === 'STANDBY' ? (CheckTime() ? OnairStateIcon : BeforeStateIcon):""}
             style={{ paddingRight: "5px", paddingTop:"2px"}}
           />
           <div style={{paddingBottom:"2px"}}>
-            {CheckTime() ? "실시간" : getTime()}
+            {isEnd === 'STANDBY' ? (CheckTime() ? "실시간" : getTime()):"종료됨"}
           </div>
         </AuctionStateBox>
       </StyledProductCardImgFrame>
@@ -170,12 +174,12 @@ export function ProductCard({ product }) {
               textOverflow: "ellipsis",
             }}
           >
-            {CheckTime()
+            {isEnd === 'STANDBY' ? (CheckTime()
               ? `방송 중`
               : `${
                   start.getMonth() + 1
                 }월 ${start.getDate()}일 ${start.getHours()}시 ` +
-                `${start.getMinutes()}분 예정`}
+                `${start.getMinutes()}분 예정`):"종료됨"}
           </div>
         </StyledCardInfTextFrame>
       </StyledCardInfBox>
