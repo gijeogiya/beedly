@@ -19,14 +19,14 @@ public interface PersonalProductRepository extends JpaRepository<PersonalProduct
 
 
     //----------- 1. productName 검색하기
-    @Query(value="select c from PersonalProduct c where c.productName like %:productName%")
+    @Query(value="select p from PersonalProduct p where p.productName like %:productName% and p.soldStatus = 'STADNBY'")
     List<PersonalProduct> findPersonalProductByProductNameLike(@Param("productName") String productName);
 
     //------------ 2. 카테고리별로 정렬하기
-    @Query(value="select p from PersonalProduct p join fetch p.category c where c.categoryName = :categoryName")
+    @Query(value="select p from PersonalProduct p join fetch p.category c where c.categoryName = :categoryName and p.soldStatus = 'STADNBY'")
     Slice<PersonalProduct> findProductByCategory(@Param("categoryName")String categoryName, @Param("pageable") Pageable pageable);
 
-    @Query(value="select p from PersonalProduct p")
+    @Query(value="select p from PersonalProduct p where p.soldStatus = 'STADNBY'")
     Slice<PersonalProduct> findProductBy(@Param("pageable") Pageable pageable);
 
     ///------------ 3. 현재 진행중인 상품 카테고리별로 정렬하기
@@ -35,13 +35,13 @@ public interface PersonalProductRepository extends JpaRepository<PersonalProduct
     Slice<PersonalAuction> findProductOnAirByCategory(@Param("categoryName")String categoryName, @Param("pageable") Pageable pageable);
 
     //----------- 4. size로 찾기
-    @Query(value = "select p from PersonalProduct p where p.width =:width and p.height =:height")
+    @Query(value = "select p from PersonalProduct p where p.width =:width and p.height =:height and p.soldStatus = 'STADNBY'")
     Slice<PersonalProduct> findProductBySize(@Param("width")Integer width, @Param("height")Integer height, @Param("pageable") Pageable pageable);
 
     //////// ---------- 5. Product 상세 찾기
 
     //----------- 5-1. 해당 Product의 상시 게시글 찜의 사용자 아이디가 있는지?
-    @Query(value="select p from PersonalFavorite p where p.personalProduct.id = :productId and p.user.id = :userId")
+    @Query(value="select p from PersonalFavorite p where p.personalProduct.id = :productId and p.user.id = :userId ")
     Optional<PersonalFavorite> findUserIdByPersonalFavorite(Long productId, Long userId);
 
     //----------- 5-2. 서면 응찰을 했는지?
@@ -57,16 +57,16 @@ public interface PersonalProductRepository extends JpaRepository<PersonalProduct
     Slice<PersonalAuction> findProductOnAir(Pageable pageable);
 
     //---------- 7. 사이즈별로 가져오기
-    @Query(value="select p from PersonalProduct p where p.width <= 70 and p.height <= 70")
+    @Query(value="select p from PersonalProduct p where p.width <= 70 and p.height <= 70 and p.soldStatus = 'STADNBY'")
     Slice<PersonalProduct> findProductBySmallSize(Pageable pageable);
 
-    @Query(value="select p from PersonalProduct p where p.width between 70 and 90 and p.height between 70 and 90")
+    @Query(value="select p from PersonalProduct p where p.width between 70 and 90 and p.height between 70 and 90 and p.soldStatus = 'STADNBY'")
     Slice<PersonalProduct> findProductByMediumSize(Pageable pageable);
 
-    @Query(value="select p from PersonalProduct p where p.width between 90 and 120 and p.height between 90 and 120")
+    @Query(value="select p from PersonalProduct p where p.width between 90 and 120 and p.height between 90 and 120 and p.soldStatus = 'STADNBY'")
     Slice<PersonalProduct> findProductByLargeSize(Pageable pageable);
 
-    @Query(value="select p from PersonalProduct p where p.width >= 120 and p.height >= 120")
+    @Query(value="select p from PersonalProduct p where p.width >= 120 and p.height >= 120 and p.soldStatus = 'STADNBY'")
     Slice<PersonalProduct> findProductByXLargeSize(Pageable pageable);
 
 }
