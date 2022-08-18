@@ -96,11 +96,11 @@ class VideoRoomComponent extends Component {
     if (!this.isLeave) this.leaveSession();
   }
 
-  handleUnmount(success) {
-    if (success !== null) this.leaveSession2(success);
+  handleUnmount(soldId) {
+    if (soldId !== null) this.leaveSession2(soldId);
     else this.leaveSession();
-    this.isLeave = true;
-    this.componentWillUnmount();
+    // this.isLeave = true;
+    // this.componentWillUnmount();
   }
   onbeforeunload(event) {
     this.leaveSession();
@@ -290,7 +290,7 @@ class VideoRoomComponent extends Component {
     }
   }
 
-  leaveSession2(success) {
+  leaveSession2(soldId) {
     const mySession = this.state.session;
 
     if (mySession) {
@@ -316,7 +316,7 @@ class VideoRoomComponent extends Component {
       localUser: undefined,
     });
     if (this.props.handleGoBack2) {
-      this.props.handleGoBack2(success);
+      this.props.handleGoBack2(soldId);
     }
   }
 

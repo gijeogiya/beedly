@@ -368,7 +368,7 @@ function BottomUi({
   return (
     <Conatainer controls="arrows">
       {localUser !== undefined && (
-        <ChatBox localUser={localUser} grade={grade}/>
+        <ChatBox localUser={localUser} grade={grade} />
       )}
       <ProductFrame
         title={bidInfo.title}
@@ -859,10 +859,11 @@ export const Auction = () => {
     navigate(-1);
   };
 
-  const handleGoBack2 = (success) => {
+  const handleGoBack2 = (soldId) => {
     //낙찰페이지로 이동
-    if (success !== null)
-      navigate(`/purchase/${success}`, {
+    console.log("sold ID : ", soldId);
+    if (soldId !== null)
+      navigate(`/purchase/${soldId}`, {
         state: {
           auctionType: auctionType,
           // soldId: success,
