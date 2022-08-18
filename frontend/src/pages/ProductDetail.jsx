@@ -57,7 +57,7 @@ export const HeaderBox = ({
         </BackButton>
       </Box>
       <Box direction="row">
-        <Box>
+        <FlexBox alignContent="center">
           {isSeller && (
             <Menu
               icon={false}
@@ -72,7 +72,7 @@ export const HeaderBox = ({
               }}
             />
           )}
-        </Box>
+        </FlexBox>
         <Box>
           <BackButton onClick={sharePage}>
             <img src={ShareBtn} alt="" />
@@ -169,7 +169,7 @@ export const ProductDetail = () => {
     setCategory(data.personalProductDto.categoryId);
     setStartTime(data.personalProductDto.startTime);
     setStartPrice(data.personalProductDto.startPrice);
-    setProductDesc(data.productDesc);
+    setProductDesc(data.personalProductDto.productDesc);
     setProductImages([...data.personalProductDto.productImgs]);
     setProductLike(data.personalProductDto.favoriteCount);
     setSoldStatus(data.personalProductDto.soldStatus);
@@ -536,24 +536,29 @@ export const ProductDetail = () => {
             size="18px"
             style={{ textDecoration: "underline" }}
           />
-          <StyledText text={productArtist} />
-          <StyledText text={productName} />
-          <StyledText text={`${moneyFormat(startPrice)}원 ~`} />
-          <StyledText text={stringToDate(startTime)} />
+          <StyledText text={productArtist} size="16px" style={{paddingTop:"15px"}}/>
+          <StyledText text={productName} size="16px" style={{paddingTop:"10px"}}/>
+          <StyledText text={`${moneyFormat(startPrice)}원 ~`} size="16px" style={{paddingTop:"10px"}}/>
+          <StyledText text={stringToDate(startTime)} size="16px" style={{paddingTop:"10px"}}/>
         </Box>
         <Box margin="large">
-          <StyledText text="작품 설명" />
-          <StyledText text={productDesc} size="10px" color="#7B7B7B" />
+          <StyledText text="작품 설명" size="17px"/>
+          <StyledText text={productDesc} color="#7B7B7B" size="14px" style={{paddingTop:"10px"}}/>
         </Box>
         <Box margin="large">
-          <StyledText text="작품 정보" />
-          <FlexBox Row_S style={{ flexWrap: "wrap", padding: "6px 10px" }}>
+          <StyledText text="작품 정보" size="17px"/>
+          <FlexBox Row_S style={{ flexWrap: "wrap", padding: "10px 0"}}>
             {tags.map((item, idx) => (
               <StyledText
                 key={item.id}
                 text={`#${item.searchTagName}`}
                 style={{
-                  margin: "3px",
+                  backgroundColor: "#f4f4f4",
+                  padding: "8px",
+                  fontSize: "14px",
+                  margin: "0px 8px 12px 0px",
+                  border: "1px solid #ebebeb",
+                  borderRadius: "16px"
                 }}
               />
             ))}

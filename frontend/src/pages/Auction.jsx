@@ -4,6 +4,7 @@ import { AuctionArtist, StyledText, StyledHr } from "../components/Common";
 import styled from "styled-components";
 import image from "../assets/images/openvidu.png";
 import artist from "../assets/images/artist.png";
+import ExitIcon from "../assets/img/ExitIcon.svg";
 import product1 from "../assets/images/product1.png";
 import { ReactComponent as Success } from "../assets/icons/success.svg";
 import { ReactComponent as Fail } from "../assets/icons/fail.svg";
@@ -37,7 +38,7 @@ const MainContent = styled.img`
 
 const PriceContent = styled.div`
   background-color: lightgray;
-  background: rgba(220, 220, 220, 0.6);
+  background: rgba(220, 220, 220, 0.4);
   width: 40%;
   color: white;
   z-index: 5;
@@ -67,7 +68,7 @@ const BidButton = styled.button`
 
 function PriceBox({ price, callPrice }) {
   return (
-    <PriceContent>
+    <PriceContent style={{marginTop: "10px"}}>
       <Box
         align="center"
         justify="center"
@@ -79,12 +80,14 @@ function PriceBox({ price, callPrice }) {
           color="white"
           weight="bold"
           text={`₩ ${moneyFormat(price)}`}
+          style={{padding: "5px 0"}}
         />
         <StyledHr />
         <StyledText
           size="14px"
           color="white"
           text={`호가 ₩ ${moneyFormat(callPrice)}`}
+          style={{padding: "5px 0"}}
         />
       </Box>
     </PriceContent>
@@ -315,7 +318,7 @@ const ChatFrame = styled.div`
   color: black;
   align-content: center;
   border-radius: 10px;
-  padding: 5px;
+  padding: 10px;
   width: 70%;
   height: 100%;
 `;
@@ -393,8 +396,10 @@ const ExitButtonDiv = styled.div`
 function ExitButton({ handleClickOpen, handleClose, handleAuctionExit, open }) {
   return (
     <ExitButtonDiv>
-      <Button SmallRed onClick={handleClickOpen}>
-        나가기
+      <Button onClick={handleClickOpen} style={{backgroundColor:"rgba(255, 255, 255, 0)"}}>
+        <div style={{objectFit:"cover"}}>
+          <img src={ExitIcon} style={{objectFit:"contain"}} alt='나가기' />
+        </div>
       </Button>
       <Dialog
         open={open}
@@ -409,10 +414,10 @@ function ExitButton({ handleClickOpen, handleClose, handleAuctionExit, open }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button SmallRed onClick={handleClose}>
+          <Button SmallBlack onClick={handleClose}>
             취소
           </Button>
-          <Button SmallBlack onClick={handleAuctionExit} autoFocus>
+          <Button SmallRed onClick={handleAuctionExit} autoFocus>
             나가기
           </Button>
         </DialogActions>
@@ -473,7 +478,6 @@ export const Auction = () => {
               setCurrentBidder((prev) =>
                 data.userName !== null ? (prev = data.userName) : prev
               );
-
               if (data.userName === userName)
                 setIsSuccess((prev) => (prev = true));
               else setIsSuccess((prev) => (prev = false));

@@ -8,7 +8,7 @@ import {
 } from "../components/HorizonScrollTable";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-// import { StyledText } from "../components/Common";
+import { StyledText } from "../components/Common";
 import user from "../stores/modules/user";
 import { getUserInfoApi } from "../utils/apis/UserAPI";
 import { getArtistApi } from "../utils/apis/ArtistAPI";
@@ -24,7 +24,6 @@ import {
 import SubBanner1 from "../assets/img/SubBanner1.png";
 import SubBanner2 from "../assets/img/SubBanner2.png";
 import { Tag } from "grommet";
-import { StyledText } from "../components/Common";
 
 const StyledTableTitle = styled.div`
   font-size: 16px;
@@ -216,19 +215,19 @@ export default function MainPage() {
       <nav>
         <StyledCategoryTable>
           <StyledCategoryButton onClick={() => goProductList("회화")}>
-            <StyledText text="회화" />
+            <StyledText text="회화" size="16px"/>
           </StyledCategoryButton>
           <StyledCategoryButton onClick={() => goProductList("판화")}>
-            <StyledText text="판화" />
+            <StyledText text="판화" size="16px"/>
           </StyledCategoryButton>
           <StyledCategoryButton onClick={() => goProductList("에디션")}>
-            <StyledText text="에디션" />
+            <StyledText text="에디션" size="16px"/>
           </StyledCategoryButton>
           <StyledCategoryButton onClick={() => goProductList("사진")}>
-            <StyledText text="사진" />
+            <StyledText text="사진" size="16px"/>
           </StyledCategoryButton>
           <StyledCategoryButton onClick={() => goProductList("입체")}>
-            <StyledText text="입체" />
+            <StyledText text="입체" size="16px"/>
           </StyledCategoryButton>
         </StyledCategoryTable>
       </nav>

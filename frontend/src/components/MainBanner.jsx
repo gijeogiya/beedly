@@ -44,7 +44,7 @@ export function BannerTable() {
             <Button Blank onClick={nextSlide} children={<img src={More} />} />
           )}
         >
-          <Image fill={true} fit="cover" src={Banner1} />
+          <Image fill={true} fit="cover" src={Banner1} onClick={() => {console.log(1)}}/>
           <Image fill={true} fit="cover" src={Banner2} />
           <Image fill={true} fit="cover" src={Banner3} />
         </Carousel>
