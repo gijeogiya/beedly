@@ -22,6 +22,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import CloseButton from "../assets/images/close.png";
 import ImInput from "../assets/icons/imageInput.svg";
+import PlusIcon from "../assets/img/PlusIcon.svg";
 import "codemirror-colorpicker/dist/codemirror-colorpicker.css";
 import { Color, ColorPicker } from "codemirror-colorpicker";
 import {
@@ -39,6 +40,7 @@ const HeaderDiv = styled.div`
   margin: 5px;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 20px;
 `;
 
 const HeaderBox = ({ productId, goBack }) => {
@@ -125,18 +127,21 @@ const style3 = {
 };
 
 const PreviewImg = styled.img`
-  width: 25vw;
-  height: 10vh;
+  width: 30vw;
+  height: 12vh;
   object-fit: cover;
   border-radius: 10px;
   src: ${(props) => props.src || ""};
 `;
 
 const PreviewDiv = styled.div`
-  width: 25vw;
-  height: 10vh;
+display: flex;
+justify-content: flex-start;
+  width: 30vw;
+  height: 12vh;
   border-radius: 10px;
   margin: 3px;
+  overflow: hidden;
 `;
 
 export const BackButton = styled.button`
@@ -166,21 +171,25 @@ const ImageBtn = styled.img`
 `;
 const ImageInput = ({ handleImageUpload }) => {
   return (
-    <Box width="100%">
+    <Box width="100%" margin="small">
       <label
         htmlFor="image"
         style={{
           display: "flex",
           alignContent: "space-between",
+
         }}
       >
         <ImageBtn src={ImInput} />
         <Box direction="row" justify="between" width="90%">
-          <StyledText size={titleSize} weight="bold" text="사진 등록" />
+          <Box direction="row">
+            <StyledText size={titleSize} weight="bold" text="사진 등록" />
+            <img src={PlusIcon} alt="사진추가" style={{ paddingLeft: "10px", height: "15px", width: "15px", alignSelf: "center" }} />
+          </Box>
           <StyledText
             size="10px"
             color="lightgray"
-            text="최대 3장"
+            text="최대 3장, 최대 1MB"
             alignSelf="end"
           />
         </Box>
@@ -331,7 +340,7 @@ export const ProductRegister = () => {
       // const data = await response.blob();
       // const metadata = { type: `image/png`, crossOrigin: "anonymous" };
       var image = new Image();
-      image.onload = function () {};
+      image.onload = function () { };
       image.crossOrigin = "Anonymous";
       image.src = url + "?not-from-cache-please";
       // let img = new File([data], metadata);
@@ -530,7 +539,7 @@ export const ProductRegister = () => {
       let temperature = parseInt(
         (temp.red * ((temp.red + temp.blue) / 100) -
           temp.blue * ((temp.red + temp.blue) / 100)) *
-          0.05
+        0.05
       );
       // console.log("color 안에서 ", saturation, brightness, temperature);
       // setPaletteColors([...colors]);
@@ -663,30 +672,32 @@ export const ProductRegister = () => {
 
   return (
     <Grommet theme={GrTheme}>
-      <Box>
-        <HeaderBox productId={productId} goBack={goBack} />
-        <Box width="90vw" alignSelf="center">
-          <Box margin="small" direction="row">
-            <Box width="small" justify="center">
-              <StyledText size={titleSize} weight="bold" text="작품명" />
+      <Box direction="row" justify="center" align="center">
+        <Box width="85vw">
+
+          <HeaderBox productId={productId} goBack={goBack} />
+          <Box width="90vw" alignSelf="center">
+            <Box margin="small" direction="row">
+              <Box width="small" justify="center">
+                <StyledText size={titleSize} weight="bold" text="작품명" />
+              </Box>
+              <Box width="medium" direction="row" justify="end">
+                <Input2
+                  Thin
+                  placeholder="작품명을 입력하세요."
+                  value={productName}
+                  onChange={(e) => {
+                    handleTitle(e.target.value);
+                  }}
+                />
+              </Box>
             </Box>
-            <Box width="medium" direction="row" justify="end">
-              <Input2
-                Thin
-                placeholder="작품명을 입력하세요."
-                value={productName}
-                onChange={(e) => {
-                  handleTitle(e.target.value);
-                }}
-              />
-            </Box>
-          </Box>
-          <Box margin="small" direction="row">
-            <Box width="small" justify="center">
-              <StyledText size={titleSize} weight="bold" text="카테고리" />
-            </Box>
-            <Box width="medium" direction="row" justify="end">
-              {/* <Select
+            <Box margin="small" direction="row">
+              <Box width="small" justify="center">
+                <StyledText size={titleSize} weight="bold" text="카테고리" />
+              </Box>
+              <Box width="medium" direction="row" justify="end">
+                {/* <Select
                 size="10px"
                 labelKey="label"
                 valueKey={{ key: "value", reduce: true }}
@@ -697,157 +708,158 @@ export const ProductRegister = () => {
                   setCategory(nextValue);
                 }}
               /> */}
-              <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="category">카테고리</InputLabel>
-                <Select
-                  labelId="category"
-                  id="category-select"
-                  value={category}
-                  label="카테고리"
+                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel id="category">카테고리</InputLabel>
+                  <Select
+                    labelId="category"
+                    id="category-select"
+                    value={category}
+                    label="카테고리"
+                    onChange={(e) => {
+                      setCategory(e.target.value);
+                    }}
+                  >
+                    {Category.map((cat, idx) => (
+                      <MenuItem key={idx} value={cat.value}>
+                        {cat.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+            </Box>
+            <Box margin="small" direction="row" style={{ marginRight: "3vw" }}>
+              <Box width="small" justify="center">
+                <StyledText size={titleSize} weight="bold" text="경매 시작가" />
+              </Box>
+              <Box width="medium" direction="row" justify="center">
+                <Input2
+                  Thin
+                  disabled={productId ? true : false}
+                  placeholder="경매 시작가를 입력하세요."
+                  value={startPrice}
                   onChange={(e) => {
-                    setCategory(e.target.value);
+                    const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
+                    setStartPrice(onlyNumber);
                   }}
-                >
-                  {Category.map((cat, idx) => (
-                    <MenuItem key={idx} value={cat.value}>
-                      {cat.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+                />
+              </Box>
+              <Box justify="center">
+                <StyledText weight="bold" text="원" />
+              </Box>
             </Box>
-          </Box>
-          <Box margin="small" direction="row">
-            <Box width="small" justify="center">
-              <StyledText size={titleSize} weight="bold" text="경매 시작가" />
-            </Box>
-            <Box width="medium" direction="row" justify="center">
-              <Input2
-                Thin
-                disabled={productId ? true : false}
-                placeholder="경매 시작가를 입력하세요."
-                value={startPrice}
-                onChange={(e) => {
-                  const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
-                  setStartPrice(onlyNumber);
-                }}
-              />
-            </Box>
-            <Box justify="center">
-              <StyledText weight="bold" text="원" />
-            </Box>
-          </Box>
-          <Box direction="row" justify="end">
-            <StyledText
-              text="등록 후에는 변경이 불가능합니다."
-              size="10px"
-              color="red"
-            />
-          </Box>
-          <Box
-            margin={{
-              vertical: "large",
-              horizontal: "small",
-            }}
-            justify="end"
-            direction="row"
-          >
-            <Box width="small" justify="center">
+            <Box direction="row" justify="end">
               <StyledText
-                size={titleSize}
-                weight="bold"
-                text="경매 시작 일시"
+                text="등록 후에는 변경이 불가능합니다."
+                size="10px"
+                color="red"
               />
             </Box>
-            <Box width="medium" direction="row" justify="end">
-              <DatePicker
-                selected={startTime}
-                onChange={(date) => setStartTime(date)}
-                showTimeSelect
-                dateFormat="yyyy년 MM월 dd일 HH:mm"
-                locale={ko}
-                customInput={<DateInputButton />}
+            <Box
+              margin={{
+                vertical: "large",
+                horizontal: "small",
+              }}
+              justify="end"
+              direction="row"
+            >
+              <Box width="small" justify="center">
+                <StyledText
+                  size={titleSize}
+                  weight="bold"
+                  text="경매 시작 일시"
+                />
+              </Box>
+              <Box width="medium" direction="row" justify="end">
+                <DatePicker
+                  selected={startTime}
+                  onChange={(date) => setStartTime(date)}
+                  showTimeSelect
+                  dateFormat="yyyy년 MM월 dd일 HH:mm"
+                  locale={ko}
+                  customInput={<DateInputButton />}
+                />
+              </Box>
+            </Box>
+            <Box margin="small" direction="row" justify="between" align="center" style={{ marginTop: "15px", marginBottom: "15px" }}>
+              <Box alignSelf="center">
+                <StyledText size={titleSize} weight="bold" text="사이즈" />
+              </Box>
+              <Box direction="row">
+
+                <Box direction="row" margin={{ left: "small" }}>
+                  <Box justify="center">
+                    <StyledText text="가로" />
+                  </Box>
+                  <Box direction="row" justify="end">
+                    <SizeInput
+                      Thin
+                      value={width}
+                      onChange={(e) => {
+                        const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
+                        setWidth(onlyNumber);
+                      }}
+                    />
+                  </Box>
+                </Box>
+
+                <Box direction="row" margin={{ left: "small" }}>
+                  <Box justify="center">
+                    <StyledText text="세로" />
+                  </Box>
+                  <Box direction="row" justify="end">
+                    <SizeInput
+                      Thin
+                      value={height}
+                      onChange={(e) => {
+                        const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
+                        setHeight(onlyNumber);
+                      }}
+                    />
+                  </Box>
+
+                </Box>
+
+                <Box direction="row" margin={{ left: "small" }}>
+                  <Box justify="center">
+                    <StyledText text="두께" />
+                  </Box>
+                  <Box direction="row" justify="end">
+                    <SizeInput
+                      Thin
+                      value={depth}
+                      onChange={(e) => {
+                        const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
+                        setDepth(onlyNumber);
+                      }}
+                    />
+                  </Box>
+                  <Box justify="center">
+                    <StyledText text="(cm)" />
+                  </Box>
+                </Box>
+              </Box>
+
+            </Box>
+            <Box margin="small">
+              <StyledText text="작품 설명" size={titleSize} weight="bold" />
+              <STextArea
+                placeholder="작가님이 작품에 대해 하고싶은 이야기들을 작성해주세요"
+                onChange={(e) => handleText(e.target.value)}
+                value={productDesc}
               />
-            </Box>
-          </Box>
-          <Box margin="small">
-            <Box>
-              <StyledText size={titleSize} weight="bold" text="사이즈" />
-            </Box>
-            <Box direction="row" margin={{ left: "small" }}>
-              <Box justify="center">
-                <StyledText text="가로" />
-              </Box>
-              <Box direction="row" justify="end">
-                <SizeInput
-                  Thin
-                  value={width}
-                  onChange={(e) => {
-                    const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
-                    setWidth(onlyNumber);
-                  }}
-                />
-              </Box>
-              <Box justify="center">
-                <StyledText text="cm" />
+              <Box justify="end" direction="row">
+                <div>{productDesc.length} / 300</div>
               </Box>
             </Box>
-            <Box direction="row" margin={{ left: "small" }}>
-              <Box justify="center">
-                <StyledText text="세로" />
-              </Box>
-              <Box direction="row" justify="end">
-                <SizeInput
-                  Thin
-                  value={height}
-                  onChange={(e) => {
-                    const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
-                    setHeight(onlyNumber);
-                  }}
-                />
-              </Box>
-              <Box justify="center">
-                <StyledText text="cm" />
-              </Box>
-            </Box>
-            <Box direction="row" margin={{ left: "small" }}>
-              <Box justify="center">
-                <StyledText text="두께" />
-              </Box>
-              <Box direction="row" justify="end">
-                <SizeInput
-                  Thin
-                  value={depth}
-                  onChange={(e) => {
-                    const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
-                    setDepth(onlyNumber);
-                  }}
-                />
-              </Box>
-              <Box justify="center">
-                <StyledText text="cm" />
-              </Box>
-            </Box>
-          </Box>
-          <Box margin="small">
-            <StyledText text="작품 설명" size={titleSize} weight="bold" />
-            <STextArea
-              placeholder="작가님이 작품에 대해 하고싶은 이야기들을 작성해주세요"
-              onChange={(e) => handleText(e.target.value)}
-              value={productDesc}
-            />
-            <Box justify="end" direction="row">
-              <div>{productDesc.length} / 300</div>
-            </Box>
-          </Box>
-          <ImageInput handleImageUpload={handleImageUpload} />
-          {/* <input
+            <ImageInput handleImageUpload={handleImageUpload} />
+            {/* <input
               type="file"
               multiple
               accept="image/jpg,image/png,image/jpeg,image/gif"
               onChange={handleImageUpload}
             /> */}
-          {/* <FileInput
+            {/* <FileInput
               multiple={{
                 aggregateThreshold: 3,
                 max: 3,
@@ -861,48 +873,48 @@ export const ProductRegister = () => {
                 maxFile: "제한 : 3장",
               }}
             /> */}
-          <Box direction="row" justify="around">
-            {prevs.map((image, idx) => {
-              return <Preview src={image} key={idx} />;
-            })}
-          </Box>
+            <Box direction="row" justify="start">
+              {prevs.map((image, idx) => {
+                return <Preview src={image} key={idx} />;
+              })}
+            </Box>
 
-          <Box margin={{ top: "20px" }}>
-            <StyledText text="Tag" size={titleSize} weight="bold" />
-            <FlexBox Column_C>
-              <FlexBox
-                Row_S
-                style={{ flexWrap: "wrap", padding: "6px 10px", width: "88vw" }}
-              >
-                {tags.map((tag, idx) => (
-                  <Button
-                    key={idx}
-                    onClick={() => {
-                      !select.some((v) => v.id === tag.id)
-                        ? setSelect((select) => [...select, tag])
-                        : setSelect(
+            <Box margin={{ top: "20px", left: "15px" }}>
+              <StyledText text="Tag" size={titleSize} weight="bold" />
+              <FlexBox Column_C>
+                <FlexBox
+                  Row_S
+                  style={{ flexWrap: "wrap", padding: "6px 10px", width: "88vw", }}
+                >
+                  {tags.map((tag, idx) => (
+                    <Button
+                      key={idx}
+                      onClick={() => {
+                        !select.some((v) => v.id === tag.id)
+                          ? setSelect((select) => [...select, tag])
+                          : setSelect(
                             select.filter((Button) => Button.id !== tag.id)
                           );
-                    }}
-                    TagGray={
-                      !select.some((v) => v.id === tag.id) ? true : false
-                    }
-                    TagYellow={
-                      select.some((v) => v.id === tag.id) ? true : false
-                    }
-                    style={{
-                      margin: "6px 3px ",
-                      wordWrap: "break-word",
-                      minWidth: "22%",
-                      padding: "5px 3px",
-                    }}
-                  >
-                    # {tag.searchTagName}
-                  </Button>
-                ))}
+                      }}
+                      TagGray={
+                        !select.some((v) => v.id === tag.id) ? true : false
+                      }
+                      TagYellow={
+                        select.some((v) => v.id === tag.id) ? true : false
+                      }
+                      style={{
+                        margin: "6px 3px ",
+                        wordWrap: "break-word",
+                        minWidth: "22%",
+                        padding: "5px 3px",
+                      }}
+                    >
+                      # {tag.searchTagName}
+                    </Button>
+                  ))}
+                </FlexBox>
               </FlexBox>
-            </FlexBox>
-            {/* <Grid columns={{ count: 4, size: "auto" }} gap="xsmall">
+              {/* <Grid columns={{ count: 4, size: "auto" }} gap="xsmall">
               {tags.map((tag, idx) => {
                 return (
                   <Button
@@ -922,84 +934,85 @@ export const ProductRegister = () => {
                 );
               })}
             </Grid> */}
-          </Box>
-          <Box alignSelf="center">
-            <Button
-              BigBlack
-              children={productId ? "작품 수정" : "작품 등록"}
-              onClick={handleClickRegister}
-            ></Button>
-            <Dialog
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <Box direction="row" width="100%" justify="end">
-                <BackButton onClick={handleClose}>
-                  <img src={CloseButton} />
-                </BackButton>
-              </Box>
+            </Box>
+            <Box alignSelf="center">
+              <Button
+                BigBlack
+                children={productId ? "작품 수정" : "작품 등록"}
+                onClick={handleClickRegister}
+              ></Button>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <Box direction="row" width="100%" justify="end">
+                  <BackButton onClick={handleClose}>
+                    <img src={CloseButton} />
+                  </BackButton>
+                </Box>
 
-              <DialogContent>
-                <Box align="center">
-                  <StyledText
-                    text={`작품을 ${productId ? "수정" : "등록"}하시겠습니까?`}
-                    weight="bold"
-                  />
-                  <p />
-                  <StyledText
-                    text="경매 시작가는 수정이 불가능합니다."
-                    color="red"
-                    size="10px"
-                  />
+                <DialogContent>
+                  <Box align="center">
+                    <StyledText
+                      text={`작품을 ${productId ? "수정" : "등록"}하시겠습니까?`}
+                      weight="bold"
+                    />
+                    <p />
+                    <StyledText
+                      text="경매 시작가는 수정이 불가능합니다."
+                      color="red"
+                      size="10px"
+                    />
+                  </Box>
+                </DialogContent>
+                <DialogActions>
+                  <Box direction="row" width="100%" justify="center">
+                    <Button
+                      MediumBlack
+                      onClick={registerProduct}
+                      children="작품 등록"
+                      autoFocus
+                    ></Button>
+                  </Box>
+                </DialogActions>
+              </Dialog>
+              <Dialog
+                open={openFail}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <Box direction="row" width="100%" justify="end">
+                  <BackButton onClick={handleClose}>
+                    <img src={CloseButton} />
+                  </BackButton>
                 </Box>
-              </DialogContent>
-              <DialogActions>
-                <Box direction="row" width="100%" justify="center">
-                  <Button
-                    MediumBlack
-                    onClick={registerProduct}
-                    children="작품 등록"
-                    autoFocus
-                  ></Button>
-                </Box>
-              </DialogActions>
-            </Dialog>
-            <Dialog
-              open={openFail}
-              onClose={handleClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <Box direction="row" width="100%" justify="end">
-                <BackButton onClick={handleClose}>
-                  <img src={CloseButton} />
-                </BackButton>
-              </Box>
 
-              <DialogContent>
-                <Box align="center">
-                  <StyledText text={`모든 정보를 입력하세요.`} weight="bold" />
-                  <p />
-                  <StyledText
-                    text="입력하지 않은 정보가 있습니다. 모든 정보를 입력하세요."
-                    color="red"
-                    size="10px"
-                  />
-                </Box>
-              </DialogContent>
-              <DialogActions>
-                <Box direction="row" width="100%" justify="center">
-                  <Button
-                    MediumBlack
-                    onClick={handleClose}
-                    children="닫기"
-                    autoFocus
-                  ></Button>
-                </Box>
-              </DialogActions>
-            </Dialog>
+                <DialogContent>
+                  <Box align="center">
+                    <StyledText text={`모든 정보를 입력하세요.`} weight="bold" />
+                    <p />
+                    <StyledText
+                      text="입력하지 않은 정보가 있습니다. 모든 정보를 입력하세요."
+                      color="red"
+                      size="10px"
+                    />
+                  </Box>
+                </DialogContent>
+                <DialogActions>
+                  <Box direction="row" width="100%" justify="center">
+                    <Button
+                      MediumBlack
+                      onClick={handleClose}
+                      children="닫기"
+                      autoFocus
+                    ></Button>
+                  </Box>
+                </DialogActions>
+              </Dialog>
+            </Box>
           </Box>
         </Box>
       </Box>

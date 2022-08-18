@@ -247,8 +247,11 @@ export default function ArtistDetailPage() {
             onClick={(e) => addFavoriteArtist(e)}
             style={{ border: "0", backgroundColor: "white" }}
           >
-            {isMyFavorite ? <FavoriteIcon style={{ color: "red" }} /> : <FavoriteBorderIcon />}
-            <div>{favoriteCount}</div>
+            <FlexBox Row_SB style={{ width: "40px" }}>
+
+              {isMyFavorite ? <FavoriteIcon style={{ color: "red" }} /> : <FavoriteBorderIcon />}
+              <div>{favoriteCount}</div>
+            </FlexBox>
           </button>
         </BarWarp>
         <div
