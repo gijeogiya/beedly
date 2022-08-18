@@ -841,7 +841,7 @@ export const Auction = () => {
         },
       });
     //그냥 뒤로가기
-    else navigate(-1);
+    else navigate("/");
   };
 
   const handleClickOpen = () => {
