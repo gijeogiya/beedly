@@ -421,10 +421,10 @@ export const ProductDetail = () => {
 
   const stringToDate = (string) => {
     // console.log(string);
-    const due = new Date(string).getTimezoneOffset() * 6000;
-    const dueDate = new Date(new Date(string) - due);
+    // const due = new Date(string).getTimezoneOffset() * 6000;
+    const dueDate = new Date(string);
     // console.log(dueDate);
-    const date = dueDate.toISOString().split("T");
+    const date = string.split("T");
     const yyyyMMdd = date[0].split("-");
     const HHmm = date[1].split(":");
     return `${yyyyMMdd[0]}년 ${parseInt(yyyyMMdd[1])}월 ${parseInt(
@@ -537,11 +537,7 @@ export const ProductDetail = () => {
         </Carousel>
 
         <Box margin="large">
-          <StyledText
-            text={productName}
-            weight="bold"
-            size="18px"
-          />
+          <StyledText text={productName} weight="bold" size="18px" />
           <StyledText
             text={productArtist}
             size="16px"
