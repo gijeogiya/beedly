@@ -52,6 +52,10 @@ export const SpecialAuctionDetail = () => {
   //     ]
 
   useEffect(() => {
+    if (!User) {
+      alert("로그인이 필요합니다.");
+      window.location.href = "/login";
+    }
     setSpecialBoard({
       startTime: "",
       boardTitle: "",

@@ -227,6 +227,7 @@ export default function MyPage() {
   }, [loading]);
 
   const checkProfile = () => {
+    if (user.artistProfileImg) return user.artistProfileImg;
     if (user.userGender === "M") {
       if (user.userRole === "ROLE_USER") {
         return UserMan;

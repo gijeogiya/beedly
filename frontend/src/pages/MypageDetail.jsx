@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import beforeIcon from "../assets/img/arrow-left.svg";
-import { StyledHr, StyledProfile } from "../components/Common";
+import { StyledHr, StyledProfile, StyledText } from "../components/Common";
 import { FlexBox } from "../components/UserStyled";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -17,8 +17,6 @@ import UserMan from "../assets/img/user_man.png";
 import UserWoman from "../assets/img/user_woman.png";
 import styled from "styled-components";
 
-
-
 const styledp = {
   fontSize: "14px",
 };
@@ -29,9 +27,7 @@ const StyledCardArtistImg = styled.img`
   object-fit: cover;
   border-radius: 50%;
   border: 2px solid #ebebeb;
-
 `;
-
 
 export default function MypageDetail() {
   const checkProfile = () => {
@@ -159,10 +155,13 @@ export default function MypageDetail() {
         </div>
         <StyledHr width="99vw" height="0.5px" color="lightgray" />
       </div>
-      <FlexBox MainContent style={{ marginTop: "0" }} >
+      <FlexBox MainContent style={{ marginTop: "0" }}>
         <div style={{ width: "80vw" }}>
-          <Box justify="center" align="center" margin={{ top: "50px", bottom: "20px" }}>
-
+          <Box
+            justify="center"
+            align="center"
+            margin={{ top: "50px", bottom: "20px" }}
+          >
             <StyledCardArtistImg
               src={checkProfile()}
               margin="5px"
@@ -170,13 +169,21 @@ export default function MypageDetail() {
           </Box>
 
           <div style={{ textAlign: "end" }}>
-
             {user.userRole === "ROLE_ARTIST" ? (
               <Link
                 to={`/artistDetail/${user.artistId}`}
                 style={{ textDecoration: "none", color: "black" }}
               >
-                <Button style={{ padding: "0px 15px", borderRadius: "16px", backgroundColor: "rgba(259,209,0,0.7)", margin: "0px" }}>내 작가페이지</Button>
+                <Button
+                  style={{
+                    padding: "0px 15px",
+                    borderRadius: "16px",
+                    backgroundColor: "rgba(259,209,0,0.7)",
+                    margin: "0px",
+                  }}
+                >
+                  <StyledText text="내 작가페이지" />
+                </Button>
               </Link>
             ) : (
               ""
@@ -185,7 +192,10 @@ export default function MypageDetail() {
           <FlexBox Row_SB>
             <h4>프로필 정보</h4>
           </FlexBox>
-          <FlexBox Column_SA style={{ height: "300px", alignItems: "flex-start" }}>
+          <FlexBox
+            Column_SA
+            style={{ height: "300px", alignItems: "flex-start" }}
+          >
             <Box direction="row" justify="between" width="80vw" align="center">
               <h5 style={{ margin: "0" }}>이름</h5>
               <div style={styledp}>{user.userName}</div>
@@ -193,11 +203,12 @@ export default function MypageDetail() {
             <Box direction="row" justify="between" width="80vw" align="center">
               <h5 style={{ margin: "0" }}>Role</h5>
               <FlexBox Row_SB>
-                <div style={styledp}>
-                  {CheckRole()}
-                </div>
+                <div style={styledp}>{CheckRole()}</div>
                 {user.userRole === "ROLE_USER" ? (
-                  <Button XsmallBlack onClick={(e) => Navigate("/signupArtist")}>
+                  <Button
+                    XsmallBlack
+                    onClick={(e) => Navigate("/signupArtist")}
+                  >
                     작가로 전환
                   </Button>
                 ) : null}
@@ -269,7 +280,7 @@ export default function MypageDetail() {
         </div>
         <br />
         <br />
-      </FlexBox >
-    </div >
+      </FlexBox>
+    </div>
   );
 }

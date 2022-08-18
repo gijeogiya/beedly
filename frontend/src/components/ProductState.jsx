@@ -55,7 +55,7 @@ export default function ProductState({ product }) {
               {product.auctionType === "P" ? "상시 경매" : "기획전 경매"}
             </p>
             <p style={{ margin: "0px 0px", fontSize: "12px" }}>
-              {product.finalPrice}
+              {`${moneyFormat(product.finalPrice)}원`}
             </p>
             {!product.paidFlag ? (
               <Button
