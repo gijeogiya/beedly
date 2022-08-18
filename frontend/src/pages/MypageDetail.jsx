@@ -10,11 +10,46 @@ import { getUserInfoApi } from "../utils/apis/UserAPI";
 import { useDispatch } from "react-redux";
 import { setUser as setReduxUser } from "../stores/modules/user";
 import { AlertDialog } from "../components/AlertDialog";
+import { Box } from "grommet";
+import ArtistMan from "../assets/img/artist_man.png";
+import ArtistWoman from "../assets/img/artist_woman.png";
+import UserMan from "../assets/img/user_man.png";
+import UserWoman from "../assets/img/user_woman.png";
+import styled from "styled-components";
+
+
+
 const styledp = {
   fontSize: "14px",
 };
 
+const StyledCardArtistImg = styled.img`
+  width: 25vw;
+  height: 25vw;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ebebeb;
+
+`;
+
+
 export default function MypageDetail() {
+  const checkProfile = () => {
+    if (user.userGender === "M") {
+      if (user.userRole === "ROLE_USER") {
+        return UserMan;
+      } else if (user.userRole === "ROLE_ARTIST") {
+        return ArtistMan;
+      }
+    } else if (user.userGender === "F") {
+      if (user.userRole === "ROLE_USER") {
+        return UserWoman;
+      } else if (user.userRole === "ROLE_ARTIST") {
+        return ArtistWoman;
+      }
+    }
+    return UserMan;
+  };
   const Navigate = useNavigate("");
   const [user, setUser] = useState({
     userName: "",
@@ -90,6 +125,17 @@ export default function MypageDetail() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const CheckRole = () => {
+    if (user.userRole === "ROLE_USER") {
+      return "구매자";
+    } else if (user.userRole === "ROLE_ARTIST") {
+      return "작가님";
+    } else if (user.userRole === "ROLE_ADMIN") {
+      return "관리자";
+    }
+    return "정보없음";
+  };
   return (
     <div>
       <div>
@@ -113,71 +159,72 @@ export default function MypageDetail() {
         </div>
         <StyledHr width="99vw" height="0.5px" color="lightgray" />
       </div>
-      <FlexBox MainContent style={{ marginTop: "0" }}>
+      <FlexBox MainContent style={{ marginTop: "0" }} >
         <div style={{ width: "80vw" }}>
-          {user.userRole === "ROLE_ARTIST" ? (
-            <Link
-              to={`/artistDetail/${user.artistId}`}
-              style={{ textDecoration: "none", color: "black" }}
-            >
-              <h4>내 페이지</h4>
-            </Link>
-          ) : (
-            ""
-          )}
+          <Box justify="center" align="center" margin={{ top: "50px", bottom: "20px" }}>
+
+            <StyledCardArtistImg
+              src={checkProfile()}
+              margin="5px"
+            ></StyledCardArtistImg>
+          </Box>
+
+          <div style={{ textAlign: "end" }}>
+
+            {user.userRole === "ROLE_ARTIST" ? (
+              <Link
+                to={`/artistDetail/${user.artistId}`}
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <Button style={{ padding: "0px 15px", borderRadius: "16px", backgroundColor: "rgba(259,209,0,0.7)", margin: "0px" }}>내 작가페이지</Button>
+              </Link>
+            ) : (
+              ""
+            )}
+          </div>
           <FlexBox Row_SB>
             <h4>프로필 정보</h4>
-            <Link
-              to="/updateMypage"
-              style={{ textDecoration: "none", color: "black" }}
-            >
-              <p>편집</p>
-            </Link>
+          </FlexBox>
+          <FlexBox Column_SA style={{ height: "300px", alignItems: "flex-start" }}>
+            <Box direction="row" justify="between" width="80vw" align="center">
+              <h5 style={{ margin: "0" }}>이름</h5>
+              <div style={styledp}>{user.userName}</div>
+            </Box>
+            <Box direction="row" justify="between" width="80vw" align="center">
+              <h5 style={{ margin: "0" }}>Role</h5>
+              <FlexBox Row_SB>
+                <div style={styledp}>
+                  {CheckRole()}
+                </div>
+                {user.userRole === "ROLE_USER" ? (
+                  <Button XsmallBlack onClick={(e) => Navigate("/signupArtist")}>
+                    작가로 전환
+                  </Button>
+                ) : null}
+              </FlexBox>
+            </Box>
+            <Box direction="row" justify="between" width="80vw" align="center">
+              <h5 style={{ margin: "0" }}>닉네임</h5>
+              <div style={styledp}>{user.userNickname}</div>
+            </Box>
+            <Box direction="row" justify="between" width="80vw" align="center">
+              <h5 style={{ margin: "0" }}>전화번호</h5>
+              <div style={styledp}>{user.userTel}</div>
+            </Box>
+            <Box direction="row" justify="between" width="80vw" align="center">
+              <h5 style={{ margin: "0" }}>생년월일 / 성별</h5>
+              <div style={styledp}>
+                {user.userBirthday} / {user.userGender === "M" ? "남" : "여"}
+              </div>
+            </Box>
+            <div style={{ marginBottom: "3px" }}>
+              <h5 style={{ margin: "0px", marginBottom: "8px" }}>주소</h5>
+              <div style={styledp}>{user.userAddr}</div>
+            </div>
           </FlexBox>
           <div>
-            <h5 style={{ margin: "0" }}>이름</h5>
-            <div style={styledp}>{user.userName}</div>
-            <StyledHr width="80vw" height="0.5px" color="lightgray" />
-          </div>
-          <div style={{ marginBottom: "3px" }}>
-            <h5 style={{ margin: "0" }}>Role</h5>
-            <FlexBox Row_SB>
-              <div style={styledp}>
-                {user.userRole === "ROLE_ARTIST" ? "작가님" : "구매자"}
-              </div>
-              {user.userRole === "ROLE_USER" ? (
-                <Button XsmallBlack onClick={(e) => Navigate("/signupArtist")}>
-                  작가로 전환
-                </Button>
-              ) : null}
-            </FlexBox>
-            <StyledHr width="80vw" height="0.5px" color="lightgray" />
-          </div>
-          <div style={{ marginBottom: "3px" }}>
-            <h5 style={{ margin: "0" }}>닉네임</h5>
-            <div style={styledp}>{user.userNickname}</div>
-            <StyledHr width="80vw" height="0.5px" color="lightgray" />
-          </div>
-          <div style={{ marginBottom: "3px" }}>
-            <h5 style={{ margin: "0" }}>전화번호</h5>
-            <div style={styledp}>{user.userTel}</div>
-            <StyledHr width="80vw" height="0.5px" color="lightgray" />
-          </div>
-          <div style={{ marginBottom: "3px" }}>
-            <h5 style={{ margin: "0" }}>생년월일 / 성별</h5>
-            <div style={styledp}>
-              {user.userBirthday} / {user.userGender === "M" ? "남" : "여"}
-            </div>
-            <StyledHr width="80vw" height="0.5px" color="lightgray" />
-          </div>
-          <div style={{ marginBottom: "3px" }}>
-            <h5 style={{ margin: "0" }}>주소</h5>
-            <div style={styledp}>{user.userAddr}</div>
-            <StyledHr width="80vw" height="0.5px" color="lightgray" />
-          </div>
-          <div>
             <h5 style={{ marginBottom: "3px" }}>태그</h5>
-            <FlexBox Row_S style={{ flexWrap: "wrap", padding: "6px 10px" }}>
+            <FlexBox Row_S style={{ flexWrap: "wrap", padding: "6px 0px" }}>
               {taglist.map((item, idx) => (
                 <Button
                   key={idx}
@@ -222,7 +269,7 @@ export default function MypageDetail() {
         </div>
         <br />
         <br />
-      </FlexBox>
-    </div>
+      </FlexBox >
+    </div >
   );
 }
