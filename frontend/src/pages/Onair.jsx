@@ -5,6 +5,7 @@ import { OnairPageTable } from "../components/OnairPageTable";
 import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
 import { getOnairApi, getOnairByCategoryApi } from "../utils/apis/PersonalProductAPI";
+import SortIcon from "../assets/img/SortIcon.svg";
 
 const OnairPageTitle = styled.div`
   display: flex;
@@ -29,6 +30,23 @@ const StyledCategoryButton = styled.button`
   border: 0;
   background-color: white;
   font-weight: ${(props) => (props.isActive ? "bold" : "0" || "0")};
+`;
+
+const SortButton = styled.button`
+  border: 0;
+  background-color: white;
+  font-size: 12px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  font-weight: 700;
+  padding-top: 4px;
+`;
+
+const SortImg = styled.img`
+  width: 13px;
+  padding-left: 3px;
+  padding-top: 2px;
 `;
 
 export default function OnairPage() {
@@ -77,7 +95,7 @@ export default function OnairPage() {
       <OnairPageTitle>
         <div style={{ fontSize: "18px", fontWeight: "700" }}>On Air</div>
         <div style={{ fontSize: "16px", color: "rgba(31, 29, 29, 0.4)" }}>
-          현재 진행 중인 개인 경매
+          현재 방송 중인 개인 경매
         </div>
       </OnairPageTitle>
       <nav>
@@ -138,6 +156,20 @@ export default function OnairPage() {
           </StyledCategoryButton>
         </StyledCategoryTable>
       </nav>
+      <div
+        style={{
+          width: "95vw",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          paddingTop: "10px",
+        }}
+      >
+        <SortButton>
+          <div>인기순</div>
+          <SortImg src={SortIcon} />
+        </SortButton>
+      </div>
       <OnairPageTable list={OnairList} />
     </div>
   );

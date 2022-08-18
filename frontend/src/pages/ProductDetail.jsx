@@ -58,7 +58,7 @@ export const HeaderBox = ({
         </BackButton>
       </Box>
       <Box direction="row">
-        <FlexBox alignContent="center">
+        <Box alignContent="center">
           {isSeller && (
             <Menu
               icon={false}
@@ -73,7 +73,7 @@ export const HeaderBox = ({
               }}
             />
           )}
-        </FlexBox>
+        </Box>
         <Box>
           <BackButton onClick={sharePage}>
             <img src={ShareBtn} alt="" />
