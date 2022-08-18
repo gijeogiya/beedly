@@ -79,10 +79,12 @@ const StyledCardInfTextFrame = styled.div`
   width: 28vw;
 `;
 
-export function ProductCard({ product }) {
+export function ProductCard({ product, startTime }) {
   const [now, setNow] = useState(new Date());
-  const start = new Date(product.startTime);
-  const date = product.startTime.split("T");
+  const start =
+    startTime === null ? new Date(product.startTime) : new Date(startTime);
+  const date =
+    startTime === null ? product.startTime.split("T") : startTime.split("T");
   const yyyyMMdd = date[0].split("-");
   const HHmm = date[1].split(":");
   const [timer, setTimer] = useState(0);
@@ -123,15 +125,21 @@ export function ProductCard({ product }) {
   return (
     <StyledProductCard>
       <StyledProductCardImgFrame>
-        <StyledRectangleRowImg src={product.productImgs[0]} />
+        <StyledRectangleRowImg
+          src={
+            product.productImgs
+              ? product.productImgs[0]
+              : product.specialProductImgs[0]
+          }
+        />
         <AuctionStateBox
           style={{ backgroundColor: CheckTime() ? "red" : "gray" }}
         >
           <StyledAuctionStateIcon
             src={CheckTime() ? OnairStateIcon : BeforeStateIcon}
-            style={{ paddingRight: "5px", paddingTop:"2px"}}
+            style={{ paddingRight: "5px", paddingTop: "2px" }}
           />
-          <div style={{paddingBottom:"2px"}}>
+          <div style={{ paddingBottom: "2px" }}>
             {CheckTime() ? "실시간" : getTime()}
           </div>
         </AuctionStateBox>
