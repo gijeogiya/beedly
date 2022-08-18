@@ -153,18 +153,22 @@ const StyledButton = styled.button`
     css`
       color: #1f1d1d;
       background-color: rgba(255, 209, 0, 0.7);
-      min-height: 32px;
-      max-width: 20%;
-      border-radius: 7px;
+      padding: 8px;
+      font-size: 12px;
+      margin: 0px 8px 12px 0px;
+      border: 1px solid #ebebeb;
+      border-radius: 16px;
     `}
     ${(props) =>
     props.TagGray &&
     css`
       color: #565656;
-      background-color: #d8d8d8;
-      min-height: 32px;
-      max-width: 20%;
-      border-radius: 7px;
+      background-color: #f4f4f4;
+  padding: 8px;
+  font-size: 12px;
+  margin: 0px 8px 12px 0px;
+  border: 1px solid #ebebeb;
+  border-radius: 16px;
 
     `}
 
