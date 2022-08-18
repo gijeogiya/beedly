@@ -135,8 +135,8 @@ const PreviewImg = styled.img`
 `;
 
 const PreviewDiv = styled.div`
-display: flex;
-justify-content: flex-start;
+  display: flex;
+  justify-content: flex-start;
   width: 30vw;
   height: 12vh;
   border-radius: 10px;
@@ -177,14 +177,22 @@ const ImageInput = ({ handleImageUpload }) => {
         style={{
           display: "flex",
           alignContent: "space-between",
-
         }}
       >
         <ImageBtn src={ImInput} />
         <Box direction="row" justify="between" width="90%">
           <Box direction="row">
             <StyledText size={titleSize} weight="bold" text="사진 등록" />
-            <img src={PlusIcon} alt="사진추가" style={{ paddingLeft: "10px", height: "15px", width: "15px", alignSelf: "center" }} />
+            <img
+              src={PlusIcon}
+              alt="사진추가"
+              style={{
+                paddingLeft: "10px",
+                height: "15px",
+                width: "15px",
+                alignSelf: "center",
+              }}
+            />
           </Box>
           <StyledText
             size="10px"
@@ -226,6 +234,7 @@ export const ProductRegister = () => {
   const [select, setSelect] = useState([]);
   const [open, setOpen] = useState(false);
   const [openFail, setOpenFail] = useState(false);
+  const [openPostFail, setOpenPostFail] = useState(false);
   const [paletteColors, setPaletteColors] = useState([]);
   const [saturation, setSaturation] = useState();
   const [brightness, setBrightness] = useState();
@@ -340,7 +349,7 @@ export const ProductRegister = () => {
       // const data = await response.blob();
       // const metadata = { type: `image/png`, crossOrigin: "anonymous" };
       var image = new Image();
-      image.onload = function () { };
+      image.onload = function () {};
       image.crossOrigin = "Anonymous";
       image.src = url + "?not-from-cache-please";
       // let img = new File([data], metadata);
@@ -468,6 +477,7 @@ export const ProductRegister = () => {
   const handleClose = () => {
     setOpen(false);
     setOpenFail(false);
+    setOpenPostFail(false);
   };
 
   const setColor = (url) => {
@@ -539,7 +549,7 @@ export const ProductRegister = () => {
       let temperature = parseInt(
         (temp.red * ((temp.red + temp.blue) / 100) -
           temp.blue * ((temp.red + temp.blue) / 100)) *
-        0.05
+          0.05
       );
       // console.log("color 안에서 ", saturation, brightness, temperature);
       // setPaletteColors([...colors]);
@@ -649,6 +659,7 @@ export const ProductRegister = () => {
           },
           (fail) => {
             console.log(fail);
+            if (fail.code === "ERR_NETWORK") setOpenPostFail(true);
           }
         );
       }
@@ -674,7 +685,6 @@ export const ProductRegister = () => {
     <Grommet theme={GrTheme}>
       <Box direction="row" justify="center" align="center">
         <Box width="85vw">
-
           <HeaderBox productId={productId} goBack={goBack} />
           <Box width="90vw" alignSelf="center">
             <Box margin="small" direction="row">
@@ -781,12 +791,17 @@ export const ProductRegister = () => {
                 />
               </Box>
             </Box>
-            <Box margin="small" direction="row" justify="between" align="center" style={{ marginTop: "15px", marginBottom: "15px" }}>
+            <Box
+              margin="small"
+              direction="row"
+              justify="between"
+              align="center"
+              style={{ marginTop: "15px", marginBottom: "15px" }}
+            >
               <Box alignSelf="center">
                 <StyledText size={titleSize} weight="bold" text="사이즈" />
               </Box>
               <Box direction="row">
-
                 <Box direction="row" margin={{ left: "small" }}>
                   <Box justify="center">
                     <StyledText text="가로" />
@@ -796,7 +811,10 @@ export const ProductRegister = () => {
                       Thin
                       value={width}
                       onChange={(e) => {
-                        const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
+                        const onlyNumber = e.target.value.replace(
+                          /[^0-9]/g,
+                          ""
+                        );
                         setWidth(onlyNumber);
                       }}
                     />
@@ -812,12 +830,14 @@ export const ProductRegister = () => {
                       Thin
                       value={height}
                       onChange={(e) => {
-                        const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
+                        const onlyNumber = e.target.value.replace(
+                          /[^0-9]/g,
+                          ""
+                        );
                         setHeight(onlyNumber);
                       }}
                     />
                   </Box>
-
                 </Box>
 
                 <Box direction="row" margin={{ left: "small" }}>
@@ -829,7 +849,10 @@ export const ProductRegister = () => {
                       Thin
                       value={depth}
                       onChange={(e) => {
-                        const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
+                        const onlyNumber = e.target.value.replace(
+                          /[^0-9]/g,
+                          ""
+                        );
                         setDepth(onlyNumber);
                       }}
                     />
@@ -839,7 +862,6 @@ export const ProductRegister = () => {
                   </Box>
                 </Box>
               </Box>
-
             </Box>
             <Box margin="small">
               <StyledText text="작품 설명" size={titleSize} weight="bold" />
@@ -884,7 +906,11 @@ export const ProductRegister = () => {
               <FlexBox Column_C>
                 <FlexBox
                   Row_S
-                  style={{ flexWrap: "wrap", padding: "6px 10px", width: "88vw", }}
+                  style={{
+                    flexWrap: "wrap",
+                    padding: "6px 10px",
+                    width: "88vw",
+                  }}
                 >
                   {tags.map((tag, idx) => (
                     <Button
@@ -893,8 +919,8 @@ export const ProductRegister = () => {
                         !select.some((v) => v.id === tag.id)
                           ? setSelect((select) => [...select, tag])
                           : setSelect(
-                            select.filter((Button) => Button.id !== tag.id)
-                          );
+                              select.filter((Button) => Button.id !== tag.id)
+                            );
                       }}
                       TagGray={
                         !select.some((v) => v.id === tag.id) ? true : false
@@ -956,7 +982,9 @@ export const ProductRegister = () => {
                 <DialogContent>
                   <Box align="center">
                     <StyledText
-                      text={`작품을 ${productId ? "수정" : "등록"}하시겠습니까?`}
+                      text={`작품을 ${
+                        productId ? "수정" : "등록"
+                      }하시겠습니까?`}
                       weight="bold"
                     />
                     <p />
@@ -992,10 +1020,47 @@ export const ProductRegister = () => {
 
                 <DialogContent>
                   <Box align="center">
-                    <StyledText text={`모든 정보를 입력하세요.`} weight="bold" />
+                    <StyledText
+                      text={`모든 정보를 입력하세요.`}
+                      weight="bold"
+                    />
                     <p />
                     <StyledText
                       text="입력하지 않은 정보가 있습니다. 모든 정보를 입력하세요."
+                      color="red"
+                      size="10px"
+                    />
+                  </Box>
+                </DialogContent>
+                <DialogActions>
+                  <Box direction="row" width="100%" justify="center">
+                    <Button
+                      MediumBlack
+                      onClick={handleClose}
+                      children="닫기"
+                      autoFocus
+                    ></Button>
+                  </Box>
+                </DialogActions>
+              </Dialog>
+              <Dialog
+                open={openPostFail}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <Box direction="row" width="100%" justify="end">
+                  <BackButton onClick={handleClose}>
+                    <img src={CloseButton} />
+                  </BackButton>
+                </Box>
+
+                <DialogContent>
+                  <Box align="center">
+                    <StyledText text={`등록 실패`} weight="bold" />
+                    <p />
+                    <StyledText
+                      text="사진 크기가 너무 큽니다. (1MB 이하만 첨부 가능합니다)"
                       color="red"
                       size="10px"
                     />

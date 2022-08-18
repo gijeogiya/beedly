@@ -33,9 +33,11 @@ export const AlertDialog = ({
         <Button SmallBlack onClick={handleClose}>
           {cancel}
         </Button>
-        <Button SmallRed onClick={handleAction} autoFocus>
-          {accept}
-        </Button>
+        {accept && (
+          <Button SmallRed onClick={handleAction} autoFocus>
+            {accept}
+          </Button>
+        )}
       </Box>
     </Dialog>
   );

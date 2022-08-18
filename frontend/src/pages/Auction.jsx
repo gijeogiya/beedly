@@ -29,6 +29,7 @@ import {
 import { moneyFormat } from "../stores/modules/basicInfo";
 import SockJS from "sockjs-client";
 import * as StompJs from "@stomp/stompjs";
+import { AlertDialog } from "../components/AlertDialog";
 
 const MainContent = styled.img`
   src: ${(props) => props.src || ""};
@@ -68,7 +69,7 @@ const BidButton = styled.button`
 
 function PriceBox({ price, callPrice }) {
   return (
-    <PriceContent style={{marginTop: "10px"}}>
+    <PriceContent style={{ marginTop: "10px" }}>
       <Box
         align="center"
         justify="center"
@@ -80,14 +81,14 @@ function PriceBox({ price, callPrice }) {
           color="white"
           weight="bold"
           text={`₩ ${moneyFormat(price)}`}
-          style={{padding: "5px 0"}}
+          style={{ padding: "5px 0" }}
         />
         <StyledHr />
         <StyledText
           size="14px"
           color="white"
           text={`호가 ₩ ${moneyFormat(callPrice)}`}
-          style={{padding: "5px 0"}}
+          style={{ padding: "5px 0" }}
         />
       </Box>
     </PriceContent>
@@ -148,6 +149,7 @@ const AuctionInfoText = ({
 
 const ProductContainer = styled.div`
   justify-content: center;
+  bottom: 0;
 `;
 
 const ButtonContainer = styled.div`
@@ -180,9 +182,9 @@ function ProductFrame({
         <Box direction="row">
           <ProductImg src={productSrc} />
           <Box>
-            <StyledText size="10px" weight="bold" text={category} />
-            <StyledText size="12px" weight="bold" text={title} />
-            <StyledText size="10px" text={artist} />
+            <StyledText size="14px" weight="bold" text={category} />
+            <StyledText size="16px" weight="bold" text={title} />
+            <StyledText size="14px" text={artist} />
           </Box>
         </Box>
         <Box>
@@ -191,16 +193,16 @@ function ProductFrame({
             info={`${moneyFormat(currentPrice)} 원`}
             titleWeight="bold"
             infoWeight="bold"
-            titleSize="10px"
-            infoSize="10px"
+            titleSize="14px"
+            infoSize="14px"
           />
           <AuctionInfoText
             title="현재 입찰자"
             info={currentBidder}
             titleWeight="bold"
             infoWeight="bold"
-            titleSize="10px"
-            infoSize="10px"
+            titleSize="14px"
+            infoSize="14px"
           />
           {grade === "buyer" && <StyledHr color="white" />}
           {grade === "buyer" && (
@@ -209,8 +211,8 @@ function ProductFrame({
               info={`${moneyFormat(callPrice + currentPrice)} 원`}
               titleWeight="bold"
               infoWeight="bold"
-              titleSize="10px"
-              infoSize="14px"
+              titleSize="14px"
+              infoSize="16px"
               infoColor="#D00000"
             />
           )}
@@ -222,8 +224,8 @@ function ProductFrame({
               )} 원`}
               titleWeight="bold"
               infoWeight="bold"
-              titleSize="10px"
-              infoSize="10px"
+              titleSize="14px"
+              infoSize="14px"
             />
           )}
         </Box>
@@ -245,7 +247,11 @@ function ProductFrame({
           )
         ) : (
           <Box justify="center" alignContent="center" align="center">
-            <Button MideumRed onClick={handleClickOpen}>
+            <Button
+              MideumRed={isSold ? false : true}
+              MediumBlack={isSold ? true : false}
+              onClick={handleClickOpen}
+            >
               {isSold ? "종료하기" : "낙찰하기"}
             </Button>
             <Dialog
@@ -393,12 +399,21 @@ const ExitButtonDiv = styled.div`
   justify-content: center;
 `;
 
-function ExitButton({ handleClickOpen, handleClose, handleAuctionExit, open }) {
+function ExitButton({
+  handleClickOpen,
+  handleClose,
+  handleAuctionExit,
+  open,
+  openFail,
+}) {
   return (
     <ExitButtonDiv>
-      <Button onClick={handleClickOpen} style={{backgroundColor:"rgba(255, 255, 255, 0)"}}>
-        <div style={{objectFit:"cover"}}>
-          <img src={ExitIcon} style={{objectFit:"contain"}} alt='나가기' />
+      <Button
+        onClick={handleClickOpen}
+        style={{ backgroundColor: "rgba(255, 255, 255, 0)" }}
+      >
+        <div style={{ objectFit: "cover" }}>
+          <img src={ExitIcon} style={{ objectFit: "contain" }} alt="나가기" />
         </div>
       </Button>
       <Dialog
@@ -422,6 +437,13 @@ function ExitButton({ handleClickOpen, handleClose, handleAuctionExit, open }) {
           </Button>
         </DialogActions>
       </Dialog>
+      <AlertDialog
+        open={openFail}
+        handleClose={handleClose}
+        title="낙찰 실패"
+        desc="낙찰자가 없습니다."
+        cancel="닫기"
+      />
     </ExitButtonDiv>
   );
 }
@@ -444,6 +466,7 @@ export const Auction = () => {
   const [isSold, setIsSold] = useState(false);
   const [initPrice, setInitPrice] = useState(0);
   const [open, setOpen] = useState(false);
+  const [openFail, setOpenFail] = useState(false);
   const [currentBidder, setCurrentBidder] = useState("없음");
   const [currentPrice, setCurrentPrice] = useState("");
   const [callPrice, setCallPrice] = useState("");
@@ -456,6 +479,7 @@ export const Auction = () => {
     category: "",
     artist: "",
     productSrc: "",
+    artistSrc: "",
   });
   const [localUser, setLocalUser] = useState(undefined);
 
@@ -655,6 +679,7 @@ export const Auction = () => {
               category: "회화",
               artist: response.data.userName,
               productSrc: response.data.productImages[0],
+              artistSrc: response.data.artistProfileImg,
             });
             setCurrentPrice(response.data.startPrice);
             setInitPrice(response.data.startPrice);
@@ -749,8 +774,8 @@ export const Auction = () => {
       if (!isSold) {
         //낙찰 정보 퍼블리시
         if (currentBidder === "없음") {
-          alert("입찰자가 없습니다!");
-          handleClose();
+          // setOpenFail(true);
+          alert("낙찰자가 없습니다!");
           return;
         }
         client.publish({
@@ -854,6 +879,7 @@ export const Auction = () => {
 
   const handleClose = () => {
     setOpen(false);
+    setOpenFail(false);
   };
 
   return loading ? (
@@ -881,13 +907,14 @@ export const Auction = () => {
           handleClose={handleClose}
           handleAuctionExit={handleAuctionExit}
           open={open}
+          openFail={openFail}
         />
       )}
 
       <AuctionArtist
         title={bidInfo.title}
         artist={bidInfo.artist}
-        artistSrc={artist}
+        artistSrc={bidInfo.artistSrc}
       />
 
       <PriceBox price={currentPrice} callPrice={callPrice} />
