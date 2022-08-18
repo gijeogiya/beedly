@@ -4,7 +4,10 @@ import { OnairPageCategoryBar } from "../components/OnairPageCategoryBar";
 import { OnairPageTable } from "../components/OnairPageTable";
 import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
-import { getOnairApi, getOnairByCategoryApi } from "../utils/apis/PersonalProductAPI";
+import {
+  getOnairApi,
+  getOnairByCategoryApi,
+} from "../utils/apis/PersonalProductAPI";
 import SortIcon from "../assets/img/SortIcon.svg";
 import { StyledText } from "../components/Common";
 
@@ -45,32 +48,34 @@ const SortButton = styled.button`
 `;
 
 const SortImg = styled.img`
-  width: 13px;
+  width: 14px;
   padding-left: 3px;
-  padding-top: 2px;
+  padding-top: 4px;
 `;
 
 export default function OnairPage() {
   const [loading, setloading] = useState(true);
   const [OnairList, setOnairList] = useState([]);
-  const [nowCategory, setNowCategory] = useState('ALL');
+  const [nowCategory, setNowCategory] = useState("ALL");
   const [sortMethod, setSortMethod] = useState(["인기순"]);
 
   const HandleSortButton = () => {
     setloading(true);
     sortMethod === "인기순"
       ? setSortMethod((prev) => (prev = "최신순"))
-      : setSortMethod((prev) => (prev = "인기순"))
+      : setSortMethod((prev) => (prev = "인기순"));
   };
 
   useEffect(() => {
     if (loading) {
       //카테고리별 온에어 가져오기
-      if (nowCategory === 'ALL') {
+      if (nowCategory === "ALL") {
         getOnairApi(
           "0",
           "20",
-          sortMethod === "인기순" ? "personalProduct.favoriteCount,DESC" : "createdDate,DESC",
+          sortMethod === "인기순"
+            ? "personalProduct.favoriteCount,DESC"
+            : "createdDate,DESC",
           (res) => {
             console.log(res);
             setOnairList(res.data.content);
@@ -79,13 +84,14 @@ export default function OnairPage() {
             console.log(err);
           }
         );
-      }
-      else {
+      } else {
         getOnairByCategoryApi(
           nowCategory,
           "0",
           "20",
-          sortMethod === "인기순" ? "personalProduct.favoriteCount,DESC" : "createdDate,DESC",
+          sortMethod === "인기순"
+            ? "personalProduct.favoriteCount,DESC"
+            : "createdDate,DESC",
           (res) => {
             console.log(res);
             setOnairList(res.data.content);
@@ -116,7 +122,11 @@ export default function OnairPage() {
             }}
             isActive={nowCategory === "ALL"}
           >
-            <StyledText text="ALL" size="16px" weight={nowCategory === "ALL" ? "bold" : "0"} />
+            <StyledText
+              text="ALL"
+              size="16px"
+              weight={nowCategory === "ALL" ? "bold" : "0"}
+            />
           </StyledCategoryButton>
           <StyledCategoryButton
             onClick={() => {
@@ -125,7 +135,11 @@ export default function OnairPage() {
             }}
             isActive={nowCategory === "회화"}
           >
-            <StyledText text="회화" size="16px" weight={nowCategory === "회화" ? "bold" : "0"} />
+            <StyledText
+              text="회화"
+              size="16px"
+              weight={nowCategory === "회화" ? "bold" : "0"}
+            />
           </StyledCategoryButton>
           <StyledCategoryButton
             onClick={() => {
@@ -134,7 +148,11 @@ export default function OnairPage() {
             }}
             isActive={nowCategory === "판화"}
           >
-            <StyledText text="판화" size="16px" weight={nowCategory === "판화" ? "bold" : "0"} />
+            <StyledText
+              text="판화"
+              size="16px"
+              weight={nowCategory === "판화" ? "bold" : "0"}
+            />
           </StyledCategoryButton>
           <StyledCategoryButton
             onClick={() => {
@@ -143,7 +161,11 @@ export default function OnairPage() {
             }}
             isActive={nowCategory === "에디션"}
           >
-            <StyledText text="에디션" size="16px" weight={nowCategory === "에디션" ? "bold" : "0"} />
+            <StyledText
+              text="에디션"
+              size="16px"
+              weight={nowCategory === "에디션" ? "bold" : "0"}
+            />
           </StyledCategoryButton>
           <StyledCategoryButton
             onClick={() => {
@@ -152,7 +174,11 @@ export default function OnairPage() {
             }}
             isActive={nowCategory === "사진"}
           >
-            <StyledText text="사진" size="16px" weight={nowCategory === "사진" ? "bold" : "0"} />
+            <StyledText
+              text="사진"
+              size="16px"
+              weight={nowCategory === "사진" ? "bold" : "0"}
+            />
           </StyledCategoryButton>
           <StyledCategoryButton
             onClick={() => {
@@ -161,7 +187,11 @@ export default function OnairPage() {
             }}
             isActive={nowCategory === "입체"}
           >
-            <StyledText text="입체" size="16px" weight={nowCategory === "입체" ? "bold" : "0"} />
+            <StyledText
+              text="입체"
+              size="16px"
+              weight={nowCategory === "입체" ? "bold" : "0"}
+            />
           </StyledCategoryButton>
         </StyledCategoryTable>
       </nav>
@@ -174,14 +204,10 @@ export default function OnairPage() {
           paddingTop: "10px",
         }}
       >
-        <SortButton
-            onClick={(e) =>
-              HandleSortButton()
-            }
-          >
-            <div>{sortMethod}</div>
-            <SortImg src={SortIcon} />
-          </SortButton>
+        <SortButton onClick={(e) => HandleSortButton()}>
+          <StyledText text={sortMethod} size="14px"></StyledText>
+          <SortImg src={SortIcon} />
+        </SortButton>
       </div>
       <OnairPageTable list={OnairList} />
     </div>

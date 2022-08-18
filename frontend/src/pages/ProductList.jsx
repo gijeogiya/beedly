@@ -9,7 +9,10 @@ import { SortButtonArea } from "../components/SortButtonArea";
 import { HalfProductCard } from "../components/HalfProductCard";
 import { Bold } from "grommet-icons";
 import SortIcon from "../assets/img/SortIcon.svg";
-import { getOnairByCategoryApi, getProductByCategoryApi } from "../utils/apis/PersonalProductAPI";
+import {
+  getOnairByCategoryApi,
+  getProductByCategoryApi,
+} from "../utils/apis/PersonalProductAPI";
 import PaintingBanner from "../assets/img/PaintingBanner.png";
 import PrintBanner from "../assets/img/PrintBanner.png";
 import EditionBanner from "../assets/img/EditionBanner.png";
@@ -28,9 +31,9 @@ const SortButton = styled.button`
 `;
 
 const SortImg = styled.img`
-  width: 13px;
+  width: 14px;
   padding-left: 3px;
-  padding-top: 2px;
+  padding-top: 4px;
 `;
 
 const StyledTableTitle = styled.div`
@@ -96,18 +99,23 @@ export default function ProductListPage() {
     setloading(true);
     sortMethod === "인기순"
       ? setSortMethod((prev) => (prev = "최신순"))
-      : setSortMethod((prev) => (prev = "인기순"))
+      : setSortMethod((prev) => (prev = "인기순"));
   };
-
 
   useEffect(() => {
     if (loading) {
       //카테고리별 인기 상품 가져오기
-      if (nowCategory === '회화') {setBannerImg(PaintingBanner);}
-      else if (nowCategory === '판화') {setBannerImg(PrintBanner);}
-      else if (nowCategory === '에디션') {setBannerImg(EditionBanner);}
-      else if (nowCategory === '사진') {setBannerImg(PhotoBanner);}
-      else if (nowCategory === '입체') {setBannerImg(FigureBanner);}
+      if (nowCategory === "회화") {
+        setBannerImg(PaintingBanner);
+      } else if (nowCategory === "판화") {
+        setBannerImg(PrintBanner);
+      } else if (nowCategory === "에디션") {
+        setBannerImg(EditionBanner);
+      } else if (nowCategory === "사진") {
+        setBannerImg(PhotoBanner);
+      } else if (nowCategory === "입체") {
+        setBannerImg(FigureBanner);
+      }
 
       getProductByCategoryApi(
         nowCategory,
@@ -201,17 +209,24 @@ export default function ProductListPage() {
             }}
             isActive={nowCategory === "회화"}
           >
-            <StyledText text="회화" size="16px" weight={nowCategory === "회화" ? "bold" : "0"} />
+            <StyledText
+              text="회화"
+              size="16px"
+              weight={nowCategory === "회화" ? "bold" : "0"}
+            />
           </StyledCategoryButton>
           <StyledCategoryButton
             onClick={() => {
               setloading(true);
               setNowCategory((prev) => (prev = "판화"));
-
             }}
             isActive={nowCategory === "판화"}
           >
-            <StyledText text="판화" size="16px" weight={nowCategory === "판화" ? "bold" : "0"} />
+            <StyledText
+              text="판화"
+              size="16px"
+              weight={nowCategory === "판화" ? "bold" : "0"}
+            />
           </StyledCategoryButton>
           <StyledCategoryButton
             onClick={() => {
@@ -220,7 +235,11 @@ export default function ProductListPage() {
             }}
             isActive={nowCategory === "에디션"}
           >
-            <StyledText text="에디션" size="16px" weight={nowCategory === "에디션" ? "bold" : "0"} />
+            <StyledText
+              text="에디션"
+              size="16px"
+              weight={nowCategory === "에디션" ? "bold" : "0"}
+            />
           </StyledCategoryButton>
           <StyledCategoryButton
             onClick={() => {
@@ -229,7 +248,11 @@ export default function ProductListPage() {
             }}
             isActive={nowCategory === "사진"}
           >
-            <StyledText text="사진" size="16px" weight={nowCategory === "사진" ? "bold" : "0"} />
+            <StyledText
+              text="사진"
+              size="16px"
+              weight={nowCategory === "사진" ? "bold" : "0"}
+            />
           </StyledCategoryButton>
           <StyledCategoryButton
             onClick={() => {
@@ -238,12 +261,16 @@ export default function ProductListPage() {
             }}
             isActive={nowCategory === "입체"}
           >
-            <StyledText text="입체" size="16px" weight={nowCategory === "입체" ? "bold" : "0"} />
+            <StyledText
+              text="입체"
+              size="16px"
+              weight={nowCategory === "입체" ? "bold" : "0"}
+            />
           </StyledCategoryButton>
         </StyledCategoryTable>
       </nav>
       <SubBanner>
-          <img src={bannerImg} alt='카테고리 배너'/>
+        <img src={bannerImg} alt="카테고리 배너" />
       </SubBanner>
       <div
         style={{
@@ -272,7 +299,9 @@ export default function ProductListPage() {
         }}
       >
         <StyledTableTitle>Products</StyledTableTitle>
-        <StyledTableSubtitle>낙찰 전 개인 {nowCategory} 작품</StyledTableSubtitle>
+        <StyledTableSubtitle>
+          낙찰 전 개인 {nowCategory} 작품
+        </StyledTableSubtitle>
         <div
           style={{
             width: "95vw",
@@ -282,12 +311,8 @@ export default function ProductListPage() {
             paddingTop: "10px",
           }}
         >
-          <SortButton
-            onClick={(e) =>
-              HandleSortButton()
-            }
-          >
-            <div>{sortMethod}</div>
+          <SortButton onClick={(e) => HandleSortButton()}>
+            <StyledText text={sortMethod} size="14px" />
             <SortImg src={SortIcon} />
           </SortButton>
         </div>
