@@ -48,6 +48,7 @@ const AuctionStateBoxProps = (backcolor) => (
 
 const StyledAuctionStateIcon = styled.img`
   height: 9px;
+  padding-right: 3px;
 `;
 
 const StyledCardInfBox = styled.div`
@@ -70,6 +71,8 @@ const StyledCardArtistImgFrame = styled.div`
 const StyledCardArtistImg = styled.img`
   object-fit: cover;
   border-radius: 50%;
+  width: 30px;
+  height: 30px;
   border:2px solid rgb(235,235,235);
 `;
 

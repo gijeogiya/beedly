@@ -120,8 +120,6 @@ export default function SearchResult() {
     <div style={{ paddingBottom: "40px" }}>
       <SearchBar handlefunction={handleSubmit} word={keyword} />
       <StyledTableTitle>'{keyword}' 검색 결과</StyledTableTitle>
-      <StyledTableTitle>Artist</StyledTableTitle>
-      {/* <HorizonScrollColTable /> */}
       <StyledTableTitle>Product</StyledTableTitle>
       {console.log(searchProductList)}
       {!loading && searchProductList.length !== 0 ? (

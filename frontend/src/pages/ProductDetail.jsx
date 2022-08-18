@@ -42,6 +42,7 @@ import {
   postPersonalFavorite,
 } from "../utils/apis/PersonalFavoriteAPI";
 import Carousel from "nuka-carousel";
+import { AlertDialog } from "../components/AlertDialog";
 export const HeaderBox = ({
   isSeller,
   goBack,
@@ -57,7 +58,7 @@ export const HeaderBox = ({
         </BackButton>
       </Box>
       <Box direction="row">
-        <Box>
+        <FlexBox alignContent="center">
           {isSeller && (
             <Menu
               icon={false}
@@ -72,7 +73,7 @@ export const HeaderBox = ({
               }}
             />
           )}
-        </Box>
+        </FlexBox>
         <Box>
           <BackButton onClick={sharePage}>
             <img src={ShareBtn} alt="" />
@@ -114,6 +115,7 @@ export const ProductDetail = () => {
   const [artistNickname, setArtistNickname] = useState("");
   // const [product, setProduct] = useState({});
   const [open, setOpen] = useState(false);
+  const [openDel, setOpenDel] = useState(false);
   const [auctionId, setAuctionId] = useState("");
   const [isOnAir, setIsOnAir] = useState("");
   const [absenteeBidPrice, setAbsenteeBidPrice] = useState();
@@ -169,7 +171,7 @@ export const ProductDetail = () => {
     setCategory(data.personalProductDto.categoryId);
     setStartTime(data.personalProductDto.startTime);
     setStartPrice(data.personalProductDto.startPrice);
-    setProductDesc(data.productDesc);
+    setProductDesc(data.personalProductDto.productDesc);
     setProductImages([...data.personalProductDto.productImgs]);
     setProductLike(data.personalProductDto.favoriteCount);
     setSoldStatus(data.personalProductDto.soldStatus);
@@ -204,6 +206,7 @@ export const ProductDetail = () => {
 
   const handleClose = () => {
     setOpen(false);
+    setOpenDel(false);
   };
 
   const handleDate = (date) => {
@@ -223,7 +226,7 @@ export const ProductDetail = () => {
       let day = 24 * hour;
       let month = day * 30;
       if (diff / month >= 1) {
-        return `${diff / month}달 남음`;
+        return `${parseInt(diff / month)}달 남음`;
       } else if (diff / day >= 1) {
         return `${parseInt(diff / day)}일 남음`;
       } else {
@@ -363,9 +366,10 @@ export const ProductDetail = () => {
     let dueDate = new Date(startTime);
     let now = new Date();
     if (isOnAir) return true;
-    if (dueDate.getTime() <= now.getTime() && isOnAir) return true;
+    if (dueDate.getTime() + KR_TIME_DIFF <= now.getTime() && isOnAir)
+      return true;
     if (
-      dueDate.getTime() <= now.getTime() &&
+      dueDate.getTime() + KR_TIME_DIFF <= now.getTime() &&
       !isOnAir &&
       User.userId === artistId
     )
@@ -416,7 +420,10 @@ export const ProductDetail = () => {
 
   const stringToDate = (string) => {
     // console.log(string);
-    const date = string.split("T");
+    const due = new Date(string).getTimezoneOffset() * 6000;
+    const dueDate = new Date(new Date(string) - due);
+    // console.log(dueDate);
+    const date = dueDate.toISOString().split("T");
     const yyyyMMdd = date[0].split("-");
     const HHmm = date[1].split(":");
     return `${yyyyMMdd[0]}년 ${parseInt(yyyyMMdd[1])}월 ${parseInt(
@@ -428,18 +435,17 @@ export const ProductDetail = () => {
   };
 
   const deleteProduct = () => {
-    if (window.confirm("삭제하시겠습니까?")) {
-      deletePersonalProduct(
-        productId,
-        (response) => {
-          console.log(response);
-          alert("삭제");
-        },
-        (fail) => {
-          console.log(fail);
-        }
-      );
-    }
+    deletePersonalProduct(
+      productId,
+      (response) => {
+        console.log(response);
+        navigate("/");
+        // window.location.href = "/";
+      },
+      (fail) => {
+        console.log(fail);
+      }
+    );
   };
   const modifyProduct = () => {
     navigate("/productModify", {
@@ -482,7 +488,7 @@ export const ProductDetail = () => {
         isSeller={artistId === User.userId}
         goBack={goBack}
         sharePage={sharePage}
-        deleteProduct={deleteProduct}
+        deleteProduct={() => setOpenDel(true)}
         modifyProduct={modifyProduct}
       />
       <Box>
@@ -536,24 +542,29 @@ export const ProductDetail = () => {
             size="18px"
             style={{ textDecoration: "underline" }}
           />
-          <StyledText text={productArtist} />
-          <StyledText text={productName} />
-          <StyledText text={`${moneyFormat(startPrice)}원 ~`} />
-          <StyledText text={stringToDate(startTime)} />
+          <StyledText text={productArtist} size="16px" style={{paddingTop:"15px"}}/>
+          <StyledText text={productName} size="16px" style={{paddingTop:"10px"}}/>
+          <StyledText text={`${moneyFormat(startPrice)}원 ~`} size="16px" style={{paddingTop:"10px"}}/>
+          <StyledText text={stringToDate(startTime)} size="16px" style={{paddingTop:"10px"}}/>
         </Box>
         <Box margin="large">
-          <StyledText text="작품 설명" />
-          <StyledText text={productDesc} size="10px" color="#7B7B7B" />
+          <StyledText text="작품 설명" size="17px"/>
+          <StyledText text={productDesc} color="#7B7B7B" size="14px" style={{paddingTop:"10px"}}/>
         </Box>
         <Box margin="large">
-          <StyledText text="작품 정보" />
-          <FlexBox Row_S style={{ flexWrap: "wrap", padding: "6px 10px" }}>
+          <StyledText text="작품 정보" size="17px"/>
+          <FlexBox Row_S style={{ flexWrap: "wrap", padding: "10px 0"}}>
             {tags.map((item, idx) => (
               <StyledText
                 key={item.id}
                 text={`#${item.searchTagName}`}
                 style={{
-                  margin: "3px",
+                  backgroundColor: "#f4f4f4",
+                  padding: "8px",
+                  fontSize: "14px",
+                  margin: "0px 8px 12px 0px",
+                  border: "1px solid #ebebeb",
+                  borderRadius: "16px"
                 }}
               />
             ))}
@@ -673,6 +684,16 @@ export const ProductDetail = () => {
           )}
         </Box>
       </Box>
+      <AlertDialog
+        open={openDel}
+        handleClose={handleClose}
+        handleAction={deleteProduct}
+        title="작품 삭제"
+        desc="삭제하시겠습니까?"
+        cancel="취소"
+        accept="삭제"
+      />
+
       <Dialog
         open={open}
         onClose={handleClose}
