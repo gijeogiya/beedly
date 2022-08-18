@@ -9,8 +9,8 @@ import { postPersonalPay, postSpecialPay } from "../utils/apis/PayAPI";
 import { getPersonalProduct } from "../utils/apis/PersonalProductAPI";
 import { getPurchaseProduct } from "../utils/apis/UserAPI";
 
-// const REDIRECT_URL = "http://localhost:3000/";
-const REDIRECT_URL = "https://i7a601.p.ssafy.io/";
+const REDIRECT_URL = "http://localhost:3000/";
+// const REDIRECT_URL = "https://i7a601.p.ssafy.io/";
 export const PurchaseSuccess = () => {
   const location = useLocation();
   // const { soldId } = location.state;
@@ -33,14 +33,14 @@ export const PurchaseSuccess = () => {
   useEffect(() => {
     setProduct(
       (prev) =>
-      (prev = {
-        name: "",
-        categoryId: "",
-        artist: "",
-        desc: "",
-        tags: [],
-        images: [],
-      })
+        (prev = {
+          name: "",
+          categoryId: "",
+          artist: "",
+          desc: "",
+          tags: [],
+          images: [],
+        })
     );
     if (loading) getPurchaseInfo();
     return () => setLoading(false);
@@ -161,14 +161,14 @@ export const PurchaseSuccess = () => {
             let data = response.data.personalProductDto;
             setProduct(
               (prev) =>
-              (prev = {
-                name: data.productName,
-                categoryId: data.categoryId,
-                artist: data.userName,
-                desc: data.productDesc,
-                tags: data.tagNames,
-                images: [...data.productImgs],
-              })
+                (prev = {
+                  name: data.productName,
+                  categoryId: data.categoryId,
+                  artist: data.userName,
+                  desc: data.productDesc,
+                  tags: data.tagNames,
+                  images: [...data.productImgs],
+                })
             );
             setLoading(false);
           },
@@ -211,9 +211,14 @@ export const PurchaseSuccess = () => {
               return <Image src={image} fit="cover" key={idx} />;
             })}
           </Carousel>
-          <Box width="85vw" >
-
-            <Box margin="small" direction="column" height="80px" justify="between" style={{ marginTop: "20px" }}>
+          <Box width="85vw">
+            <Box
+              margin="small"
+              direction="column"
+              height="80px"
+              justify="between"
+              style={{ marginTop: "20px" }}
+            >
               <StyledText
                 text="낙찰 정보"
                 weight="bold"
@@ -221,24 +226,35 @@ export const PurchaseSuccess = () => {
                 style={{ paddingBottom: "20px" }}
               />
 
-
               <StyledText text={product.name} size="20px" weight="bold" />
               <StyledText text={product.artist} size="16px" />
-
-
             </Box>
 
             <Box margin="small" style={{ marginTop: "30px" }}>
-              <StyledText text="작품 설명" size="15px" style={{ margin: "5px 0px" }} />
+              <StyledText
+                text="작품 설명"
+                size="15px"
+                style={{ margin: "5px 0px" }}
+              />
               <StyledText text={product.desc} size="14px" color="#7B7B7B" />
             </Box>
             <Box direction="row" justify="between" margin="small">
               <StyledText text="낙찰 금액" size="15px" />
               <StyledText text={`${moneyFormat(finalPrice)}원`} />
             </Box>
-            <Box margin="small" direction="column" height="400px" justify="between" style={{ marginTop: "50px" }}>
+            <Box
+              margin="small"
+              direction="column"
+              height="400px"
+              justify="between"
+              style={{ marginTop: "50px" }}
+            >
               <StyledText text="결제 정보" weight="bold" size="15px" />
-              <Box direction="row" justify="between" margin={{ bottom: "30px" }}>
+              <Box
+                direction="row"
+                justify="between"
+                margin={{ bottom: "30px" }}
+              >
                 <StyledText text="이름" weight="bold" />
                 <StyledText text={userName} />
               </Box>
@@ -247,25 +263,42 @@ export const PurchaseSuccess = () => {
                 <StyledText text={userTel} />
               </Box>
               <Box>
-                <StyledText text="주소" weight="bold" style={{ marginBottom: "8px" }} />
+                <StyledText
+                  text="주소"
+                  weight="bold"
+                  style={{ marginBottom: "8px" }}
+                />
                 <StyledText text={userAddr} />
               </Box>
-              <Box direction="column" justify="between" height="130px" align="end">
+              <Box
+                direction="column"
+                justify="between"
+                height="130px"
+                align="end"
+              >
                 <StyledText
-                  text={`수수료(5%) ${moneyFormat(parseInt(finalPrice * 0.05))}`}
+                  text={`수수료(5%) ${moneyFormat(
+                    parseInt(finalPrice * 0.05)
+                  )}`}
                 />
 
                 <StyledText text={`배송비 4,000`} />
                 <Box direction="row" justify="between" align="end" width="80vw">
                   <StyledText text="총 결제금액" weight="bold" />
                   <StyledText
-                    text={`${moneyFormat(parseInt(finalPrice * 1.05) + 4000)}원`}
+                    text={`${moneyFormat(
+                      parseInt(finalPrice * 1.05) + 4000
+                    )}원`}
                     weight="bold"
                     size="20px"
                     style={{ color: "red" }}
                   />
                 </Box>
-                <StyledHr width="100%" color="#A1A1A1" style={{ height: "2px" }} />
+                <StyledHr
+                  width="100%"
+                  color="#A1A1A1"
+                  style={{ height: "2px" }}
+                />
 
                 <StyledText text={paidFlag ? "결제 완료" : "결제 대기중"} />
               </Box>
