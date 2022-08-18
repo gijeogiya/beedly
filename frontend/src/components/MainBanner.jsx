@@ -6,6 +6,7 @@ import Carousel from "nuka-carousel";
 import Button from "./Button";
 import BackBtn from "../assets/images/backButton.png";
 import More from "../assets/images/more.png";
+import { Link } from "react-router-dom";
 const GrommetTheme = {
   carousel: {
     icons: {
@@ -44,9 +45,21 @@ export function BannerTable() {
             <Button Blank onClick={nextSlide} children={<img src={More} />} />
           )}
         >
-          <Image fill={true} fit="cover" src={Banner1} onClick={() => {console.log(1)}}/>
-          <Image fill={true} fit="cover" src={Banner2} />
-          <Image fill={true} fit="cover" src={Banner3} />
+          <div>
+            <Link to="/bannerEvent1">
+              <Image fill={true} fit="cover" src={Banner1} onClick={() => {console.log(1)}}/>
+            </Link>
+          </div>
+          <div>
+            <Link to="/bannerEvent2">
+              <Image fill={true} fit="cover" src={Banner2} onClick={() => {console.log(1)}}/>
+            </Link>
+          </div>
+          <div>
+            {/* <Link to="/specialAuctionDetail/:boardId"> */}
+              <Image fill={true} fit="cover" src={Banner3} onClick={() => {console.log(1)}}/>
+            {/* </Link> */}
+          </div>
         </Carousel>
       </Box>
     </Grommet>

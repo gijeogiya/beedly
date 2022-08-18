@@ -137,16 +137,6 @@ export default function SearchResult() {
     <div style={{ paddingBottom: "40px" }}>
       <SearchBar handlefunction={handleSubmit} word={keyword} />
       <StyledTableTitle>'{keyword}' 검색 결과</StyledTableTitle>
-      <StyledTableTitle>Artist</StyledTableTitle>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          paddingTop: "10vw",
-        }}
-      >
-        검색결과가 없습니다.
-      </div>
       <StyledTableTitle>Product</StyledTableTitle>
       {console.log(searchProductList)}
       {!loading && searchProductList.length !== 0 ? (
