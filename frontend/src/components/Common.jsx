@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box } from "grommet";
+import { Avatar, Box } from "grommet";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import HomeIcon from "../assets/img/HomeIcon.svg";
@@ -334,8 +334,10 @@ export function AuctionArtist({ title, artist, artistSrc }) {
   return (
     <AuctionArtistFrame>
       <Box direction="row">
-        <ArtistImg src={artistSrc} />
-        <Box>
+        <Box margin="small">
+          <Avatar src={artistSrc} />
+        </Box>
+        <Box margin="small">
           <StyledText size="16px" color="white" weight="bold" text={artist} />
           <StyledText size="14px" color="white" weight="bold" text={title} />
         </Box>
