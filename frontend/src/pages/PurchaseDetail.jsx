@@ -6,6 +6,7 @@ import { StyledHr, StyledText } from "../components/Common";
 import { moneyFormat } from "../stores/modules/basicInfo";
 import { getPurchaseProduct } from "../utils/apis/UserAPI";
 import { BackButton } from "./ProductRegister";
+import { postPersonalPay, postSpecialPay } from "../utils/apis/PayAPI";
 import beforeIcon from "../assets/img/arrow-left.svg";
 export const PurchaseDetail = () => {
   const params = new URLSearchParams(window.location.search);
@@ -35,7 +36,48 @@ export const PurchaseDetail = () => {
   useEffect(() => {
     console.log(success + ", " + errorMsg + ", " + soldId);
     if (success === true) {
-      if (loading) getPurchaseInfo();
+      if (location.state === null) {
+        if (auctionType === "P")
+          postPersonalPay(
+            soldId,
+            (response) => {
+              console.log("결제 완료 API 호출 !!!", response);
+              navigate(`/purchaseDetail/${soldId}`, {
+                state: {
+                  error_msg: errorMsg,
+                  merchant_uid: merchantUid,
+                  success: success,
+                  soldId: soldId,
+                  auctionType: auctionType,
+                },
+              });
+            },
+            (fail) => {
+              console.log(fail);
+            }
+          );
+        else if (auctionType === "S")
+          postSpecialPay(
+            soldId,
+            (response) => {
+              console.log("결제 완료 API 호출 !!!", response);
+              navigate(`/purchaseDetail/${soldId}`, {
+                state: {
+                  error_msg: errorMsg,
+                  merchant_uid: merchantUid,
+                  success: success,
+                  soldId: soldId,
+                  auctionType: auctionType,
+                },
+              });
+            },
+            (fail) => {
+              console.log(fail);
+            }
+          );
+      } else {
+        if (loading) getPurchaseInfo();
+      }
     } else {
       setLoading(false);
     }

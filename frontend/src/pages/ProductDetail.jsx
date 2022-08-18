@@ -392,6 +392,7 @@ export const ProductDetail = () => {
                   grade: artistId === User.userId ? "seller" : "buyer",
                   auctionId: response.data.auctionId,
                   auctionType: "P",
+                  userName: User.userName,
                 },
               });
             },
@@ -542,18 +543,39 @@ export const ProductDetail = () => {
             size="18px"
             style={{ textDecoration: "underline" }}
           />
-          <StyledText text={productArtist} size="16px" style={{paddingTop:"15px"}}/>
-          <StyledText text={productName} size="16px" style={{paddingTop:"10px"}}/>
-          <StyledText text={`${moneyFormat(startPrice)}원 ~`} size="16px" style={{paddingTop:"10px"}}/>
-          <StyledText text={stringToDate(startTime)} size="16px" style={{paddingTop:"10px"}}/>
+          <StyledText
+            text={productArtist}
+            size="16px"
+            style={{ paddingTop: "15px" }}
+          />
+          <StyledText
+            text={productName}
+            size="16px"
+            style={{ paddingTop: "10px" }}
+          />
+          <StyledText
+            text={`${moneyFormat(startPrice)}원 ~`}
+            size="16px"
+            style={{ paddingTop: "10px" }}
+          />
+          <StyledText
+            text={stringToDate(startTime)}
+            size="16px"
+            style={{ paddingTop: "10px" }}
+          />
         </Box>
         <Box margin="large">
-          <StyledText text="작품 설명" size="17px"/>
-          <StyledText text={productDesc} color="#7B7B7B" size="14px" style={{paddingTop:"10px"}}/>
+          <StyledText text="작품 설명" size="17px" />
+          <StyledText
+            text={productDesc}
+            color="#7B7B7B"
+            size="14px"
+            style={{ paddingTop: "10px" }}
+          />
         </Box>
         <Box margin="large">
-          <StyledText text="작품 정보" size="17px"/>
-          <FlexBox Row_S style={{ flexWrap: "wrap", padding: "10px 0"}}>
+          <StyledText text="작품 정보" size="17px" />
+          <FlexBox Row_S style={{ flexWrap: "wrap", padding: "10px 0" }}>
             {tags.map((item, idx) => (
               <StyledText
                 key={item.id}
@@ -564,7 +586,7 @@ export const ProductDetail = () => {
                   fontSize: "14px",
                   margin: "0px 8px 12px 0px",
                   border: "1px solid #ebebeb",
-                  borderRadius: "16px"
+                  borderRadius: "16px",
                 }}
               />
             ))}
