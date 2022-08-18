@@ -32,17 +32,18 @@ const AuctionStateBox = styled.div`
   background-color: ${true ? "red" : "gray" || "gray"};
   display: inline-block;
   position: absolute;
-  font-size: 12px;
-  padding-left: 5px;
-  padding-right: 5px;
+  font-size: 16px;
+  padding-left: 10px;
+  padding-right: 12px;
   border-radius: 3px;
-  margin: 12px;
+  margin: 18px;
 `;
 const AuctionStateBoxProps = (backcolor) => (
   <AuctionStateBox props={backcolor}></AuctionStateBox>
 );
 const StyledAuctionStateIcon = styled.img`
-  height: 9px;
+  height: 12px;
+  padding-right: 5px;
 `;
 
 const StyledCardInfBox = styled.div`
@@ -80,6 +81,7 @@ export function OnairProductCard({ product }) {
   const date = product.startTime.split("T");
   const yyyyMMdd = date[0].split("-");
   const HHmm = date[1].split(":");
+  const isEnd = product.soldStatus; //STANDBY
   const CheckTime = () => {
     if (start > now) {
       // 아직 진행 예정
@@ -112,12 +114,12 @@ export function OnairProductCard({ product }) {
       <StyledProductCardImgFrame>
         <StyledRectangleRowImg src={product.productImgs[0]} />
         <AuctionStateBox
-          style={{ backgroundColor: CheckTime() ? "red" : "gray" }}
+          style={{ backgroundColor: isEnd === 'STANDBY' ? (CheckTime() ? "red" : "gray") : "gray" }}
         >
           <StyledAuctionStateIcon
-            src={CheckTime() ? OnairStateIcon : BeforeStateIcon}
+            src={isEnd === 'STANDBY' ? (CheckTime() ? OnairStateIcon : BeforeStateIcon) : ""}
           />
-          {CheckTime() ? "실시간" : getTime()}
+          {isEnd === 'STANDBY' ? (CheckTime() ? "실시간" : getTime()) : "종료됨"}
         </AuctionStateBox>
       </StyledProductCardImgFrame>
       <StyledCardInfBox>
@@ -143,12 +145,12 @@ export function OnairProductCard({ product }) {
             {product.productName}
           </div>
           <div style={{ fontSize: "16px", whiteSpace: "pre-line" }}>
-            {CheckTime()
+            {isEnd === 'STANDBY' ? (CheckTime()
               ? '방송 중'
               : `${
                   start.getMonth() + 1
                 }월 ${start.getDate()}일 ${start.getHours()}시 ` +
-                `${start.getMinutes()}분 예정`}
+                `${start.getMinutes()}분 예정`): "종료됨"}
           </div>
         </StyledCardInfTextFrame>
       </StyledCardInfBox>

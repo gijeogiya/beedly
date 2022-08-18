@@ -88,6 +88,7 @@ export function HalfProductCard({ product }) {
   const yyyyMMdd = date[0].split("-");
   const HHmm = date[1].split(":");
   const [timer, setTimer] = useState(0);
+  const isEnd = product.soldStatus; //STANDBY
   const CheckTime = () => {
     if (start > now) {
       // 아직 진행 예정
@@ -127,12 +128,12 @@ export function HalfProductCard({ product }) {
       <StyledProductCardImgFrame>
         <StyledRectangleRowImg src={product.productImgs[0]} />
         <AuctionStateBox
-          style={{ backgroundColor: CheckTime() ? "red" : "gray" }}
+          style={{ backgroundColor: isEnd === 'STANDBY' ? (CheckTime() ? "red" : "gray") : "gray" }}
         >
           <StyledAuctionStateIcon
-            src={CheckTime() ? OnairStateIcon : BeforeStateIcon}
+            src={isEnd === 'STANDBY' ? (CheckTime() ? OnairStateIcon : BeforeStateIcon) : ""}
           />
-          {CheckTime() ? "실시간" : getTime()}
+          {isEnd === 'STANDBY' ? (CheckTime() ? "실시간" : getTime()) : "종료됨"}
         </AuctionStateBox>
       </StyledProductCardImgFrame>
       <StyledCardInfBox>
@@ -166,11 +167,12 @@ export function HalfProductCard({ product }) {
             overflow: "hidden",
             textOverflow: "ellipsis",
           }}>
-            {CheckTime()
+            {isEnd === 'STANDBY' ?
+            (CheckTime()
               ? `방송 중`
               : `${start.getMonth() + 1
               }월 ${start.getDate()}일 ${start.getHours()}시 ` +
-              `${start.getMinutes()}분 예정`}
+              `${start.getMinutes()}분 예정`) : '종료됨'}
           </div>
         </StyledCardInfTextFrame>
       </StyledCardInfBox>
