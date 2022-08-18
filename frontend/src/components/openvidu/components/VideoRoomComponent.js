@@ -36,7 +36,6 @@ class VideoRoomComponent extends Component {
     this.localUserAccessAllowed = false;
     this.userGrade = props.grade;
     console.log(this.userGrade);
-    this.isLeave = false;
     this.state = {
       mySessionId: sessionName,
       myUserName: userName,
@@ -46,6 +45,7 @@ class VideoRoomComponent extends Component {
       chatDisplay: "block",
       currentVideoDevice: undefined,
       grade: this.props.grade,
+      isLeave: false,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -93,14 +93,15 @@ class VideoRoomComponent extends Component {
     window.removeEventListener("beforeunload", this.onbeforeunload);
     window.removeEventListener("resize", this.updateLayout);
     window.removeEventListener("resize", this.checkSize);
-    if (!this.isLeave) this.leaveSession();
+    if (this.state.isLeave !== true) this.leaveSession();
   }
 
   handleUnmount(soldId) {
-    if (soldId !== null) this.leaveSession2(soldId);
-    else this.leaveSession();
-    // this.isLeave = true;
-    // this.componentWillUnmount();
+    if (soldId !== null) {
+      this.setState({ isLeave: true });
+      this.leaveSession2(soldId);
+    } else this.leaveSession();
+    this.componentWillUnmount();
   }
   onbeforeunload(event) {
     this.leaveSession();
@@ -262,7 +263,7 @@ class VideoRoomComponent extends Component {
 
   leaveSession() {
     const mySession = this.state.session;
-
+    console.log("leaveSession 1111111");
     if (mySession) {
       const data = {
         message: "님이 퇴장했습니다.",
@@ -285,14 +286,16 @@ class VideoRoomComponent extends Component {
       myUserName: undefined,
       localUser: undefined,
     });
-    if (this.props.handleGoBack) {
-      this.props.handleGoBack();
-    }
+    if (this.state.isLeave === false)
+      if (this.props.handleGoBack) {
+        console.log("leaveSession 1111111 gobackkkkkkkkk");
+        this.props.handleGoBack();
+      }
   }
 
   leaveSession2(soldId) {
     const mySession = this.state.session;
-
+    console.log("leaveSession 2222222");
     if (mySession) {
       const data = {
         message: "님이 퇴장했습니다.",
@@ -316,6 +319,7 @@ class VideoRoomComponent extends Component {
       localUser: undefined,
     });
     if (this.props.handleGoBack2) {
+      console.log("leaveSession 2222222 gobackkkkkkkkkkk");
       this.props.handleGoBack2(soldId);
     }
   }
