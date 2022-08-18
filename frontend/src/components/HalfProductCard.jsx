@@ -73,11 +73,11 @@ const StyledCardArtistImg = styled.img`
   border-radius: 50%;
   width: 30px;
   height: 30px;
-  border:2px solid rgb(235,235,235);
+  border: 2px solid rgb(235, 235, 235);
 `;
 
 const StyledCardInfTextFrame = styled.div`
-width:30vw;
+  width: 30vw;
   padding-left: 5px;
 `;
 
@@ -103,24 +103,46 @@ export function HalfProductCard({ product }) {
       setNow(new Date());
     }, 1000);
     return () => clearInterval(countdown);
-
-
   }, [timer]);
 
   const getTime = () => {
     let diff = start - now;
-    const diffDays = Math.floor(
-      (start.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
-    );
-    diff -= diffDays * (1000 * 60 * 60 * 24);
-    const diffHours = Math.floor(diff / (1000 * 60 * 60));
-    diff -= diffHours * (1000 * 60 * 60);
-    const diffMin = Math.floor(diff / (1000 * 60));
-    diff -= diffMin * (1000 * 60);
-    const diffSec = Math.floor(diff / 1000);
-    return `${diffDays < 10 ? ` 0${diffDays}` : diffDays}일 ${diffHours < 10 ? `0${diffHours}` : diffHours
-      }: ${diffMin < 10 ? `0${diffMin}` : diffMin}: ${diffSec < 10 ? `0${diffSec}` : diffSec
+    // const diffDays = Math.floor(
+    //   (start.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+    // );
+    // diff -= diffDays * (1000 * 60 * 60 * 24);
+    // const diffHours = Math.floor(diff / (1000 * 60 * 60));
+    // diff -= diffHours * (1000 * 60 * 60);
+    // const diffMin = Math.floor(diff / (1000 * 60));
+    // diff -= diffMin * (1000 * 60);
+    // const diffSec = Math.floor(diff / 1000);
+    // return `${diffDays < 10 ? ` 0${diffDays}` : diffDays}일 ${diffHours < 10 ? `0${diffHours}` : diffHours
+    //   }: ${diffMin < 10 ? `0${diffMin}` : diffMin}: ${diffSec < 10 ? `0${diffSec}` : diffSec
+    //   }`;
+    let sec = 1000;
+    let minute = sec * 60;
+    let hour = minute * 60;
+    let day = 24 * hour;
+    let month = day * 30;
+    if (diff / month >= 1) {
+      return `${parseInt(diff / month)}달 남음`;
+    } else if (diff / day >= 1) {
+      return `${parseInt(diff / day)}일 남음`;
+    } else {
+      return `${diff / hour >= 1 ? `${parseInt(diff / hour)}:` : ``}${
+        diff / minute >= 1
+          ? `${
+              parseInt((diff % hour) / minute) < 10
+                ? `0${parseInt((diff % hour) / minute)}`
+                : parseInt((diff % hour) / minute)
+            }:`
+          : ``
+      }${
+        parseInt((diff % minute) / sec) < 10
+          ? `0${parseInt((diff % minute) / sec)}`
+          : parseInt((diff % minute) / sec)
       }`;
+    }
   };
 
   return (
@@ -128,12 +150,25 @@ export function HalfProductCard({ product }) {
       <StyledProductCardImgFrame>
         <StyledRectangleRowImg src={product.productImgs[0]} />
         <AuctionStateBox
-          style={{ backgroundColor: isEnd === 'STANDBY' ? (CheckTime() ? "red" : "gray") : "gray" }}
+          style={{
+            backgroundColor:
+              isEnd === "STANDBY" ? (CheckTime() ? "red" : "gray") : "gray",
+          }}
         >
           <StyledAuctionStateIcon
-            src={isEnd === 'STANDBY' ? (CheckTime() ? OnairStateIcon : BeforeStateIcon) : ""}
+            src={
+              isEnd === "STANDBY"
+                ? CheckTime()
+                  ? OnairStateIcon
+                  : BeforeStateIcon
+                : ""
+            }
           />
-          {isEnd === 'STANDBY' ? (CheckTime() ? "실시간" : getTime()) : "종료됨"}
+          {isEnd === "STANDBY"
+            ? CheckTime()
+              ? "실시간"
+              : getTime()
+            : "종료됨"}
         </AuctionStateBox>
       </StyledProductCardImgFrame>
       <StyledCardInfBox>
@@ -162,17 +197,22 @@ export function HalfProductCard({ product }) {
           >
             {product.productName}
           </div>
-          <div style={{
-            fontSize: "12px", whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}>
-            {isEnd === 'STANDBY' ?
-            (CheckTime()
-              ? `방송 중`
-              : `${start.getMonth() + 1
-              }월 ${start.getDate()}일 ${start.getHours()}시 ` +
-              `${start.getMinutes()}분 예정`) : '종료됨'}
+          <div
+            style={{
+              fontSize: "12px",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {isEnd === "STANDBY"
+              ? CheckTime()
+                ? `방송 중`
+                : `${
+                    start.getMonth() + 1
+                  }월 ${start.getDate()}일 ${start.getHours()}시 ` +
+                  `${start.getMinutes()}분 예정`
+              : "종료됨"}
           </div>
         </StyledCardInfTextFrame>
       </StyledCardInfBox>
