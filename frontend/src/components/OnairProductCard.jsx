@@ -8,6 +8,7 @@ const StyledProductCard = styled.div`
   justify-content: space-between;
   width: 90vw;
   padding-top: 14px;
+  padding-bottom: 10px;
 `;
 
 const StyledProductCardImgFrame = styled.div`
@@ -47,13 +48,13 @@ const StyledAuctionStateIcon = styled.img`
 const StyledCardInfBox = styled.div`
   display: flex;
   padding-left: 5px;
-  padding-top: 5px;
+  padding-top: 10px;
 `;
 
 const StyledCardArtistImgFrame = styled.div`
   display: flex;
-  width: 30px;
-  height: 30px;
+  width: 50px;
+  height: 50px;
   flex-direction: column;
   padding-left: 3px;
   padding-top: 5px;
@@ -63,11 +64,14 @@ const StyledCardArtistImgFrame = styled.div`
 
 const StyledCardArtistImg = styled.img`
   object-fit: cover;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
 `;
 
 const StyledCardInfTextFrame = styled.div`
-  padding-left: 5px;
+  padding-left: 10px;
+  padding-top: 3px;
 `;
 
 export function OnairProductCard({ product }) {
@@ -123,7 +127,7 @@ export function OnairProductCard({ product }) {
         <StyledCardInfTextFrame>
           <div
             style={{
-              fontSize: "14px",
+              fontSize: "16px",
               fontWeight: "700",
               whiteSpace: "pre-line",
             }}
@@ -132,15 +136,15 @@ export function OnairProductCard({ product }) {
           </div>
           <div
             style={{
-              fontSize: "14px",
+              fontSize: "16px",
               whiteSpace: "pre-line",
             }}
           >
             {product.productName}
           </div>
-          <div style={{ fontSize: "12px", whiteSpace: "pre-line" }}>
+          <div style={{ fontSize: "16px", whiteSpace: "pre-line" }}>
             {CheckTime()
-              ? `시청중`
+              ? '방송 중'
               : `${
                   start.getMonth() + 1
                 }월 ${start.getDate()}일 ${start.getHours()}시 ` +
