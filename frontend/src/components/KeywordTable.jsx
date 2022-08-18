@@ -27,6 +27,7 @@ const RecentlyKeywordButton = styled.button`
   border: 1px solid #ebebeb;
   border-radius: 16px;
   display: flex;
+  color: black;
 `;
 
 const RecentlyKeywordRemoveButton = styled.button`
@@ -52,6 +53,7 @@ const RecommendKeywordButton = styled.button`
   margin: 0px 8px 12px 0px;
   border: 1px solid #ebebeb;
   border-radius: 16px;
+  color: black;
 `;
 
 export function RecentlyKeywordTable({ list }) {
@@ -83,7 +85,17 @@ export function RecentlyKeywordTable({ list }) {
 
   return (
     <div>
-      {list !== null && list.length == 0 && <div style={{ textAlign: "center", margin: "25px 10px 10px 10px", fontSize: "14px" }}>최근 검색어가 없습니다.</div>}
+      {list !== null && list.length == 0 && (
+        <div
+          style={{
+            textAlign: "center",
+            margin: "25px 10px 10px 10px",
+            fontSize: "14px",
+          }}
+        >
+          최근 검색어가 없습니다.
+        </div>
+      )}
       {list !== null ? (
         <RecentlyKeywordFrame>
           {RecentKeywordList.map((keyword, idx) => (
@@ -107,7 +119,7 @@ export function RecentlyKeywordTable({ list }) {
 }
 
 export function RecommendKeywordTable({ list }) {
-  console.log(typeof (list));
+  console.log(typeof list);
   const Navigate = useNavigate();
   const [RecommendKeywordList, setRecommendKeywordList] = useState([]);
   useEffect(() => {
@@ -126,12 +138,17 @@ export function RecommendKeywordTable({ list }) {
     <div>
       {list !== null ? (
         <RecommendKeywordFrame>
-          {RecommendKeywordList.map((keyword, idx) =>
+          {RecommendKeywordList.map((keyword, idx) => (
             <RecommendKeywordButton key={idx}>
-              <div onClick={(e) => SearchByKeyword(keyword.searchTagName)}>{keyword.searchTagName}</div>
+              <div onClick={(e) => SearchByKeyword(keyword.searchTagName)}>
+                {keyword.searchTagName}
+              </div>
             </RecommendKeywordButton>
-          )}
-        </RecommendKeywordFrame>) : <div></div>}
+          ))}
+        </RecommendKeywordFrame>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 }
