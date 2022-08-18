@@ -41,13 +41,13 @@ const StyledTableTitle = styled.div`
 const ArtistDetailBackgroundImg = styled.img`
   object-fit: cover;
   width: 100%;
-  height: 200px;
+  height: 400px;
 `;
 
 const ArtistDetailMainInf = styled.div`
   display: flex;
   position: absolute;
-  padding: 164px 0 0 24px;
+  padding: 364px 0 0 24px;
 `;
 
 const StyledCardArtistImgFrame = styled.div`
@@ -64,11 +64,11 @@ const StyledCardArtistImg = styled.img`
   height: 23vw;
   object-fit: cover;
   border-radius: 50%;
-  border: 2px solid white;
+  border: 2px solid #ebebeb;
 `;
 
 const ArtistDetailSubInf = styled.div`
-  padding: 64px 0 0 26px;
+  padding: 70px 0 0 26px;
   display: flex;
   justify-content: flex-start;
   align-items: center;

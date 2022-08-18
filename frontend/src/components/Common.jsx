@@ -271,6 +271,10 @@ const TimeTable = styled.div`
 const ArtistImg = styled.img`
   src: ${(props) => props.src || ""};
   border-radius: 50%;
+  width: 15vw;
+  height: 15vw;
+  padding-right: 15px;
+  padding-left: 12px;
 `;
 
 const ProfileImg = styled.img`
@@ -318,12 +322,12 @@ export function Product({
 }
 
 const AuctionArtistFrame = styled.div`
-  height: 12%;
+  height: 16%;
   color: white;
   z-index: 5;
   position: absolute;
-  left: 5%;
-  top: 5%;
+  left: 20px;
+  top: 35px;
 `;
 
 export function AuctionArtist({ title, artist, artistSrc }) {
@@ -332,8 +336,8 @@ export function AuctionArtist({ title, artist, artistSrc }) {
       <Box direction="row">
         <ArtistImg src={artistSrc} />
         <Box>
-          <StyledText size="13px" color="white" weight="bold" text={artist} />
-          <StyledText size="10px" color="white" weight="bold" text={title} />
+          <StyledText size="16px" color="white" weight="bold" text={artist} />
+          <StyledText size="14px" color="white" weight="bold" text={title} />
         </Box>
       </Box>
     </AuctionArtistFrame>
