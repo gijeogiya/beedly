@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Avatar, Box } from "grommet";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import HomeIcon from "../assets/img/HomeIcon.svg";
 import SearchIcon from "../assets/img/SearchIcon.svg";
 import ListIcon from "../assets/img/ListIcon.svg";
 import OnairIcon from "../assets/img/OnairIcon.svg";
 import MypageIcon from "../assets/img/MypageIcon.svg";
+import ActiveHomeIcon from "../assets/img/ActiveHomeIcon.svg";
+import ActiveSearchIcon from "../assets/img/ActiveSearchIcon.svg";
+import ActiveListIcon from "../assets/img/ActiveListIcon.svg";
+import ActiveOnairIcon from "../assets/img/ActiveOnairIcon.svg";
+import ActiveMypageIcon from "../assets/img/ActiveMypageIcon.svg";
 import SampleProfile from "../assets/img/SampleProfile.png";
 import { Notice } from "./Notice";
 import { UserGuide } from "./UserGuide";
@@ -178,6 +183,7 @@ let nowScrollTop = 0;
 export function NavBar() {
   const [show, handleShow] = useState("visible");
   const [opacity, setOpacity] = useState("1");
+  const { pathname } = useLocation();
   useEffect(() => {
     let mounted = true;
     window.addEventListener("scroll", () => {
@@ -209,27 +215,39 @@ export function NavBar() {
     <NavBarDiv isShow={show} opacity={opacity}>
       <div style={IconButtonStyle}>
         <Link to="/">
-          <img alt="홈" src={HomeIcon} />
+          <img alt="홈" src={pathname === "/" ? ActiveHomeIcon : HomeIcon} />
         </Link>
       </div>
       <div style={IconButtonStyle}>
         <Link to="/search">
-          <img alt="검색" src={SearchIcon} />
+          <img
+            alt="검색"
+            src={pathname === "/search" ? ActiveSearchIcon : SearchIcon}
+          />
         </Link>
       </div>
       <div style={IconButtonStyle}>
         <Link to="/productlist">
-          <img alt="리스트" src={ListIcon} />
+          <img
+            alt="리스트"
+            src={pathname === "/productlist" ? ActiveListIcon : ListIcon}
+          />
         </Link>
       </div>
       <div style={IconButtonStyle}>
         <Link to="/onair">
-          <img alt="Onair" src={OnairIcon} />
+          <img
+            alt="Onair"
+            src={pathname === "/onair" ? ActiveOnairIcon : OnairIcon}
+          />
         </Link>
       </div>
       <div style={IconButtonStyle}>
         <Link to="/mypage">
-          <img alt="Mypage" src={MypageIcon} />
+          <img
+            alt="Mypage"
+            src={pathname === "/mypage" ? ActiveMypageIcon : MypageIcon}
+          />
         </Link>
       </div>
     </NavBarDiv>
