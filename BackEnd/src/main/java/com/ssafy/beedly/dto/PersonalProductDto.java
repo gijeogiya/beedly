@@ -183,7 +183,7 @@ public class PersonalProductDto {
 		for (PersonalProductImg productImg : productImgs) {
 			this.productImgs.add(productImg.getImgUri());
 		}
-		this.artistImg = personalProduct.getArtist().getArtistBgImg();
+		this.artistImg = personalProduct.getArtist().getArtistProfileImg();
 		//this.personalSoldId = personalProduct.getPersonalSold().getId();
 		this.brightness = personalProduct.getBrightness();
 		this.saturation = personalProduct.getSaturation();
