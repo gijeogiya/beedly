@@ -82,9 +82,11 @@ const StyledCardInfTextFrame = styled.div`
 export function ProductCard({ product, startTime }) {
   const [now, setNow] = useState(new Date());
   const start =
-    startTime === null ? new Date(product.startTime) : new Date(startTime);
+    startTime === undefined ? new Date(product.startTime) : new Date(startTime);
   const date =
-    startTime === null ? product.startTime.split("T") : startTime.split("T");
+    startTime === undefined
+      ? product.startTime.split("T")
+      : startTime.split("T");
   const yyyyMMdd = date[0].split("-");
   const HHmm = date[1].split(":");
   const [timer, setTimer] = useState(0);
