@@ -47,18 +47,39 @@ export function BannerTable() {
         >
           <div>
             <Link to="/bannerEvent1">
-              <Image fill={true} fit="cover" src={Banner1} onClick={() => {console.log(1)}}/>
+              <Image
+                fill={true}
+                fit="cover"
+                src={Banner1}
+                onClick={() => {
+                  console.log(1);
+                }}
+              />
             </Link>
           </div>
           <div>
             <Link to="/bannerEvent2">
-              <Image fill={true} fit="cover" src={Banner2} onClick={() => {console.log(1)}}/>
+              <Image
+                fill={true}
+                fit="cover"
+                src={Banner2}
+                onClick={() => {
+                  console.log(1);
+                }}
+              />
             </Link>
           </div>
           <div>
-            {/* <Link to="/specialAuctionDetail/:boardId"> */}
-              <Image fill={true} fit="cover" src={Banner3} onClick={() => {console.log(1)}}/>
-            {/* </Link> */}
+            <Link to="/specialAuctionDetail/18">
+              <Image
+                fill={true}
+                fit="cover"
+                src={Banner3}
+                onClick={() => {
+                  console.log(1);
+                }}
+              />
+            </Link>
           </div>
         </Carousel>
       </Box>
