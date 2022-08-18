@@ -37,6 +37,8 @@ import { SpecialAuctionDetail } from "./pages/SpecialAuctionDetail";
 import { LikeList } from "./pages/LikeList";
 import { LikeArtistList } from "./pages/LikeArtistList";
 import { LikeProduct } from "./components/LikeProduct";
+import { BannerEvent1 } from "./pages/BannerEvent1";
+import { BannerEvent2 } from "./pages/BannerEvent2";
 
 const Layout = () => {
   return (
@@ -94,7 +96,7 @@ export const Router = () => {
         <Route path="/likeArtist" element={<LikeArtist />} />
         <Route path="/likeProduct" element={<LikeProduct />} />
         <Route path="/LikeArtist" element={<LikeArtistList />} />
-        <Route path="/mypageDetail" element={<MypageDetail />} />s
+        <Route path="/mypageDetail" element={<MypageDetail />} />
         <Route path="/signupTag" element={<SignupTag />} />
         <Route
           path="/specialAuctionDetail/:boardId"
@@ -105,6 +107,8 @@ export const Router = () => {
         <Route path="/adminUserManage" element={<AdminUserManage />} />
         <Route path="/purchase/:soldId" element={<PurchaseSuccess />} />
         <Route path="/purchaseDetail/:soldId" element={<PurchaseDetail />} />
+        <Route path="/bannerEvent1" element={<BannerEvent1 />} />
+        <Route path="/bannerEvent2" element={<BannerEvent2 />} />
       </Route>
       {/* 로고,  */}
       <Route path="/" element={<LayOutNoNav />}>
@@ -127,6 +131,7 @@ export const Router = () => {
       <Route path="/personalAuction" element={<Auction />} />
       <Route path="/specialAuction" element={<Auction />} />
       <Route path="/user/kakao/callback" element={<Kakao />}></Route>
+      {/* 메인 배너 이벤트 페이지*/}
     </Routes>
   );
 };
