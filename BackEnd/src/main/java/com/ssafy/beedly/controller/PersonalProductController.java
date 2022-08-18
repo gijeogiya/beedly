@@ -144,16 +144,12 @@ public class PersonalProductController {
 		return ResponseEntity.ok(personalProductService.getProductBySizeCategory(pageable, size));
 	}
 
-
-
 	@ApiOperation(value = "모든 searchTag정보 가져오기")
 	// 5. 모든 searchTag 조회
 	@GetMapping("searchTag")
 	public  ResponseEntity<?> getSearchTagsInfo(Pageable pageable){
 		return ResponseEntity.ok(personalProductService.getSearchTagsInfo());
 	}
-
-
 
 
 }
