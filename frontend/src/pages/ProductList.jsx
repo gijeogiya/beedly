@@ -15,6 +15,7 @@ import PrintBanner from "../assets/img/PrintBanner.png";
 import EditionBanner from "../assets/img/EditionBanner.png";
 import PhotoBanner from "../assets/img/PhotoBanner.png";
 import FigureBanner from "../assets/img/FigureBanner.png";
+import { StyledText } from "../components/Common";
 
 const SortButton = styled.button`
   border: 0;
@@ -60,7 +61,6 @@ const StyledCategoryButton = styled.button`
   font-size: 16px;
   border: 0;
   background-color: white;
-  font-weight: ${(props) => (props.isActive ? "bold" : "0" || "0")};
 `;
 const ProductTable = styled.div`
   justify-content: center;
@@ -81,7 +81,7 @@ export default function ProductListPage() {
   const [popularProductList, setPopularProductList] = useState([]);
   const [loading, setloading] = useState(true);
   const [sortMethod, setSortMethod] = useState(["인기순"]);
-  const [bannerImg, setBannerImg] = useState(EditionBanner);
+  const [bannerImg, setBannerImg] = useState(PaintingBanner);
 
   const [size, setSize] = useState({});
   const gottenCategory = location.state
@@ -103,11 +103,11 @@ export default function ProductListPage() {
   useEffect(() => {
     if (loading) {
       //카테고리별 인기 상품 가져오기
-      // if (nowCategory === '회화') {setBannerImg(PaintingBanner); console.log(1)}
-      // else if (nowCategory === '판화') {setBannerImg(PrintBanner); console.log(2)}
-      // else if (nowCategory === '에디션') {setBannerImg(EditionBanner); console.log(3)}
-      // else if (nowCategory === '사진') {setBannerImg(PhotoBanner); console.log(4)}
-      // else if (nowCategory === '입체') {setBannerImg(FigureBanner); console.log(5)}
+      if (nowCategory === '회화') {setBannerImg(PaintingBanner);}
+      else if (nowCategory === '판화') {setBannerImg(PrintBanner);}
+      else if (nowCategory === '에디션') {setBannerImg(EditionBanner);}
+      else if (nowCategory === '사진') {setBannerImg(PhotoBanner);}
+      else if (nowCategory === '입체') {setBannerImg(FigureBanner);}
 
       getProductByCategoryApi(
         nowCategory,
@@ -198,51 +198,47 @@ export default function ProductListPage() {
             onClick={() => {
               setloading(true);
               setNowCategory((prev) => (prev = "회화"));
-              setBannerImg(PaintingBanner);
             }}
             isActive={nowCategory === "회화"}
           >
-            회화
+            <StyledText text="회화" size="16px" weight={nowCategory === "회화" ? "bold" : "0"} />
           </StyledCategoryButton>
           <StyledCategoryButton
             onClick={() => {
               setloading(true);
               setNowCategory((prev) => (prev = "판화"));
-              setBannerImg(PrintBanner);
+
             }}
             isActive={nowCategory === "판화"}
           >
-            판화
+            <StyledText text="판화" size="16px" weight={nowCategory === "판화" ? "bold" : "0"} />
           </StyledCategoryButton>
           <StyledCategoryButton
             onClick={() => {
               setloading(true);
               setNowCategory((prev) => (prev = "에디션"));
-              setBannerImg(EditionBanner);
             }}
             isActive={nowCategory === "에디션"}
           >
-            에디션
+            <StyledText text="에디션" size="16px" weight={nowCategory === "에디션" ? "bold" : "0"} />
           </StyledCategoryButton>
           <StyledCategoryButton
             onClick={() => {
               setloading(true);
               setNowCategory((prev) => (prev = "사진"));
-              setBannerImg(PhotoBanner);
             }}
             isActive={nowCategory === "사진"}
           >
-            사진
+            <StyledText text="사진" size="16px" weight={nowCategory === "사진" ? "bold" : "0"} />
           </StyledCategoryButton>
           <StyledCategoryButton
             onClick={() => {
               setloading(true);
               setNowCategory((prev) => (prev = "입체"));
-              setBannerImg(FigureBanner);
             }}
             isActive={nowCategory === "입체"}
           >
-            입체
+            <StyledText text="입체" size="16px" weight={nowCategory === "입체" ? "bold" : "0"} />
           </StyledCategoryButton>
         </StyledCategoryTable>
       </nav>
