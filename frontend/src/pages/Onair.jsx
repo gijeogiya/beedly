@@ -54,6 +54,14 @@ export default function OnairPage() {
   const [loading, setloading] = useState(true);
   const [OnairList, setOnairList] = useState([]);
   const [nowCategory, setNowCategory] = useState('ALL');
+  const [sortMethod, setSortMethod] = useState(["인기순"]);
+
+  const HandleSortButton = () => {
+    setloading(true);
+    sortMethod === "인기순"
+      ? setSortMethod((prev) => (prev = "최신순"))
+      : setSortMethod((prev) => (prev = "인기순"))
+  };
 
   useEffect(() => {
     if (loading) {
@@ -62,7 +70,7 @@ export default function OnairPage() {
         getOnairApi(
           "0",
           "20",
-          "",
+          sortMethod === "인기순" ? "personalProduct.favoriteCount,DESC" : "createdDate,DESC",
           (res) => {
             console.log(res);
             setOnairList(res.data.content);
@@ -77,7 +85,7 @@ export default function OnairPage() {
           nowCategory,
           "0",
           "20",
-          "",
+          sortMethod === "인기순" ? "personalProduct.favoriteCount,DESC" : "createdDate,DESC",
           (res) => {
             console.log(res);
             setOnairList(res.data.content);
@@ -166,10 +174,14 @@ export default function OnairPage() {
           paddingTop: "10px",
         }}
       >
-        <SortButton>
-          <div>인기순</div>
-          <SortImg src={SortIcon} />
-        </SortButton>
+        <SortButton
+            onClick={(e) =>
+              HandleSortButton()
+            }
+          >
+            <div>{sortMethod}</div>
+            <SortImg src={SortIcon} />
+          </SortButton>
       </div>
       <OnairPageTable list={OnairList} />
     </div>
