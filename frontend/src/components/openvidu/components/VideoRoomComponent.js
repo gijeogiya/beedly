@@ -36,6 +36,7 @@ class VideoRoomComponent extends Component {
     this.localUserAccessAllowed = false;
     this.userGrade = props.grade;
     console.log(this.userGrade);
+    this.isLeave = false;
     this.state = {
       mySessionId: sessionName,
       myUserName: userName,
@@ -92,12 +93,13 @@ class VideoRoomComponent extends Component {
     window.removeEventListener("beforeunload", this.onbeforeunload);
     window.removeEventListener("resize", this.updateLayout);
     window.removeEventListener("resize", this.checkSize);
-    this.leaveSession();
+    if (!this.isLeave) this.leaveSession();
   }
 
   handleUnmount(success) {
     if (success !== null) this.leaveSession2(success);
     else this.leaveSession();
+    this.isLeave = true;
     this.componentWillUnmount();
   }
   onbeforeunload(event) {
@@ -176,16 +178,17 @@ class VideoRoomComponent extends Component {
 
   async connectWebCam() {
     var devices = await this.OV.getDevices();
+    console.log("camera ++ ", devices);
     var videoDevices = devices.filter((device) => device.kind === "videoinput");
 
     let publisher = this.OV.initPublisher(undefined, {
       audioSource: undefined,
       videoSource:
-        this.state.grade === "seller" ? videoDevices[0].deviceId : undefined,
+        this.props.grade === "seller" ? videoDevices[0].deviceId : undefined,
       publishAudio:
-        this.state.grade === "seller" ? localUser.isAudioActive() : false,
+        this.props.grade === "seller" ? localUser.isAudioActive() : false,
       publishVideo:
-        this.state.grade === "seller" ? localUser.isVideoActive() : false,
+        this.props.grade === "seller" ? localUser.isVideoActive() : false,
       resolution: "640x480",
       frameRate: 30,
       insertMode: "APPEND",

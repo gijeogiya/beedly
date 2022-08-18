@@ -83,6 +83,7 @@ export function RecentlyKeywordTable({ list }) {
 
   return (
     <div>
+      {list !== null && list.length == 0 && <div style={{ textAlign: "center", margin: "25px 10px 10px 10px", fontSize: "14px" }}>최근 검색어가 없습니다.</div>}
       {list !== null ? (
         <RecentlyKeywordFrame>
           {RecentKeywordList.map((keyword, idx) => (

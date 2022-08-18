@@ -47,7 +47,7 @@ const InputStyle3 = styled.input`
 export const SizeInput = styled.input`
   font-weight: bold;
   font-family: "Noto Sans KR", sans-serif;
-  width: 20vw;
+  width: 5vw;
   height: 30px;
   border: none;
   border-bottom: 1px solid #ccc;
@@ -59,7 +59,7 @@ export const SizeInput = styled.input`
 const TextAreaStyle = styled.textarea`
   font-weight: bold;
   font-family: "Noto Sans KR", sans-serif;
-  width: 78vw;
+  width: 75vw;
   height: 30vh;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.6);
   border-radius: 5px;
