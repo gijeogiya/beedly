@@ -91,8 +91,8 @@ export function ProductCard({ product, startTime }) {
   const HHmm = date[1].split(":");
   const [timer, setTimer] = useState(0);
   const isEnd = product.soldStatus; //STANDBY
-  const LeftMonth = start.getMonth();
-  const LeftDay = start.get();
+  // const LeftMonth = start.getMonth();
+  // const LeftDay = start.get();
   const CheckTime = () => {
     if (start > now) {
       // 아직 진행 예정
@@ -111,20 +111,44 @@ export function ProductCard({ product, startTime }) {
 
   const getTime = () => {
     let diff = start - now;
-    const diffDays = Math.floor(
-      (start.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
-    );
-    diff -= diffDays * (1000 * 60 * 60 * 24);
-    const diffHours = Math.floor(diff / (1000 * 60 * 60));
-    diff -= diffHours * (1000 * 60 * 60);
-    const diffMin = Math.floor(diff / (1000 * 60));
-    diff -= diffMin * (1000 * 60);
-    const diffSec = Math.floor(diff / 1000);
-    return `${diffDays < 10 ? ` 0${diffDays}` : diffDays}일 ${
-      diffHours < 10 ? `0${diffHours}` : diffHours
-    }: ${diffMin < 10 ? `0${diffMin}` : diffMin}: ${
-      diffSec < 10 ? `0${diffSec}` : diffSec
-    }`;
+    // const diffDays = Math.floor(
+    //   (start.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+    // );
+    // diff -= diffDays * (1000 * 60 * 60 * 24);
+    // const diffHours = Math.floor(diff / (1000 * 60 * 60));
+    // diff -= diffHours * (1000 * 60 * 60);
+    // const diffMin = Math.floor(diff / (1000 * 60));
+    // diff -= diffMin * (1000 * 60);
+    // const diffSec = Math.floor(diff / 1000);
+    // return `${diffDays < 10 ? ` 0${diffDays}` : diffDays}일 ${
+    //   diffHours < 10 ? `0${diffHours}` : diffHours
+    // }: ${diffMin < 10 ? `0${diffMin}` : diffMin}: ${
+    //   diffSec < 10 ? `0${diffSec}` : diffSec
+    // }`;
+    let sec = 1000;
+    let minute = sec * 60;
+    let hour = minute * 60;
+    let day = 24 * hour;
+    let month = day * 30;
+    if (diff / month >= 1) {
+      return `${parseInt(diff / month)}달 남음`;
+    } else if (diff / day >= 1) {
+      return `${parseInt(diff / day)}일 남음`;
+    } else {
+      return `${diff / hour >= 1 ? `${parseInt(diff / hour)}:` : ``}${
+        diff / minute >= 1
+          ? `${
+              parseInt((diff % hour) / minute) < 10
+                ? `0${parseInt((diff % hour) / minute)}`
+                : parseInt((diff % hour) / minute)
+            }:`
+          : ``
+      }${
+        parseInt((diff % minute) / sec) < 10
+          ? `0${parseInt((diff % minute) / sec)}`
+          : parseInt((diff % minute) / sec)
+      }`;
+    }
   };
 
   return (
