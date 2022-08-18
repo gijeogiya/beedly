@@ -32,7 +32,7 @@ const StyledRectangleRowImg = styled.img`
 const AuctionStateBox = styled.div`
   color: white;
   background-color: ${true ? "red" : "gray" || "gray"};
-  display: inline-block;
+  display: flex;
   position: absolute;
   font-size: 12px;
   padding-left: 5px;
@@ -46,6 +46,7 @@ const AuctionStateBoxProps = (backcolor) => (
 );
 const StyledAuctionStateIcon = styled.img`
   height: 12px;
+  padding-right: 3px;
 `;
 
 const StyledCardInfBox = styled.div`
@@ -68,6 +69,8 @@ const StyledCardArtistImgFrame = styled.div`
 const StyledCardArtistImg = styled.img`
   object-fit: cover;
   border-radius: 50%;
+  width: 30px;
+  height: 30px;
   border: 2px solid rgb(235, 235, 235);
 `;
 
@@ -126,9 +129,11 @@ export function ProductCard({ product }) {
         >
           <StyledAuctionStateIcon
             src={CheckTime() ? OnairStateIcon : BeforeStateIcon}
-            style={{ paddingRight: "5px" }}
+            style={{ paddingRight: "5px", paddingTop:"2px"}}
           />
-          {CheckTime() ? "실시간" : getTime()}
+          <div style={{paddingBottom:"2px"}}>
+            {CheckTime() ? "실시간" : getTime()}
+          </div>
         </AuctionStateBox>
       </StyledProductCardImgFrame>
       <StyledCardInfBox>
