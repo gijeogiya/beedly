@@ -11,12 +11,14 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import reportWebVitals from "./reportWebVitals";
 import { persistStore } from "redux-persist"; // load
 import { PersistGate } from "redux-persist/integration/react"; // load
+import ScrollToTop from "./components/ScrollTop";
 // const composedEnhancer = compose(applyMiddleware(thunk), composeWithDevTools());
 const store = createStore(rootReducer, applyMiddleware(thunk));
 const persistor = persistStore(store); // 정의
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
+      <ScrollToTop />
       <Provider store={store}>
         <PersistGate persistor={persistor}>
           <App />
