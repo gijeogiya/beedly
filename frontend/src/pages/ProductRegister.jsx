@@ -728,27 +728,31 @@ export const ProductRegister = () => {
                 </FormControl>
               </Box>
             </Box>
-            <Box margin="small" direction="row" style={{ marginRight: "3vw" }}>
-              <Box width="small" justify="center">
+            <Box margin="small" direction="row" style={{ marginRight: "3vw" }} justify="between">
+              <Box justify="center">
                 <StyledText size={titleSize} weight="bold" text="경매 시작가" />
               </Box>
-              <Box width="medium" direction="row" justify="center">
-                <Input2
-                  Thin
-                  disabled={productId ? true : false}
-                  placeholder="경매 시작가를 입력하세요."
-                  value={startPrice}
-                  onChange={(e) => {
-                    const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
-                    setStartPrice(onlyNumber);
-                  }}
-                />
-              </Box>
-              <Box justify="center">
-                <StyledText weight="bold" text="원" />
+              <Box direction="row">
+
+                <Box direction="row" justify="center">
+                  <Input2
+                    Thin
+                    disabled={productId ? true : false}
+                    placeholder="경매 시작가를 입력하세요."
+                    value={startPrice}
+                    style={{ width: "40vw" }}
+                    onChange={(e) => {
+                      const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
+                      setStartPrice(onlyNumber);
+                    }}
+                  />
+                </Box>
+                <Box justify="center">
+                  <StyledText weight="bold" text="원" />
+                </Box>
               </Box>
             </Box>
-            <Box direction="row" justify="end">
+            <Box direction="row" justify="end" margin={{ right: "20px" }}>
               <StyledText
                 text="등록 후에는 변경이 불가능합니다."
                 size="10px"
@@ -1016,6 +1020,6 @@ export const ProductRegister = () => {
           </Box>
         </Box>
       </Box>
-    </Grommet>
+    </Grommet >
   );
 };
