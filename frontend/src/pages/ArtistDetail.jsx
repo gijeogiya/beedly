@@ -304,12 +304,12 @@ export default function ArtistDetailPage() {
               <div
                 style={{
                   position: "absolute",
-                  paddingLeft: "90%",
-                  paddingTop: "35%",
+                  paddingLeft: "88%",
+                  paddingTop: "85%",
                 }}
               >
                 <label htmlFor="bgimage">
-                  <img src={CameraIcon} alt="배경이미지 편집" /> :{" "}
+                  <img src={CameraIcon} alt="배경이미지 편집" /> {" "}
                   <div style={{ display: "none" }}></div>
                 </label>
                 <input
@@ -359,7 +359,7 @@ export default function ArtistDetailPage() {
                 <img
                   src={EditIcon}
                   alt="자기소개 편집"
-                  style={{ width: "18px", height: "18px" }}
+                  style={{ width: "18px", height: "18px"}}
                   onClick={(e) => setWantUpdateDesc(true)}
                 />
               ) : (

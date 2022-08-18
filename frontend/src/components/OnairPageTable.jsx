@@ -17,7 +17,6 @@ export function OnairPageTable({ list }) {
   };
   return (
     <OnairProductCardTable>
-      <SortButtonArea />
       {list.map((product, idx) => (
         <div
           className="card"
