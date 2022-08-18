@@ -87,8 +87,6 @@ export function ProductCard({ product }) {
   const HHmm = date[1].split(":");
   const [timer, setTimer] = useState(0);
   const isEnd = product.soldStatus; //STANDBY
-  const LeftMonth = start.getMonth()
-  const LeftDay = start.get()
   const CheckTime = () => {
     if (start > now) {
       // 아직 진행 예정
@@ -133,7 +131,7 @@ export function ProductCard({ product }) {
         >
           <StyledAuctionStateIcon
             src={isEnd === 'STANDBY' ? (CheckTime() ? OnairStateIcon : BeforeStateIcon):""}
-            style={{ paddingRight: "5px", paddingTop:"2px"}}
+            style={{ paddingRight: "5px", paddingTop:"3px"}}
           />
           <div style={{paddingBottom:"2px"}}>
             {isEnd === 'STANDBY' ? (CheckTime() ? "실시간" : getTime()):"종료됨"}
