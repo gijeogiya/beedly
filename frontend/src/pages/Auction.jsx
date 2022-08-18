@@ -368,7 +368,7 @@ function BottomUi({
   return (
     <Conatainer controls="arrows">
       {localUser !== undefined && (
-        <ChatBox localUser={localUser} grade={grade} />
+        <ChatBox localUser={localUser} grade={grade}/>
       )}
       <ProductFrame
         title={bidInfo.title}
