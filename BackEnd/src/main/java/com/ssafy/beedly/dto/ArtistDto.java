@@ -30,7 +30,7 @@ public class ArtistDto {
     @ApiModelProperty(notes = "작가의 유저 식별자")
     private Long userId;
 
-    @ApiModelProperty(notes = "작가 이름")
+    @ApiModelProperty(notes = "작가 닉네임")
     private String userNickname;
 
     @ApiModelProperty(notes = "로그인한 유저가 이 작가를 찜했는지(true) 안했는지(false)")

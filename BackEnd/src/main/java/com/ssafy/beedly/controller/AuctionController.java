@@ -7,7 +7,6 @@ import com.ssafy.beedly.domain.User;
 import com.ssafy.beedly.dto.auction.*;
 import com.ssafy.beedly.dto.bid.request.BidMessageRequest;
 import com.ssafy.beedly.dto.bid.response.BidMessageResponse;
-import com.ssafy.beedly.dto.bid.type.MessageType;
 import com.ssafy.beedly.service.PersonalAuctionService;
 import com.ssafy.beedly.service.PersonalBidService;
 import com.ssafy.beedly.service.SpecialAuctionService;
@@ -109,9 +108,9 @@ public class AuctionController {
     // 기획전 경매방 입장
     @ApiOperation(value = "기획전 경매방 입장", notes = "기획전 경매방 입장(방 정보 + 상품 정보 리스트 같이 리턴)")
     @ApiImplicitParam(name = "auctionId", value = "기획전 경매방 식별자")
-    @Cacheable(value = CacheKey.SPECIAL_AUCTION_BOARD, key = "#auctionId", unless = "#result == null", cacheManager = "cacheManager")
+//    @Cacheable(value = CacheKey.SPECIAL_AUCTION_BOARD, key = "#auctionId", unless = "#result == null", cacheManager = "cacheManager")
     @GetMapping("/auction/{auctionId}/special")
-    public List<EnterSpecialAuctionResponse> enterSpecialAuction(@PathVariable Long auctionId) {
+    public EnterSpecialAuctionResponse enterSpecialAuction(@PathVariable Long auctionId) {
         return specialAuctionService.enterSpecialAuction(auctionId);
 
     }
@@ -129,8 +128,10 @@ public class AuctionController {
             bidMessageResponse = specialBidService.createBid(userId, request);
             messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), bidMessageResponse);
         } else if (request.getType().equals("SB")) { // 낙찰 정보 뿌리기
-            SuccessfulBidResponse successfulBidResponse = specialAuctionService.successfulBid(request.getProductId());
+            SpecialSuccessfulBidResponse successfulBidResponse = specialAuctionService.successfulBid(request);
             messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), successfulBidResponse);
+        } else if (request.getType().equals("NB")) {
+            messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), new SpecialNextBidResponse(true));
         } else if (request.getType().equals("F")) { // 경매 종료
             specialAuctionService.closeSpecialAuction(userId, request);
             messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), new FinishSpecialAuctionResponse(true, "경매가 종료되었습니다."));
