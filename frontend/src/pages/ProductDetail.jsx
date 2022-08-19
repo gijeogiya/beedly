@@ -252,7 +252,12 @@ export const ProductDetail = () => {
   };
 
   const isValidAbsentee = () => {
-    if (absenteeBidPrice === 0 || absenteeBidPrice === "") return false;
+    if (
+      absenteeBidPrice === 0 ||
+      absenteeBidPrice === "" ||
+      absenteeBidPrice < startPrice
+    )
+      return false;
     return true;
   };
 
@@ -277,7 +282,7 @@ export const ProductDetail = () => {
         );
       }
     } else {
-      alert("희망 응찰가를 입력하세요!");
+      alert("희망 응찰가를 입력하세요!(시작가 < 응찰가)");
     }
   };
 
@@ -302,7 +307,7 @@ export const ProductDetail = () => {
         );
       }
     } else {
-      alert("희망 응찰가를 입력하세요!");
+      alert("희망 응찰가를 입력하세요!(시작가 < 응찰가)");
     }
   };
 

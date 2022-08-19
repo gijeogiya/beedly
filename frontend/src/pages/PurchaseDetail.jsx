@@ -16,19 +16,23 @@ export const PurchaseDetail = () => {
   const [product, setProduct] = useState();
   const navigate = useNavigate();
   let success =
-    location.state !== null
+    location.state !== undefined
       ? location.state.success
       : params.get("imp_success");
   let errorMsg =
-    location.state !== null ? location.state.errorMsg : params.get("error_msg");
+    location.state !== undefined
+      ? location.state.errorMsg
+      : params.get("error_msg");
   let merchantUid =
-    location.state !== null
+    location.state !== undefined
       ? location.state.merchantUid
       : params.get("merchant_uid");
   let soldId =
-    location.state !== null ? location.state.soldId : merchantUid.split("_")[3];
+    location.state !== undefined
+      ? location.state.soldId
+      : merchantUid.split("_")[3];
   let auctionType =
-    location.state !== null
+    location.state !== undefined
       ? location.state.auctionType
       : merchantUid.split("_")[0];
   // auctionType + "_order_no_" + soldId,
@@ -36,7 +40,7 @@ export const PurchaseDetail = () => {
   useEffect(() => {
     console.log(success + ", " + errorMsg + ", " + soldId);
     if (success === true) {
-      if (location.state === null) {
+      if (location.state === undefined) {
         if (auctionType === "P")
           postPersonalPay(
             soldId,
