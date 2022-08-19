@@ -123,7 +123,7 @@ public class PersonalProductDto {
 		this.saturation = personalProduct.getSaturation();
 		this.temperature = personalProduct.getTemperature();
 		this.searchTagDtos = personalProduct.getSearchTags()
-				.stream().map(personalSearchTag -> new com.ssafy.beedly.dto.SearchTagDto(personalSearchTag.getSearchTag()))
+				.stream().map(personalSearchTag -> new SearchTagDto(personalSearchTag.getSearchTag()))
 				.collect(Collectors.toList());
 	}
 
@@ -139,6 +139,7 @@ public class PersonalProductDto {
 		this.soldStatus = personalProduct.getSoldStatus();
 		this.startTime = personalProduct.getStartTime();
 		this.categoryId = personalProduct.getCategory().getId();
+		this.categoryName = personalProduct.getCategory().getCategoryName();
 		this.userId = personalProduct.getUser().getId();
 		this.favoriteCount = personalProduct.getFavoriteCount();
 		List<PersonalProductImg> productImgs = personalProduct.getProductImgs();
@@ -155,7 +156,7 @@ public class PersonalProductDto {
 		this.saturation = personalProduct.getSaturation();
 		this.temperature = personalProduct.getTemperature();
 		this.searchTagDtos = personalProduct.getSearchTags()
-				.stream().map(personalSearchTag -> new com.ssafy.beedly.dto.SearchTagDto(personalSearchTag.getSearchTag()))
+				.stream().map(personalSearchTag -> new SearchTagDto(personalSearchTag.getSearchTag()))
 				.collect(Collectors.toList());
 	}
 
@@ -182,13 +183,13 @@ public class PersonalProductDto {
 		for (PersonalProductImg productImg : productImgs) {
 			this.productImgs.add(productImg.getImgUri());
 		}
-		this.artistImg = personalProduct.getArtist().getArtistBgImg();
+		this.artistImg = personalProduct.getArtist().getArtistProfileImg();
 		//this.personalSoldId = personalProduct.getPersonalSold().getId();
 		this.brightness = personalProduct.getBrightness();
 		this.saturation = personalProduct.getSaturation();
 		this.temperature = personalProduct.getTemperature();
 		this.searchTagDtos = personalProduct.getSearchTags()
-				.stream().map(personalSearchTag -> new com.ssafy.beedly.dto.SearchTagDto(personalSearchTag.getSearchTag()))
+				.stream().map(personalSearchTag -> new SearchTagDto(personalSearchTag.getSearchTag()))
 				.collect(Collectors.toList());
 	}
 }

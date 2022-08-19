@@ -1,6 +1,8 @@
 package com.ssafy.beedly.dto.auction;
 
 import com.ssafy.beedly.domain.*;
+import com.ssafy.beedly.dto.SearchTagDto;
+import com.ssafy.beedly.dto.category.CategoryDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -46,6 +48,8 @@ public class EnterPersonalAuctionResponse implements Serializable {
     @ApiModelProperty(notes = "회원 닉네임")
     private String userNickname;
 
+    private CategoryDto categoryDto;
+
 
     public EnterPersonalAuctionResponse(PersonalAuction pa, Artist a, User u) {
         this.auctionId = pa.getId();
@@ -65,5 +69,7 @@ public class EnterPersonalAuctionResponse implements Serializable {
 
         this.userName = u.getUserName();
         this.userNickname = u.getUserNickname();
+
+        this.categoryDto = new CategoryDto(p.getCategory());
     }
 }

@@ -5,18 +5,26 @@ import com.ssafy.beedly.common.exception.NotMatchException;
 import com.ssafy.beedly.domain.PersonalFavorite;
 import com.ssafy.beedly.domain.PersonalProduct;
 import com.ssafy.beedly.domain.User;
+import com.ssafy.beedly.dto.PersonalProductDto;
+import com.ssafy.beedly.dto.personal.product.FavoriteProductDto;
 import com.ssafy.beedly.repository.PersonalFavoriteRepository;
 import com.ssafy.beedly.repository.PersonalProductRepository;
 import com.ssafy.beedly.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.ssafy.beedly.common.exception.NotFoundException.*;
 import static com.ssafy.beedly.common.exception.NotMatchException.FAVORITE_NOT_MATCH;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PersonalFavoriteService {
 
     private final PersonalFavoriteRepository personalFavoriteRepository;
@@ -47,5 +55,12 @@ public class PersonalFavoriteService {
         personalProduct.minusFavoriteCount();
 
         personalFavoriteRepository.delete(personalFavorite);
+    }
+
+    // 내가 찜한 상품 리스트들
+    public List<FavoriteProductDto> findMyFavoriteProductList(User user) {
+        List<PersonalFavorite> findMyFavorite = personalFavoriteRepository.findMyFavoriteProductWithProduct(user.getId());
+        return findMyFavorite.stream().map(personalFavorite -> new FavoriteProductDto(personalFavorite))
+                .collect(Collectors.toList());
     }
 }

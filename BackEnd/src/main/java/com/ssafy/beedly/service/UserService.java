@@ -189,4 +189,8 @@ public class UserService {
 
         return findUser;
     }
+
+    public String getKakaoAccessTokenDevelop(String code) {
+        return KakaoLoginApi.getKakaoAccessTokenDevelop(restApiKey, code);
+    }
 }

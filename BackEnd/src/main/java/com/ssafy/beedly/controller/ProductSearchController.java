@@ -63,7 +63,7 @@ public class ProductSearchController {
 	@GetMapping("tag")
 	public ResponseEntity<Slice<PersonalProductDto>> getProductByTag(@RequestParam("tag")String tagName,
 																	 @PageableDefault(sort="createdDate", direction = Sort.Direction.DESC) Pageable pageable){
-		System.out.println(tagName);
+//		System.out.println(tagName);
 		return ResponseEntity.ok(productSearchService.getProductByTag(tagName, pageable));
 	}
 
