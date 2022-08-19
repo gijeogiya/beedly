@@ -54,7 +54,6 @@ const StyledCategoryTable = styled.div`
   display: flex;
   justify-content: center;
   padding: 10px 0;
-  border-bottom: 2px solid #ebebeb;
 `;
 
 const StyledCategoryButton = styled.button`
