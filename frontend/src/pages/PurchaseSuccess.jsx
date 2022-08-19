@@ -61,7 +61,7 @@ export const PurchaseSuccess = () => {
       buyer_postcode: "",
       m_redirect_url: REDIRECT_URL + "/purchaseDetail",
     };
-    IMP.request_pay(data, callback);
+    IMP.request_pay(data);
   };
 
   const callback = (response) => {
