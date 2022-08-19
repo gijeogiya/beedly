@@ -785,7 +785,9 @@ export const ProductDetail = () => {
                   <StyledText text="(입찰가+수수료+배송료)" size="8px" />
                 </Box>
                 <StyledText
-                  text={`${moneyFormat(parseInt(absenteeBidPrice * 1.2))}원`}
+                  text={`${moneyFormat(
+                    parseInt(absenteeBidPrice * 1.05 + 4000)
+                  )}원`}
                 />
               </Box>
             </Box>
