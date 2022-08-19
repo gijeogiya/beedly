@@ -108,7 +108,7 @@ const ProductBox = styled.div`
   background: rgba(255, 255, 255, 0.5);
   color: black;
   border-radius: 10px;
-  padding: 10px;
+  padding: 3px 10px;
   width: 70%;
   margin: 0 auto;
 `;
@@ -179,34 +179,34 @@ function ProductFrame({
   return (
     <ProductContainer>
       <ProductBox>
-        <Box direction="row" style={{padding:"5px 0 20px 16px"}}>
+        <Box direction="row" style={{padding:"5px 0 0px 16px"}}>
           <ProductImg src={productSrc} style={{width:"80px", objectFit:"cover"}}/>
           <Box style={{padding:"5px 0 10px 8px"}}>
-            <StyledText size="16px" weight="bold" text={title} />
+            <StyledText size="15px" weight="bold" text={title} />
             <StyledText size="14px" text={artist} />
           </Box>
         </Box>
-        <Box style={{padding:"10px 0"}}>
+        <Box style={{padding:"5px 0"}}>
           <AuctionInfoText
             title="현재 입찰가"
             info={`${moneyFormat(currentPrice)} 원`}
-            titleSize="15px"
-            infoSize="15px"
+            titleSize="14px"
+            infoSize="14px"
           />
           <AuctionInfoText
             title="현재 입찰자"
             info={currentBidder}
-            titleSize="15px"
-            infoSize="15px"
+            titleSize="14px"
+            infoSize="14px"
           />
-          {grade === "buyer" && <hr style={{width:"260px"}} />}
+          {grade === "buyer" && <hr style={{width:"230px"}} />}
           {grade === "buyer" && (
             <AuctionInfoText
               title="입찰가"
               info={`${moneyFormat(callPrice + currentPrice)} 원`}
               infoWeight="bold"
-              titleSize="15px"
-              infoSize="16px"
+              titleSize="14px"
+              infoSize="15px"
               infoColor="#D00000"
             />
           )}
@@ -216,8 +216,8 @@ function ProductFrame({
               info={`${moneyFormat(
                 Math.floor((0 + callPrice + currentPrice) * 1.1)
               )} 원`}
-              titleSize="15px"
-              infoSize="15px"
+              titleSize="14px"
+              infoSize="14px"
             />
           )}
         </Box>
