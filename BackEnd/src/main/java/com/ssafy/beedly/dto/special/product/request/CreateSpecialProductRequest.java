@@ -24,8 +24,13 @@ public class CreateSpecialProductRequest {
     @ApiModelProperty(notes = "시작 가격")
     private Integer startPrice;
 
+    @ApiModelProperty(notes = "세로")
     private Integer height;
+
+    @ApiModelProperty(notes = "가로")
     private Integer weight;
+
+    @ApiModelProperty(notes = "높이")
     private Integer depth;
 
     @ApiModelProperty(notes = "작가 이름")

@@ -62,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
-                .antMatchers("/ws-stomp/**", "/api/port","/actuator/health").permitAll()
+                .antMatchers("/api/ws-stomp/**", "/api/port","/actuator/health").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users", "/api/users/login").permitAll()
                 .anyRequest().permitAll()
                 //.anyRequest().hasAnyRole("USER", "ADMIN")
@@ -78,7 +78,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOriginPattern("*");
+//        configuration.addAllowedOriginPattern("*");
+        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("http://localhost:8080");
+        configuration.addAllowedOrigin("https://i7a601.p.ssafy.io");
+
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);

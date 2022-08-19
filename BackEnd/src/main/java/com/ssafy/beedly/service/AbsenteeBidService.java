@@ -5,6 +5,7 @@ import com.ssafy.beedly.common.exception.NotFoundException;
 import com.ssafy.beedly.domain.PersonalProduct;
 import com.ssafy.beedly.domain.User;
 import com.ssafy.beedly.dto.AbsenteeBidDto;
+import com.ssafy.beedly.dto.bid.response.AbsenteeBidResponse;
 import com.ssafy.beedly.repository.AbsenteeBidRepository;
 import com.ssafy.beedly.repository.PersonalProductRepository;
 
@@ -23,6 +24,7 @@ import static com.ssafy.beedly.common.exception.NotFoundException.ABSENTEE_BID_N
 import static com.ssafy.beedly.common.exception.NotFoundException.PRODUCT_NOT_FOUND;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -63,5 +65,12 @@ public class AbsenteeBidService {
         AbsenteeBid absenteeBid = absenteeBidRepository.findById(absenteeBidId)
                 .orElseThrow(() -> new NotFoundException(ABSENTEE_BID_NOT_FOUND));
         absenteeBidRepository.delete(absenteeBid);
+    }
+
+    // 내가 서면 응찰한 목록
+    public List<AbsenteeBidResponse> findMyAbsenteeBidList(User user) {
+        List<AbsenteeBid> findMyAbsenteeBids = absenteeBidRepository.findMyAbsenteeBidsByUserId(user.getId());
+        return findMyAbsenteeBids.stream().map(absenteeBid -> new AbsenteeBidResponse(absenteeBid))
+                .collect(Collectors.toList());
     }
 }

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.xml.ws.Response;
 import java.util.List;
 
 @RestController
@@ -35,10 +34,8 @@ public class SpecialBoardController {
             "  \"startTime\": \"2013-09-29T18:46:19Z\"\n" +
             "}\n")
     @PostMapping("/admin/special/board")
-    public ResponseEntity createSpecialBoard(@ApiIgnore @LoginUser User user, @RequestPart CreateSpecialBoardRequest request, @RequestPart(required = false)MultipartFile image) {
-        specialBoardService.createPost(user, request, image);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Long> createSpecialBoard(@ApiIgnore @LoginUser User user, @RequestPart CreateSpecialBoardRequest request, @RequestPart(required = false)MultipartFile image) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(specialBoardService.createPost(user, request, image));
     }
 
     // 기획전 게시글 상세 조회( + 상품정보 + 경매 진행중이면 경매방 정보)
@@ -50,7 +47,7 @@ public class SpecialBoardController {
     }
 
     // 진행 예정인 기획전 게시글 리스트 조회
-    @ApiOperation(value = "기획전 게시글 리스트 조회", notes = "조회 시점으로 경매 예정인 게시글들만 조회")
+    @ApiOperation(value = "경매 예정인 기획전 게시글 리스트 조회", notes = "조회 시점으로 경매 예정인 게시글들만 조회")
     @GetMapping("/special/board")
     public ResponseEntity<List<SpecialBoardSimpleResponse>> searchWaitingSpecialBoards() {
         return ResponseEntity.ok(specialBoardService.searchWaitingSpecialBoards());
@@ -82,10 +79,11 @@ public class SpecialBoardController {
         return ResponseEntity.ok().build();
     }
 
-    // 유진누나 연습 코드
-    @GetMapping
-    public void dfdfd(@RequestBody ListRequest dddd) {
-
+    // 현재 진행중인 기획전 게시판
+    @ApiOperation(value = "현재 진행중인 기획전 게시글 리스트 조회", notes = "현재 경매중인 기획전 게시글 조회")
+    @GetMapping("/special/board/onair")
+    public ResponseEntity<List<SpecialBoardSimpleResponse>> searchOnAirSpecialBoards() {
+        return ResponseEntity.ok(specialBoardService.searchOnAirSpecialBoards());
     }
 
 }

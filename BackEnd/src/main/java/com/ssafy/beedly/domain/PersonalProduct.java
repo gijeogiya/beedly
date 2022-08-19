@@ -80,6 +80,9 @@ public class PersonalProduct extends BaseEntity {
 
     @Column(name="p_temperature")
     private Integer temperature;
+
+    @OneToMany(mappedBy = "personalProduct")
+    private List<PersonalSearchTag> searchTags = new ArrayList<>();
         
 
     public PersonalProduct(String productName) {
@@ -124,6 +127,7 @@ public class PersonalProduct extends BaseEntity {
         personalProduct.brightness = request.getBrightness();
         personalProduct.saturation = request.getSaturation();
         personalProduct.temperature = request.getTemperature();
+        personalProduct.favoriteCount = 0;
 
         return personalProduct;
     }
@@ -145,5 +149,15 @@ public class PersonalProduct extends BaseEntity {
         this.brightness = request.getBrightness();
         this.saturation = request.getSaturation();
         this.temperature = request.getTemperature();
+    }
+
+    public void addFavoriteCount() {
+        this.favoriteCount += 1;
+    }
+
+    public void minusFavoriteCount() {
+        if (this.favoriteCount >= 1) {
+            this.favoriteCount -= 1;
+        }
     }
 }

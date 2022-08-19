@@ -22,7 +22,7 @@ public class SpecialProductController {
 
    // 기획전 게시글에 상품 등록 + 이미지
    @ApiOperation(value = "기획전 게시글에 상품 등록", notes = "이미지도 여러개 가능(최대 5개) \n" +
-           "상품 등록 데이터 request:\n {\n" +
+           "상품 등록 데이터 요청 데이터:\n request: {\n" +
            "  \"productName\": \"기획전 상품\",\n" +
            "  \"productDesc\": \"기획전 상품이에요오오오\",\n" +
            "  \"startPrice\": 50000,\n" +
@@ -63,6 +63,8 @@ public class SpecialProductController {
    }
 
    // 기획전 상품 삭제
+   @ApiOperation(value = "기획전 상품 삭제", notes = "기획전 상품 삭제하기")
+   @ApiImplicitParam(name = "productId", value = "기획전 상품 식별자")
    @DeleteMapping("/admin/special/product/{productId}")
    public ResponseEntity deleteSpecialProduct(@PathVariable Long productId) {
       specialProductService.delete(productId);
