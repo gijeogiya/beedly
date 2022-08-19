@@ -1,19 +1,25 @@
 package com.ssafy.beedly.service;
 
+import com.ssafy.beedly.common.exception.DuplicateException;
 import com.ssafy.beedly.common.exception.NotFoundException;
 import com.ssafy.beedly.common.exception.NotMatchException;
 import com.ssafy.beedly.domain.*;
 import com.ssafy.beedly.domain.type.BidType;
 import com.ssafy.beedly.domain.type.SoldStatus;
 import com.ssafy.beedly.dto.auction.EnterPersonalAuctionResponse;
+import com.ssafy.beedly.dto.auction.FinishAuctionResponse;
 import com.ssafy.beedly.dto.auction.SuccessfulBidResponse;
+import com.ssafy.beedly.dto.bid.request.BidMessageRequest;
 import com.ssafy.beedly.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
+import static com.ssafy.beedly.common.exception.DuplicateException.PERSONAL_AUCTION_PRODUCT_DUPLICATED;
+import static com.ssafy.beedly.common.exception.DuplicateException.PRODUCT_SOLD_DUPLICATED;
 import static com.ssafy.beedly.common.exception.NotFoundException.*;
 import static com.ssafy.beedly.common.exception.NotMatchException.AUCTION_NOT_MATCH;
 import static com.ssafy.beedly.common.exception.NotMatchException.PRODUCT_OWNER_NOT_MATCH;
@@ -40,6 +46,12 @@ public class PersonalAuctionService {
         if (findProduct.getUser().getId() != user.getId()) {
             throw new NotMatchException(PRODUCT_OWNER_NOT_MATCH);
         }
+
+        List<PersonalAuction> findAuction = personalAuctionRepository.findByPersonalProductId(findProduct.getId());
+        if (findAuction.size() >= 1) {
+            throw new DuplicateException(PERSONAL_AUCTION_PRODUCT_DUPLICATED);
+        }
+
         PersonalAuction savePersonalAuction = personalAuctionRepository.save(PersonalAuction.createPersonalAuction(findProduct, user));
 
         return savePersonalAuction.getId();
@@ -51,7 +63,7 @@ public class PersonalAuctionService {
                 .orElseThrow(() -> new NotFoundException(AUCTION_NOT_FOUND));
 
         User host = findPersonalAuction.getUser();
-        Artist findArtist = artistRepository.findByUserId(host.getId())
+        Artist findArtist = artistRepository.findArtistByUserId(host.getId())
                 .orElseThrow(() -> new NotFoundException(ARTIST_NOT_FOUND));
 
         return new EnterPersonalAuctionResponse(findPersonalAuction, findArtist, host);
@@ -59,14 +71,24 @@ public class PersonalAuctionService {
 
     // 상시 경매방 종료
     @Transactional
-    public void closePersonalAuction(User user, Long auctionId) {
-        PersonalAuction findPersonalAuction = personalAuctionRepository.findByIdWithProductAndUser(auctionId)
+    public FinishAuctionResponse closePersonalAuction(Long userId, BidMessageRequest request) {
+        PersonalAuction findPersonalAuction = personalAuctionRepository.findByIdWithProductAndUser(request.getAuctionId())
                 .orElseThrow(() -> new NotFoundException(AUCTION_NOT_FOUND));
-        if (findPersonalAuction.getUser().getId() != user.getId()) {
+        if (findPersonalAuction.getUser().getId() != userId) {
             throw new NotMatchException(AUCTION_NOT_MATCH);
         }
 
         findPersonalAuction.closeAuction();
+
+        Optional<PersonalSold> findSoldInfo = personalSoldRepository.findPersonalSoldByPersonalProductId(request.getProductId());
+        FinishAuctionResponse finishAuctionResponse = new FinishAuctionResponse();
+        finishAuctionResponse.setFinished(true);
+        if (findSoldInfo.isPresent()) {
+            finishAuctionResponse.setSoldId(findSoldInfo.get().getId());
+            finishAuctionResponse.setUserName(findSoldInfo.get().getUser().getUserName());
+        }
+
+        return finishAuctionResponse;
     }
 
     // 상시 경매 낙찰 확정
@@ -74,6 +96,10 @@ public class PersonalAuctionService {
     public SuccessfulBidResponse successfulBid(Long productId) {
         PersonalProduct findProduct = personalProductRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
+        List<PersonalSold> findSoldInfo = personalSoldRepository.findByPersonalProductId(productId);
+        if (findSoldInfo.size() >= 1) {
+            throw new DuplicateException(PRODUCT_SOLD_DUPLICATED);
+        }
 
         Optional<PersonalBid> bestOnSiteBid = personalBidRepository.findFirstByPersonalProductIdOrderByBidPriceDesc(findProduct.getId());
         Optional<AbsenteeBid> bestAbsenteeBid = absenteeBidRepository.findFirstByPersonalProductIdOrderByAbsenteeBidPriceDesc(findProduct.getId());

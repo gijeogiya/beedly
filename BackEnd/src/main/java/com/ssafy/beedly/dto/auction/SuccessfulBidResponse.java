@@ -15,7 +15,7 @@ public class SuccessfulBidResponse {
     @ApiModelProperty(notes = "낙찰됐으면 true, 유찰됐으면 false")
     private Boolean isSold;
 
-    @ApiModelProperty(notes = "상시: ONSITE, 기획전: ABSENTEE")
+    @ApiModelProperty(notes = "현장응찰로 낙찰: ONSITE, 서면응찰로 낙찰: ABSENTEE")
     private BidType bidType;
 
     @ApiModelProperty(notes = "낙찰 식별자")

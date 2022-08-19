@@ -3,7 +3,7 @@ package com.ssafy.beedly.domain;
 import com.ssafy.beedly.domain.common.BaseEntity;
 import com.ssafy.beedly.domain.type.Gender;
 import com.ssafy.beedly.domain.type.UserRole;
-import com.ssafy.beedly.domain.type.YN;
+
 import com.ssafy.beedly.dto.user.kakao.KakaoAuccount;
 import com.ssafy.beedly.dto.user.kakao.KakaoUserResponse;
 import com.ssafy.beedly.dto.user.request.UserUpdateRequest;
@@ -12,6 +12,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Random;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -50,8 +51,14 @@ public class User extends BaseEntity {
     @Column(name = "user_bday")
     private LocalDate userBirthday;
 
-    @Column(name = "user_score")
-    private Integer userScore;
+    @Column(name = "user_brightness")
+    private Integer userBrightness;
+
+    @Column(name = "user_saturation")
+    private Integer userSaturation;
+
+    @Column(name = "user_temperature")
+    private Integer userTemperature;
 
 
 //    private LocalDateTime userDeleteDate;
@@ -75,11 +82,24 @@ public class User extends BaseEntity {
         User user = new User();
         KakaoAuccount kakaoAuccount = kakao.getKakao_account();
 
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+
         user.kakaoId = kakao.getId();
-        user.userName = "구매자";
+        user.userName = random.ints(leftLimit,rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
         user.userEmail = kakaoAuccount.getEmail();
         user.userGender = kakaoAuccount.getGender().equals("male") ? Gender.M : Gender.F;
         user.userRole = UserRole.ROLE_USER;
+        user.userBrightness = 0;
+        user.userSaturation = 0;
+        user.userTemperature = 0;
+
         return user;
     }
 
@@ -89,6 +109,12 @@ public class User extends BaseEntity {
         this.userTel = request.getTel();
         this.userAddr = request.getAddr();
         this.userBirthday = request.getBirthday();
+    }
+
+    public void updateScore(Integer brightness, Integer saturation, Integer temperature) {
+        this.userBrightness = brightness;
+        this.userSaturation = saturation;
+        this.userTemperature = temperature;
     }
 
     // 테스트용 생성자

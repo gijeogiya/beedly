@@ -97,26 +97,26 @@ public class ServiceTest {
 	}
 	 */
 
-	@Autowired
-	UserRecommendationRepository userRecommendationRepository;
-	@Autowired
-	UserRecommendationService userRecommendationService;
+//	@Autowired
+//	UserRecommendationRepository userRecommendationRepository;
+//	@Autowired
+//	UserRecommendationService userRecommendationService;
 
-	@Test
-	public void addUserRecommendationTag() {
-		List<Long> selectedTags = new ArrayList<>();
-		Long l = 1L;
-		for (int i = 1; i <= 5; i++) {
-			selectedTags.add(l++);
-		}
-		User user = new User(1L);
-		UserRecommendation userRecommendation = new UserRecommendation(1L, user);
-		for (Long id: selectedTags
-			 ) {
-			RecommendationTag recommendationTag = new RecommendationTag(id);
-			userRecommendation.setRecTag(recommendationTag);
-			userRecommendationRepository.save(userRecommendation);
-		}
-	}
+//	@Test
+//	public void addUserRecommendationTag() {
+//		List<Long> selectedTags = new ArrayList<>();
+//		Long l = 1L;
+//		for (int i = 1; i <= 5; i++) {
+//			selectedTags.add(l++);
+//		}
+//		User user = new User(1L);
+//		UserRecommendation userRecommendation = new UserRecommendation(1L, user);
+//		for (Long id: selectedTags
+//			 ) {
+//			RecommendationTag recommendationTag = new RecommendationTag(id);
+//			userRecommendation.setRecTag(recommendationTag);
+//			userRecommendationRepository.save(userRecommendation);
+//		}
+//	}
 
 }

@@ -53,7 +53,9 @@ public class SpecialBoardResponse {
         this.boardDesc = sb.getBoardDesc();
         this.mainImgUri = sb.getMainImgUri();
         this.userId = sb.getUser().getId();
-        this.specialProducts = sb.getSpecialProducts().stream().map(specialProduct -> new SpecialProductResponse(specialProduct)).collect(Collectors.toList());
+        if (sb.getSpecialProducts().size() >= 1) {
+            this.specialProducts = sb.getSpecialProducts().stream().map(specialProduct -> new SpecialProductResponse(specialProduct)).collect(Collectors.toList());
+        }
         if (sb.getSpecialAuction() != null) {
             this.specialAuctionId = sb.getSpecialAuction().getId();
         }
