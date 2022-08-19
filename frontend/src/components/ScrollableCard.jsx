@@ -175,7 +175,7 @@ export function ProductCard({ product, startTime }) {
                   : BeforeStateIcon
                 : ""
             }
-            style={{ paddingRight: "5px", paddingTop: "2px" }}
+            style={{ paddingRight: "5px", paddingTop: "3px" }}
           />
           <div style={{ paddingBottom: "2px" }}>
             {isEnd === "STANDBY"
