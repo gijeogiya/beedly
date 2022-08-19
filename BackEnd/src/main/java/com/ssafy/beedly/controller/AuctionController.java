@@ -4,13 +4,9 @@ import com.ssafy.beedly.config.data.CacheKey;
 import com.ssafy.beedly.config.security.util.JwtUtil;
 import com.ssafy.beedly.config.web.LoginUser;
 import com.ssafy.beedly.domain.User;
-import com.ssafy.beedly.dto.auction.CreateAuctionResponse;
-import com.ssafy.beedly.dto.auction.EnterPersonalAuctionResponse;
-import com.ssafy.beedly.dto.auction.EnterSpecialAuctionResponse;
-import com.ssafy.beedly.dto.auction.SuccessfulBidResponse;
+import com.ssafy.beedly.dto.auction.*;
 import com.ssafy.beedly.dto.bid.request.BidMessageRequest;
 import com.ssafy.beedly.dto.bid.response.BidMessageResponse;
-import com.ssafy.beedly.dto.bid.type.MessageType;
 import com.ssafy.beedly.service.PersonalAuctionService;
 import com.ssafy.beedly.service.PersonalBidService;
 import com.ssafy.beedly.service.SpecialAuctionService;
@@ -33,7 +29,7 @@ import java.util.List;
 
 @Api(value = "경매 컨트롤러")
 @RestController
-@RequestMapping("/auction")
+//@RequestMapping("/auction")
 @RequiredArgsConstructor
 public class AuctionController {
 
@@ -47,53 +43,64 @@ public class AuctionController {
     // 상시 경매방 생성
     @ApiOperation(value = "상시 경매방 생성", notes = "상품 식별자로 상시 경매방 생성")
     @ApiImplicitParam(name = "productId", value = "상품 식별자")
-    @PostMapping("/personal/product/{productId}")
+    @PostMapping("/auction/personal/product/{productId}")
     public ResponseEntity<CreateAuctionResponse> createPersonalAuction(@ApiIgnore @LoginUser User user, @PathVariable Long productId) {
         return ResponseEntity.status(HttpStatus.CREATED).body(new CreateAuctionResponse(personalAuctionService.createPersonalAuction(user, productId)));
     }
 
     // 상시 경매방 입장(방 정보 + 상품 정보 + 작가정보도 같이 리턴)
-
     @ApiOperation(value = "상시 경매방 입장", notes = "상시 경매방 입장(방 정보 + 상품 정보 + 작가정보도 같이 리턴)")
     @ApiImplicitParam(name = "auctionId", value = "상시 경매방 식별자")
     @Cacheable(value = CacheKey.PERSONAL_AUCTION_BOARD, key = "#auctionId", unless = "#result == null", cacheManager = "cacheManager")
-    @GetMapping("/{auctionId}/personal")
+    @GetMapping("/auction/{auctionId}/personal")
     public EnterPersonalAuctionResponse enterPersonalAuction(@PathVariable Long auctionId) {
         return personalAuctionService.enterPersonalAuction(auctionId);
 
     }
 
-    // 상시 경매 입찰하기
-    @MessageMapping("/personal/bidding")
+    // 상시 경매 웹소켓 통신
+    @MessageMapping("/auction/personal/product/bidding")
     public void personalProductBidding(BidMessageRequest request, @Header(HttpHeaders.AUTHORIZATION) String bearerToken) {
         Long userId = Long.valueOf(jwtUtil.getSubject(bearerToken.substring(7)));
 
-        BidMessageResponse bidMessageResponse = null;
+        BidMessageResponse bidMessageResponse = new BidMessageResponse();
+        System.out.println(request);
+        System.out.println("Message Type: " + request.getType());
+        System.out.println(request.getType().equals("E"));
+        System.out.println(request.getType().equals("B"));
 
-        if (MessageType.ENTER.equals(request.getType())) { // 처음 들어왔을 때, 최신 입찰정보 가져오기
+        if (request.getType().equals("E")) { // 처음 들어왔을 때, 최신 입찰정보 가져오기
             bidMessageResponse = personalBidService.getLatestBidInfo(request);
-        } else if (MessageType.BIDDING.equals(request.getType())) { // 입찰하기
+            // 입찰정보 뿌리기
+            messagingTemplate.convertAndSend("/sub/auction/personal/" + request.getAuctionId(), bidMessageResponse);
+        } else if (request.getType().equals("B")) { // 입찰하기
             bidMessageResponse = personalBidService.createBid(userId, request);
+            // 입찰정보 뿌리기
+            messagingTemplate.convertAndSend("/sub/auction/personal/" + request.getAuctionId(), bidMessageResponse);
+        } else if (request.getType().equals("SB")) { // 낙찰 확정
+            SuccessfulBidResponse successfulBidResponse = personalAuctionService.successfulBid(request.getProductId());
+            // 입찰정보 뿌리기
+            messagingTemplate.convertAndSend("/sub/auction/personal/" + request.getAuctionId(), successfulBidResponse);
+        } else if (request.getType().equals("F")) { // 경매종료
+            FinishAuctionResponse finishAuctionResponse = personalAuctionService.closePersonalAuction(userId, request);
+            messagingTemplate.convertAndSend("/sub/auction/personal/" + request.getAuctionId(), finishAuctionResponse);
         }
-
-        // 입찰정보 뿌리기
-        messagingTemplate.convertAndSend("/sub/auction/personal/" + request.getAuctionId(), bidMessageResponse);
     }
 
     // 상시 경매방 종료
-    @ApiOperation(value = "상시 경매방 종료", notes = "상시 경매방 종료하기")
-    @ApiImplicitParam(name = "auctionId", value = "상시 경매방 식별자")
-    @PatchMapping("/{auctionId}/personal")
-    public ResponseEntity closePersonalAuction(@ApiIgnore @LoginUser User user, @PathVariable Long auctionId) {
-        personalAuctionService.closePersonalAuction(user, auctionId);
-
-        return ResponseEntity.ok().build();
-    }
+//    @ApiOperation(value = "상시 경매방 종료", notes = "상시 경매방 종료하기")
+//    @ApiImplicitParam(name = "auctionId", value = "상시 경매방 식별자")
+//    @PatchMapping("/auction/{auctionId}/personal")
+//    public ResponseEntity closePersonalAuction(@ApiIgnore @LoginUser User user, @PathVariable Long auctionId) {
+//        personalAuctionService.closePersonalAuction(user, auctionId);
+//
+//        return ResponseEntity.ok().build();
+//    }
 
     // 기획전 경매방 생성
     @ApiOperation(value = "기획전 경매방 생성", notes = "기획전 게시글 식별자로 기획전 경매방 생성")
     @ApiImplicitParam(name = "boardId", value = "기획전 게시글 식별자")
-    @PostMapping("/special/board/{boardId}")
+    @PostMapping("/auction/special/board/{boardId}")
     public ResponseEntity<CreateAuctionResponse> createSpecialAuction(@ApiIgnore @LoginUser User user, @PathVariable Long boardId) {
         return ResponseEntity.status(HttpStatus.CREATED).body(new CreateAuctionResponse(specialAuctionService.createSpecialAuction(user, boardId)));
     }
@@ -101,53 +108,60 @@ public class AuctionController {
     // 기획전 경매방 입장
     @ApiOperation(value = "기획전 경매방 입장", notes = "기획전 경매방 입장(방 정보 + 상품 정보 리스트 같이 리턴)")
     @ApiImplicitParam(name = "auctionId", value = "기획전 경매방 식별자")
-    @Cacheable(value = CacheKey.SPECIAL_AUCTION_BOARD, key = "#auctionId", unless = "#result == null", cacheManager = "cacheManager")
-    @GetMapping("/{auctionId}/special")
-    public List<EnterSpecialAuctionResponse> enterSpecialAuction(@PathVariable Long auctionId) {
+//    @Cacheable(value = CacheKey.SPECIAL_AUCTION_BOARD, key = "#auctionId", unless = "#result == null", cacheManager = "cacheManager")
+    @GetMapping("/auction/{auctionId}/special")
+    public EnterSpecialAuctionResponse enterSpecialAuction(@PathVariable Long auctionId) {
         return specialAuctionService.enterSpecialAuction(auctionId);
 
     }
 
-    // 기획전 경매 입찰하기
-    @MessageMapping("/special/bidding")
+    // 기획전 경매 웹소켓 통신
+    @MessageMapping("/auction/special/product/bidding")
     public void specialProductBidding(BidMessageRequest request, @Header(HttpHeaders.AUTHORIZATION) String bearerToken) {
         Long userId = Long.valueOf(jwtUtil.getSubject(bearerToken.substring(7)));
 
-        BidMessageResponse bidMessageResponse = null;
-        if (MessageType.ENTER.equals(request.getType())) { // 처음 들어왔을 때, 최신 입찰정보 가져오기
+        BidMessageResponse bidMessageResponse = new BidMessageResponse();
+        if (request.getType().equals("E")) { // 처음 들어왔을 때, 최신 입찰정보 가져오기
             bidMessageResponse = specialBidService.getLatestBidInfo(request);
-        } else if (MessageType.BIDDING.equals(request.getType())) { // 입찰하기
+            messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), bidMessageResponse);
+        } else if (request.getType().equals("B")) { // 입찰하기
             bidMessageResponse = specialBidService.createBid(userId, request);
+            messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), bidMessageResponse);
+        } else if (request.getType().equals("SB")) { // 낙찰 정보 뿌리기
+            SpecialSuccessfulBidResponse successfulBidResponse = specialAuctionService.successfulBid(request);
+            messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), successfulBidResponse);
+        } else if (request.getType().equals("NB")) {
+            messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), new SpecialNextBidResponse(true));
+        } else if (request.getType().equals("F")) { // 경매 종료
+            specialAuctionService.closeSpecialAuction(userId, request);
+            messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), new FinishSpecialAuctionResponse(true, "경매가 종료되었습니다."));
         }
-
-        // 입찰정보 뿌리기
-        messagingTemplate.convertAndSend("/sub/auction/special/" + request.getAuctionId(), bidMessageResponse);
     }
 
     // 기획전 경매방 종료
-    @ApiOperation(value = "기획전 경매방 종료", notes = "기획전 경매방 종료하기")
-    @ApiImplicitParam(name = "auctionId", value = "기획전 경매방 식별자")
-    @PatchMapping("/{auctionId}/special")
-    public ResponseEntity closeSpecialAuction(@PathVariable Long auctionId) {
-        specialAuctionService.closeSpecialAuction(auctionId);
-
-        return ResponseEntity.ok().build();
-    }
+//    @ApiOperation(value = "기획전 경매방 종료", notes = "기획전 경매방 종료하기")
+//    @ApiImplicitParam(name = "auctionId", value = "기획전 경매방 식별자")
+//    @PatchMapping("/auction/{auctionId}/special")
+//    public ResponseEntity closeSpecialAuction(@PathVariable Long auctionId) {
+//        specialAuctionService.closeSpecialAuction(auctionId);
+//
+//        return ResponseEntity.ok().build();
+//    }
 
     // 상시 경매 상품 낙찰 확정
-    @ApiOperation("상시 경매 상품 낙찰 확정")
-    @ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
-    @PostMapping("/personal/successful/bid/product/{productId}")
-    public ResponseEntity<SuccessfulBidResponse> successfulBidPersonalAuction(@PathVariable Long productId) {
-        return ResponseEntity.ok(personalAuctionService.successfulBid(productId));
-    }
+//    @ApiOperation("상시 경매 상품 낙찰 확정")
+//    @ApiImplicitParam(name = "productId", value = "상시 상품 식별자")
+//    @PostMapping("/personal/successful/bid/product/{productId}")
+//    public ResponseEntity<SuccessfulBidResponse> successfulBidPersonalAuction(@PathVariable Long productId) {
+//        return ResponseEntity.ok(personalAuctionService.successfulBid(productId));
+//    }
 
     // 기획전 경매 상품 낙찰 확정
-    @ApiOperation("기획전 경매 상품 낙찰 확정")
-    @ApiImplicitParam(name = "productId", value = "기획전 상품 식별자")
-    @PostMapping("/special/successful/bid/product/{productId}")
-    public ResponseEntity<SuccessfulBidResponse> successfulBidSpecialAuction(@PathVariable Long productId) {
-        return ResponseEntity.ok(specialAuctionService.successfulBid(productId));
-    }
+//    @ApiOperation("기획전 경매 상품 낙찰 확정")
+//    @ApiImplicitParam(name = "productId", value = "기획전 상품 식별자")
+//    @PostMapping("/special/successful/bid/product/{productId}")
+//    public ResponseEntity<SuccessfulBidResponse> successfulBidSpecialAuction(@PathVariable Long productId) {
+//        return ResponseEntity.ok(specialAuctionService.successfulBid(productId));
+//    }
 
 }

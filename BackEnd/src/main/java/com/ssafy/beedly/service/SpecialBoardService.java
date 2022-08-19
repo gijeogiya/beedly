@@ -9,11 +9,14 @@ import com.ssafy.beedly.common.exception.NotMatchException;
 import com.ssafy.beedly.domain.Category;
 import com.ssafy.beedly.domain.SpecialBoard;
 import com.ssafy.beedly.domain.User;
+import com.ssafy.beedly.domain.type.YN;
 import com.ssafy.beedly.dto.special.board.request.CreateSpecialBoardRequest;
 import com.ssafy.beedly.dto.special.board.response.SpecialBoardResponse;
 import com.ssafy.beedly.dto.special.board.response.SpecialBoardSimpleResponse;
 import com.ssafy.beedly.repository.CategoryRepository;
+import com.ssafy.beedly.repository.SpecialAuctionRepository;
 import com.ssafy.beedly.repository.SpecialBoardRepository;
+import com.ssafy.beedly.repository.SpecialProductRepository;
 import com.ssafy.beedly.repository.query.SpecialBoardQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,22 +44,24 @@ public class SpecialBoardService {
     private final SpecialBoardRepository specialBoardRepository;
     private final SpecialBoardQueryRepository specialBoardQueryRepository;
     private final AmazonS3Client amazonS3Client;
+    private final SpecialProductRepository specialProductRepository;
+    private final SpecialAuctionRepository specialAuctionRepository;
 
     // 게시글 생성
     @Transactional
-    public void createPost(User user, CreateSpecialBoardRequest request, MultipartFile image) {
+    public Long createPost(User user, CreateSpecialBoardRequest request, MultipartFile image) {
         String imageUrl = uploadImageS3(image);
-        specialBoardRepository.save(SpecialBoard.createSpecialBoard(user, request, imageUrl));
+        return specialBoardRepository.save(SpecialBoard.createSpecialBoard(user, request, imageUrl)).getId();
     }
 
     // 게시글 상세조회
     public SpecialBoardResponse searchSpecialBoard(Long boardId) {
-         return new SpecialBoardResponse(specialBoardQueryRepository.findByIdWithProducts(boardId));
+        return new SpecialBoardResponse(specialBoardQueryRepository.findByIdWithProducts(boardId));
     }
 
     // 진행 예정인 게시글 리스트 조회
     public List<SpecialBoardSimpleResponse> searchWaitingSpecialBoards() {
-        return specialBoardRepository.findWaitingSpecialBoardOrderByStartTimeAsc(LocalDateTime.now())
+        return specialBoardRepository.findWaitingSpecialBoardOrderByStartTimeAsc(LocalDateTime.now().minusHours(9))
                 .stream().map(specialBoard -> new SpecialBoardSimpleResponse(specialBoard))
                 .collect(Collectors.toList());
     }
@@ -81,7 +86,15 @@ public class SpecialBoardService {
         SpecialBoard findSpecialBoard = specialBoardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundException(SPECIAL_BOARD_NOT_FOUND));
 
-        specialBoardRepository.delete(findSpecialBoard);
+        findSpecialBoard.deleteSpecialBoard();
+
+        specialProductRepository.softDeleteProductByProductId(findSpecialBoard.getId(), YN.Y);
+    }
+
+    // 현재 진행중인 기획전 게시글 조회
+    public List<SpecialBoardSimpleResponse> searchOnAirSpecialBoards() {
+        return specialAuctionRepository.findOnAirList().stream().map(specialAuction -> new SpecialBoardSimpleResponse(specialAuction))
+                .collect(Collectors.toList());
     }
 
     public String uploadImageS3(MultipartFile image) {

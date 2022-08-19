@@ -23,7 +23,7 @@ public class PersonalAuction extends BaseEntity {
     private Boolean activeFlag;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "p_product_id")
+    @JoinColumn(name = "p_product_id", unique = true)
     private PersonalProduct personalProduct;
 
     @ManyToOne(fetch = FetchType.LAZY)

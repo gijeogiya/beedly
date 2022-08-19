@@ -30,7 +30,7 @@ public interface SpecialBoardRepository extends JpaRepository<SpecialBoard, Long
 	List<SpecialAuction> findSpecialBoardByOnAirOrderByStartTimeDesc();
 
 	// 진행 예정중인 기획 게시판 (시간 오름차순)
-	@Query("select sb from SpecialBoard sb join fetch sb.user where sb.startTime >= :now order by sb.startTime ASC")
+	@Query("select sb from SpecialBoard sb join fetch sb.user where sb.startTime >= :now and sb.isDeleted = 'N' order by sb.startTime ASC")
 	List<SpecialBoard> findWaitingSpecialBoardOrderByStartTimeAsc(LocalDateTime now);
 
 }
