@@ -153,16 +153,16 @@
   height: 30px;
   border-radius: 30px;
   border: 3px solid rgba(255, 255, 255, 1);
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.3);
 }
 #messageInput input {
-  width: 90%;
+  width: 80%;
   height: 100%;
   border: none;
   outline: none;
   font-size: 14px;
   margin-left: -6%;
-  color: rgba(220, 220, 220, 0.6);
+  color: rgba(0, 0, 0, 1);
   background-color: transparent;
 }
 

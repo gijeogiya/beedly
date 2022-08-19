@@ -83,7 +83,7 @@ function PriceBox({ price, callPrice }) {
           text={`₩ ${moneyFormat(price)}`}
           style={{ padding: "5px 0" }}
         />
-        <StyledHr />
+        <StyledHr color="white" style={{width:"30vw"}} />
         <StyledText
           size="14px"
           color="white"
@@ -105,18 +105,18 @@ const ProductImg = styled.img`
 
 const ProductBox = styled.div`
   background-color: lightgray;
-  background: rgba(220, 220, 220, 0.6);
+  background: rgba(255, 255, 255, 0.5);
   color: black;
   border-radius: 10px;
   padding: 10px;
-  width: 80%;
+  width: 70%;
   margin: 0 auto;
 `;
 
 const AuctionInfoDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 0 60px 0 60px;
+  padding: 0 20px;
 `;
 
 const AuctionInfoText = ({
@@ -179,39 +179,33 @@ function ProductFrame({
   return (
     <ProductContainer>
       <ProductBox>
-        <Box direction="row">
-          <ProductImg src={productSrc} />
-          <Box>
-            <StyledText size="14px" weight="bold" text={category} />
+        <Box direction="row" style={{padding:"5px 0 20px 16px"}}>
+          <ProductImg src={productSrc} style={{width:"80px", objectFit:"cover"}}/>
+          <Box style={{padding:"5px 0 10px 8px"}}>
             <StyledText size="16px" weight="bold" text={title} />
             <StyledText size="14px" text={artist} />
           </Box>
         </Box>
-        <Box>
+        <Box style={{padding:"10px 0"}}>
           <AuctionInfoText
             title="현재 입찰가"
             info={`${moneyFormat(currentPrice)} 원`}
-            titleWeight="bold"
-            infoWeight="bold"
-            titleSize="14px"
-            infoSize="14px"
+            titleSize="15px"
+            infoSize="15px"
           />
           <AuctionInfoText
             title="현재 입찰자"
             info={currentBidder}
-            titleWeight="bold"
-            infoWeight="bold"
-            titleSize="14px"
-            infoSize="14px"
+            titleSize="15px"
+            infoSize="15px"
           />
-          {grade === "buyer" && <StyledHr color="white" />}
+          {grade === "buyer" && <hr style={{width:"260px"}} />}
           {grade === "buyer" && (
             <AuctionInfoText
               title="입찰가"
               info={`${moneyFormat(callPrice + currentPrice)} 원`}
-              titleWeight="bold"
               infoWeight="bold"
-              titleSize="14px"
+              titleSize="15px"
               infoSize="16px"
               infoColor="#D00000"
             />
@@ -222,10 +216,8 @@ function ProductFrame({
               info={`${moneyFormat(
                 Math.floor((0 + callPrice + currentPrice) * 1.1)
               )} 원`}
-              titleWeight="bold"
-              infoWeight="bold"
-              titleSize="14px"
-              infoSize="14px"
+              titleSize="15px"
+              infoSize="15px"
             />
           )}
         </Box>
