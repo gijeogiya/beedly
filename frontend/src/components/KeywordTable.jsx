@@ -5,7 +5,6 @@ import XIcon from "../assets/img/XIcon.svg";
 
 const RecentlyKeywordFrame = styled.div`
   display: flex;
-  flex-wrap: wrap;
   overflow-x: scroll;
   overflow-y: hidden;
   white-space: nowrap;
