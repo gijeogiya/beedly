@@ -43,6 +43,7 @@ import {
 } from "../utils/apis/PersonalFavoriteAPI";
 import Carousel from "nuka-carousel";
 import { AlertDialog } from "../components/AlertDialog";
+
 export const HeaderBox = ({
   isSeller,
   goBack,
@@ -429,7 +430,13 @@ export const ProductDetail = () => {
     // const due = new Date(string).getTimezoneOffset() * 6000;
     const dueDate = new Date(string);
     // console.log(dueDate);
-    const date = string.split("T");
+    let offset = dueDate.getTimezoneOffset() * 60000;
+    let dateOffset = new Date(dueDate.getTime() - offset + KR_TIME_DIFF);
+    // const date = string.split("T");
+    // let momentDate = moment(string).format();
+    // console.log(dateOffset.toISOString());
+    // const date = dateOffset.toISOString().split("T");
+    const date = dateOffset.toISOString().split("T");
     const yyyyMMdd = date[0].split("-");
     const HHmm = date[1].split(":");
     return `${yyyyMMdd[0]}년 ${parseInt(yyyyMMdd[1])}월 ${parseInt(
