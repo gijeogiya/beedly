@@ -22,11 +22,12 @@ export const KakaoPayRedirect = () => {
     console.log(params);
     console.log(success + ", " + errorMsg + ", " + soldId, auctionType);
     if (loading)
-      if (success === true) {
+      if (success === "true" || success === true) {
         if (auctionType === "P")
           postPersonalPay(
             soldId,
             (response) => {
+              setLoading(false);
               console.log("결제 완료 API 호출 !!!", response);
               navigate(`/purchaseDetail/${soldId}`, {
                 state: {
@@ -46,6 +47,7 @@ export const KakaoPayRedirect = () => {
           postSpecialPay(
             soldId,
             (response) => {
+              setLoading(false);
               console.log("결제 완료 API 호출 !!!", response);
               navigate(`/purchaseDetail/${soldId}`, {
                 state: {
@@ -78,6 +80,13 @@ export const KakaoPayRedirect = () => {
         <Box direction="row" justify="center">
           <Button children="뒤로가기" onClick={goBack} />
         </Box>
+      </Box>
+    );
+  else
+    return (
+      <Box>
+        결제 완료 후 이동중입니다...
+        <Spinner />
       </Box>
     );
 };
