@@ -9,82 +9,26 @@ import { BackButton } from "./ProductRegister";
 import { postPersonalPay, postSpecialPay } from "../utils/apis/PayAPI";
 import beforeIcon from "../assets/img/arrow-left.svg";
 export const PurchaseDetail = () => {
-  const params = new URL(window.location.href).searchParams;
+  // const params = new URL(window.location.href).searchParams;
   const [loading, setLoading] = useState(true);
   const location = useLocation();
   const [user, setUser] = useState();
   const [product, setProduct] = useState();
   const navigate = useNavigate();
-  let success =
-    location.state !== undefined
-      ? location.state.success
-      : params.get("imp_success");
-  let errorMsg =
-    location.state !== undefined
-      ? location.state.errorMsg
-      : params.get("error_msg");
-  let merchantUid =
-    location.state !== undefined
-      ? location.state.merchantUid
-      : params.get("merchant_uid");
-  let soldId =
-    location.state !== undefined
-      ? location.state.soldId
-      : merchantUid.split("_")[3];
-  let auctionType =
-    location.state !== undefined
-      ? location.state.auctionType
-      : merchantUid.split("_")[0];
+  let success = location.state.success;
+  let errorMsg = location.state.errorMsg;
+  let merchantUid = location.state.merchantUid;
+  let soldId = location.state.soldId;
+  let auctionType = location.state.auctionType;
   // auctionType + "_order_no_" + soldId,
 
   useEffect(() => {
-    console.log(success + ", " + errorMsg + ", " + soldId);
     if (success === true) {
-      if (location.state === undefined) {
-        if (auctionType === "P")
-          postPersonalPay(
-            soldId,
-            (response) => {
-              console.log("결제 완료 API 호출 !!!", response);
-              navigate(`/purchaseDetail/${soldId}`, {
-                state: {
-                  error_msg: errorMsg,
-                  merchant_uid: merchantUid,
-                  success: success,
-                  soldId: soldId,
-                  auctionType: auctionType,
-                },
-              });
-            },
-            (fail) => {
-              console.log(fail);
-            }
-          );
-        else if (auctionType === "S")
-          postSpecialPay(
-            soldId,
-            (response) => {
-              console.log("결제 완료 API 호출 !!!", response);
-              navigate(`/purchaseDetail/${soldId}`, {
-                state: {
-                  error_msg: errorMsg,
-                  merchant_uid: merchantUid,
-                  success: success,
-                  soldId: soldId,
-                  auctionType: auctionType,
-                },
-              });
-            },
-            (fail) => {
-              console.log(fail);
-            }
-          );
-      } else {
-        if (loading) getPurchaseInfo();
-      }
+      if (loading) getPurchaseInfo();
     } else {
       setLoading(false);
     }
+
     return () => setLoading(false);
   });
   const getPurchaseInfo = () => {
