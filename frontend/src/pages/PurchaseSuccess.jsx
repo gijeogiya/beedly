@@ -9,8 +9,8 @@ import { postPersonalPay, postSpecialPay } from "../utils/apis/PayAPI";
 import { getPersonalProduct } from "../utils/apis/PersonalProductAPI";
 import { getPurchaseProduct } from "../utils/apis/UserAPI";
 
-// const REDIRECT_URL = "http://localhost:3000/";
-const REDIRECT_URL = "https://i7a601.p.ssafy.io/";
+const REDIRECT_URL = "http://localhost:3000/";
+// const REDIRECT_URL = "https://i7a601.p.ssafy.io/";
 export const PurchaseSuccess = () => {
   const location = useLocation();
   // const { soldId } = location.state;
@@ -59,7 +59,7 @@ export const PurchaseSuccess = () => {
       buyer_tel: userTel,
       buyer_addr: userAddr,
       buyer_postcode: "",
-      m_redirect_url: REDIRECT_URL + `purchaseDetail/${soldId}`,
+      m_redirect_url: REDIRECT_URL + `kakaopay/callback`,
     };
     IMP.request_pay(data, callback);
   };

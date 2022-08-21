@@ -39,6 +39,7 @@ import { LikeArtistList } from "./pages/LikeArtistList";
 import { LikeProduct } from "./components/LikeProduct";
 import { BannerEvent1 } from "./pages/BannerEvent1";
 import { BannerEvent2 } from "./pages/BannerEvent2";
+import { KakaoPayRedirect } from "./pages/KakaoPayRedirect";
 
 const Layout = () => {
   return (
@@ -126,11 +127,14 @@ export const Router = () => {
           path="/specialProduct/:boardId"
           element={<SpecialProductRegister />}
         />
+        <Route path="/kakaopay/callback" element={<KakaoPayRedirect />}></Route>
       </Route>
+
       {/* 아무것도 없음 */}
       <Route path="/personalAuction" element={<Auction />} />
       <Route path="/specialAuction" element={<Auction />} />
       <Route path="/user/kakao/callback" element={<Kakao />}></Route>
+
       {/* 메인 배너 이벤트 페이지*/}
     </Routes>
   );

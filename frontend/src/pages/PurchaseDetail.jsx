@@ -9,7 +9,7 @@ import { BackButton } from "./ProductRegister";
 import { postPersonalPay, postSpecialPay } from "../utils/apis/PayAPI";
 import beforeIcon from "../assets/img/arrow-left.svg";
 export const PurchaseDetail = () => {
-  const params = new URLSearchParams(window.location.search);
+  const params = new URL(window.location.href).searchParams;
   const [loading, setLoading] = useState(true);
   const location = useLocation();
   const [user, setUser] = useState();
@@ -108,10 +108,12 @@ export const PurchaseDetail = () => {
     );
   };
 
+  const goMyPage = () => {
+    navigate("/mypage");
+  };
   const goBack = () => {
     navigate(-1);
   };
-
   // return <div>{success + ", " + errorMsg + ", " + soldId}</div>;
   if (loading) return <Spinner />;
   else {
@@ -137,7 +139,7 @@ export const PurchaseDetail = () => {
               padding: "0px 10px",
             }}
           >
-            <img alt="이전" src={beforeIcon} onClick={goBack} />
+            <img alt="이전" src={beforeIcon} onClick={goMyPage} />
             <h4>상세구매내역</h4>
             <h4 style={{ visibility: "hidden" }}>dd</h4>
           </div>
