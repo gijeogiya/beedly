@@ -85,6 +85,7 @@ export const KakaoPayRedirect = () => {
   else
     return (
       <Box>
+        {success + ", " + errorMsg + ", " + soldId + ", " + auctionType}
         결제 완료 후 이동중입니다...
         <Spinner />
       </Box>
