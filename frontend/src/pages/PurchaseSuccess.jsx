@@ -9,8 +9,8 @@ import { postPersonalPay, postSpecialPay } from "../utils/apis/PayAPI";
 import { getPersonalProduct } from "../utils/apis/PersonalProductAPI";
 import { getPurchaseProduct } from "../utils/apis/UserAPI";
 
-// const REDIRECT_URL = "http://localhost:3000/";
-const REDIRECT_URL = "https://i7a601.p.ssafy.io/";
+const REDIRECT_URL = "http://localhost:3000/";
+// const REDIRECT_URL = "https://i7a601.p.ssafy.io/";
 export const PurchaseSuccess = () => {
   const location = useLocation();
   // const { soldId } = location.state;
