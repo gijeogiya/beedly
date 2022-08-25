@@ -1,6 +1,6 @@
 import { Box, Image, Spinner } from "grommet";
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import { StyledHr, StyledText } from "../components/Common";
 import { moneyFormat } from "../stores/modules/basicInfo";
