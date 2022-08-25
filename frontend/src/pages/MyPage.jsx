@@ -189,17 +189,17 @@ export default function MyPage() {
           }
         );
         // 판매내역 조회
-        if (user.userRole !== "ROLE_USER") {
-          getSaleApi(
-            (res) => {
-              console.log("판매내역 ", res);
-              handleSale(res.data);
-            },
-            (err) => {
-              console.log(err);
-            }
-          );
-        }
+        // if (user.userRole !== "ROLE_USER") {
+        //   getSaleApi(
+        //     (res) => {
+        //       console.log("판매내역 ", res);
+        //       handleSale(res.data);
+        //     },
+        //     (err) => {
+        //       console.log(err);
+        //     }
+        //   );
+        // }
 
         // 찜한 상품 조회
         getLikeProduct(
