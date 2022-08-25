@@ -24,7 +24,7 @@ export const PurchaseDetail = () => {
   // auctionType + "_order_no_" + soldId,
 
   useEffect(() => {
-    if (success === true) {
+    if (success === "true" || success === true) {
       if (loading) getPurchaseInfo();
     } else {
       setLoading(false);
