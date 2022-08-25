@@ -100,38 +100,66 @@ export const PurchaseDetail = () => {
               {/*배송지 정보 */}
               <StyledText text="배송지정보" weight="bold" size="16px" />
               <Box>
-                <StyledText text="주소" />
+                <StyledText
+                  text="주소"
+                  weight="bold"
+                  style={{ marginBottom: "8px" }}
+                />
                 <StyledText text={user.userAddr} />
-                <StyledHr width="100%" color="#A1A1A1" />
               </Box>
               <Box>
-                <StyledText text="이름" />
+                <StyledText
+                  text="이름"
+                  weight="bold"
+                  style={{ marginBottom: "8px" }}
+                />
                 <StyledText text={user.userName} />
-                <StyledHr width="100%" color="#A1A1A1" />
               </Box>
               <Box>
-                <StyledText text="전화번호" />
+                <StyledText
+                  text="전화번호"
+                  weight="bold"
+                  style={{ marginBottom: "8px" }}
+                />
                 <StyledText text={user.userTel} />
-                <StyledHr width="100%" color="#A1A1A1" />
               </Box>
-              <Box>
+              <Box
+                direction="column"
+                justify="between"
+                height="130px"
+                align="end"
+              >
                 <StyledText
                   text={`수수료(5%) ${moneyFormat(
                     parseInt(product.finalPrice * 0.05)
                   )}`}
                 />
+
                 <StyledText text={`배송비 4,000`} />
-                <StyledText text="총 결제금액" />
-                <StyledText
-                  text={`${moneyFormat(
-                    parseInt(product.finalPrice * 1.05) + 4000
-                  )}원`}
-                  weight="bold"
-                  size="20px"
+                <Box direction="row" justify="between" align="end" width="80vw">
+                  <StyledText text="총 결제금액" weight="bold" />
+                  <StyledText
+                    text={`${moneyFormat(
+                      parseInt(product.finalPrice * 1.05) + 4000
+                    )}원`}
+                    weight="bold"
+                    size="20px"
+                    style={{ color: "red" }}
+                  />
+                </Box>
+                <StyledHr
+                  width="100%"
+                  color="#A1A1A1"
+                  style={{ height: "2px" }}
                 />
-                <StyledHr width="100%" color="#A1A1A1" />
+
                 <StyledText
                   text={product.paidFlag ? "결제 완료" : "결제 대기중"}
+                />
+                <Button
+                  BigYellow
+                  children="홈으로 돌아가기"
+                  onClick={goMyPage}
                 />
               </Box>
             </Box>
