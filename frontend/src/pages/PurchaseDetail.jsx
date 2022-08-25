@@ -123,7 +123,6 @@ export const PurchaseDetail = () => {
               <Box
                 margin="small"
                 direction="column"
-                height="400px"
                 justify="between"
                 style={{ marginTop: "50px" }}
               >
