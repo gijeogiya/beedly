@@ -26,6 +26,15 @@ export const KakaoPayRedirect = () => {
             (response) => {
               setLoading(false);
               console.log("결제 완료 API 호출 !!!", response);
+              navigate(`/purchaseDetail/${soldId}`, {
+                state: {
+                  error_msg: errorMsg,
+                  merchant_uid: merchantUid,
+                  success: success,
+                  soldId: soldId,
+                  auctionType: auctionType,
+                },
+              });
             },
             (fail) => {
               console.log(fail);
@@ -37,20 +46,20 @@ export const KakaoPayRedirect = () => {
             (response) => {
               setLoading(false);
               console.log("결제 완료 API 호출 !!!", response);
+              navigate(`/purchaseDetail/${soldId}`, {
+                state: {
+                  error_msg: errorMsg,
+                  merchant_uid: merchantUid,
+                  success: success,
+                  soldId: soldId,
+                  auctionType: auctionType,
+                },
+              });
             },
             (fail) => {
               console.log(fail);
             }
           );
-        navigate(`/purchaseDetail/${soldId}`, {
-          state: {
-            error_msg: errorMsg,
-            merchant_uid: merchantUid,
-            success: success,
-            soldId: soldId,
-            auctionType: auctionType,
-          },
-        });
       } else if (success === "false" || success === false) {
         setLoading(false);
       }
