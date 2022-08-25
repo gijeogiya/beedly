@@ -178,7 +178,7 @@ export const ProductDetail = () => {
     setSoldStatus(data.personalProductDto.soldStatus);
     setArtistNickname(data.personalProductDto.userNickname);
     //UserId 설정
-    setArtistId(data.personalProductDto.userId + 1);
+    setArtistId(data.personalProductDto.userId);
     setAuctionId(data.auctionId);
     setIsAbsenteeBid(data.isAbsenteeBid);
     setFavoriteCount(data.personalProductDto.favoriteCount);
