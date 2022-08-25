@@ -31,7 +31,6 @@ export const KakaoPayRedirect = () => {
                   error_msg: errorMsg,
                   merchant_uid: merchantUid,
                   success: success,
-                  soldId: soldId,
                   auctionType: auctionType,
                 },
               });
@@ -51,7 +50,6 @@ export const KakaoPayRedirect = () => {
                   error_msg: errorMsg,
                   merchant_uid: merchantUid,
                   success: success,
-                  soldId: soldId,
                   auctionType: auctionType,
                 },
               });

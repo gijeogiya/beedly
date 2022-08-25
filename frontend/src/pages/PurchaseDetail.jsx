@@ -15,11 +15,12 @@ export const PurchaseDetail = () => {
   const [user, setUser] = useState();
   const [product, setProduct] = useState();
   const navigate = useNavigate();
-  let success = location.state.success;
-  let errorMsg = location.state.errorMsg;
-  let merchantUid = location.state.merchantUid;
-  let soldId = location.state.soldId;
-  let auctionType = location.state.auctionType;
+  let { success } = location.state;
+  let { errorMsg } = location.state;
+  let { merchantUid } = location.state;
+  // let { soldId } = location.state;
+  const { soldId } = useParams();
+  let { auctionType } = location.state;
   // auctionType + "_order_no_" + soldId,
 
   useEffect(() => {
