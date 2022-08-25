@@ -96,7 +96,7 @@ export const PurchaseDetail = () => {
             <Box margin="large">
               {/*배송지 정보 */}
               <StyledText text="배송지정보" weight="bold" size="16px" />
-              <Box>
+              <Box style={{ marginTop: "20px" }}>
                 <StyledText
                   text="주소"
                   weight="bold"
@@ -104,7 +104,7 @@ export const PurchaseDetail = () => {
                 />
                 <StyledText text={user.userAddr} />
               </Box>
-              <Box>
+              <Box style={{ marginTop: "20px" }}>
                 <StyledText
                   text="이름"
                   weight="bold"
@@ -112,7 +112,7 @@ export const PurchaseDetail = () => {
                 />
                 <StyledText text={user.userName} />
               </Box>
-              <Box>
+              <Box style={{ marginTop: "20px" }}>
                 <StyledText
                   text="전화번호"
                   weight="bold"
